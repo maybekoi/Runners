@@ -1,13 +1,13 @@
 # SRU18 
 
-* A merge of TyDev's and mattkc's Sonic Runners Decomps but also a port of the decomps to Unity 2018
+* A merge of Me and mattkc's Sonic Runners Decomps but also a port of the decomps to Unity 2018
 
 # How to setup SRU18
 
-By: SnesFX/Blitzdotcs
+By: SnesFX/YoPhlox
 
 1. Download files from this repo using
-`git clone https://github.com/blitzdotcs/SRU18.git `
+`git clone https://github.com/yophlox/SRU18.git `
 
 2. Download the files from [here](https://github.com/itsmattkc/RunnersAssetBundleDecomp)
 
@@ -45,8 +45,6 @@ By: SnesFX/Blitzdotcs
 
 # Credits
 
-* BlitzEX - Owner
-
-* TyDev - Decomp, Porter, and original owner
+* YoPhlox - Decomp, Porter, and original owner
 
 * MattKc - Decomp
