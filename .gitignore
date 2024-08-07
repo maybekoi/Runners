@@ -1,0 +1,5 @@
+Library/
+Temp/
+Export/
+Assets/AssetBundles*
+SRDebugMenu.cs
