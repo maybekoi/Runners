@@ -744,7 +744,7 @@ public class GeneralWindow : WindowBase
 		}
 		if (m_generalWindowObject != null)
 		{
-			return null;
+			m_generalWindowPrefab = (Resources.Load("Prefabs/UI/GeneralWindow") as GameObject);
 		}
 		m_generalWindowObject = (UnityEngine.Object.Instantiate(m_generalWindowPrefab, Vector3.zero, Quaternion.identity) as GameObject);
 		m_generalWindowObject.SetActive(true);
