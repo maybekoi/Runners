@@ -740,13 +740,17 @@ public class GeneralWindow : WindowBase
 		m_createdTime = 0f;
 		if (m_generalWindowPrefab == null)
 		{
-			m_generalWindowPrefab = (Resources.Load("Prefabs/UI/GeneralWindow") as GameObject);
+			m_generalWindowPrefab = Resources.Load<GameObject>("Prefabs/UI/GeneralWindow");
+			UnityEngine.Debug.Log("Loaded GameObject since it was null!");
 		}
+
 		if (m_generalWindowObject != null)
 		{
-			return null;
+			return m_generalWindowObject;
+			UnityEngine.Debug.Log("GameObject wasn't null!");
 		}
-		m_generalWindowObject = (UnityEngine.Object.Instantiate(m_generalWindowPrefab, Vector3.zero, Quaternion.identity) as GameObject);
+
+		m_generalWindowObject = UnityEngine.Object.Instantiate(m_generalWindowPrefab, Vector3.zero, Quaternion.identity) as GameObject;
 		m_generalWindowObject.SetActive(true);
 		ResetScrollBar();
 		SoundManager.SePlay("sys_window_open");
