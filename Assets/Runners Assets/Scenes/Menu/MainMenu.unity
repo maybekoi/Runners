@@ -2065,7 +2065,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 13}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.1920342, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.5669117, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 135}
@@ -2203,7 +2203,7 @@ Transform:
   m_GameObject: {fileID: 23}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -198, y: 46, z: 0}
-  m_LocalScale: {x: 1.1, y: 1.1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 137}
   m_Father: {fileID: 119}
@@ -2216,7 +2216,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 24}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 639.29474, y: -392.904, z: 0}
+  m_LocalPosition: {x: 551.3512, y: -392.904, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 191}
@@ -2582,7 +2582,7 @@ Transform:
   m_GameObject: {fileID: 51}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -30, y: -32, z: 0}
-  m_LocalScale: {x: 1.05, y: 1.05, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 176}
   m_RootOrder: 3
@@ -3169,7 +3169,7 @@ Transform:
   m_GameObject: {fileID: 93}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 166, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 176}
   m_RootOrder: 4
@@ -3301,7 +3301,7 @@ Transform:
   m_GameObject: {fileID: 103}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 90, y: 0, z: 0}
-  m_LocalScale: {x: 1.2, y: 1.2, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 195}
   m_Father: {fileID: 150}
@@ -3328,7 +3328,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 105}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.0297945, y: -32.904, z: 0}
+  m_LocalPosition: {x: -0.83776, y: -32.33709, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 206}
@@ -3415,7 +3415,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 111}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -640.9703, y: 327.096, z: 0}
+  m_LocalPosition: {x: -553.02673, y: 327.096, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 150}
@@ -4184,7 +4184,7 @@ MonoBehaviour:
   mWidth: 180
   mHeight: 32
   mDepth: 191
-  mFont: {fileID: 0}
+  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 2}
   mText: "\u901A\u4FE1\u4E2D..."
   mEncoding: 1
   mMaxLineCount: 0
@@ -4289,7 +4289,7 @@ MonoBehaviour:
   mWidth: 180
   mHeight: 32
   mDepth: 192
-  mFont: {fileID: 0}
+  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 2}
   mText: "\u901A\u4FE1\u4E2D..."
   mEncoding: 1
   mMaxLineCount: 0
@@ -4534,7 +4534,7 @@ MonoBehaviour:
   mWidth: 160
   mHeight: 32
   mDepth: 51
-  mFont: {fileID: 0}
+  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 2}
   mText: "\u30ED\u30FC\u30C9\u4E2D..."
   mEncoding: 1
   mMaxLineCount: 0
@@ -4566,7 +4566,7 @@ MonoBehaviour:
   mWidth: 160
   mHeight: 64
   mDepth: 51
-  mFont: {fileID: 0}
+  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 2}
   mText: " \u304A\u3068\u3082\u7D39\u4ECB"
   mEncoding: 1
   mMaxLineCount: 2
@@ -4858,7 +4858,7 @@ MonoBehaviour:
   mWidth: 320
   mHeight: 256
   mDepth: 51
-  mFont: {fileID: 0}
+  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 2}
   mText: read error
   mEncoding: 1
   mMaxLineCount: 8
@@ -5445,7 +5445,7 @@ MonoBehaviour:
   mWidth: 400
   mHeight: 38
   mDepth: 51
-  mFont: {fileID: 0}
+  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 2}
   mText: read error
   mEncoding: 1
   mMaxLineCount: 2
@@ -5567,7 +5567,7 @@ MonoBehaviour:
   mWidth: 208
   mHeight: 32
   mDepth: 52
-  mFont: {fileID: 0}
+  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 2}
   mText: "\u30A4\u30D9\u30F3\u30C8\u958B\u50AC\u4E2D\uFF01"
   mEncoding: 1
   mMaxLineCount: 0

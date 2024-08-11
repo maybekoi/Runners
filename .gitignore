@@ -4,3 +4,4 @@ Export/
 Assets/AssetBundles*
 SRDebugMenu.cs
 AssetBundles/
+/obj

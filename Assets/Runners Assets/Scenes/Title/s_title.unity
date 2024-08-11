@@ -922,13 +922,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 262}
+  - component: {fileID: 408}
   m_Layer: 16
   m_Name: sega_logo
   m_TagString: HUD
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &69
 GameObject:
   m_ObjectHideFlags: 0
@@ -4063,7 +4064,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 77}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.5000329, y: -317.5, z: 0}
+  m_LocalPosition: {x: -0.5000118, y: -317.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 278}
@@ -5623,7 +5624,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 189}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -629.8583, y: 360, z: 0}
+  m_LocalPosition: {x: -658.2047, y: 360, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 279}
@@ -5787,7 +5788,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 201}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.5669665, y: 0.5669117, z: 0}
+  m_LocalPosition: {x: -0.5669425, y: 0.5669117, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 230}
@@ -5820,7 +5821,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 203}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.5669665, y: 0.5669117, z: 0}
+  m_LocalPosition: {x: -0.5669425, y: 0.5669117, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 380}
@@ -6012,6 +6013,17 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!114 &408
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 68}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ff6590f4b1cb5c4ba53d5115b8780e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!65 &409
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -23847,7 +23859,7 @@ MonoBehaviour:
     e00: 317.5
     e01: 0
     e02: 0
-    e03: -0.5000329
+    e03: 0.5000118
     e10: 0
     e11: 317.5
     e12: 0
@@ -23958,7 +23970,7 @@ MonoBehaviour:
     e00: 360
     e01: 0
     e02: 0
-    e03: -0.5669665
+    e03: 0.5669425
     e10: 0
     e11: 360
     e12: 0
@@ -23966,7 +23978,7 @@ MonoBehaviour:
     e20: 0
     e21: 0
     e22: 360
-    e23: -0
+    e23: 0
     e30: 0
     e31: 0
     e32: 0
