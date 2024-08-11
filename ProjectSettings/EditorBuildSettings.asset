@@ -33,6 +33,18 @@ EditorBuildSettings:
     path: Assets/Runners Assets/Scenes/UI/ShopMenu/AgeVerificationWindow.unity
     guid: 1d2f2432e98bb9040958f2b51612b49d
   - enabled: 1
+    path: Assets/Runners Assets/Scenes/Characters/CharaAbilityDataTable.unity
+    guid: 6272e162c91c28a4aab41020b04060de
+  - enabled: 1
+    path: Assets/Runners Assets/Scenes/Characters/CharacterCommonResource.unity
+    guid: aef04238cd5810d4298b6787b0a4e29f
+  - enabled: 1
+    path: Assets/Runners Assets/Scenes/Characters/Sonic/CharacterEffectSonic.unity
+    guid: 6d93e01756654f94699c3940ffe95672
+  - enabled: 1
+    path: Assets/Runners Assets/Scenes/Characters/Sonic/CharacterModelSonic.unity
+    guid: 14fc8308a04edbd4298197fb2e1741fe
+  - enabled: 1
     path: Assets/AssetBundles/AchievementTable.unity
     guid: f173ba2de3559d2418a8f2b76c7ff340
   - enabled: 1
