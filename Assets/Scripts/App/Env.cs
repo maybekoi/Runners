@@ -44,7 +44,7 @@ namespace App
 
 		public const bool forDevelop = false;
 
-		private static readonly bool m_useAssetBundle = false;
+		private static readonly bool m_useAssetBundle = false; // Set to false cuz the AB's on the server gotta get rebuilt lol
 
 		private static readonly bool m_releaseApplication;
 
