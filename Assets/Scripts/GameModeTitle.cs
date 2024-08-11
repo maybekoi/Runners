@@ -216,6 +216,19 @@ public class GameModeTitle : MonoBehaviour
 		SystemSettings.ChangeQualityLevelBySaveData();
 		SystemData systemSaveData = SystemSaveManager.GetSystemSaveData();
 		bool flag = false;
+		if (systemSaveData != null)
+		{
+			flag = systemSaveData.highTexture;
+		}
+		if (flag)
+		{
+			Caching.maximumAvailableDiskSpace = 524288000L;
+		}
+		else
+		{
+			Caching.maximumAvailableDiskSpace = 314572800L;
+		}
+		Caching.expirationDelay = 2592000;
 		GameObject gameObject = GameObject.Find("StageInfo");
 		if (gameObject == null)
 		{
@@ -430,33 +443,33 @@ public class GameModeTitle : MonoBehaviour
 	{
 		switch (e.Signal)
 		{
-		case -3:
-			if (FontManager.Instance != null && FontManager.Instance.IsNecessaryLoadFont())
-			{
-				FontManager.Instance.LoadResourceData();
-				FontManager.Instance.ReplaceFont();
-			}
-			return TinyFsmState.End();
-		case -4:
-			return TinyFsmState.End();
-		case 0:
-			if (s_first)
-			{
-				m_fsm.ChangeState(new TinyFsmState(StateFadeOut));
-			}
-			else
-			{
-				SegaLogoAnimationSkip();
-				if (SystemSaveManager.Instance != null && SystemSaveManager.Instance.ErrorOnStart())
+			case -3:
+				if (FontManager.Instance != null && FontManager.Instance.IsNecessaryLoadFont())
 				{
-					m_fsm.ChangeState(new TinyFsmState(StateSaveDataError));
-					return TinyFsmState.End();
+					FontManager.Instance.LoadResourceData();
+					FontManager.Instance.ReplaceFont();
 				}
-				m_fsm.ChangeState(new TinyFsmState(StateSnsInitialize));
-			}
-			return TinyFsmState.End();
-		default:
-			return TinyFsmState.End();
+				return TinyFsmState.End();
+			case -4:
+				return TinyFsmState.End();
+			case 0:
+				if (s_first)
+				{
+					m_fsm.ChangeState(new TinyFsmState(StateFadeOut));
+				}
+				else
+				{
+					SegaLogoAnimationSkip();
+					if (SystemSaveManager.Instance != null && SystemSaveManager.Instance.ErrorOnStart())
+					{
+						m_fsm.ChangeState(new TinyFsmState(StateSaveDataError));
+						return TinyFsmState.End();
+					}
+					m_fsm.ChangeState(new TinyFsmState(StateSnsInitialize));
+				}
+				return TinyFsmState.End();
+			default:
+				return TinyFsmState.End();
 		}
 	}
 
@@ -464,52 +477,52 @@ public class GameModeTitle : MonoBehaviour
 	{
 		switch (e.Signal)
 		{
-		case -3:
-			if (m_touchScreenObject != null)
-			{
-				m_touchScreenObject.SetActive(true);
-				TextObject text = TextManager.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Title", "ui_Lbl_mainmenu");
-				UILabel component = m_touchScreenObject.GetComponent<UILabel>();
-				if (component != null)
+			case -3:
+				if (m_touchScreenObject != null)
 				{
-					component.text = text.text;
+					m_touchScreenObject.SetActive(true);
+					TextObject text = TextManager.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Title", "ui_Lbl_mainmenu");
+					UILabel component = m_touchScreenObject.GetComponent<UILabel>();
+					if (component != null)
+					{
+						component.text = text.text;
+					}
+					UILabel uILabel = GameObjectUtil.FindChildGameObjectComponent<UILabel>(m_touchScreenObject, "Lbl_mainmenu_sh");
+					if (uILabel != null)
+					{
+						uILabel.text = text.text;
+					}
 				}
-				UILabel uILabel = GameObjectUtil.FindChildGameObjectComponent<UILabel>(m_touchScreenObject, "Lbl_mainmenu_sh");
-				if (uILabel != null)
-				{
-					uILabel.text = text.text;
-				}
-			}
-			return TinyFsmState.End();
-		case -4:
-			return TinyFsmState.End();
-		case 0:
-			return TinyFsmState.End();
-		case 109:
-		{
-			GameObject parent = GameObject.Find("UI Root (2D)");
-			GameObject gameObject = GameObjectUtil.FindChildGameObject(parent, "img_titlelogo");
-			if (gameObject != null)
-			{
-				gameObject.SetActive(true);
-			}
-			Animation animation = GameObjectUtil.FindChildGameObjectComponent<Animation>(parent, "TitleScreen");
-			if (animation != null)
-			{
-				ActiveAnimation activeAnimation = ActiveAnimation.Play(animation, "ui_title_intro_logo_Anim", Direction.Forward);
-				EventDelegate.Add(activeAnimation.onFinished, SegaLogoAnimationFinishCallback, false);
-			}
-			s_first = false;
-			if (SystemSaveManager.Instance != null && SystemSaveManager.Instance.ErrorOnStart())
-			{
-				m_fsm.ChangeState(new TinyFsmState(StateSaveDataError));
 				return TinyFsmState.End();
-			}
-			m_fsm.ChangeState(new TinyFsmState(StateSnsInitialize));
-			return TinyFsmState.End();
-		}
-		default:
-			return TinyFsmState.End();
+			case -4:
+				return TinyFsmState.End();
+			case 0:
+				return TinyFsmState.End();
+			case 109:
+				{
+					GameObject parent = GameObject.Find("UI Root (2D)");
+					GameObject gameObject = GameObjectUtil.FindChildGameObject(parent, "img_titlelogo");
+					if (gameObject != null)
+					{
+						gameObject.SetActive(true);
+					}
+					Animation animation = GameObjectUtil.FindChildGameObjectComponent<Animation>(parent, "TitleScreen");
+					if (animation != null)
+					{
+						ActiveAnimation activeAnimation = ActiveAnimation.Play(animation, "ui_title_intro_logo_Anim", Direction.Forward);
+						EventDelegate.Add(activeAnimation.onFinished, SegaLogoAnimationFinishCallback, false);
+					}
+					s_first = false;
+					if (SystemSaveManager.Instance != null && SystemSaveManager.Instance.ErrorOnStart())
+					{
+						m_fsm.ChangeState(new TinyFsmState(StateSaveDataError));
+						return TinyFsmState.End();
+					}
+					m_fsm.ChangeState(new TinyFsmState(StateSnsInitialize));
+					return TinyFsmState.End();
+				}
+			default:
+				return TinyFsmState.End();
 		}
 	}
 
@@ -517,55 +530,55 @@ public class GameModeTitle : MonoBehaviour
 	{
 		switch (e.Signal)
 		{
-		case -3:
-			CreateSaveErrorWindow(false);
-			m_subState = 0;
-			BackKeyManager.InvalidFlag = false;
-			return TinyFsmState.End();
-		case -4:
-			BackKeyManager.InvalidFlag = true;
-			return TinyFsmState.End();
-		case 0:
-			switch (m_subState)
-			{
+			case -3:
+				CreateSaveErrorWindow(false);
+				m_subState = 0;
+				BackKeyManager.InvalidFlag = false;
+				return TinyFsmState.End();
+			case -4:
+				BackKeyManager.InvalidFlag = true;
+				return TinyFsmState.End();
 			case 0:
-				if (!GeneralWindow.IsButtonPressed)
+				switch (m_subState)
 				{
-					break;
+					case 0:
+						if (!GeneralWindow.IsButtonPressed)
+						{
+							break;
+						}
+						GeneralWindow.Close();
+						if (SystemSaveManager.Instance.SaveForStartingError())
+						{
+							if (m_isLogined)
+							{
+								m_fsm.ChangeState(new TinyFsmState(StateSnsInitialize));
+							}
+							else
+							{
+								m_fsm.ChangeState(new TinyFsmState(StateSnsInitialize));
+							}
+						}
+						else
+						{
+							CreateSaveErrorWindow(true);
+							m_subState = 1;
+						}
+						break;
+					case 1:
+						if (GeneralWindow.IsButtonPressed)
+						{
+							GeneralWindow.Close();
+							CreateSaveErrorWindow(false);
+							m_subState = 0;
+						}
+						break;
 				}
-				GeneralWindow.Close();
-				if (SystemSaveManager.Instance.SaveForStartingError())
-				{
-					if (m_isLogined)
-					{
-						m_fsm.ChangeState(new TinyFsmState(StateSnsInitialize));
-					}
-					else
-					{
-						m_fsm.ChangeState(new TinyFsmState(StateSnsInitialize));
-					}
-				}
-				else
-				{
-					CreateSaveErrorWindow(true);
-					m_subState = 1;
-				}
-				break;
-			case 1:
-				if (GeneralWindow.IsButtonPressed)
-				{
-					GeneralWindow.Close();
-					CreateSaveErrorWindow(false);
-					m_subState = 0;
-				}
-				break;
-			}
-			return TinyFsmState.End();
-		case 109:
-			m_fsm.ChangeState(new TinyFsmState(StateSnsInitialize));
-			return TinyFsmState.End();
-		default:
-			return TinyFsmState.End();
+				return TinyFsmState.End();
+			case 109:
+				m_fsm.ChangeState(new TinyFsmState(StateSnsInitialize));
+				return TinyFsmState.End();
+			default:
+				return TinyFsmState.End();
 		}
 	}
 
@@ -582,22 +595,22 @@ public class GameModeTitle : MonoBehaviour
 	{
 		switch (e.Signal)
 		{
-		case -3:
-		{
-			SocialInterface socialInterface = GameObjectUtil.FindGameObjectComponent<SocialInterface>("SocialInterface");
-			if (socialInterface != null)
-			{
-				socialInterface.Initialize(base.gameObject);
-			}
-			return TinyFsmState.End();
-		}
-		case -4:
-			return TinyFsmState.End();
-		case 0:
-			m_fsm.ChangeState(new TinyFsmState(StateNoahConnect));
-			return TinyFsmState.End();
-		default:
-			return TinyFsmState.End();
+			case -3:
+				{
+					SocialInterface socialInterface = GameObjectUtil.FindGameObjectComponent<SocialInterface>("SocialInterface");
+					if (socialInterface != null)
+					{
+						socialInterface.Initialize(base.gameObject);
+					}
+					return TinyFsmState.End();
+				}
+			case -4:
+				return TinyFsmState.End();
+			case 0:
+				m_fsm.ChangeState(new TinyFsmState(StateNoahConnect));
+				return TinyFsmState.End();
+			default:
+				return TinyFsmState.End();
 		}
 	}
 
@@ -605,22 +618,22 @@ public class GameModeTitle : MonoBehaviour
 	{
 		switch (e.Signal)
 		{
-		case -3:
-			return TinyFsmState.End();
-		case -4:
-			return TinyFsmState.End();
-		case 0:
-			if (m_isReturnFirstTutorial)
-			{
-				m_fsm.ChangeState(new TinyFsmState(StateGameServerPreLogin));
-			}
-			else
-			{
-				m_fsm.ChangeState(new TinyFsmState(StateWaitTouchScreen));
-			}
-			return TinyFsmState.End();
-		default:
-			return TinyFsmState.End();
+			case -3:
+				return TinyFsmState.End();
+			case -4:
+				return TinyFsmState.End();
+			case 0:
+				if (m_isReturnFirstTutorial)
+				{
+					m_fsm.ChangeState(new TinyFsmState(StateGameServerPreLogin));
+				}
+				else
+				{
+					m_fsm.ChangeState(new TinyFsmState(StateWaitTouchScreen));
+				}
+				return TinyFsmState.End();
+			default:
+				return TinyFsmState.End();
 		}
 	}
 
@@ -628,112 +641,113 @@ public class GameModeTitle : MonoBehaviour
 	{
 		switch (e.Signal)
 		{
-		case -3:
-			BackKeyManager.InvalidFlag = false;
-			if (m_startButton != null)
-			{
-				m_startButton.SetActive(true);
-			}
-			if (m_movetButton != null)
-			{
-				m_movetButton.SetActive(true);
-			}
-			if (m_cacheButton != null)
-			{
-				m_cacheButton.SetActive(true);
-			}
-			return TinyFsmState.End();
-		case -4:
-			BackKeyManager.InvalidFlag = true;
-			return TinyFsmState.End();
-		case 0:
-			if (GeneralWindow.IsCreated("quit_app"))
-			{
-				if (GeneralWindow.IsButtonPressed)
+			case -3:
+				BackKeyManager.InvalidFlag = false;
+				if (m_startButton != null)
 				{
-					if (GeneralWindow.IsYesButtonPressed)
-					{
-						Application.Quit();
-					}
-					else if (GeneralWindow.IsNoButtonPressed)
-					{
-					}
-					GeneralWindow.Close();
-					SetUIEffect(true);
+					m_startButton.SetActive(true);
 				}
-			}
-			else if (GeneralWindow.IsCreated("cache_clear"))
-			{
-				if (GeneralWindow.IsButtonPressed)
+				if (m_movetButton != null)
 				{
-					if (GeneralWindow.IsYesButtonPressed)
-					{
-						GeneralWindow.Close();
-						GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
-						info.name = "cache_clear_end";
-						info.caption = TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Option", "cash_cashclear_confirmation_bar");
-						info.message = TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Option", "cash_cashclear_confirmation_title");
-						info.anchor_path = "Camera/Anchor_5_MC";
-						info.buttonType = GeneralWindow.ButtonType.Ok;
-						GeneralWindow.Create(info);
-					}
-					else
-					{
-						GeneralWindow.Close();
-					}
+					m_movetButton.SetActive(true);
 				}
-			}
-			else if (GeneralWindow.IsCreated("cache_clear_end") && GeneralWindow.IsButtonPressed)
-			{
-				GeneralWindow.Close();
-			}
-			return TinyFsmState.End();
-		case 111:
-			m_fsm.ChangeState(new TinyFsmState(StateTakeoverFunction));
-			return TinyFsmState.End();
-		case 100:
-		{
-			if (m_startButton != null)
-			{
-				m_startButton.SetActive(false);
-			}
-			if (m_movetButton != null)
-			{
-				m_movetButton.SetActive(false);
-			}
-			if (m_cacheButton != null)
-			{
-				m_cacheButton.SetActive(false);
-			}
-			if (m_isLogined)
-			{
-				m_fsm.ChangeState(new TinyFsmState(StateFadeIn));
-			}
-			else
-			{
-				m_fsm.ChangeState(new TinyFsmState(StateGameServerPreLogin));
-			}
-			GameObject parent = GameObject.Find("UI Root (2D)");
-			UIObjectContainer uIObjectContainer = GameObjectUtil.FindChildGameObjectComponent<UIObjectContainer>(parent, "TitleScreen");
-			if (uIObjectContainer != null)
-			{
-				GameObject[] objects = uIObjectContainer.Objects;
-				if (objects != null)
+				if (m_cacheButton != null)
 				{
-					GameObject[] array = objects;
-					foreach (GameObject gameObject in array)
+					m_cacheButton.SetActive(true);
+				}
+				return TinyFsmState.End();
+			case -4:
+				BackKeyManager.InvalidFlag = true;
+				return TinyFsmState.End();
+			case 0:
+				if (GeneralWindow.IsCreated("quit_app"))
+				{
+					if (GeneralWindow.IsButtonPressed)
 					{
-						if (gameObject != null)
+						if (GeneralWindow.IsYesButtonPressed)
 						{
-							gameObject.SetActive(false);
+							Application.Quit();
+						}
+						else if (GeneralWindow.IsNoButtonPressed)
+						{
+						}
+						GeneralWindow.Close();
+						SetUIEffect(true);
+					}
+				}
+				else if (GeneralWindow.IsCreated("cache_clear"))
+				{
+					if (GeneralWindow.IsButtonPressed)
+					{
+						if (GeneralWindow.IsYesButtonPressed)
+						{
+							GeneralUtil.CleanAllCache();
+							GeneralWindow.Close();
+							GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
+							info.name = "cache_clear_end";
+							info.caption = TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Option", "cash_cashclear_confirmation_bar");
+							info.message = TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Option", "cash_cashclear_confirmation_title");
+							info.anchor_path = "Camera/Anchor_5_MC";
+							info.buttonType = GeneralWindow.ButtonType.Ok;
+							GeneralWindow.Create(info);
+						}
+						else
+						{
+							GeneralWindow.Close();
 						}
 					}
 				}
-			}
-			return TinyFsmState.End();
-		}
-		default:
-			return TinyFsmState.End();
+				else if (GeneralWindow.IsCreated("cache_clear_end") && GeneralWindow.IsButtonPressed)
+				{
+					GeneralWindow.Close();
+				}
+				return TinyFsmState.End();
+			case 111:
+				m_fsm.ChangeState(new TinyFsmState(StateTakeoverFunction));
+				return TinyFsmState.End();
+			case 100:
+				{
+					if (m_startButton != null)
+					{
+						m_startButton.SetActive(false);
+					}
+					if (m_movetButton != null)
+					{
+						m_movetButton.SetActive(false);
+					}
+					if (m_cacheButton != null)
+					{
+						m_cacheButton.SetActive(false);
+					}
+					if (m_isLogined)
+					{
+						m_fsm.ChangeState(new TinyFsmState(StateFadeIn));
+					}
+					else
+					{
+						m_fsm.ChangeState(new TinyFsmState(StateGameServerPreLogin));
+					}
+					GameObject parent = GameObject.Find("UI Root (2D)");
+					UIObjectContainer uIObjectContainer = GameObjectUtil.FindChildGameObjectComponent<UIObjectContainer>(parent, "TitleScreen");
+					if (uIObjectContainer != null)
+					{
+						GameObject[] objects = uIObjectContainer.Objects;
+						if (objects != null)
+						{
+							GameObject[] array = objects;
+							foreach (GameObject gameObject in array)
+							{
+								if (gameObject != null)
+								{
+									gameObject.SetActive(false);
+								}
+							}
+						}
+					}
+					return TinyFsmState.End();
+				}
+			default:
+				return TinyFsmState.End();
 		}
 	}
 
@@ -741,82 +755,82 @@ public class GameModeTitle : MonoBehaviour
 	{
 		switch (e.Signal)
 		{
-		case -3:
-			BackKeyManager.InvalidFlag = false;
-			m_subState = 0;
-			CreateTakeoverCautionWindow();
-			return TinyFsmState.End();
-		case -4:
-			BackKeyManager.InvalidFlag = true;
-			return TinyFsmState.End();
-		case 0:
-			switch (m_subState)
-			{
+			case -3:
+				BackKeyManager.InvalidFlag = false;
+				m_subState = 0;
+				CreateTakeoverCautionWindow();
+				return TinyFsmState.End();
+			case -4:
+				BackKeyManager.InvalidFlag = true;
+				return TinyFsmState.End();
 			case 0:
-			{
-				if (!GeneralWindow.IsCreated("TakeoverCaution") || !GeneralWindow.IsButtonPressed)
+				switch (m_subState)
 				{
-					break;
+					case 0:
+						{
+							if (!GeneralWindow.IsCreated("TakeoverCaution") || !GeneralWindow.IsButtonPressed)
+							{
+								break;
+							}
+							bool flag = false;
+							if (GeneralWindow.IsYesButtonPressed)
+							{
+								m_subState = 1;
+								if (m_takeoverInput == null)
+								{
+									m_takeoverInput = base.gameObject.AddComponent<SettingTakeoverInput>();
+									m_takeoverInput.Setup(ANCHOR_PATH);
+								}
+								if (m_takeoverInput != null)
+								{
+									m_takeoverInput.PlayStart();
+								}
+								flag = true;
+							}
+							else if (GeneralWindow.IsNoButtonPressed)
+							{
+								m_fsm.ChangeState(new TinyFsmState(StateWaitTouchScreen));
+							}
+							GeneralWindow.Close();
+							if (flag)
+							{
+								SetUIEffect(false);
+							}
+							break;
+						}
+					case 1:
+						if (!(m_takeoverInput != null) || !m_takeoverInput.IsEndPlay())
+						{
+							break;
+						}
+						if (m_takeoverInput.IsDicide)
+						{
+							string inputIdText = m_takeoverInput.InputIdText;
+							string inputPassText = m_takeoverInput.InputPassText;
+							Debug.Log("Input Finished! Input ID is " + inputIdText);
+							Debug.Log("Input Finished! Input PASS is " + inputPassText);
+							if (inputIdText.Length == 0 || inputPassText.Length == 0)
+							{
+								m_fsm.ChangeState(new TinyFsmState(StateTakeoverError));
+								m_subState = 2;
+							}
+							else
+							{
+								m_fsm.ChangeState(new TinyFsmState(StateTakeoverExecute));
+								m_subState = 2;
+							}
+						}
+						if (m_takeoverInput.IsCanceled)
+						{
+							m_subState = 2;
+							m_fsm.ChangeState(new TinyFsmState(StateWaitTouchScreen));
+						}
+						SetUIEffect(true);
+						break;
 				}
-				bool flag = false;
-				if (GeneralWindow.IsYesButtonPressed)
-				{
-					m_subState = 1;
-					if (m_takeoverInput == null)
-					{
-						m_takeoverInput = base.gameObject.AddComponent<SettingTakeoverInput>();
-						m_takeoverInput.Setup(ANCHOR_PATH);
-					}
-					if (m_takeoverInput != null)
-					{
-						m_takeoverInput.PlayStart();
-					}
-					flag = true;
-				}
-				else if (GeneralWindow.IsNoButtonPressed)
-				{
-					m_fsm.ChangeState(new TinyFsmState(StateWaitTouchScreen));
-				}
-				GeneralWindow.Close();
-				if (flag)
-				{
-					SetUIEffect(false);
-				}
-				break;
-			}
-			case 1:
-				if (!(m_takeoverInput != null) || !m_takeoverInput.IsEndPlay())
-				{
-					break;
-				}
-				if (m_takeoverInput.IsDicide)
-				{
-					string inputIdText = m_takeoverInput.InputIdText;
-					string inputPassText = m_takeoverInput.InputPassText;
-					Debug.Log("Input Finished! Input ID is " + inputIdText);
-					Debug.Log("Input Finished! Input PASS is " + inputPassText);
-					if (inputIdText.Length == 0 || inputPassText.Length == 0)
-					{
-						m_fsm.ChangeState(new TinyFsmState(StateTakeoverError));
-						m_subState = 2;
-					}
-					else
-					{
-						m_fsm.ChangeState(new TinyFsmState(StateTakeoverExecute));
-						m_subState = 2;
-					}
-				}
-				if (m_takeoverInput.IsCanceled)
-				{
-					m_subState = 2;
-					m_fsm.ChangeState(new TinyFsmState(StateWaitTouchScreen));
-				}
-				SetUIEffect(true);
-				break;
-			}
-			return TinyFsmState.End();
-		default:
-			return TinyFsmState.End();
+				return TinyFsmState.End();
+			default:
+				return TinyFsmState.End();
 		}
 	}
 
@@ -824,22 +838,22 @@ public class GameModeTitle : MonoBehaviour
 	{
 		switch (e.Signal)
 		{
-		case -3:
-			BackKeyManager.InvalidFlag = false;
-			CreateTakeoverErrorWindow();
-			return TinyFsmState.End();
-		case -4:
-			BackKeyManager.InvalidFlag = true;
-			return TinyFsmState.End();
-		case 0:
-			if (GeneralWindow.IsCreated("TakeoverError") && GeneralWindow.IsButtonPressed)
-			{
-				GeneralWindow.Close();
-				m_fsm.ChangeState(new TinyFsmState(StateWaitTouchScreen));
-			}
-			return TinyFsmState.End();
-		default:
-			return TinyFsmState.End();
+			case -3:
+				BackKeyManager.InvalidFlag = false;
+				CreateTakeoverErrorWindow();
+				return TinyFsmState.End();
+			case -4:
+				BackKeyManager.InvalidFlag = true;
+				return TinyFsmState.End();
+			case 0:
+				if (GeneralWindow.IsCreated("TakeoverError") && GeneralWindow.IsButtonPressed)
+				{
+					GeneralWindow.Close();
+					m_fsm.ChangeState(new TinyFsmState(StateWaitTouchScreen));
+				}
+				return TinyFsmState.End();
+			default:
+				return TinyFsmState.End();
 		}
 	}
 
@@ -847,48 +861,48 @@ public class GameModeTitle : MonoBehaviour
 	{
 		switch (e.Signal)
 		{
-		case -3:
-		{
-			BackKeyManager.InvalidFlag = false;
-			m_isTakeoverLogin = false;
-			string inputIdText = m_takeoverInput.InputIdText;
-			string inputPassText = m_takeoverInput.InputPassText;
-			ServerInterface serverInterface = GameObjectUtil.FindGameObjectComponent<ServerInterface>("ServerInterface");
-			if (serverInterface != null)
-			{
-				string migrationPassword = NetUtil.CalcMD5String(inputPassText);
-				serverInterface.RequestServerMigration(inputIdText, migrationPassword, base.gameObject);
-			}
-			CreateTakeoverExecWindow();
-			m_timer = 0f;
-			return TinyFsmState.End();
-		}
-		case -4:
-			BackKeyManager.InvalidFlag = true;
-			return TinyFsmState.End();
-		case 0:
-			if (GeneralWindow.IsCreated("TakeoverExec"))
-			{
-				m_timer += Time.deltaTime;
-				if (m_timer >= TAKEOVER_WAIT_TIME)
+			case -3:
 				{
-					m_timer = TAKEOVER_WAIT_TIME;
+					BackKeyManager.InvalidFlag = false;
+					m_isTakeoverLogin = false;
+					string inputIdText = m_takeoverInput.InputIdText;
+					string inputPassText = m_takeoverInput.InputPassText;
+					ServerInterface serverInterface = GameObjectUtil.FindGameObjectComponent<ServerInterface>("ServerInterface");
+					if (serverInterface != null)
+					{
+						string migrationPassword = NetUtil.CalcMD5String(inputPassText);
+						serverInterface.RequestServerMigration(inputIdText, migrationPassword, base.gameObject);
+					}
+					CreateTakeoverExecWindow();
+					m_timer = 0f;
+					return TinyFsmState.End();
 				}
-				if (m_isTakeoverLogin && m_timer >= TAKEOVER_WAIT_TIME)
+			case -4:
+				BackKeyManager.InvalidFlag = true;
+				return TinyFsmState.End();
+			case 0:
+				if (GeneralWindow.IsCreated("TakeoverExec"))
 				{
-					Debug.Log("Takeover Finished! Result Success! ");
+					m_timer += Time.deltaTime;
+					if (m_timer >= TAKEOVER_WAIT_TIME)
+					{
+						m_timer = TAKEOVER_WAIT_TIME;
+					}
+					if (m_isTakeoverLogin && m_timer >= TAKEOVER_WAIT_TIME)
+					{
+						Debug.Log("Takeover Finished! Result Success! ");
+						GeneralWindow.Close();
+						m_fsm.ChangeState(new TinyFsmState(StateTakeoverFinished));
+					}
+				}
+				return TinyFsmState.End();
+			case 113:
+				if (GeneralWindow.IsCreated("TakeoverExec"))
+				{
 					GeneralWindow.Close();
-					m_fsm.ChangeState(new TinyFsmState(StateTakeoverFinished));
+					m_fsm.ChangeState(new TinyFsmState(StateTakeoverError));
 				}
-			}
-			return TinyFsmState.End();
-		case 113:
-			if (GeneralWindow.IsCreated("TakeoverExec"))
-			{
-				GeneralWindow.Close();
-				m_fsm.ChangeState(new TinyFsmState(StateTakeoverError));
-			}
-			break;
+				break;
 		}
 		return TinyFsmState.End();
 	}
@@ -897,22 +911,22 @@ public class GameModeTitle : MonoBehaviour
 	{
 		switch (e.Signal)
 		{
-		case -3:
-			BackKeyManager.InvalidFlag = false;
-			CreateTakeoverFinishedWindow();
-			Debug.Log("Takeover Finished!");
-			return TinyFsmState.End();
-		case -4:
-			BackKeyManager.InvalidFlag = true;
-			return TinyFsmState.End();
-		case 0:
-			if (GeneralWindow.IsCreated("TakeoverFinished") && GeneralWindow.IsButtonPressed)
-			{
-				OnMsgGotoHead();
-			}
-			return TinyFsmState.End();
-		default:
-			return TinyFsmState.End();
+			case -3:
+				BackKeyManager.InvalidFlag = false;
+				CreateTakeoverFinishedWindow();
+				Debug.Log("Takeover Finished!");
+				return TinyFsmState.End();
+			case -4:
+				BackKeyManager.InvalidFlag = true;
+				return TinyFsmState.End();
+			case 0:
+				if (GeneralWindow.IsCreated("TakeoverFinished") && GeneralWindow.IsButtonPressed)
+				{
+					OnMsgGotoHead();
+				}
+				return TinyFsmState.End();
+			default:
+				return TinyFsmState.End();
 		}
 	}
 
@@ -960,32 +974,32 @@ public class GameModeTitle : MonoBehaviour
 	{
 		switch (e.Signal)
 		{
-		case -3:
-			BackKeyManager.InvalidFlag = false;
-			m_pushNotice = base.gameObject.AddComponent<SettingPartsPushNotice>();
-			m_pushNotice.Setup(ANCHOR_PATH);
-			m_pushNotice.PlayStart();
-			m_pushNotice.SetCloseButtonEnabled(false);
-			return TinyFsmState.End();
-		case -4:
-			BackKeyManager.InvalidFlag = true;
-			return TinyFsmState.End();
-		case 100:
-			m_fsm.ChangeState(new TinyFsmState(StateGameServerPreLogin));
-			return TinyFsmState.End();
-		case 0:
-			if (m_pushNotice != null && m_pushNotice.IsEndPlay())
-			{
-				if (m_pushNotice.IsOverwrite && SystemSaveManager.Instance != null)
-				{
-					SystemSaveManager.Instance.SaveSystemData();
-				}
+			case -3:
+				BackKeyManager.InvalidFlag = false;
+				m_pushNotice = base.gameObject.AddComponent<SettingPartsPushNotice>();
+				m_pushNotice.Setup(ANCHOR_PATH);
+				m_pushNotice.PlayStart();
+				m_pushNotice.SetCloseButtonEnabled(false);
+				return TinyFsmState.End();
+			case -4:
+				BackKeyManager.InvalidFlag = true;
+				return TinyFsmState.End();
+			case 100:
 				m_fsm.ChangeState(new TinyFsmState(StateGameServerPreLogin));
-				Debug.Log("m_fsm.ChangeState(new TinyFsmState(this.StateGameServerPreLogin));");
-			}
-			return TinyFsmState.End();
-		default:
-			return TinyFsmState.End();
+				return TinyFsmState.End();
+			case 0:
+				if (m_pushNotice != null && m_pushNotice.IsEndPlay())
+				{
+					if (m_pushNotice.IsOverwrite && SystemSaveManager.Instance != null)
+					{
+						SystemSaveManager.Instance.SaveSystemData();
+					}
+					m_fsm.ChangeState(new TinyFsmState(StateGameServerPreLogin));
+					Debug.Log("m_fsm.ChangeState(new TinyFsmState(this.StateGameServerPreLogin));");
+				}
+				return TinyFsmState.End();
+			default:
+				return TinyFsmState.End();
 		}
 	}
 
@@ -993,50 +1007,50 @@ public class GameModeTitle : MonoBehaviour
 	{
 		switch (e.Signal)
 		{
-		case -3:
-		{
-			ServerSessionWatcher serverSessionWatcher = GameObjectUtil.FindGameObjectComponent<ServerSessionWatcher>("NetMonitor");
-			if (serverSessionWatcher != null)
-			{
-				m_isSessionValid = false;
-				serverSessionWatcher.ValidateSession(ServerSessionWatcher.ValidateType.PRELOGIN, ValidateSessionCallback);
-			}
-			return TinyFsmState.End();
-		}
-		case -4:
-			return TinyFsmState.End();
-		case 0:
-			if (m_isSessionValid)
-			{
-				Debug.Log("GameModeTitle.StateGameServerPreLogin:Finished");
-				if (m_userIdLabel != null)
+			case -3:
 				{
-					m_userIdLabel.gameObject.SetActive(true);
-					m_userIdLabel.text = GetViewUserID();
-				}
-				bool flag = true;
-				if (SystemSaveManager.Instance != null)
-				{
-					string countryCode = SystemSaveManager.GetCountryCode();
-					if (string.IsNullOrEmpty(countryCode))
+					ServerSessionWatcher serverSessionWatcher = GameObjectUtil.FindGameObjectComponent<ServerSessionWatcher>("NetMonitor");
+					if (serverSessionWatcher != null)
 					{
-						flag = false;
+						m_isSessionValid = false;
+						serverSessionWatcher.ValidateSession(ServerSessionWatcher.ValidateType.PRELOGIN, ValidateSessionCallback);
 					}
+					return TinyFsmState.End();
 				}
-				if (flag)
+			case -4:
+				return TinyFsmState.End();
+			case 0:
+				if (m_isSessionValid)
 				{
-					m_fsm.ChangeState(new TinyFsmState(StateAssetBundleInitialize));
-				}
-				else
-				{
-					m_fsm.ChangeState(new TinyFsmState(StateGetCountryCodeRetry));
-					Debug.Log("GameModeTitle.StateGameServerPreLogin:LostCountryCode!!");
+					Debug.Log("GameModeTitle.StateGameServerPreLogin:Finished");
+					if (m_userIdLabel != null)
+					{
+						m_userIdLabel.gameObject.SetActive(true);
+						m_userIdLabel.text = GetViewUserID();
+					}
+					bool flag = true;
+					if (SystemSaveManager.Instance != null)
+					{
+						string countryCode = SystemSaveManager.GetCountryCode();
+						if (string.IsNullOrEmpty(countryCode))
+						{
+							flag = false;
+						}
+					}
+					if (flag)
+					{
+						m_fsm.ChangeState(new TinyFsmState(StateAssetBundleInitialize));
+					}
+					else
+					{
+						m_fsm.ChangeState(new TinyFsmState(StateGetCountryCodeRetry));
+						Debug.Log("GameModeTitle.StateGameServerPreLogin:LostCountryCode!!");
+					}
+					return TinyFsmState.End();
 				}
 				return TinyFsmState.End();
-			}
-			return TinyFsmState.End();
-		default:
-			return TinyFsmState.End();
+			default:
+				return TinyFsmState.End();
 		}
 	}
 
@@ -1044,27 +1058,27 @@ public class GameModeTitle : MonoBehaviour
 	{
 		switch (e.Signal)
 		{
-		case -3:
-		{
-			m_isGetCountry = false;
-			ServerInterface serverInterface = GameObjectUtil.FindGameObjectComponent<ServerInterface>("ServerInterface");
-			if (serverInterface != null)
-			{
-				serverInterface.RequestServerGetCountry(base.gameObject);
-			}
-			return TinyFsmState.End();
-		}
-		case -4:
-			return TinyFsmState.End();
-		case 0:
-			if (m_isGetCountry)
-			{
-				m_fsm.ChangeState(new TinyFsmState(StateAssetBundleInitialize));
-				Debug.Log("GameModeTitle.StateGetCountryCodeRetry:Finished");
-			}
-			return TinyFsmState.End();
-		default:
-			return TinyFsmState.End();
+			case -3:
+				{
+					m_isGetCountry = false;
+					ServerInterface serverInterface = GameObjectUtil.FindGameObjectComponent<ServerInterface>("ServerInterface");
+					if (serverInterface != null)
+					{
+						serverInterface.RequestServerGetCountry(base.gameObject);
+					}
+					return TinyFsmState.End();
+				}
+			case -4:
+				return TinyFsmState.End();
+			case 0:
+				if (m_isGetCountry)
+				{
+					m_fsm.ChangeState(new TinyFsmState(StateAssetBundleInitialize));
+					Debug.Log("GameModeTitle.StateGetCountryCodeRetry:Finished");
+				}
+				return TinyFsmState.End();
+			default:
+				return TinyFsmState.End();
 		}
 	}
 
@@ -1072,32 +1086,32 @@ public class GameModeTitle : MonoBehaviour
 	{
 		switch (e.Signal)
 		{
-		case -3:
-			NetBaseUtil.SetAssetServerURL();
-			Screen.sleepTimeout = -1;
-			if (Env.useAssetBundle)
-			{
-				if (AssetBundleLoader.Instance == null)
+			case -3:
+				NetBaseUtil.SetAssetServerURL();
+				Screen.sleepTimeout = -1;
+				if (Env.useAssetBundle)
 				{
-					AssetBundleLoader.Create();
+					if (AssetBundleLoader.Instance == null)
+					{
+						AssetBundleLoader.Create();
+					}
+					if (!AssetBundleLoader.Instance.IsEnableDownlad())
+					{
+						AssetBundleLoader.Instance.Initialize();
+					}
 				}
-				if (!AssetBundleLoader.Instance.IsEnableDownlad())
+				return TinyFsmState.End();
+			case -4:
+				Screen.sleepTimeout = -2;
+				return TinyFsmState.End();
+			case 0:
+				if (!Env.useAssetBundle || AssetBundleLoader.Instance.IsEnableDownlad())
 				{
-					AssetBundleLoader.Instance.Initialize();
+					m_fsm.ChangeState(new TinyFsmState(StateStreamingLoaderInitialize));
 				}
-			}
-			return TinyFsmState.End();
-		case -4:
-			Screen.sleepTimeout = -2;
-			return TinyFsmState.End();
-		case 0:
-			if (!Env.useAssetBundle || AssetBundleLoader.Instance.IsEnableDownlad())
-			{
-				m_fsm.ChangeState(new TinyFsmState(StateStreamingLoaderInitialize));
-			}
-			return TinyFsmState.End();
-		default:
-			return TinyFsmState.End();
+				return TinyFsmState.End();
+			default:
+				return TinyFsmState.End();
 		}
 	}
 
@@ -1105,27 +1119,27 @@ public class GameModeTitle : MonoBehaviour
 	{
 		switch (e.Signal)
 		{
-		case -3:
-			Screen.sleepTimeout = -1;
-			if (StreamingDataLoader.Instance == null)
-			{
-				StreamingDataKeyRetryProcess process = new StreamingDataKeyRetryProcess(base.gameObject, this);
-				NetMonitor.Instance.StartMonitor(process, 0f, HudNetworkConnect.DisplayType.ALL);
-				StreamingDataLoader.Create();
-				StreamingDataLoader.Instance.Initialize(base.gameObject);
-			}
-			return TinyFsmState.End();
-		case -4:
-			Screen.sleepTimeout = -2;
-			return TinyFsmState.End();
-		case 0:
-			if (StreamingDataLoader.Instance.IsEnableDownlad())
-			{
-				m_fsm.ChangeState(new TinyFsmState(StateCheckExistDownloadData));
-			}
-			return TinyFsmState.End();
-		default:
-			return TinyFsmState.End();
+			case -3:
+				Screen.sleepTimeout = -1;
+				if (StreamingDataLoader.Instance == null)
+				{
+					StreamingDataKeyRetryProcess process = new StreamingDataKeyRetryProcess(base.gameObject, this);
+					NetMonitor.Instance.StartMonitor(process, 0f, HudNetworkConnect.DisplayType.ALL);
+					StreamingDataLoader.Create();
+					StreamingDataLoader.Instance.Initialize(base.gameObject);
+				}
+				return TinyFsmState.End();
+			case -4:
+				Screen.sleepTimeout = -2;
+				return TinyFsmState.End();
+			case 0:
+				if (StreamingDataLoader.Instance.IsEnableDownlad())
+				{
+					m_fsm.ChangeState(new TinyFsmState(StateCheckExistDownloadData));
+				}
+				return TinyFsmState.End();
+			default:
+				return TinyFsmState.End();
 		}
 	}
 
@@ -1133,72 +1147,72 @@ public class GameModeTitle : MonoBehaviour
 	{
 		switch (e.Signal)
 		{
-		case -3:
-			if (m_loader == null)
-			{
-				GameObject gameObject = new GameObject();
-				m_loader = gameObject.AddComponent<TitleDataLoader>();
-				if (StreamingDataLoader.Instance != null)
+			case -3:
+				if (m_loader == null)
 				{
-					if (SystemSaveManager.Instance != null)
+					GameObject gameObject = new GameObject();
+					m_loader = gameObject.AddComponent<TitleDataLoader>();
+					if (StreamingDataLoader.Instance != null)
 					{
-						SystemData systemdata = SystemSaveManager.Instance.GetSystemdata();
-						if (systemdata != null && !systemdata.IsFlagStatus(SystemData.FlagStatus.FIRST_LAUNCH_TUTORIAL_END) && !m_isReturnFirstTutorial)
+						if (SystemSaveManager.Instance != null)
 						{
-							if (systemdata.IsFlagStatus(SystemData.FlagStatus.TUTORIAL_BOSS_MAP_1))
+							SystemData systemdata = SystemSaveManager.Instance.GetSystemdata();
+							if (systemdata != null && !systemdata.IsFlagStatus(SystemData.FlagStatus.FIRST_LAUNCH_TUTORIAL_END) && !m_isReturnFirstTutorial)
 							{
-								systemdata.SetFlagStatus(SystemData.FlagStatus.FIRST_LAUNCH_TUTORIAL_END, true);
-								SystemSaveManager.Instance.SaveSystemData();
+								if (systemdata.IsFlagStatus(SystemData.FlagStatus.TUTORIAL_BOSS_MAP_1))
+								{
+									systemdata.SetFlagStatus(SystemData.FlagStatus.FIRST_LAUNCH_TUTORIAL_END, true);
+									SystemSaveManager.Instance.SaveSystemData();
+								}
+								else
+								{
+									m_isFirstTutorial = true;
+								}
 							}
-							else
+						}
+						List<string> getData = new List<string>();
+						if (m_isFirstTutorial)
+						{
+							m_loader.AddStreamingSoundData("BGM_z01.acb");
+							m_loader.AddStreamingSoundData("BGM_z01_streamfiles.awb");
+							m_loader.AddStreamingSoundData("BGM_jingle.acb");
+							m_loader.AddStreamingSoundData("BGM_jingle_streamfiles.awb");
+							m_loader.AddStreamingSoundData("se_runners.acb");
+						}
+						else
+						{
+							StreamingDataLoader.Instance.GetLoadList(ref getData);
+							foreach (string item in getData)
 							{
-								m_isFirstTutorial = true;
+								bool flag = item.Contains("BGM_z");
+								bool flag2 = item.Contains("BGM_boss");
+								if (!flag && !flag2)
+								{
+									m_loader.AddStreamingSoundData(item);
+								}
 							}
 						}
 					}
-					List<string> getData = new List<string>();
-					if (m_isFirstTutorial)
+					m_loader.Setup(m_isFirstTutorial);
+				}
+				return TinyFsmState.End();
+			case -4:
+				return TinyFsmState.End();
+			case 0:
+				if (m_loader.EndCheckExistingDownloadData)
+				{
+					if (m_loader.RequestedDownloadCount > 0)
 					{
-						m_loader.AddStreamingSoundData("BGM_z01.acb");
-						m_loader.AddStreamingSoundData("BGM_z01_streamfiles.awb");
-						m_loader.AddStreamingSoundData("BGM_jingle.acb");
-						m_loader.AddStreamingSoundData("BGM_jingle_streamfiles.awb");
-						m_loader.AddStreamingSoundData("se_runners.acb");
+						m_fsm.ChangeState(new TinyFsmState(StateAskDataDownload));
 					}
 					else
 					{
-						StreamingDataLoader.Instance.GetLoadList(ref getData);
-						foreach (string item in getData)
-						{
-							bool flag = item.Contains("BGM_z");
-							bool flag2 = item.Contains("BGM_boss");
-							if (!flag && !flag2)
-							{
-								m_loader.AddStreamingSoundData(item);
-							}
-						}
+						m_fsm.ChangeState(new TinyFsmState(StateWaitDataLoad));
 					}
 				}
-				m_loader.Setup(m_isFirstTutorial);
-			}
-			return TinyFsmState.End();
-		case -4:
-			return TinyFsmState.End();
-		case 0:
-			if (m_loader.EndCheckExistingDownloadData)
-			{
-				if (m_loader.RequestedDownloadCount > 0)
-				{
-					m_fsm.ChangeState(new TinyFsmState(StateAskDataDownload));
-				}
-				else
-				{
-					m_fsm.ChangeState(new TinyFsmState(StateWaitDataLoad));
-				}
-			}
-			return TinyFsmState.End();
-		default:
-			return TinyFsmState.End();
+				return TinyFsmState.End();
+			default:
+				return TinyFsmState.End();
 		}
 	}
 
@@ -1206,66 +1220,66 @@ public class GameModeTitle : MonoBehaviour
 	{
 		switch (e.Signal)
 		{
-		case -3:
-		{
-			GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
-			if (m_isFirstTutorial)
-			{
-				info.caption = TextManager.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Title", "ui_Lbl_load_caption").text;
-				info.message = TextManager.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Title", "ui_Lbl_load_ask_FirstTutorial").text;
-			}
-			else if (m_isReturnFirstTutorial)
-			{
-				info.caption = TextManager.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Title", "ui_Lbl_load_caption").text;
-				info.message = TextManager.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Title", "ui_Lbl_load_ask_FirstTutorialReturn").text;
-			}
-			else
-			{
-				info.caption = TextManager.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Title", "ui_Lbl_load_caption").text;
-				if (TitleUtil.initUser)
+			case -3:
 				{
-					info.message = TextManager.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Title", "ui_Lbl_load_ask").text;
+					GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
+					if (m_isFirstTutorial)
+					{
+						info.caption = TextManager.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Title", "ui_Lbl_load_caption").text;
+						info.message = TextManager.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Title", "ui_Lbl_load_ask_FirstTutorial").text;
+					}
+					else if (m_isReturnFirstTutorial)
+					{
+						info.caption = TextManager.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Title", "ui_Lbl_load_caption").text;
+						info.message = TextManager.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Title", "ui_Lbl_load_ask_FirstTutorialReturn").text;
+					}
+					else
+					{
+						info.caption = TextManager.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Title", "ui_Lbl_load_caption").text;
+						if (TitleUtil.initUser)
+						{
+							info.message = TextManager.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Title", "ui_Lbl_load_ask").text;
+						}
+						else
+						{
+							info.message = TextManager.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Title", "ui_Lbl_load_ask_2").text;
+						}
+					}
+					info.anchor_path = "Camera/Anchor_5_MC";
+					info.buttonType = GeneralWindow.ButtonType.YesNo;
+					GeneralWindow.Create(info);
+					return TinyFsmState.End();
 				}
-				else
+			case -4:
+				return TinyFsmState.End();
+			case 0:
+				if (GeneralWindow.IsYesButtonPressed)
 				{
-					info.message = TextManager.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Title", "ui_Lbl_load_ask_2").text;
+					if (m_isReturnFirstTutorial)
+					{
+						m_isReturnFirstTutorial = false;
+					}
+					GeneralWindow.Close();
+					SoundManager.BgmPlay("bgm_sys_load");
+					m_fsm.ChangeState(new TinyFsmState(StateWaitDataDownload));
 				}
-			}
-			info.anchor_path = "Camera/Anchor_5_MC";
-			info.buttonType = GeneralWindow.ButtonType.YesNo;
-			GeneralWindow.Create(info);
-			return TinyFsmState.End();
-		}
-		case -4:
-			return TinyFsmState.End();
-		case 0:
-			if (GeneralWindow.IsYesButtonPressed)
-			{
-				if (m_isReturnFirstTutorial)
+				else if (GeneralWindow.IsNoButtonPressed)
 				{
-					m_isReturnFirstTutorial = false;
+					GeneralWindow.Close();
+					m_isLogined = false;
+					if (m_isReturnFirstTutorial)
+					{
+						m_isReturnFirstTutorial = false;
+						m_fsm.ChangeState(new TinyFsmState(StateLoadTitleResetScene));
+					}
+					else
+					{
+						m_fsm.ChangeState(new TinyFsmState(StateWaitTouchScreen));
+					}
 				}
-				GeneralWindow.Close();
-				SoundManager.BgmPlay("bgm_sys_load");
-				m_fsm.ChangeState(new TinyFsmState(StateWaitDataDownload));
-			}
-			else if (GeneralWindow.IsNoButtonPressed)
-			{
-				GeneralWindow.Close();
-				m_isLogined = false;
-				if (m_isReturnFirstTutorial)
-				{
-					m_isReturnFirstTutorial = false;
-					m_fsm.ChangeState(new TinyFsmState(StateLoadTitleResetScene));
-				}
-				else
-				{
-					m_fsm.ChangeState(new TinyFsmState(StateWaitTouchScreen));
-				}
-			}
-			return TinyFsmState.End();
-		default:
-			return TinyFsmState.End();
+				return TinyFsmState.End();
+			default:
+				return TinyFsmState.End();
 		}
 	}
 
@@ -1273,65 +1287,65 @@ public class GameModeTitle : MonoBehaviour
 	{
 		switch (e.Signal)
 		{
-		case -3:
-			Screen.sleepTimeout = -1;
-			if (m_loadingWindow != null)
-			{
-				m_loadingWindow.PlayStart();
-			}
-			if (m_loader != null)
-			{
-				m_loader.StartLoad();
-			}
-			SetUIEffect(false);
-			return TinyFsmState.End();
-		case -4:
-			if (m_loader != null)
-			{
-				UnityEngine.Object.Destroy(m_loader.gameObject);
-				m_loader = null;
-			}
-			Screen.sleepTimeout = -2;
-			return TinyFsmState.End();
-		case 0:
-			if (m_loader == null)
-			{
-				m_fsm.ChangeState(new TinyFsmState(StateEndDataLoad));
-			}
-			else if (m_loader.LoadEnd)
-			{
-				TextManager.NotLoadSetupCommonText();
-				TextManager.NotLoadSetupChaoText();
-				TextManager.NotLoadSetupEventText();
-				MissionTable.LoadSetup();
-				CharacterDataNameInfo.LoadSetup();
-				StageAbilityManager.SetupAbilityDataTable();
-				OverlapBonusTable overlapBonusTable = GameObjectUtil.FindGameObjectComponent<OverlapBonusTable>("OverlapBonusTable");
-				if (overlapBonusTable != null)
-				{
-					overlapBonusTable.Setup();
-				}
-				SetUIEffect(true);
+			case -3:
+				Screen.sleepTimeout = -1;
 				if (m_loadingWindow != null)
 				{
-					m_loadingWindow.PlayEnd();
+					m_loadingWindow.PlayStart();
 				}
-				m_fsm.ChangeState(new TinyFsmState(StateEndDataLoad));
-			}
-			else if (m_loader != null && m_loadingWindow != null)
-			{
-				float num = m_loader.RequestedLoadCount;
-				float num2 = m_loader.LoadEndCount;
-				if (num == 0f)
+				if (m_loader != null)
 				{
-					num = 1f;
+					m_loader.StartLoad();
 				}
-				float loadingPercentage = num2 * 100f / num;
-				m_loadingWindow.SetLoadingPercentage(loadingPercentage);
-			}
-			return TinyFsmState.End();
-		default:
-			return TinyFsmState.End();
+				SetUIEffect(false);
+				return TinyFsmState.End();
+			case -4:
+				if (m_loader != null)
+				{
+					UnityEngine.Object.Destroy(m_loader.gameObject);
+					m_loader = null;
+				}
+				Screen.sleepTimeout = -2;
+				return TinyFsmState.End();
+			case 0:
+				if (m_loader == null)
+				{
+					m_fsm.ChangeState(new TinyFsmState(StateEndDataLoad));
+				}
+				else if (m_loader.LoadEnd)
+				{
+					TextManager.NotLoadSetupCommonText();
+					TextManager.NotLoadSetupChaoText();
+					TextManager.NotLoadSetupEventText();
+					MissionTable.LoadSetup();
+					CharacterDataNameInfo.LoadSetup();
+					StageAbilityManager.SetupAbilityDataTable();
+					OverlapBonusTable overlapBonusTable = GameObjectUtil.FindGameObjectComponent<OverlapBonusTable>("OverlapBonusTable");
+					if (overlapBonusTable != null)
+					{
+						overlapBonusTable.Setup();
+					}
+					SetUIEffect(true);
+					if (m_loadingWindow != null)
+					{
+						m_loadingWindow.PlayEnd();
+					}
+					m_fsm.ChangeState(new TinyFsmState(StateEndDataLoad));
+				}
+				else if (m_loader != null && m_loadingWindow != null)
+				{
+					float num = m_loader.RequestedLoadCount;
+					float num2 = m_loader.LoadEndCount;
+					if (num == 0f)
+					{
+						num = 1f;
+					}
+					float loadingPercentage = num2 * 100f / num;
+					m_loadingWindow.SetLoadingPercentage(loadingPercentage);
+				}
+				return TinyFsmState.End();
+			default:
+				return TinyFsmState.End();
 		}
 	}
 
@@ -1339,64 +1353,64 @@ public class GameModeTitle : MonoBehaviour
 	{
 		switch (e.Signal)
 		{
-		case -3:
-			Screen.sleepTimeout = -1;
-			if (m_loadingConnect != null)
-			{
-				m_loadingConnect.Setup();
-				m_loadingConnect.PlayStart(HudNetworkConnect.DisplayType.NO_BG);
-			}
-			if (m_loader != null)
-			{
-				m_loader.StartLoad();
-			}
-			return TinyFsmState.End();
-		case -4:
-			if (m_loader != null)
-			{
-				UnityEngine.Object.Destroy(m_loader.gameObject);
-				m_loader = null;
-			}
-			Screen.sleepTimeout = -2;
-			return TinyFsmState.End();
-		case 0:
-			if (m_loader == null)
-			{
-				m_fsm.ChangeState(new TinyFsmState(StateEndDataLoad));
-			}
-			else if (m_loader.LoadEnd)
-			{
-				TextManager.NotLoadSetupCommonText();
-				TextManager.NotLoadSetupChaoText();
-				TextManager.NotLoadSetupEventText();
-				MissionTable.LoadSetup();
-				CharacterDataNameInfo.LoadSetup();
-				StageAbilityManager.SetupAbilityDataTable();
-				OverlapBonusTable overlapBonusTable = GameObjectUtil.FindGameObjectComponent<OverlapBonusTable>("OverlapBonusTable");
-				if (overlapBonusTable != null)
-				{
-					overlapBonusTable.Setup();
-				}
+			case -3:
+				Screen.sleepTimeout = -1;
 				if (m_loadingConnect != null)
 				{
-					m_loadingConnect.PlayEnd();
+					m_loadingConnect.Setup();
+					m_loadingConnect.PlayStart(HudNetworkConnect.DisplayType.NO_BG);
 				}
-				m_fsm.ChangeState(new TinyFsmState(StateEndDataLoad));
-			}
-			else if (m_loader != null && m_loadingWindow != null)
-			{
-				float num = m_loader.RequestedLoadCount;
-				float num2 = m_loader.LoadEndCount;
-				if (num == 0f)
+				if (m_loader != null)
 				{
-					num = 1f;
+					m_loader.StartLoad();
 				}
-				float loadingPercentage = num2 * 100f / num;
-				m_loadingWindow.SetLoadingPercentage(loadingPercentage);
-			}
-			return TinyFsmState.End();
-		default:
-			return TinyFsmState.End();
+				return TinyFsmState.End();
+			case -4:
+				if (m_loader != null)
+				{
+					UnityEngine.Object.Destroy(m_loader.gameObject);
+					m_loader = null;
+				}
+				Screen.sleepTimeout = -2;
+				return TinyFsmState.End();
+			case 0:
+				if (m_loader == null)
+				{
+					m_fsm.ChangeState(new TinyFsmState(StateEndDataLoad));
+				}
+				else if (m_loader.LoadEnd)
+				{
+					TextManager.NotLoadSetupCommonText();
+					TextManager.NotLoadSetupChaoText();
+					TextManager.NotLoadSetupEventText();
+					MissionTable.LoadSetup();
+					CharacterDataNameInfo.LoadSetup();
+					StageAbilityManager.SetupAbilityDataTable();
+					OverlapBonusTable overlapBonusTable = GameObjectUtil.FindGameObjectComponent<OverlapBonusTable>("OverlapBonusTable");
+					if (overlapBonusTable != null)
+					{
+						overlapBonusTable.Setup();
+					}
+					if (m_loadingConnect != null)
+					{
+						m_loadingConnect.PlayEnd();
+					}
+					m_fsm.ChangeState(new TinyFsmState(StateEndDataLoad));
+				}
+				else if (m_loader != null && m_loadingWindow != null)
+				{
+					float num = m_loader.RequestedLoadCount;
+					float num2 = m_loader.LoadEndCount;
+					if (num == 0f)
+					{
+						num = 1f;
+					}
+					float loadingPercentage = num2 * 100f / num;
+					m_loadingWindow.SetLoadingPercentage(loadingPercentage);
+				}
+				return TinyFsmState.End();
+			default:
+				return TinyFsmState.End();
 		}
 	}
 
@@ -1404,19 +1418,19 @@ public class GameModeTitle : MonoBehaviour
 	{
 		switch (e.Signal)
 		{
-		case -3:
-			return TinyFsmState.End();
-		case -4:
-			if (m_progressBar != null)
-			{
-				m_progressBar.SetState(0);
-			}
-			return TinyFsmState.End();
-		case 0:
-			m_fsm.ChangeState(new TinyFsmState(StateGameServerLogin));
-			return TinyFsmState.End();
-		default:
-			return TinyFsmState.End();
+			case -3:
+				return TinyFsmState.End();
+			case -4:
+				if (m_progressBar != null)
+				{
+					m_progressBar.SetState(0);
+				}
+				return TinyFsmState.End();
+			case 0:
+				m_fsm.ChangeState(new TinyFsmState(StateGameServerLogin));
+				return TinyFsmState.End();
+			default:
+				return TinyFsmState.End();
 		}
 	}
 
@@ -1424,42 +1438,42 @@ public class GameModeTitle : MonoBehaviour
 	{
 		switch (e.Signal)
 		{
-		case -3:
-		{
-			ServerSessionWatcher serverSessionWatcher = GameObjectUtil.FindGameObjectComponent<ServerSessionWatcher>("NetMonitor");
-			if (serverSessionWatcher != null)
-			{
-				m_isSessionValid = false;
-				serverSessionWatcher.ValidateSession(ServerSessionWatcher.ValidateType.LOGIN_OR_RELOGIN, ValidateSessionCallback);
-			}
-			return TinyFsmState.End();
-		}
-		case -4:
-			if (m_progressBar != null)
-			{
-				m_progressBar.SetState(1);
-			}
-			return TinyFsmState.End();
-		case 0:
-			if (m_isSessionValid)
-			{
-				m_isLogined = true;
-				Debug.Log("GameModeTitle.StateGameServerLogin:Finished");
-				if (m_isFirstTutorial)
+			case -3:
 				{
-					m_nextSceneName = "s_playingstage";
-					SetFirstTutorialInfo();
-					m_fsm.ChangeState(new TinyFsmState(StateFadeIn));
+					ServerSessionWatcher serverSessionWatcher = GameObjectUtil.FindGameObjectComponent<ServerSessionWatcher>("NetMonitor");
+					if (serverSessionWatcher != null)
+					{
+						m_isSessionValid = false;
+						serverSessionWatcher.ValidateSession(ServerSessionWatcher.ValidateType.LOGIN_OR_RELOGIN, ValidateSessionCallback);
+					}
+					return TinyFsmState.End();
 				}
-				else
+			case -4:
+				if (m_progressBar != null)
 				{
-					m_fsm.ChangeState(new TinyFsmState(StateGetServerContinueParameter));
+					m_progressBar.SetState(1);
 				}
 				return TinyFsmState.End();
-			}
-			return TinyFsmState.End();
-		default:
-			return TinyFsmState.End();
+			case 0:
+				if (m_isSessionValid)
+				{
+					m_isLogined = true;
+					Debug.Log("GameModeTitle.StateGameServerLogin:Finished");
+					if (m_isFirstTutorial)
+					{
+						m_nextSceneName = "s_playingstage";
+						SetFirstTutorialInfo();
+						m_fsm.ChangeState(new TinyFsmState(StateFadeIn));
+					}
+					else
+					{
+						m_fsm.ChangeState(new TinyFsmState(StateGetServerContinueParameter));
+					}
+					return TinyFsmState.End();
+				}
+				return TinyFsmState.End();
+			default:
+				return TinyFsmState.End();
 		}
 	}
 
@@ -1467,41 +1481,42 @@ public class GameModeTitle : MonoBehaviour
 	{
 		switch (e.Signal)
 		{
-		case -3:
-		{
-			ServerInterface loggedInServerInterface = ServerInterface.LoggedInServerInterface;
-			if (loggedInServerInterface != null)
-			{
-				loggedInServerInterface.RequestServerGetVariousParameter(base.gameObject);
-			}
-			return TinyFsmState.End();
-		}
-		case -4:
-			if (m_progressBar != null)
-			{
-				m_progressBar.SetState(2);
-			}
-			return TinyFsmState.End();
-		case 0:
-			return TinyFsmState.End();
-		case 102:
-			if (RegionManager.Instance.IsUseHardlightAds())
-			{
-				GameObject x = GameObject.Find("HardlightAds");
-				if (x == null)
+			case -3:
 				{
-					x = new GameObject();
-					if (x != null)
+					ServerInterface loggedInServerInterface = ServerInterface.LoggedInServerInterface;
+					if (loggedInServerInterface != null)
 					{
-						x.name = "HardlightAds";
-						UnityEngine.Object.DontDestroyOnLoad(x);
+						loggedInServerInterface.RequestServerGetVariousParameter(base.gameObject);
+					}
+					return TinyFsmState.End();
+				}
+			case -4:
+				if (m_progressBar != null)
+				{
+					m_progressBar.SetState(2);
+				}
+				return TinyFsmState.End();
+			case 0:
+				return TinyFsmState.End();
+			case 102:
+				if (RegionManager.Instance.IsUseHardlightAds())
+				{
+					GameObject x = GameObject.Find("HardlightAds");
+					if (x == null)
+					{
+						x = new GameObject();
+						if (x != null)
+						{
+							x.name = "HardlightAds";
+							UnityEngine.Object.DontDestroyOnLoad(x);
+							UnityEngineInternal.APIUpdaterRuntimeServices.AddComponent(x, "Assets/Scripts/GameModeTitle.cs (1512,8)", "HardlightAds");
+						}
 					}
 				}
-			}
-			m_fsm.ChangeState(new TinyFsmState(StateCheckAtom));
-			return TinyFsmState.End();
-		default:
-			return TinyFsmState.End();
+				m_fsm.ChangeState(new TinyFsmState(StateCheckAtom));
+				return TinyFsmState.End();
+			default:
+				return TinyFsmState.End();
 		}
 	}
 
@@ -1509,27 +1524,32 @@ public class GameModeTitle : MonoBehaviour
 	{
 		switch (e.Signal)
 		{
-		case -3:
-			if (Binding.Instance != null)
-			{
-				string urlSchemeStr = Binding.Instance.GetUrlSchemeStr();
-				Binding.Instance.ClearUrlSchemeStr();
-				if (!string.IsNullOrEmpty(urlSchemeStr))
+			case -3:
+				if (Binding.Instance != null)
 				{
-					string campaign = string.Empty;
-					string serial = string.Empty;
-					if (ServerAtomSerial.GetSerialFromScheme(urlSchemeStr, ref campaign, ref serial))
+					string urlSchemeStr = Binding.Instance.GetUrlSchemeStr();
+					Binding.Instance.ClearUrlSchemeStr();
+					if (!string.IsNullOrEmpty(urlSchemeStr))
 					{
-						m_atomInfo = new AtomDataInfo();
-						m_atomInfo.campain = campaign;
-						m_atomInfo.serial = serial;
-						GeneralWindow.CInfo info3 = default(GeneralWindow.CInfo);
-						info3.message = TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Title", "atom_check");
-						info3.caption = TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Title", "atom_check_caption");
-						info3.anchor_path = "Camera/Anchor_5_MC";
-						info3.buttonType = GeneralWindow.ButtonType.Ok;
-						GeneralWindow.Create(info3);
-						m_subState = 0;
+						string campaign = string.Empty;
+						string serial = string.Empty;
+						if (ServerAtomSerial.GetSerialFromScheme(urlSchemeStr, ref campaign, ref serial))
+						{
+							m_atomInfo = new AtomDataInfo();
+							m_atomInfo.campain = campaign;
+							m_atomInfo.serial = serial;
+							GeneralWindow.CInfo info3 = default(GeneralWindow.CInfo);
+							info3.message = TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Title", "atom_check");
+							info3.caption = TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Title", "atom_check_caption");
+							info3.anchor_path = "Camera/Anchor_5_MC";
+							info3.buttonType = GeneralWindow.ButtonType.Ok;
+							GeneralWindow.Create(info3);
+							m_subState = 0;
+						}
+						else
+						{
+							m_subState = 3;
+						}
 					}
 					else
 					{
@@ -1540,99 +1560,94 @@ public class GameModeTitle : MonoBehaviour
 				{
 					m_subState = 3;
 				}
-			}
-			else
-			{
-				m_subState = 3;
-			}
-			return TinyFsmState.End();
-		case -4:
-			if (m_progressBar != null)
-			{
-				m_progressBar.SetState(3);
-			}
-			m_atomInfo = null;
-			return TinyFsmState.End();
-		case 0:
-			switch (m_subState)
-			{
+				return TinyFsmState.End();
+			case -4:
+				if (m_progressBar != null)
+				{
+					m_progressBar.SetState(3);
+				}
+				m_atomInfo = null;
+				return TinyFsmState.End();
 			case 0:
-			{
-				if (!GeneralWindow.IsButtonPressed)
+				switch (m_subState)
 				{
-					break;
+					case 0:
+						{
+							if (!GeneralWindow.IsButtonPressed)
+							{
+								break;
+							}
+							bool new_user = true;
+							SystemSaveManager instance = SystemSaveManager.Instance;
+							if (instance != null)
+							{
+								SystemData systemdata = instance.GetSystemdata();
+								if (systemdata != null)
+								{
+									new_user = systemdata.IsNewUser();
+								}
+							}
+							ServerInterface loggedInServerInterface = ServerInterface.LoggedInServerInterface;
+							loggedInServerInterface.RequestServerAtomSerial(m_atomInfo.campain, m_atomInfo.serial, new_user, base.gameObject);
+							GeneralWindow.Close();
+							m_subState = 1;
+							break;
+						}
+					case 1:
+						Debug.Log("Wait Server");
+						return TinyFsmState.End();
+					case 2:
+						if (GeneralWindow.IsButtonPressed)
+						{
+							Debug.Log("EndText end:");
+							GeneralWindow.Close();
+							m_subState = 3;
+						}
+						return TinyFsmState.End();
+					case 3:
+						m_fsm.ChangeState(new TinyFsmState(StateCheckNoLoginIncentive));
+						return TinyFsmState.End();
 				}
-				bool new_user = true;
-				SystemSaveManager instance = SystemSaveManager.Instance;
-				if (instance != null)
-				{
-					SystemData systemdata = instance.GetSystemdata();
-					if (systemdata != null)
-					{
-						new_user = systemdata.IsNewUser();
-					}
-				}
-				ServerInterface loggedInServerInterface = ServerInterface.LoggedInServerInterface;
-				loggedInServerInterface.RequestServerAtomSerial(m_atomInfo.campain, m_atomInfo.serial, new_user, base.gameObject);
-				GeneralWindow.Close();
-				m_subState = 1;
-				break;
-			}
+				return TinyFsmState.End();
 			case 1:
-				Debug.Log("Wait Server");
-				return TinyFsmState.End();
-			case 2:
-				if (GeneralWindow.IsButtonPressed)
 				{
-					Debug.Log("EndText end:");
-					GeneralWindow.Close();
-					m_subState = 3;
+					int iD = e.GetMessage.ID;
+					TextManager.TextType type = TextManager.TextType.TEXTTYPE_FIXATION_TEXT;
+					switch (iD)
+					{
+						case 61495:
+							{
+								GeneralWindow.CInfo info2 = default(GeneralWindow.CInfo);
+								info2.message = TextUtility.GetText(type, "Title", "atom_present_get");
+								info2.caption = TextUtility.GetText(type, "Title", "atom_success_caption");
+								info2.anchor_path = "Camera/Anchor_5_MC";
+								info2.buttonType = GeneralWindow.ButtonType.Ok;
+								GeneralWindow.Create(info2);
+								m_subState = 2;
+								break;
+							}
+						case 61517:
+							{
+								MsgServerConnctFailed msgServerConnctFailed = e.GetMessage as MsgServerConnctFailed;
+								string cellID = "atom_invalid_serial";
+								if (msgServerConnctFailed != null && msgServerConnctFailed.m_status == ServerInterface.StatusCode.UsedSerialCode)
+								{
+									cellID = "atom_used_serial";
+								}
+								GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
+								info.message = TextUtility.GetText(type, "Title", cellID);
+								info.caption = TextUtility.GetText(type, "Title", "atom_failure_caption");
+								info.anchor_path = "Camera/Anchor_5_MC";
+								info.buttonType = GeneralWindow.ButtonType.Ok;
+								GeneralWindow.Create(info);
+								m_subState = 2;
+								break;
+							}
+					}
+					return TinyFsmState.End();
 				}
+			default:
 				return TinyFsmState.End();
-			case 3:
-				m_fsm.ChangeState(new TinyFsmState(StateCheckNoLoginIncentive));
-				return TinyFsmState.End();
-			}
-			return TinyFsmState.End();
-		case 1:
-		{
-			int iD = e.GetMessage.ID;
-			TextManager.TextType type = TextManager.TextType.TEXTTYPE_FIXATION_TEXT;
-			switch (iD)
-			{
-			case 61495:
-			{
-				GeneralWindow.CInfo info2 = default(GeneralWindow.CInfo);
-				info2.message = TextUtility.GetText(type, "Title", "atom_present_get");
-				info2.caption = TextUtility.GetText(type, "Title", "atom_success_caption");
-				info2.anchor_path = "Camera/Anchor_5_MC";
-				info2.buttonType = GeneralWindow.ButtonType.Ok;
-				GeneralWindow.Create(info2);
-				m_subState = 2;
-				break;
-			}
-			case 61517:
-			{
-				MsgServerConnctFailed msgServerConnctFailed = e.GetMessage as MsgServerConnctFailed;
-				string cellID = "atom_invalid_serial";
-				if (msgServerConnctFailed != null && msgServerConnctFailed.m_status == ServerInterface.StatusCode.UsedSerialCode)
-				{
-					cellID = "atom_used_serial";
-				}
-				GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
-				info.message = TextUtility.GetText(type, "Title", cellID);
-				info.caption = TextUtility.GetText(type, "Title", "atom_failure_caption");
-				info.anchor_path = "Camera/Anchor_5_MC";
-				info.buttonType = GeneralWindow.ButtonType.Ok;
-				GeneralWindow.Create(info);
-				m_subState = 2;
-				break;
-			}
-			}
-			return TinyFsmState.End();
-		}
-		default:
-			return TinyFsmState.End();
 		}
 	}
 
@@ -1640,61 +1655,61 @@ public class GameModeTitle : MonoBehaviour
 	{
 		switch (e.Signal)
 		{
-		case -3:
-			if (PnoteNotification.CheckEnableGetNoLoginIncentive())
-			{
-				ServerInterface loggedInServerInterface = ServerInterface.LoggedInServerInterface;
-				if (loggedInServerInterface != null)
+			case -3:
+				if (PnoteNotification.CheckEnableGetNoLoginIncentive())
 				{
-					loggedInServerInterface.RequestServerGetFacebookIncentive(4, 1, base.gameObject);
-					m_subState = 0;
+					ServerInterface loggedInServerInterface = ServerInterface.LoggedInServerInterface;
+					if (loggedInServerInterface != null)
+					{
+						loggedInServerInterface.RequestServerGetFacebookIncentive(4, 1, base.gameObject);
+						m_subState = 0;
+					}
 				}
-			}
-			else
-			{
-				m_subState = 2;
-			}
-			return TinyFsmState.End();
-		case -4:
-			if (m_progressBar != null)
-			{
-				m_progressBar.SetState(4);
-			}
-			m_atomInfo = null;
-			return TinyFsmState.End();
-		case 0:
-			switch (m_subState)
-			{
+				else
+				{
+					m_subState = 2;
+				}
+				return TinyFsmState.End();
+			case -4:
+				if (m_progressBar != null)
+				{
+					m_progressBar.SetState(4);
+				}
+				m_atomInfo = null;
+				return TinyFsmState.End();
 			case 0:
-				Debug.Log("Wait Server");
-				return TinyFsmState.End();
-			case 1:
-				if (GeneralWindow.IsButtonPressed)
+				switch (m_subState)
 				{
-					Debug.Log("EndText end:");
-					GeneralWindow.Close();
-					m_subState = 3;
+					case 0:
+						Debug.Log("Wait Server");
+						return TinyFsmState.End();
+					case 1:
+						if (GeneralWindow.IsButtonPressed)
+						{
+							Debug.Log("EndText end:");
+							GeneralWindow.Close();
+							m_subState = 3;
+						}
+						return TinyFsmState.End();
+					case 2:
+						m_fsm.ChangeState(new TinyFsmState(StateSnsAdditionalData));
+						return TinyFsmState.End();
+					default:
+						return TinyFsmState.End();
 				}
-				return TinyFsmState.End();
-			case 2:
-				m_fsm.ChangeState(new TinyFsmState(StateSnsAdditionalData));
+			case 1:
+				switch (e.GetMessage.ID)
+				{
+					case 61490:
+						m_subState = 2;
+						break;
+					case 61517:
+						m_subState = 2;
+						break;
+				}
 				return TinyFsmState.End();
 			default:
 				return TinyFsmState.End();
-			}
-		case 1:
-			switch (e.GetMessage.ID)
-			{
-			case 61490:
-				m_subState = 2;
-				break;
-			case 61517:
-				m_subState = 2;
-				break;
-			}
-			return TinyFsmState.End();
-		default:
-			return TinyFsmState.End();
 		}
 	}
 
@@ -1702,39 +1717,39 @@ public class GameModeTitle : MonoBehaviour
 	{
 		switch (e.Signal)
 		{
-		case -3:
-		{
-			SocialInterface socialInterface2 = GameObjectUtil.FindGameObjectComponent<SocialInterface>("SocialInterface");
-			if (socialInterface2 != null && socialInterface2.IsLoggedIn)
-			{
-				socialInterface2.RequestFriendRankingInfoSet(null, null, SettingPartsSnsAdditional.Mode.BACK_GROUND_LOAD);
-			}
-			return TinyFsmState.End();
-		}
-		case -4:
-			if (m_progressBar != null)
-			{
-				m_progressBar.SetState(5);
-			}
-			return TinyFsmState.End();
-		case 0:
-		{
-			SocialInterface socialInterface = GameObjectUtil.FindGameObjectComponent<SocialInterface>("SocialInterface");
-			if (socialInterface != null && socialInterface.IsLoggedIn)
-			{
-				if (socialInterface.IsEnableFriendInfo)
+			case -3:
 				{
-					m_fsm.ChangeState(new TinyFsmState(StatePushNoticeCheck));
+					SocialInterface socialInterface2 = GameObjectUtil.FindGameObjectComponent<SocialInterface>("SocialInterface");
+					if (socialInterface2 != null && socialInterface2.IsLoggedIn)
+					{
+						socialInterface2.RequestFriendRankingInfoSet(null, null, SettingPartsSnsAdditional.Mode.BACK_GROUND_LOAD);
+					}
+					return TinyFsmState.End();
 				}
-			}
-			else
-			{
-				m_fsm.ChangeState(new TinyFsmState(StatePushNoticeCheck));
-			}
-			return TinyFsmState.End();
-		}
-		default:
-			return TinyFsmState.End();
+			case -4:
+				if (m_progressBar != null)
+				{
+					m_progressBar.SetState(5);
+				}
+				return TinyFsmState.End();
+			case 0:
+				{
+					SocialInterface socialInterface = GameObjectUtil.FindGameObjectComponent<SocialInterface>("SocialInterface");
+					if (socialInterface != null && socialInterface.IsLoggedIn)
+					{
+						if (socialInterface.IsEnableFriendInfo)
+						{
+							m_fsm.ChangeState(new TinyFsmState(StatePushNoticeCheck));
+						}
+					}
+					else
+					{
+						m_fsm.ChangeState(new TinyFsmState(StatePushNoticeCheck));
+					}
+					return TinyFsmState.End();
+				}
+			default:
+				return TinyFsmState.End();
 		}
 	}
 
@@ -1742,30 +1757,30 @@ public class GameModeTitle : MonoBehaviour
 	{
 		switch (e.Signal)
 		{
-		case -3:
-			if (SystemSaveManager.Instance != null)
-			{
-				SystemData systemSaveData = SystemSaveManager.GetSystemSaveData();
-				if (systemSaveData != null)
+			case -3:
+				if (SystemSaveManager.Instance != null)
 				{
-					if (systemSaveData.pushNotice)
+					SystemData systemSaveData = SystemSaveManager.GetSystemSaveData();
+					if (systemSaveData != null)
 					{
-						PnoteNotification.RequestRegister();
-					}
-					else
-					{
-						PnoteNotification.RequestUnregister();
+						if (systemSaveData.pushNotice)
+						{
+							PnoteNotification.RequestRegister();
+						}
+						else
+						{
+							PnoteNotification.RequestUnregister();
+						}
 					}
 				}
-			}
-			return TinyFsmState.End();
-		case -4:
-			return TinyFsmState.End();
-		case 0:
-			m_fsm.ChangeState(new TinyFsmState(StateWaitToGetMenuData));
-			return TinyFsmState.End();
-		default:
-			return TinyFsmState.End();
+				return TinyFsmState.End();
+			case -4:
+				return TinyFsmState.End();
+			case 0:
+				m_fsm.ChangeState(new TinyFsmState(StateWaitToGetMenuData));
+				return TinyFsmState.End();
+			default:
+				return TinyFsmState.End();
 		}
 	}
 
@@ -1773,28 +1788,28 @@ public class GameModeTitle : MonoBehaviour
 	{
 		switch (e.Signal)
 		{
-		case -3:
-		{
-			ServerInterface loggedInServerInterface = ServerInterface.LoggedInServerInterface;
-			if (loggedInServerInterface != null)
-			{
-				loggedInServerInterface.RequestServerRetrievePlayerState(base.gameObject);
-			}
-			return TinyFsmState.End();
-		}
-		case -4:
-			if (m_progressBar != null)
-			{
-				m_progressBar.SetState(16);
-			}
-			return TinyFsmState.End();
-		case 0:
-			return TinyFsmState.End();
-		case 103:
-			m_fsm.ChangeState(new TinyFsmState(StateAchievementLogin));
-			return TinyFsmState.End();
-		default:
-			return TinyFsmState.End();
+			case -3:
+				{
+					ServerInterface loggedInServerInterface = ServerInterface.LoggedInServerInterface;
+					if (loggedInServerInterface != null)
+					{
+						loggedInServerInterface.RequestServerRetrievePlayerState(base.gameObject);
+					}
+					return TinyFsmState.End();
+				}
+			case -4:
+				if (m_progressBar != null)
+				{
+					m_progressBar.SetState(16);
+				}
+				return TinyFsmState.End();
+			case 0:
+				return TinyFsmState.End();
+			case 103:
+				m_fsm.ChangeState(new TinyFsmState(StateAchievementLogin));
+				return TinyFsmState.End();
+			default:
+				return TinyFsmState.End();
 		}
 	}
 
@@ -1802,33 +1817,33 @@ public class GameModeTitle : MonoBehaviour
 	{
 		switch (e.Signal)
 		{
-		case -3:
-		{
-			AchievementManager.Setup();
-			SystemSaveManager instance = SystemSaveManager.Instance;
-			if (instance != null)
-			{
-				SystemData systemdata = SystemSaveManager.Instance.GetSystemdata();
-				if (systemdata != null && systemdata.achievementCancelCount >= ACHIEVEMENT_HIDE_COUNT)
+			case -3:
 				{
-					AchievementManager.RequestSkipAuthenticate();
+					AchievementManager.Setup();
+					SystemSaveManager instance = SystemSaveManager.Instance;
+					if (instance != null)
+					{
+						SystemData systemdata = SystemSaveManager.Instance.GetSystemdata();
+						if (systemdata != null && systemdata.achievementCancelCount >= ACHIEVEMENT_HIDE_COUNT)
+						{
+							AchievementManager.RequestSkipAuthenticate();
+							return TinyFsmState.End();
+						}
+					}
+					AchievementManager.RequestUpdate();
 					return TinyFsmState.End();
 				}
-			}
-			AchievementManager.RequestUpdate();
-			return TinyFsmState.End();
-		}
-		case -4:
-			if (m_progressBar != null)
-			{
-				m_progressBar.SetState(17);
-			}
-			return TinyFsmState.End();
-		case 0:
-			m_fsm.ChangeState(new TinyFsmState(StateGetCostList));
-			return TinyFsmState.End();
-		default:
-			return TinyFsmState.End();
+			case -4:
+				if (m_progressBar != null)
+				{
+					m_progressBar.SetState(17);
+				}
+				return TinyFsmState.End();
+			case 0:
+				m_fsm.ChangeState(new TinyFsmState(StateGetCostList));
+				return TinyFsmState.End();
+			default:
+				return TinyFsmState.End();
 		}
 	}
 
@@ -1836,28 +1851,28 @@ public class GameModeTitle : MonoBehaviour
 	{
 		switch (e.Signal)
 		{
-		case -3:
-		{
-			ServerInterface loggedInServerInterface = ServerInterface.LoggedInServerInterface;
-			if (loggedInServerInterface != null)
-			{
-				loggedInServerInterface.RequestServerGetCostList(base.gameObject);
-			}
-			return TinyFsmState.End();
-		}
-		case -4:
-			if (m_progressBar != null)
-			{
-				m_progressBar.SetState(19);
-			}
-			return TinyFsmState.End();
-		case 0:
-			return TinyFsmState.End();
-		case 106:
-			m_fsm.ChangeState(new TinyFsmState(StateGetEventList));
-			return TinyFsmState.End();
-		default:
-			return TinyFsmState.End();
+			case -3:
+				{
+					ServerInterface loggedInServerInterface = ServerInterface.LoggedInServerInterface;
+					if (loggedInServerInterface != null)
+					{
+						loggedInServerInterface.RequestServerGetCostList(base.gameObject);
+					}
+					return TinyFsmState.End();
+				}
+			case -4:
+				if (m_progressBar != null)
+				{
+					m_progressBar.SetState(19);
+				}
+				return TinyFsmState.End();
+			case 0:
+				return TinyFsmState.End();
+			case 106:
+				m_fsm.ChangeState(new TinyFsmState(StateGetEventList));
+				return TinyFsmState.End();
+			default:
+				return TinyFsmState.End();
 		}
 	}
 
@@ -1865,34 +1880,34 @@ public class GameModeTitle : MonoBehaviour
 	{
 		switch (e.Signal)
 		{
-		case -3:
-		{
-			m_isSkip = true;
-			ServerInterface loggedInServerInterface = ServerInterface.LoggedInServerInterface;
-			if (loggedInServerInterface != null)
-			{
-				loggedInServerInterface.RequestServerGetEventList(base.gameObject);
-				m_isSkip = false;
-			}
-			return TinyFsmState.End();
-		}
-		case -4:
-			if (m_progressBar != null)
-			{
-				m_progressBar.SetState(20);
-			}
-			return TinyFsmState.End();
-		case 0:
-			if (m_isSkip)
-			{
+			case -3:
+				{
+					m_isSkip = true;
+					ServerInterface loggedInServerInterface = ServerInterface.LoggedInServerInterface;
+					if (loggedInServerInterface != null)
+					{
+						loggedInServerInterface.RequestServerGetEventList(base.gameObject);
+						m_isSkip = false;
+					}
+					return TinyFsmState.End();
+				}
+			case -4:
+				if (m_progressBar != null)
+				{
+					m_progressBar.SetState(20);
+				}
+				return TinyFsmState.End();
+			case 0:
+				if (m_isSkip)
+				{
+					m_fsm.ChangeState(new TinyFsmState(StateGetMileageMap));
+				}
+				return TinyFsmState.End();
+			case 108:
 				m_fsm.ChangeState(new TinyFsmState(StateGetMileageMap));
-			}
-			return TinyFsmState.End();
-		case 108:
-			m_fsm.ChangeState(new TinyFsmState(StateGetMileageMap));
-			return TinyFsmState.End();
-		default:
-			return TinyFsmState.End();
+				return TinyFsmState.End();
+			default:
+				return TinyFsmState.End();
 		}
 	}
 
@@ -1900,51 +1915,51 @@ public class GameModeTitle : MonoBehaviour
 	{
 		switch (e.Signal)
 		{
-		case -3:
-		{
-			m_isSkip = true;
-			ServerInterface loggedInServerInterface = ServerInterface.LoggedInServerInterface;
-			if (loggedInServerInterface != null)
-			{
-				List<string> list = new List<string>();
-				if (list != null)
+			case -3:
 				{
-					SocialInterface socialInterface = GameObjectUtil.FindGameObjectComponent<SocialInterface>("SocialInterface");
-					if (socialInterface != null)
+					m_isSkip = true;
+					ServerInterface loggedInServerInterface = ServerInterface.LoggedInServerInterface;
+					if (loggedInServerInterface != null)
 					{
-						list = SocialInterface.GetGameIdList(socialInterface.FriendList);
+						List<string> list = new List<string>();
+						if (list != null)
+						{
+							SocialInterface socialInterface = GameObjectUtil.FindGameObjectComponent<SocialInterface>("SocialInterface");
+							if (socialInterface != null)
+							{
+								list = SocialInterface.GetGameIdList(socialInterface.FriendList);
+							}
+						}
+						if (list != null && list.Count > 0)
+						{
+							loggedInServerInterface.RequestServerGetMileageData(list.ToArray(), base.gameObject);
+							m_isSkip = false;
+						}
+						else
+						{
+							loggedInServerInterface.RequestServerGetMileageData(null, base.gameObject);
+							m_isSkip = false;
+						}
 					}
+					return TinyFsmState.End();
 				}
-				if (list != null && list.Count > 0)
+			case -4:
+				if (m_progressBar != null)
 				{
-					loggedInServerInterface.RequestServerGetMileageData(list.ToArray(), base.gameObject);
-					m_isSkip = false;
+					m_progressBar.SetState(21);
 				}
-				else
+				return TinyFsmState.End();
+			case 0:
+				if (m_isSkip)
 				{
-					loggedInServerInterface.RequestServerGetMileageData(null, base.gameObject);
-					m_isSkip = false;
+					m_fsm.ChangeState(new TinyFsmState(StateIapInitialize));
 				}
-			}
-			return TinyFsmState.End();
-		}
-		case -4:
-			if (m_progressBar != null)
-			{
-				m_progressBar.SetState(21);
-			}
-			return TinyFsmState.End();
-		case 0:
-			if (m_isSkip)
-			{
+				return TinyFsmState.End();
+			case 107:
 				m_fsm.ChangeState(new TinyFsmState(StateIapInitialize));
-			}
-			return TinyFsmState.End();
-		case 107:
-			m_fsm.ChangeState(new TinyFsmState(StateIapInitialize));
-			return TinyFsmState.End();
-		default:
-			return TinyFsmState.End();
+				return TinyFsmState.End();
+			default:
+				return TinyFsmState.End();
 		}
 	}
 
@@ -1952,20 +1967,20 @@ public class GameModeTitle : MonoBehaviour
 	{
 		switch (e.Signal)
 		{
-		case -3:
-			IapInitializeEndCallback(NativeObserver.IAPResult.ProductsRequestCompleted);
-			return TinyFsmState.End();
-		case -4:
-			if (m_progressBar != null)
-			{
-				m_progressBar.SetState(22);
-			}
-			return TinyFsmState.End();
-		case 0:
-			m_fsm.ChangeState(new TinyFsmState(StateLoadEventResource));
-			return TinyFsmState.End();
-		default:
-			return TinyFsmState.End();
+			case -3:
+				IapInitializeEndCallback(NativeObserver.IAPResult.ProductsRequestCompleted);
+				return TinyFsmState.End();
+			case -4:
+				if (m_progressBar != null)
+				{
+					m_progressBar.SetState(22);
+				}
+				return TinyFsmState.End();
+			case 0:
+				m_fsm.ChangeState(new TinyFsmState(StateLoadEventResource));
+				return TinyFsmState.End();
+			default:
+				return TinyFsmState.End();
 		}
 	}
 
@@ -1973,49 +1988,49 @@ public class GameModeTitle : MonoBehaviour
 	{
 		switch (e.Signal)
 		{
-		case -3:
-			if (EventManager.Instance != null && EventManager.Instance.IsInEvent())
-			{
-				m_sceneLoader = new GameObject("SceneLoader");
-				if (m_sceneLoader != null)
+			case -3:
+				if (EventManager.Instance != null && EventManager.Instance.IsInEvent())
 				{
-					ResourceSceneLoader resourceSceneLoader = m_sceneLoader.AddComponent<ResourceSceneLoader>();
-					m_loadInfoForEvent.m_scenename = "EventResourceCommon" + EventManager.GetResourceName();
-					resourceSceneLoader.AddLoadAndResourceManager(m_loadInfoForEvent);
+					m_sceneLoader = new GameObject("SceneLoader");
+					if (m_sceneLoader != null)
+					{
+						ResourceSceneLoader resourceSceneLoader = m_sceneLoader.AddComponent<ResourceSceneLoader>();
+						m_loadInfoForEvent.m_scenename = "EventResourceCommon" + EventManager.GetResourceName();
+						resourceSceneLoader.AddLoadAndResourceManager(m_loadInfoForEvent);
+					}
+					AtlasManager.Instance.StartLoadAtlasForTitle();
 				}
-				AtlasManager.Instance.StartLoadAtlasForTitle();
-			}
-			return TinyFsmState.End();
-		case -4:
-			if (m_progressBar != null)
-			{
-				m_progressBar.SetState(23);
-			}
-			return TinyFsmState.End();
-		case 0:
-		{
-			bool flag = true;
-			if (m_sceneLoader != null)
-			{
-				if (m_sceneLoader.GetComponent<ResourceSceneLoader>().Loaded && AtlasManager.Instance.IsLoadAtlas())
+				return TinyFsmState.End();
+			case -4:
+				if (m_progressBar != null)
 				{
-					flag = true;
-					UnityEngine.Object.Destroy(m_sceneLoader);
-					m_sceneLoader = null;
+					m_progressBar.SetState(23);
 				}
-				else
+				return TinyFsmState.End();
+			case 0:
 				{
-					flag = false;
+					bool flag = true;
+					if (m_sceneLoader != null)
+					{
+						if (m_sceneLoader.GetComponent<ResourceSceneLoader>().Loaded && AtlasManager.Instance.IsLoadAtlas())
+						{
+							flag = true;
+							UnityEngine.Object.Destroy(m_sceneLoader);
+							m_sceneLoader = null;
+						}
+						else
+						{
+							flag = false;
+						}
+					}
+					if (flag)
+					{
+						m_fsm.ChangeState(new TinyFsmState(StateLoadingUIData));
+					}
+					return TinyFsmState.End();
 				}
-			}
-			if (flag)
-			{
-				m_fsm.ChangeState(new TinyFsmState(StateLoadingUIData));
-			}
-			return TinyFsmState.End();
-		}
-		default:
-			return TinyFsmState.End();
+			default:
+				return TinyFsmState.End();
 		}
 	}
 
@@ -2023,23 +2038,23 @@ public class GameModeTitle : MonoBehaviour
 	{
 		switch (e.Signal)
 		{
-		case -3:
-			ChaoTextureManager.Instance.RequestTitleLoadChaoTexture();
-			return TinyFsmState.End();
-		case -4:
-			if (m_progressBar != null)
-			{
-				m_progressBar.SetState(24);
-			}
-			return TinyFsmState.End();
-		case 0:
-			if (ChaoTextureManager.Instance.IsLoaded())
-			{
-				m_fsm.ChangeState(new TinyFsmState(StateJailBreakCheck));
-			}
-			return TinyFsmState.End();
-		default:
-			return TinyFsmState.End();
+			case -3:
+				ChaoTextureManager.Instance.RequestTitleLoadChaoTexture();
+				return TinyFsmState.End();
+			case -4:
+				if (m_progressBar != null)
+				{
+					m_progressBar.SetState(24);
+				}
+				return TinyFsmState.End();
+			case 0:
+				if (ChaoTextureManager.Instance.IsLoaded())
+				{
+					m_fsm.ChangeState(new TinyFsmState(StateJailBreakCheck));
+				}
+				return TinyFsmState.End();
+			default:
+				return TinyFsmState.End();
 		}
 	}
 
@@ -2047,23 +2062,23 @@ public class GameModeTitle : MonoBehaviour
 	{
 		switch (e.Signal)
 		{
-		case -3:
-		{
-			CPlusPlusLink instance = CPlusPlusLink.Instance;
-			if (instance != null)
-			{
-				Debug.Log("GameModeTitle.StateJailBreakCheck");
-				instance.BootGameCheatCheck();
-			}
-			return TinyFsmState.End();
-		}
-		case -4:
-			return TinyFsmState.End();
-		case 0:
-			m_fsm.ChangeState(new TinyFsmState(StateFadeIn));
-			return TinyFsmState.End();
-		default:
-			return TinyFsmState.End();
+			case -3:
+				{
+					CPlusPlusLink instance = CPlusPlusLink.Instance;
+					if (instance != null)
+					{
+						Debug.Log("GameModeTitle.StateJailBreakCheck");
+						instance.BootGameCheatCheck();
+					}
+					return TinyFsmState.End();
+				}
+			case -4:
+				return TinyFsmState.End();
+			case 0:
+				m_fsm.ChangeState(new TinyFsmState(StateFadeIn));
+				return TinyFsmState.End();
+			default:
+				return TinyFsmState.End();
 		}
 	}
 
@@ -2071,20 +2086,20 @@ public class GameModeTitle : MonoBehaviour
 	{
 		switch (e.Signal)
 		{
-		case -3:
-			CameraFade.StartAlphaFade(Color.black, false, 1f, 0f, FinishFadeCallback);
-			SoundManager.BgmFadeOut(0.5f);
-			return TinyFsmState.End();
-		case -4:
-			return TinyFsmState.End();
-		case 0:
-			return TinyFsmState.End();
-		case 109:
-			CameraFade.StartAlphaFade(Color.black, false, -1f);
-			m_fsm.ChangeState(new TinyFsmState(StateLoadLevel));
-			return TinyFsmState.End();
-		default:
-			return TinyFsmState.End();
+			case -3:
+				CameraFade.StartAlphaFade(Color.black, false, 1f, 0f, FinishFadeCallback);
+				SoundManager.BgmFadeOut(0.5f);
+				return TinyFsmState.End();
+			case -4:
+				return TinyFsmState.End();
+			case 0:
+				return TinyFsmState.End();
+			case 109:
+				CameraFade.StartAlphaFade(Color.black, false, -1f);
+				m_fsm.ChangeState(new TinyFsmState(StateLoadLevel));
+				return TinyFsmState.End();
+			default:
+				return TinyFsmState.End();
 		}
 	}
 
@@ -2092,21 +2107,21 @@ public class GameModeTitle : MonoBehaviour
 	{
 		switch (e.Signal)
 		{
-		case -3:
-			BackKeyManager.EndScene();
-			m_stageInfo.FromTitle = true;
-			Resources.UnloadUnusedAssets();
-			GC.Collect();
-			TimeProfiler.StartCountTime("Title-NextScene");
-			NativeObserver.Instance.CheckCurrentTransaction();
-			Application.LoadLevel(m_nextSceneName);
-			return TinyFsmState.End();
-		case -4:
-			return TinyFsmState.End();
-		case 0:
-			return TinyFsmState.End();
-		default:
-			return TinyFsmState.End();
+			case -3:
+				BackKeyManager.EndScene();
+				m_stageInfo.FromTitle = true;
+				Resources.UnloadUnusedAssets();
+				GC.Collect();
+				TimeProfiler.StartCountTime("Title-NextScene");
+				NativeObserver.Instance.CheckCurrentTransaction();
+				Application.LoadLevel(m_nextSceneName);
+				return TinyFsmState.End();
+			case -4:
+				return TinyFsmState.End();
+			case 0:
+				return TinyFsmState.End();
+			default:
+				return TinyFsmState.End();
 		}
 	}
 
@@ -2114,18 +2129,18 @@ public class GameModeTitle : MonoBehaviour
 	{
 		switch (e.Signal)
 		{
-		case -3:
-			CameraFade.StartAlphaFade(Color.black, false, 2f, 0f, FinishFadeCallback);
-			return TinyFsmState.End();
-		case -4:
-			return TinyFsmState.End();
-		case 0:
-			return TinyFsmState.End();
-		case 109:
-			Application.LoadLevel("s_title_reset");
-			return TinyFsmState.End();
-		default:
-			return TinyFsmState.End();
+			case -3:
+				CameraFade.StartAlphaFade(Color.black, false, 2f, 0f, FinishFadeCallback);
+				return TinyFsmState.End();
+			case -4:
+				return TinyFsmState.End();
+			case 0:
+				return TinyFsmState.End();
+			case 109:
+				Application.LoadLevel("s_title_reset");
+				return TinyFsmState.End();
+			default:
+				return TinyFsmState.End();
 		}
 	}
 
@@ -2237,18 +2252,18 @@ public class GameModeTitle : MonoBehaviour
 	{
 		switch (m_exchangeType)
 		{
-		case RedStarExchangeType.RSRING:
-			m_progressBar.SetState(12);
-			break;
-		case RedStarExchangeType.RING:
-			m_progressBar.SetState(13);
-			break;
-		case RedStarExchangeType.CHALLENGE:
-			m_progressBar.SetState(14);
-			break;
-		case RedStarExchangeType.RAIDBOSS_ENERGY:
-			m_progressBar.SetState(15);
-			break;
+			case RedStarExchangeType.RSRING:
+				m_progressBar.SetState(12);
+				break;
+			case RedStarExchangeType.RING:
+				m_progressBar.SetState(13);
+				break;
+			case RedStarExchangeType.CHALLENGE:
+				m_progressBar.SetState(14);
+				break;
+			case RedStarExchangeType.RAIDBOSS_ENERGY:
+				m_progressBar.SetState(15);
+				break;
 		}
 		bool flag = false;
 		m_exchangeType++;

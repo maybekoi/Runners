@@ -77,6 +77,14 @@ public class GeneralUtil
 		return m / gcd(m, n) * n;
 	}
 
+	public static void CleanAllCache()
+	{
+		Caching.ClearCache();
+		if (InformationImageManager.Instance != null)
+		{
+			InformationImageManager.Instance.DeleteImageFiles();
+		}
+	}
 	public static string GetDateStringHour(DateTime targetTime, int addTimeHour = 0)
 	{
 		return GetDateString(targetTime, addTimeHour * 60 * 60 * 1000);

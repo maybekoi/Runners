@@ -323,67 +323,67 @@ public class GeneralWindow : WindowBase
 		}
 		switch (m_info.buttonType)
 		{
-		case ButtonType.None:
-			transform2.gameObject.SetActive(true);
-			gameObject3 = m_generalWindowObject.transform.Find("window/pattern_btn_less/bl_textView/bl_ScrollView/bl_Lbl_body").gameObject;
-			str = "window/pattern_btn_less/bl_textView/bl_";
-			break;
-		case ButtonType.Ok:
-			transform3.gameObject.SetActive(true);
-			transform4.gameObject.SetActive(true);
-			break;
-		case ButtonType.YesNo:
-			transform3.gameObject.SetActive(true);
-			transform5.gameObject.SetActive(true);
-			if (m_info.name == "FacebookLogin" && !flag)
-			{
-				UIImageButton uIImageButton2 = GameObjectUtil.FindChildGameObjectComponent<UIImageButton>(transform5.gameObject, "Btn_yes");
-				if (uIImageButton2 != null)
+			case ButtonType.None:
+				transform2.gameObject.SetActive(true);
+				gameObject3 = m_generalWindowObject.transform.Find("window/pattern_btn_less/bl_textView/bl_ScrollView/bl_Lbl_body").gameObject;
+				str = "window/pattern_btn_less/bl_textView/bl_";
+				break;
+			case ButtonType.Ok:
+				transform3.gameObject.SetActive(true);
+				transform4.gameObject.SetActive(true);
+				break;
+			case ButtonType.YesNo:
+				transform3.gameObject.SetActive(true);
+				transform5.gameObject.SetActive(true);
+				if (m_info.name == "FacebookLogin" && !flag)
 				{
-					uIImageButton2.isEnabled = false;
+					UIImageButton uIImageButton2 = GameObjectUtil.FindChildGameObjectComponent<UIImageButton>(transform5.gameObject, "Btn_yes");
+					if (uIImageButton2 != null)
+					{
+						uIImageButton2.isEnabled = false;
+					}
 				}
-			}
-			break;
-		case ButtonType.ShopCancel:
-			transform3.gameObject.SetActive(true);
-			transform6.gameObject.SetActive(true);
-			break;
-		case ButtonType.TweetCancel:
-			transform3.gameObject.SetActive(true);
-			transform7.gameObject.SetActive(true);
-			if (!flag)
-			{
-				UIImageButton uIImageButton3 = GameObjectUtil.FindChildGameObjectComponent<UIImageButton>(transform7.gameObject, "Btn_post");
-				if (uIImageButton3 != null)
+				break;
+			case ButtonType.ShopCancel:
+				transform3.gameObject.SetActive(true);
+				transform6.gameObject.SetActive(true);
+				break;
+			case ButtonType.TweetCancel:
+				transform3.gameObject.SetActive(true);
+				transform7.gameObject.SetActive(true);
+				if (!flag)
 				{
-					uIImageButton3.isEnabled = false;
+					UIImageButton uIImageButton3 = GameObjectUtil.FindChildGameObjectComponent<UIImageButton>(transform7.gameObject, "Btn_post");
+					if (uIImageButton3 != null)
+					{
+						uIImageButton3.isEnabled = false;
+					}
 				}
-			}
-			break;
-		case ButtonType.Close:
-			transform3.gameObject.SetActive(true);
-			transform8.gameObject.SetActive(true);
-			break;
-		case ButtonType.TweetOk:
-			transform3.gameObject.SetActive(true);
-			transform9.gameObject.SetActive(true);
-			if (!flag)
-			{
-				UIImageButton uIImageButton = GameObjectUtil.FindChildGameObjectComponent<UIImageButton>(transform9.gameObject, "Btn_post");
-				if (uIImageButton != null)
+				break;
+			case ButtonType.Close:
+				transform3.gameObject.SetActive(true);
+				transform8.gameObject.SetActive(true);
+				break;
+			case ButtonType.TweetOk:
+				transform3.gameObject.SetActive(true);
+				transform9.gameObject.SetActive(true);
+				if (!flag)
 				{
-					uIImageButton.isEnabled = false;
+					UIImageButton uIImageButton = GameObjectUtil.FindChildGameObjectComponent<UIImageButton>(transform9.gameObject, "Btn_post");
+					if (uIImageButton != null)
+					{
+						uIImageButton.isEnabled = false;
+					}
 				}
-			}
-			break;
-		case ButtonType.OkNextSkip:
-			transform3.gameObject.SetActive(true);
-			transform10.gameObject.SetActive(true);
-			break;
-		case ButtonType.OkNextSkipAllSkip:
-			transform3.gameObject.SetActive(true);
-			transform11.gameObject.SetActive(true);
-			break;
+				break;
+			case ButtonType.OkNextSkip:
+				transform3.gameObject.SetActive(true);
+				transform10.gameObject.SetActive(true);
+				break;
+			case ButtonType.OkNextSkipAllSkip:
+				transform3.gameObject.SetActive(true);
+				transform11.gameObject.SetActive(true);
+				break;
 		}
 		int num = (m_info.buttonType != 0) ? 1 : 0;
 		m_isChangedBgm = false;
@@ -524,30 +524,30 @@ public class GeneralWindow : WindowBase
 		{
 			switch (m_info.buttonType)
 			{
-			case ButtonType.Ok:
-				SendButtonMessage("window/pattern_btn_use/pattern_0", "Btn_ok");
-				break;
-			case ButtonType.YesNo:
-				SendButtonMessage("window/pattern_btn_use/pattern_1", "Btn_no");
-				break;
-			case ButtonType.ShopCancel:
-				SendButtonMessage("window/pattern_btn_use/pattern_2", "Btn_cancel");
-				break;
-			case ButtonType.TweetCancel:
-				SendButtonMessage("window/pattern_btn_use/pattern_3", "Btn_ok");
-				break;
-			case ButtonType.Close:
-				SendButtonMessage("window/pattern_btn_use/pattern_4", "Btn_close");
-				break;
-			case ButtonType.TweetOk:
-				SendButtonMessage("window/pattern_btn_use/pattern_5", "Btn_ok");
-				break;
-			case ButtonType.OkNextSkip:
-				SendButtonMessage("window/pattern_btn_use/pattern_6", "Btn_skip");
-				break;
-			case ButtonType.OkNextSkipAllSkip:
-				SendButtonMessage("window/pattern_btn_use/pattern_7", "Btn_skip");
-				break;
+				case ButtonType.Ok:
+					SendButtonMessage("window/pattern_btn_use/pattern_0", "Btn_ok");
+					break;
+				case ButtonType.YesNo:
+					SendButtonMessage("window/pattern_btn_use/pattern_1", "Btn_no");
+					break;
+				case ButtonType.ShopCancel:
+					SendButtonMessage("window/pattern_btn_use/pattern_2", "Btn_cancel");
+					break;
+				case ButtonType.TweetCancel:
+					SendButtonMessage("window/pattern_btn_use/pattern_3", "Btn_ok");
+					break;
+				case ButtonType.Close:
+					SendButtonMessage("window/pattern_btn_use/pattern_4", "Btn_close");
+					break;
+				case ButtonType.TweetOk:
+					SendButtonMessage("window/pattern_btn_use/pattern_5", "Btn_ok");
+					break;
+				case ButtonType.OkNextSkip:
+					SendButtonMessage("window/pattern_btn_use/pattern_6", "Btn_skip");
+					break;
+				case ButtonType.OkNextSkipAllSkip:
+					SendButtonMessage("window/pattern_btn_use/pattern_7", "Btn_skip");
+					break;
 			}
 		}
 		if (msg != null)
@@ -607,19 +607,19 @@ public class GeneralWindow : WindowBase
 			}
 			switch (@event.arrowType)
 			{
-			case ArrowType.MIDDLE:
-				m_singleFaceWindowUis[0].m_balloonArrow.SetActive(true);
-				break;
-			case ArrowType.RIGHT:
-				m_twinFaceWindowUis[1].m_balloonArrow.SetActive(true);
-				break;
-			case ArrowType.LEFT:
-				m_twinFaceWindowUis[0].m_balloonArrow.SetActive(true);
-				break;
-			case ArrowType.TWO_SIDES:
-				m_twinFaceWindowUis[0].m_balloonArrow.SetActive(true);
-				m_twinFaceWindowUis[1].m_balloonArrow.SetActive(true);
-				break;
+				case ArrowType.MIDDLE:
+					m_singleFaceWindowUis[0].m_balloonArrow.SetActive(true);
+					break;
+				case ArrowType.RIGHT:
+					m_twinFaceWindowUis[1].m_balloonArrow.SetActive(true);
+					break;
+				case ArrowType.LEFT:
+					m_twinFaceWindowUis[0].m_balloonArrow.SetActive(true);
+					break;
+				case ArrowType.TWO_SIDES:
+					m_twinFaceWindowUis[0].m_balloonArrow.SetActive(true);
+					m_twinFaceWindowUis[1].m_balloonArrow.SetActive(true);
+					break;
 			}
 			if (@event.faceWindows != null)
 			{
@@ -635,18 +635,18 @@ public class GeneralWindow : WindowBase
 					}
 					switch (faceWindow.showingType)
 					{
-					case ShowingType.NORMAL:
-						faceWindowUI2.m_faceWindowGameObject.SetActive(true);
-						faceWindowUI2.m_disableFilter.SetActive(false);
-						break;
-					case ShowingType.DARK:
-						faceWindowUI2.m_faceWindowGameObject.SetActive(true);
-						faceWindowUI2.m_disableFilter.SetActive(true);
-						break;
-					case ShowingType.HIDE:
-						faceWindowUI2.m_faceWindowGameObject.SetActive(false);
-						faceWindowUI2.m_disableFilter.SetActive(false);
-						break;
+						case ShowingType.NORMAL:
+							faceWindowUI2.m_faceWindowGameObject.SetActive(true);
+							faceWindowUI2.m_disableFilter.SetActive(false);
+							break;
+						case ShowingType.DARK:
+							faceWindowUI2.m_faceWindowGameObject.SetActive(true);
+							faceWindowUI2.m_disableFilter.SetActive(true);
+							break;
+						case ShowingType.HIDE:
+							faceWindowUI2.m_faceWindowGameObject.SetActive(false);
+							faceWindowUI2.m_disableFilter.SetActive(false);
+							break;
 					}
 					faceWindowUI2.m_namePlateGameObject.SetActive(!string.IsNullOrEmpty(faceWindow.name));
 					faceWindowUI2.m_nameLabel.text = faceWindow.name;
@@ -673,15 +673,15 @@ public class GeneralWindow : WindowBase
 					string str2 = "_intro_skip_Anim";
 					switch (faceWindow.animType)
 					{
-					case AnimType.VIBRATION:
-						str = "_vibe_Anim";
-						break;
-					case AnimType.FADE_IN:
-						str2 = "_intro_Anim";
-						break;
-					case AnimType.FADE_OUT:
-						str2 = "_outro_Anim";
-						break;
+						case AnimType.VIBRATION:
+							str = "_vibe_Anim";
+							break;
+						case AnimType.FADE_IN:
+							str2 = "_intro_Anim";
+							break;
+						case AnimType.FADE_OUT:
+							str2 = "_outro_Anim";
+							break;
 					}
 					ActiveAnimation.Play(faceWindowUI2.m_vibrateAnimation, "ui_gn_window_event_tex_" + faceWindowUI2.m_windowKey + str, Direction.Forward);
 					ActiveAnimation.Play(faceWindowUI2.m_fadeAnimation, "ui_gn_window_event_tex_" + faceWindowUI2.m_windowKey + str2, Direction.Forward);
@@ -744,7 +744,7 @@ public class GeneralWindow : WindowBase
 		}
 		if (m_generalWindowObject != null)
 		{
-			m_generalWindowPrefab = (Resources.Load("Prefabs/UI/GeneralWindow") as GameObject);
+			return null;
 		}
 		m_generalWindowObject = (UnityEngine.Object.Instantiate(m_generalWindowPrefab, Vector3.zero, Quaternion.identity) as GameObject);
 		m_generalWindowObject.SetActive(true);

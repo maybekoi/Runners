@@ -6427,14 +6427,6 @@ ParticleSystem:
     quality: 0
     voxelSize: 0.5
     collisionMessages: 0
-  SubModule:
-    enabled: 1
-    subEmitterBirth: {fileID: 1790275208932336482}
-    subEmitterBirth1: {fileID: 1790275208932336481}
-    subEmitterCollision: {fileID: 0}
-    subEmitterCollision1: {fileID: 0}
-    subEmitterDeath: {fileID: 0}
-    subEmitterDeath1: {fileID: 0}
 --- !u!199 &199483152058052431
 ParticleSystemRenderer:
   m_ObjectHideFlags: 1
@@ -12949,14 +12941,6 @@ ParticleSystem:
     quality: 0
     voxelSize: 0.5
     collisionMessages: 0
-  SubModule:
-    enabled: 1
-    subEmitterBirth: {fileID: 1790275208932336478}
-    subEmitterBirth1: {fileID: 1790275208932336477}
-    subEmitterCollision: {fileID: 0}
-    subEmitterCollision1: {fileID: 0}
-    subEmitterDeath: {fileID: 0}
-    subEmitterDeath1: {fileID: 0}
 --- !u!199 &199613462620168992
 ParticleSystemRenderer:
   m_ObjectHideFlags: 1
@@ -19471,14 +19455,6 @@ ParticleSystem:
     quality: 0
     voxelSize: 0.5
     collisionMessages: 0
-  SubModule:
-    enabled: 1
-    subEmitterBirth: {fileID: 1790275208932336480}
-    subEmitterBirth1: {fileID: 1790275208932336479}
-    subEmitterCollision: {fileID: 0}
-    subEmitterCollision1: {fileID: 0}
-    subEmitterDeath: {fileID: 0}
-    subEmitterDeath1: {fileID: 0}
 --- !u!199 &199730193092865422
 ParticleSystemRenderer:
   m_ObjectHideFlags: 1
