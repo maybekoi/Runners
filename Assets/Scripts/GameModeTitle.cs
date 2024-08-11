@@ -1502,15 +1502,11 @@ public class GameModeTitle : MonoBehaviour
 				if (RegionManager.Instance.IsUseHardlightAds())
 				{
 					GameObject x = GameObject.Find("HardlightAds");
+
 					if (x == null)
 					{
-						x = new GameObject();
-						if (x != null)
-						{
-							x.name = "HardlightAds";
-							UnityEngine.Object.DontDestroyOnLoad(x);
-							UnityEngineInternal.APIUpdaterRuntimeServices.AddComponent(x, "Assets/Scripts/GameModeTitle.cs (1512,8)", "HardlightAds");
-						}
+						x = new GameObject("HardlightAds");
+						UnityEngine.Object.DontDestroyOnLoad(x);
 					}
 				}
 				m_fsm.ChangeState(new TinyFsmState(StateCheckAtom));
