@@ -21,7 +21,7 @@ By: SnesFX/YoPhlox
 
 7. Paste Everything there
 
-8. Download Unity 2018.3.0f1 if you don't have it
+8. Download Unity 2018.2.18f1 if you don't have it
 
 9. Open the project in Unity
 
