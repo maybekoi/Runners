@@ -9,9 +9,9 @@ By: SnesFX/YoPhlox
 1. Download files from this repo using
 `git clone https://github.com/yophlox/SRU18.git `
 
-2. Download the files from [here](https://github.com/itsmattkc/RunnersAssetBundleDecomp)
+2. Download the files from [here](https://github.com/yophlox/AssetBundles)
 
-3. Open the zip and Open the RunnersAssetBundleDecomp-master folder
+3. Open the zip and Open the AssetBundles-master folder
 
 4. Extract the files
 
