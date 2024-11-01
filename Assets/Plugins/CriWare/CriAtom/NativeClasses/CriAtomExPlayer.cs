@@ -2724,8 +2724,8 @@ public class CriAtomExPlayer : IDisposable
         }else
         {
         	const int CRIATOMPARAMETER2_ID_LOOP_COUNT = 146;
-        //    IntPtr player_parameter = criAtomExPlayer_GetPlayerParameter(this.handle);
-        //    criAtomExPlayerParameter_RemoveParameter(player_parameter, CRIATOMPARAMETER2_ID_LOOP_COUNT);
+            IntPtr player_parameter = criAtomExPlayer_GetPlayerParameter(this.handle);
+            criAtomExPlayerParameter_RemoveParameter(player_parameter, CRIATOMPARAMETER2_ID_LOOP_COUNT);
         }
 	}
 

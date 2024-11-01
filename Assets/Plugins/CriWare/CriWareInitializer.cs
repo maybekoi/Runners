@@ -403,6 +403,12 @@ public class CriWareInitializer : MonoBehaviour {
         if (initializesMana) {
             CriManaPlugin.SetConfigParameters(manaConfig.graphicsMultiThreaded, manaConfig.numberOfDecoders, manaConfig.numberOfMaxEntries);
             CriManaPlugin.SetConfigAdditonalParameters_ANDROID(true);
+#if UNITY_PSP2
+            CriWareVITA.EnableManaH264Playback(manaConfig.vitaH264PlaybackConfig.useH264Playback);
+            CriWareVITA.SetManaH264DecoderMaxSize(manaConfig.vitaH264PlaybackConfig.maxWidth,
+                                                     manaConfig.vitaH264PlaybackConfig.maxHeight);
+            CriWareVITA.EnableManaH264DecoderGetDisplayMemoryFromUnityTexture(manaConfig.vitaH264PlaybackConfig.getMemoryFromTexture);
+#endif
             CriManaPlugin.InitializeLibrary();
         }
 #endif

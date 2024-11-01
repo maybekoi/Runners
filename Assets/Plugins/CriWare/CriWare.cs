@@ -262,8 +262,8 @@ public class CriWare
 		if (GetBinaryVersionNumber() == GetRequiredBinaryVersionNumber()) {
 			return true;
 		} else {
-			Debug.LogError("CRI runtime library is not compatible. Confirm the version number. Gonna try to continue anyways!");
-			return true;
+			Debug.LogError("CRI runtime library is not compatible. Confirm the version number.");
+			return false;
 		}
 	}
 
