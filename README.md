@@ -9,7 +9,7 @@ By: SnesFX/YoPhlox
 1. Download files from this repo using
 `git clone https://github.com/yophlox/SRU18.git --recursive`
 
-2. Download Unity 2018.2.19f1 if you don't have it
+2. Download Unity 2018.2.19f1 if you don't have it (you can still use 2018.2.18f1 since there's no major differences lol)
 
 3. Open the project in Unity
 
