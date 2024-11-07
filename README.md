@@ -2,6 +2,12 @@
 
 * A merge of me and mattkc's Sonic Runners Decomps but also a port of the decomps to Unity 2018
 
+# Current Issues
+
+* No Audio
+
+* Alot of UI stuff aren't fixed.
+
 # How to setup SRU18
 
 By: SnesFX/YoPhlox
