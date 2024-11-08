@@ -32,11 +32,11 @@ public class HudHeaderPageName : MonoBehaviour
 		GameObject mainMenuCmnUIObject = HudMenuUtility.GetMainMenuCmnUIObject();
 		if (mainMenuCmnUIObject != null)
 		{
-			GameObject gameObject = mainMenuCmnUIObject.transform.FindChild("Anchor_1_TL/mainmenu_info_user/img_header/Lbl_header").gameObject;
+			GameObject gameObject = mainMenuCmnUIObject.transform.Find("Anchor_1_TL/mainmenu_info_user/img_header/Lbl_header").gameObject;
 			if (gameObject != null)
 			{
 				m_header_label = gameObject.GetComponent<UILabel>();
-				GameObject gameObject2 = gameObject.transform.FindChild("Lbl_header_sdw").gameObject;
+				GameObject gameObject2 = gameObject.transform.Find("Lbl_header_sdw").gameObject;
 				if (gameObject2 != null)
 				{
 					m_header_label_sdw = gameObject2.GetComponent<UILabel>();

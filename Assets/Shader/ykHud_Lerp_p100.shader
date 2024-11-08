@@ -1,3 +1,5 @@
+// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
 Shader "Custom/UI/ykHud_Lerp_+100" {
 Properties {
  _StOneCol ("Start WhiteColor", Color) = (1,1,1,1)
@@ -45,7 +47,7 @@ SubShader {
     {
       v2f o;
 
-      o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);
+      o.vertex = UnityObjectToClipPos(v.vertex);
       o.color = v.color;
       o.texcoord = (v.texcoord.xy + frac((_ScrollingSpeed.xy * _Time.y)));
 

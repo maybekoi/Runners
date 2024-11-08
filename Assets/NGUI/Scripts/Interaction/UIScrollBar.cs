@@ -106,8 +106,8 @@ public class UIScrollBar : UIWidgetContainer
 						ForceUpdate();
 
 						// Update the colliders as well
-						if (mBG.collider != null) NGUITools.AddWidgetCollider(mBG.gameObject);
-						if (mFG.collider != null) NGUITools.AddWidgetCollider(mFG.gameObject);
+						if (mBG.GetComponent<Collider>() != null) NGUITools.AddWidgetCollider(mBG.gameObject);
+						if (mFG.GetComponent<Collider>() != null) NGUITools.AddWidgetCollider(mFG.gameObject);
 					}
 				}
 			}
@@ -310,14 +310,14 @@ public class UIScrollBar : UIWidgetContainer
 
 	void Start ()
 	{
-		if (background != null && background.collider != null)
+		if (background != null && background.GetComponent<Collider>() != null)
 		{
 			UIEventListener listener = UIEventListener.Get(background.gameObject);
 			listener.onPress += OnPressBackground;
 			listener.onDrag += OnDragBackground;
 		}
 
-		if (foreground != null && foreground.collider != null)
+		if (foreground != null && foreground.GetComponent<Collider>() != null)
 		{
 			UIEventListener listener = UIEventListener.Get(foreground.gameObject);
 			listener.onPress += OnPressForeground;
@@ -373,7 +373,7 @@ public class UIScrollBar : UIWidgetContainer
 				mFG.width = Mathf.RoundToInt(fgs.x + fg.x + fg.z);
 				mFG.height = Mathf.RoundToInt(fgs.y + fg.y + fg.w);
 				if (val < 0.999f && val > 0.001f) mFG.MakePixelPerfect();
-				if (mFG.collider != null) NGUITools.AddWidgetCollider(mFG.gameObject);
+				if (mFG.GetComponent<Collider>() != null) NGUITools.AddWidgetCollider(mFG.gameObject);
 			}
 			else
 			{
@@ -386,7 +386,7 @@ public class UIScrollBar : UIWidgetContainer
 				mFG.width = Mathf.RoundToInt(fgs.x + fg.x + fg.z);
 				mFG.height = Mathf.RoundToInt(fgs.y + fg.y + fg.w);
 				if (val < 0.999f && val > 0.001f) mFG.MakePixelPerfect();
-				if (mFG.collider != null) NGUITools.AddWidgetCollider(mFG.gameObject);
+				if (mFG.GetComponent<Collider>() != null) NGUITools.AddWidgetCollider(mFG.gameObject);
 			}
 		}
 	}

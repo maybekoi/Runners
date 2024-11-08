@@ -66,7 +66,7 @@ public class pause_window : MonoBehaviour
 	private void OnFinishedContinueAnimationCallback()
 	{
 		GameObjectUtil.SendMessageFindGameObject("HudCockpit", "OnFinishedContinueAnimation", null, SendMessageOptions.DontRequireReceiver);
-		GameObject gameObject = base.transform.FindChild("pause_Anim").gameObject;
+		GameObject gameObject = base.transform.Find("pause_Anim").gameObject;
 		if (gameObject != null)
 		{
 			gameObject.SetActive(false);

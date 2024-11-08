@@ -43,7 +43,7 @@ public class HudCharacterSubPanel : MonoBehaviour
 		}
 		for (uint num = 0u; num < 2; num++)
 		{
-			Transform transform = mainMenuUIObject.transform.FindChild("Anchor_5_MC/2_Character/Btn_2_player/" + m_path_name[num]);
+			Transform transform = mainMenuUIObject.transform.Find("Anchor_5_MC/2_Character/Btn_2_player/" + m_path_name[num]);
 			if (transform != null)
 			{
 				m_data_obj[num] = transform.gameObject;

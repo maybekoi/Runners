@@ -31,7 +31,7 @@ public class HudDailyChallenge : MonoBehaviour
 		{
 			return;
 		}
-		Transform transform = mainMenuUIObject.transform.FindChild("Anchor_9_BR/Btn_1_challenge");
+		Transform transform = mainMenuUIObject.transform.Find("Anchor_9_BR/Btn_1_challenge");
 		if (transform == null)
 		{
 			return;

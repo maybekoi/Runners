@@ -1,3 +1,5 @@
+// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
 Shader "CriMana/Yuv2RgbAdditive" {
 Properties {
  _MainTex ("Texture", 2D) = "white" {}
@@ -36,7 +38,7 @@ SubShader {
     {
       v2f o;
 
-      o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);
+      o.vertex = UnityObjectToClipPos(v.vertex);
       o.texcoord = ((v.texcoord.xy * _MainTex_ST.xy) + _MainTex_ST.zw);
 
       return o;

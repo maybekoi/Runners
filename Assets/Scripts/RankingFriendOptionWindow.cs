@@ -102,9 +102,9 @@ public class RankingFriendOptionWindow : MonoBehaviour
 		yield return null;
 		m_panel.alpha = 1f;
 		m_scrollViewPanel.alpha = 1f;
-		if (base.animation != null)
+		if (base.GetComponent<Animation>() != null)
 		{
-			ActiveAnimation m_activeAnim = ActiveAnimation.Play(base.animation, Direction.Forward);
+			ActiveAnimation m_activeAnim = ActiveAnimation.Play(base.GetComponent<Animation>(), Direction.Forward);
 			EventDelegate.Add(m_activeAnim.onFinished, OnFinishedActiveAnimation, true);
 		}
 		m_showConfirmWindow = false;
@@ -217,10 +217,10 @@ public class RankingFriendOptionWindow : MonoBehaviour
 		m_uiLabels[0].text = TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "Ranking", "ui_friend_select_confirmation_caption").text;
 		m_uiLabels[1].text = TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "Ranking", "ui_friend_select_confirmation_body").text;
 		m_buttonPage.SetActive(false);
-		if (base.animation != null)
+		if (base.GetComponent<Animation>() != null)
 		{
 			m_isAnimationEnd = false;
-			m_activeAnim = ActiveAnimation.Play(base.animation, Direction.Forward);
+			m_activeAnim = ActiveAnimation.Play(base.GetComponent<Animation>(), Direction.Forward);
 			EventDelegate.Add(m_activeAnim.onFinished, OnFinishedActiveAnimation, true);
 		}
 	}

@@ -1184,7 +1184,7 @@ namespace Chao
 
 		private void OnTriggerEnter(Collider other)
 		{
-			TinyFsmEvent signal = TinyFsmEvent.CreateUserEventObject(100, base.collider);
+			TinyFsmEvent signal = TinyFsmEvent.CreateUserEventObject(100, base.GetComponent<Collider>());
 			m_fsmBehavior.Dispatch(signal);
 		}
 

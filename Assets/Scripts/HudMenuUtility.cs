@@ -40,7 +40,7 @@ public class HudMenuUtility
 		GameObject gameObject = GameObject.Find("UI Root (2D)");
 		if (gameObject != null)
 		{
-			Transform transform = gameObject.transform.FindChild("Camera/menu_Anim");
+			Transform transform = gameObject.transform.Find("Camera/menu_Anim");
 			if (transform != null)
 			{
 				return transform.gameObject;
@@ -54,7 +54,7 @@ public class HudMenuUtility
 		GameObject gameObject = GameObject.Find("UI Root (2D)");
 		if (gameObject != null)
 		{
-			Transform transform = gameObject.transform.FindChild("Camera");
+			Transform transform = gameObject.transform.Find("Camera");
 			if (transform != null)
 			{
 				return transform.gameObject;
@@ -68,7 +68,7 @@ public class HudMenuUtility
 		GameObject gameObject = GameObject.Find("UI Root (2D)");
 		if (gameObject != null)
 		{
-			Transform transform = gameObject.transform.FindChild("Camera/menu_Anim/MainMenuUI4");
+			Transform transform = gameObject.transform.Find("Camera/menu_Anim/MainMenuUI4");
 			if (transform != null)
 			{
 				return transform.gameObject;
@@ -82,7 +82,7 @@ public class HudMenuUtility
 		GameObject gameObject = GameObject.Find("UI Root (2D)");
 		if (gameObject != null)
 		{
-			Transform transform = gameObject.transform.FindChild("Camera/menu_Anim/MainMenuCmnUI");
+			Transform transform = gameObject.transform.Find("Camera/menu_Anim/MainMenuCmnUI");
 			if (transform != null)
 			{
 				return transform.gameObject;
@@ -96,7 +96,7 @@ public class HudMenuUtility
 		GameObject gameObject = GameObject.Find("UI Root (2D)");
 		if (gameObject != null)
 		{
-			Transform transform = gameObject.transform.FindChild("Camera/Anchor_5_MC");
+			Transform transform = gameObject.transform.Find("Camera/Anchor_5_MC");
 			if (transform != null)
 			{
 				return transform.gameObject;
@@ -453,7 +453,7 @@ public class HudMenuUtility
 		GameObject menuAnimUIObject = GetMenuAnimUIObject();
 		if (menuAnimUIObject != null)
 		{
-			Transform transform = menuAnimUIObject.transform.FindChild(name);
+			Transform transform = menuAnimUIObject.transform.Find(name);
 			if (transform != null)
 			{
 				GameObject gameObject = transform.gameObject;
@@ -466,10 +466,10 @@ public class HudMenuUtility
 					return gameObject;
 				}
 			}
-			Transform transform2 = menuAnimUIObject.transform.FindChild("OptionWindows");
+			Transform transform2 = menuAnimUIObject.transform.Find("OptionWindows");
 			if (transform2 != null)
 			{
-				Transform transform3 = transform2.FindChild(name);
+				Transform transform3 = transform2.Find(name);
 				if (transform3 != null)
 				{
 					GameObject gameObject2 = transform3.gameObject;
@@ -484,7 +484,7 @@ public class HudMenuUtility
 		GameObject mainMenuGeneralAnchor = GetMainMenuGeneralAnchor();
 		if (mainMenuGeneralAnchor != null)
 		{
-			Transform transform4 = mainMenuGeneralAnchor.transform.FindChild(name);
+			Transform transform4 = mainMenuGeneralAnchor.transform.Find(name);
 			if (transform4 != null)
 			{
 				GameObject gameObject3 = transform4.gameObject;
@@ -506,7 +506,7 @@ public class HudMenuUtility
 		GameObject mainMenuUIObject = GetMainMenuUIObject();
 		if (mainMenuUIObject != null)
 		{
-			Transform transform = mainMenuUIObject.transform.FindChild("Anchor_5_MC/mainmenu_contents");
+			Transform transform = mainMenuUIObject.transform.Find("Anchor_5_MC/mainmenu_contents");
 			if (transform != null)
 			{
 				GameObject gameObject = transform.gameObject;

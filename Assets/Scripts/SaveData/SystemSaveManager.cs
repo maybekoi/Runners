@@ -310,7 +310,7 @@ namespace SaveData
 		private string GetHashData(string textdata)
 		{
 			byte[] bytes = Encoding.UTF8.GetBytes(textdata);
-			SHA256 sHA = new SHA256CryptoServiceProvider();
+			SHA256 sHA = new SHA256Managed();
 			byte[] array = sHA.ComputeHash(bytes);
 			StringBuilder stringBuilder = new StringBuilder();
 			for (int i = 0; i < array.Length; i++)

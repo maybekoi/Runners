@@ -4,7 +4,7 @@ public class ykTextureSheetSharedMaterialAnimation : ykTextureSheetAnimation
 {
 	protected override Material GetMaterial()
 	{
-		return base.renderer.sharedMaterial;
+		return base.GetComponent<Renderer>().sharedMaterial;
 	}
 
 	protected override bool IsValidChange()

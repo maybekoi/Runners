@@ -197,7 +197,7 @@ public class CameraManager : MonoBehaviour
 
 	private void Start()
 	{
-		Camera camera = base.camera;
+		Camera camera = base.GetComponent<Camera>();
 		float fieldOfView = camera.fieldOfView;
 		ScreenType screenType = ScreenUtil.GetScreenType();
 		float num = 1.5f;

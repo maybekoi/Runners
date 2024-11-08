@@ -49,7 +49,7 @@ public class ykTextureSheetAnimation : MonoBehaviour
 
 	protected virtual Material GetMaterial()
 	{
-		return base.renderer.material;
+		return base.GetComponent<Renderer>().material;
 	}
 
 	protected virtual bool IsValidChange()

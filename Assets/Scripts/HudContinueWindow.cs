@@ -541,7 +541,7 @@ public class HudContinueWindow : MonoBehaviour
 		Animation component = base.gameObject.GetComponent<Animation>();
 		if (component != null)
 		{
-			ActiveAnimation activeAnimation = ActiveAnimation.Play(base.animation, Direction.Reverse);
+			ActiveAnimation activeAnimation = ActiveAnimation.Play(base.GetComponent<Animation>(), Direction.Reverse);
 			if (activeAnimation != null)
 			{
 				EventDelegate.Add(activeAnimation.onFinished, OnFinishedAnimationCallbck, true);
@@ -560,7 +560,7 @@ public class HudContinueWindow : MonoBehaviour
 		Animation component = base.gameObject.GetComponent<Animation>();
 		if (component != null)
 		{
-			ActiveAnimation activeAnimation = ActiveAnimation.Play(base.animation, Direction.Reverse);
+			ActiveAnimation activeAnimation = ActiveAnimation.Play(base.GetComponent<Animation>(), Direction.Reverse);
 			if (activeAnimation != null)
 			{
 				EventDelegate.Add(activeAnimation.onFinished, OnFinishedAnimationCallbck, true);
@@ -579,7 +579,7 @@ public class HudContinueWindow : MonoBehaviour
 		Animation component = base.gameObject.GetComponent<Animation>();
 		if (component != null)
 		{
-			ActiveAnimation activeAnimation = ActiveAnimation.Play(base.animation, Direction.Reverse);
+			ActiveAnimation activeAnimation = ActiveAnimation.Play(base.GetComponent<Animation>(), Direction.Reverse);
 			if (activeAnimation != null)
 			{
 				EventDelegate.Add(activeAnimation.onFinished, OnFinishedAnimationCallbck, true);

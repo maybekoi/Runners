@@ -1015,7 +1015,7 @@ public class HudCockpit : MonoBehaviour
 		{
 			for (int i = 0; i < 4; i++)
 			{
-				Transform transform = gameObject.transform.FindChild("Anchor_2_TC/" + Anchor2TC_tbl[i]);
+				Transform transform = gameObject.transform.Find("Anchor_2_TC/" + Anchor2TC_tbl[i]);
 				if (transform != null)
 				{
 					array[i] = transform.gameObject;
@@ -1031,7 +1031,7 @@ public class HudCockpit : MonoBehaviour
 		{
 			for (int j = 0; j < PauseWindowSetupLbl.Length; j++)
 			{
-				Transform transform2 = gameObject2.transform.FindChild(PauseWindowSetupLbl[j]);
+				Transform transform2 = gameObject2.transform.Find(PauseWindowSetupLbl[j]);
 				if (transform2 != null)
 				{
 					HudUtility.SetupUILabelText(transform2.gameObject);

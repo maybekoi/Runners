@@ -137,7 +137,7 @@ public class AssetBundleResult
 			}
 			else
 			{
-				mObjects = (mAssetBundle.Load(objectName, typeof(GameObject)) as GameObject);
+				mObjects = mAssetBundle.LoadAsset(objectName) as GameObject;
 				mAssetBundle.Unload(false);
 				mAssetBundle = null;
 			}
@@ -159,7 +159,7 @@ public class AssetBundleResult
 			{
 				GameObject gameObject = new GameObject("async load object");
 				mAbAsyncLoader = gameObject.AddComponent<AssetBundleAsyncObjectLoader>();
-				mAbAsyncLoader.assetBundleRequest = mAssetBundle.LoadAsync(objectName, typeof(GameObject));
+				mAbAsyncLoader.assetBundleRequest = mAssetBundle.LoadAssetAsync<GameObject>(objectName);
 				mAbAsyncLoader.asyncLoadedCallback = AsyncLoadCallback;
 			}
 		}

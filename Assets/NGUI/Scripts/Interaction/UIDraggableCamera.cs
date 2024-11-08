@@ -70,7 +70,7 @@ public class UIDraggableCamera : MonoBehaviour
 
 	void Awake ()
 	{
-		mCam = camera;
+		mCam = GetComponent<Camera>();
 		mTrans = transform;
 
 		if (rootForBounds == null)

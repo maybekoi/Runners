@@ -96,41 +96,41 @@ public class HudPageTurner : MonoBehaviour
 		GameObject mainMenuUIObject = HudMenuUtility.GetMainMenuUIObject();
 		if (mainMenuUIObject != null)
 		{
-			Transform transform = mainMenuUIObject.transform.FindChild("Anchor_4_ML/mainmenu_grip_L/Btn_mainmenu_pager_L");
+			Transform transform = mainMenuUIObject.transform.Find("Anchor_4_ML/mainmenu_grip_L/Btn_mainmenu_pager_L");
 			if (transform != null)
 			{
 				m_left_button = transform.gameObject;
 				SetButtonCommponent(m_left_button);
 			}
-			Transform transform2 = mainMenuUIObject.transform.FindChild("Anchor_5_MC/mainmenu_grip/Btn_pager/Btn_mainmenu_pager_L");
+			Transform transform2 = mainMenuUIObject.transform.Find("Anchor_5_MC/mainmenu_grip/Btn_pager/Btn_mainmenu_pager_L");
 			if (transform2 != null)
 			{
 				m_leftPageBtn = transform2.gameObject;
 				SetButtonCommponent(m_leftPageBtn);
-				Transform transform3 = transform2.FindChild("img_pager_icon_l");
+				Transform transform3 = transform2.Find("img_pager_icon_l");
 				if (transform3 != null)
 				{
 					m_left_icon = transform3.gameObject.GetComponent<UISprite>();
 				}
 			}
-			Transform transform4 = mainMenuUIObject.transform.FindChild("Anchor_6_MR/mainmenu_grip_R/Btn_mainmenu_pager_R");
+			Transform transform4 = mainMenuUIObject.transform.Find("Anchor_6_MR/mainmenu_grip_R/Btn_mainmenu_pager_R");
 			if (transform4 != null)
 			{
 				m_right_button = transform4.gameObject;
 				SetButtonCommponent(m_right_button);
 			}
-			Transform transform5 = mainMenuUIObject.transform.FindChild("Anchor_5_MC/mainmenu_grip/Btn_pager/Btn_mainmenu_pager_R");
+			Transform transform5 = mainMenuUIObject.transform.Find("Anchor_5_MC/mainmenu_grip/Btn_pager/Btn_mainmenu_pager_R");
 			if (transform5 != null)
 			{
 				m_rightPageBtn = transform5.gameObject;
 				SetButtonCommponent(m_rightPageBtn);
-				Transform transform6 = transform5.FindChild("img_pager_icon_r");
+				Transform transform6 = transform5.Find("img_pager_icon_r");
 				if (transform6 != null)
 				{
 					m_right_icon = transform6.gameObject.GetComponent<UISprite>();
 				}
 			}
-			GameObject gameObject = mainMenuUIObject.transform.FindChild("Anchor_5_MC/mainmenu_grip/mainmenu_SB").gameObject;
+			GameObject gameObject = mainMenuUIObject.transform.Find("Anchor_5_MC/mainmenu_grip/mainmenu_SB").gameObject;
 			if (gameObject != null)
 			{
 				m_scroll_bar = gameObject.GetComponent<UIScrollBar>();
@@ -139,12 +139,12 @@ public class HudPageTurner : MonoBehaviour
 					EventDelegate.Add(m_scroll_bar.onChange, OnChangeScrollBarValue);
 				}
 			}
-			GameObject gameObject2 = mainMenuUIObject.transform.FindChild("Anchor_5_MC/mainmenu_grip/mainmenu_Slider").gameObject;
+			GameObject gameObject2 = mainMenuUIObject.transform.Find("Anchor_5_MC/mainmenu_grip/mainmenu_Slider").gameObject;
 			if (gameObject2 != null)
 			{
 				m_slider = gameObject2.GetComponent<UISlider>();
 			}
-			Transform transform7 = mainMenuUIObject.transform.FindChild("Anchor_5_MC/mainmenu_contents");
+			Transform transform7 = mainMenuUIObject.transform.Find("Anchor_5_MC/mainmenu_contents");
 			if (transform7 != null)
 			{
 				GameObject gameObject3 = transform7.gameObject;
@@ -153,11 +153,11 @@ public class HudPageTurner : MonoBehaviour
 					m_contents_panel = gameObject3.GetComponent<UIPanel>();
 				}
 			}
-			m_bg = mainMenuUIObject.transform.FindChild("Anchor_5_MC/mainmenu_grip/custom_bg").gameObject;
+			m_bg = mainMenuUIObject.transform.Find("Anchor_5_MC/mainmenu_grip/custom_bg").gameObject;
 			if (m_bg != null)
 			{
 				m_bg_animation = m_bg.GetComponent<Animation>();
-				GameObject gameObject4 = m_bg.transform.FindChild("img_stage_tex").gameObject;
+				GameObject gameObject4 = m_bg.transform.Find("img_stage_tex").gameObject;
 				if (gameObject4 != null)
 				{
 					m_bg_ui_tex = gameObject4.GetComponent<UITexture>();

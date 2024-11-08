@@ -444,7 +444,7 @@ namespace Player
 
 		private void SetupAnimation()
 		{
-			GameObject gameObject = base.transform.FindChild(m_bodyName).gameObject;
+			GameObject gameObject = base.transform.Find(m_bodyName).gameObject;
 			if ((bool)gameObject)
 			{
 				m_bodyAnimator = gameObject.GetComponent<Animator>();

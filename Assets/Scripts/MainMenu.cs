@@ -459,7 +459,7 @@ public class MainMenu : MonoBehaviour
 			{
 				m_stage_info_obj.name = "StageInfo";
 				UnityEngine.Object.DontDestroyOnLoad(m_stage_info_obj);
-				m_stage_info_obj.AddComponent("StageInfo");
+				m_stage_info_obj.AddComponent<StageInfo>();
 			}
 		}
 		GameObject mainMenuUIObject = HudMenuUtility.GetMainMenuUIObject();

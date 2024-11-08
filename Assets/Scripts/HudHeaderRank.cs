@@ -23,7 +23,7 @@ public class HudHeaderRank : MonoBehaviour
 		GameObject mainMenuCmnUIObject = HudMenuUtility.GetMainMenuCmnUIObject();
 		if (mainMenuCmnUIObject != null)
 		{
-			Transform transform = mainMenuCmnUIObject.transform.FindChild("Anchor_1_TL/mainmenu_info_user/Btn_honor/img_bg_name/Lbl_rank");
+			Transform transform = mainMenuCmnUIObject.transform.Find("Anchor_1_TL/mainmenu_info_user/Btn_honor/img_bg_name/Lbl_rank");
 			if (transform != null)
 			{
 				GameObject gameObject = transform.gameObject;

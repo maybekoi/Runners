@@ -237,7 +237,7 @@ public class GameModeTitle : MonoBehaviour
 			{
 				gameObject.name = "StageInfo";
 				UnityEngine.Object.DontDestroyOnLoad(gameObject);
-				gameObject.AddComponent("StageInfo");
+				gameObject.AddComponent<StageInfo>();
 			}
 		}
 		if (gameObject != null)
@@ -1509,7 +1509,7 @@ public class GameModeTitle : MonoBehaviour
 					{
 						x.name = "HardlightAds";
 						UnityEngine.Object.DontDestroyOnLoad(x);
-						x.AddComponent("HardlightAds");
+						UnityEngineInternal.APIUpdaterRuntimeServices.AddComponent(x, "Assets/Scripts/GameModeTitle.cs (1512,7)", "HardlightAds");
 					}
 				}
 			}

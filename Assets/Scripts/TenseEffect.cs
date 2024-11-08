@@ -39,8 +39,8 @@ public class TenseEffect : MonoBehaviour
 		if (m_MaterialProperty != null)
 		{
 			m_MaterialProperty.Clear();
-			m_MaterialProperty.AddColor("_AmbientColor", color);
+			m_MaterialProperty.SetColor("_AmbientColor", color);
 		}
-		base.renderer.SetPropertyBlock(m_MaterialProperty);
+		base.GetComponent<Renderer>().SetPropertyBlock(m_MaterialProperty);
 	}
 }

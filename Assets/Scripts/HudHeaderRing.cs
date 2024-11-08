@@ -27,12 +27,12 @@ public class HudHeaderRing : MonoBehaviour
 		GameObject mainMenuCmnUIObject = HudMenuUtility.GetMainMenuCmnUIObject();
 		if (mainMenuCmnUIObject != null)
 		{
-			GameObject gameObject = mainMenuCmnUIObject.transform.FindChild("Anchor_3_TR/mainmenu_info_quantum/img_bg_stock_ring/Lbl_stock").gameObject;
+			GameObject gameObject = mainMenuCmnUIObject.transform.Find("Anchor_3_TR/mainmenu_info_quantum/img_bg_stock_ring/Lbl_stock").gameObject;
 			if (gameObject != null)
 			{
 				m_ui_ring_label = gameObject.GetComponent<UILabel>();
 			}
-			m_sale_obj = mainMenuCmnUIObject.transform.FindChild("Anchor_3_TR/mainmenu_info_quantum/Btn_shop/img_sale_icon_ring").gameObject;
+			m_sale_obj = mainMenuCmnUIObject.transform.Find("Anchor_3_TR/mainmenu_info_quantum/Btn_shop/img_sale_icon_ring").gameObject;
 		}
 		m_initEnd = true;
 	}

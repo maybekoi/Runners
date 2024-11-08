@@ -90,7 +90,7 @@ public class CryptoUtility
 	public static string Encrypt(string text)
 	{
 		//Discarded unreachable code: IL_0084
-		AesCryptoServiceProvider aesCryptoServiceProvider = new AesCryptoServiceProvider();
+        Aes aesCryptoServiceProvider = Aes.Create();
 		aesCryptoServiceProvider.Mode = CipherMode.CBC;
 		aesCryptoServiceProvider.Padding = PaddingMode.PKCS7;
 		aesCryptoServiceProvider.BlockSize = 128;
@@ -108,7 +108,7 @@ public class CryptoUtility
 	public static string Decrypt(string text)
 	{
 		//Discarded unreachable code: IL_009b
-		AesCryptoServiceProvider aesCryptoServiceProvider = new AesCryptoServiceProvider();
+		Aes aesCryptoServiceProvider = Aes.Create();
 		aesCryptoServiceProvider.Mode = CipherMode.CBC;
 		aesCryptoServiceProvider.Padding = PaddingMode.PKCS7;
 		aesCryptoServiceProvider.BlockSize = 128;

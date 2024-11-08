@@ -104,7 +104,7 @@ public class UIButtonColor : UIWidgetContainer
 		}
 		else
 		{
-			Renderer ren = tweenTarget.renderer;
+			Renderer ren = tweenTarget.GetComponent<Renderer>();
 
 			if (ren != null)
 			{
@@ -112,7 +112,7 @@ public class UIButtonColor : UIWidgetContainer
 			}
 			else
 			{
-				Light lt = tweenTarget.light;
+				Light lt = tweenTarget.GetComponent<Light>();
 
 				if (lt != null)
 				{

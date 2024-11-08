@@ -51,7 +51,7 @@ public class UICursor : MonoBehaviour
 			mousePosition.x = Mathf.Clamp01(mousePosition.x / (float)Screen.width);
 			mousePosition.y = Mathf.Clamp01(mousePosition.y / (float)Screen.height);
 			mTrans.position = uiCamera.ViewportToWorldPoint(mousePosition);
-			if (uiCamera.isOrthoGraphic)
+			if (uiCamera.orthographic)
 			{
 				Vector3 scale = new Vector3(mSprite.width, mSprite.height, 1f);
 				mTrans.localPosition = NGUIMath.ApplyHalfPixelOffset(mTrans.localPosition, scale);

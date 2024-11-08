@@ -98,7 +98,7 @@ public class TutorialCursor : MonoBehaviour
 	{
 		for (int i = 0; i < 18; i++)
 		{
-			Transform transform = base.gameObject.transform.FindChild(ParamTable[i].m_name);
+			Transform transform = base.gameObject.transform.Find(ParamTable[i].m_name);
 			if (transform != null)
 			{
 				m_cursorObj[i] = transform.gameObject;
@@ -119,7 +119,7 @@ public class TutorialCursor : MonoBehaviour
 		{
 			return;
 		}
-		Transform transform = m_cursorObj[(int)type].transform.FindChild("blinder/0_all");
+		Transform transform = m_cursorObj[(int)type].transform.Find("blinder/0_all");
 		if (transform != null)
 		{
 			GameObject gameObject = transform.gameObject;

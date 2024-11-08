@@ -50,7 +50,7 @@ public class HudChaoPanel : MonoBehaviour
 		}
 		for (uint num = 0u; num < 4; num++)
 		{
-			Transform transform = gameObject.transform.FindChild(m_path_name[num]);
+			Transform transform = gameObject.transform.Find(m_path_name[num]);
 			if (transform != null)
 			{
 				m_data_obj[num] = transform.gameObject;

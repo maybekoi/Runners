@@ -89,7 +89,7 @@ public class HudCharacterPanel : MonoBehaviour
 		}
 		for (uint num = 0u; num < 1; num++)
 		{
-			Transform transform = mainMenuUIObject.transform.FindChild("Anchor_5_MC/2_Character/Btn_2_player/" + m_path_name[num]);
+			Transform transform = mainMenuUIObject.transform.Find("Anchor_5_MC/2_Character/Btn_2_player/" + m_path_name[num]);
 			if (transform != null)
 			{
 				m_data_obj[num] = transform.gameObject;
@@ -101,7 +101,7 @@ public class HudCharacterPanel : MonoBehaviour
 		}
 		for (uint num2 = 0u; num2 < 5; num2++)
 		{
-			Transform transform2 = mainMenuUIObject.transform.FindChild("Anchor_5_MC/mainmenu_contents/grid/page_3/slot/ui_mm_main2_page(Clone)/info_bonus/" + m_bonusPathName[num2]);
+			Transform transform2 = mainMenuUIObject.transform.Find("Anchor_5_MC/mainmenu_contents/grid/page_3/slot/ui_mm_main2_page(Clone)/info_bonus/" + m_bonusPathName[num2]);
 			if (transform2 != null)
 			{
 				m_bonusDataObj[num2] = transform2.gameObject;
@@ -111,13 +111,13 @@ public class HudCharacterPanel : MonoBehaviour
 				m_init_flag = false;
 			}
 		}
-		Transform transform3 = mainMenuUIObject.transform.FindChild("Anchor_5_MC/mainmenu_contents/grid/page_3/slot/ui_mm_main2_page(Clone)/info_notice");
+		Transform transform3 = mainMenuUIObject.transform.Find("Anchor_5_MC/mainmenu_contents/grid/page_3/slot/ui_mm_main2_page(Clone)/info_notice");
 		if (transform3 != null)
 		{
 			m_detailTextLabel = GameObjectUtil.FindChildGameObjectComponent<UILabel>(transform3.gameObject, "Lbl_bonusnotice");
 			m_detailTextBg = GameObjectUtil.FindChildGameObjectComponent<UISprite>(transform3.gameObject, "img_base_bg");
 		}
-		Transform transform4 = mainMenuUIObject.transform.FindChild("Anchor_5_MC/mainmenu_contents/grid/page_3/slot/ui_mm_main2_page(Clone)/player_set");
+		Transform transform4 = mainMenuUIObject.transform.Find("Anchor_5_MC/mainmenu_contents/grid/page_3/slot/ui_mm_main2_page(Clone)/player_set");
 		if (!(transform4 != null))
 		{
 			return;

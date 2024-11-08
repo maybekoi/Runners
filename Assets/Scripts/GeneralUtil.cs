@@ -252,7 +252,7 @@ public class GeneralUtil
 
 	public static void CleanAllCache()
 	{
-		Caching.CleanCache();
+		Caching.ClearCache();
 		if (InformationImageManager.Instance != null)
 		{
 			InformationImageManager.Instance.DeleteImageFiles();
@@ -1042,7 +1042,7 @@ public class GeneralUtil
 				if (gameObject4 != null)
 				{
 					bool active = false;
-					GameObject gameObject8 = gameObject4.transform.FindChild("Lbl_roulette_volume").gameObject;
+					GameObject gameObject8 = gameObject4.transform.Find("Lbl_roulette_volume").gameObject;
 					if (gameObject8 != null)
 					{
 						UILabel component = gameObject8.GetComponent<UILabel>();

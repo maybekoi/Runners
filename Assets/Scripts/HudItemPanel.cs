@@ -24,7 +24,7 @@ public class HudItemPanel : MonoBehaviour
 		GameObject mainMenuUIObject = HudMenuUtility.GetMainMenuUIObject();
 		if (mainMenuUIObject != null)
 		{
-			Transform transform = mainMenuUIObject.transform.FindChild("Anchor_5_MC/mainmenu_contents/grid/page_1/slot/ui_mm_main2_page(Clone)/item_set/slot");
+			Transform transform = mainMenuUIObject.transform.Find("Anchor_5_MC/mainmenu_contents/grid/page_1/slot/ui_mm_main2_page(Clone)/item_set/slot");
 			if (transform != null)
 			{
 				m_slot_obj = transform.gameObject;

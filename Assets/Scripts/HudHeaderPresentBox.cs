@@ -36,13 +36,13 @@ public class HudHeaderPresentBox : MonoBehaviour
 		GameObject mainMenuUIObject = HudMenuUtility.GetMainMenuUIObject();
 		if (mainMenuUIObject != null)
 		{
-			GameObject gameObject = mainMenuUIObject.transform.FindChild("Anchor_7_BL/Btn_2_presentbox").gameObject;
+			GameObject gameObject = mainMenuUIObject.transform.Find("Anchor_7_BL/Btn_2_presentbox").gameObject;
 			if (gameObject != null)
 			{
-				m_present_box_badge = gameObject.transform.FindChild("badge").gameObject;
+				m_present_box_badge = gameObject.transform.Find("badge").gameObject;
 				if (m_present_box_badge != null)
 				{
-					GameObject gameObject2 = m_present_box_badge.transform.FindChild("Lbl_present_volume").gameObject;
+					GameObject gameObject2 = m_present_box_badge.transform.Find("Lbl_present_volume").gameObject;
 					if (gameObject2 != null)
 					{
 						m_volume_label = gameObject2.GetComponent<UILabel>();
