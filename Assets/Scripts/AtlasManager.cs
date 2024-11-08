@@ -185,7 +185,7 @@ public class AtlasManager : MonoBehaviour
 		{
 			return;
 		}
-		string str = "_" + TextUtility.GetSuffixe();
+		string str = "_" + Text.TextUtility.GetSuffixe();
 		UIAtlas[] array = Resources.FindObjectsOfTypeAll(typeof(UIAtlas)) as UIAtlas[];
 		GameObject gameObject = ResourceManager.Instance.GetGameObject(ResourceCategory.UI, "ui_cmn_item_Atlas");
 		if (gameObject != null)
@@ -262,7 +262,7 @@ public class AtlasManager : MonoBehaviour
 		{
 			return;
 		}
-		string str = "_" + TextUtility.GetSuffixe();
+		string str = "_" + Text.TextUtility.GetSuffixe();
 		UIAtlas[] array = Resources.FindObjectsOfTypeAll(typeof(UIAtlas)) as UIAtlas[];
 		for (int i = 0; i < m_stageLangAtlasName.Length; i++)
 		{
@@ -317,7 +317,7 @@ public class AtlasManager : MonoBehaviour
 		{
 			return;
 		}
-		string str = "_" + TextUtility.GetSuffixe();
+		string str = "_" + Text.TextUtility.GetSuffixe();
 		string name = "ui_load_word_Atlas" + str;
 		GameObject gameObject = ResourceManager.Instance.GetGameObject(ResourceCategory.UI, name);
 		if (gameObject != null)
@@ -592,7 +592,7 @@ public class AtlasManager : MonoBehaviour
 			int specificId = EventManager.GetSpecificId();
 			if (specificId > 0)
 			{
-				m_eventLangAtlasName = "ui_event_" + specificId + "_Atlas_" + TextUtility.GetSuffixe();
+				m_eventLangAtlasName = "ui_event_" + specificId + "_Atlas_" + Text.TextUtility.GetSuffixe();
 				ResourceSceneLoader.ResourceInfo resInfo = CreateResourceSceneLoader(m_eventLangAtlasName, true);
 				AddSceneLoaderAndResourceManager(resInfo);
 			}
@@ -603,11 +603,11 @@ public class AtlasManager : MonoBehaviour
 	{
 		for (int i = 0; i < m_menuLangAtlasName.Length; i++)
 		{
-			string sceneName = m_menuLangAtlasName[i] + "_" + TextUtility.GetSuffixe();
+			string sceneName = m_menuLangAtlasName[i] + "_" + Text.TextUtility.GetSuffixe();
 			ResourceSceneLoader.ResourceInfo resInfo = CreateResourceSceneLoader(sceneName);
 			AddSceneLoaderAndResourceManager(resInfo);
 		}
-		string sceneName2 = "ui_load_word_Atlas_" + TextUtility.GetSuffixe();
+		string sceneName2 = "ui_load_word_Atlas_" + Text.TextUtility.GetSuffixe();
 		ResourceSceneLoader.ResourceInfo resInfo2 = CreateResourceSceneLoader(sceneName2, true);
 		AddSceneLoaderAndResourceManager(resInfo2);
 		AddLoadEventLangAtlas();
@@ -621,7 +621,7 @@ public class AtlasManager : MonoBehaviour
 	{
 		for (int i = 0; i < m_dividedMenuLangAtlasName.Length; i++)
 		{
-			string sceneName = m_dividedMenuLangAtlasName[i] + "_" + TextUtility.GetSuffixe();
+			string sceneName = m_dividedMenuLangAtlasName[i] + "_" + Text.TextUtility.GetSuffixe();
 			ResourceSceneLoader.ResourceInfo resInfo = CreateResourceSceneLoader(sceneName);
 			AddSceneLoaderAndResourceManager(resInfo);
 		}
@@ -631,7 +631,7 @@ public class AtlasManager : MonoBehaviour
 	{
 		for (int i = 0; i < m_stageLangAtlasName.Length; i++)
 		{
-			string sceneName = m_stageLangAtlasName[i] + "_" + TextUtility.GetSuffixe();
+			string sceneName = m_stageLangAtlasName[i] + "_" + Text.TextUtility.GetSuffixe();
 			ResourceSceneLoader.ResourceInfo resInfo = CreateResourceSceneLoader(sceneName);
 			AddSceneLoaderAndResourceManager(resInfo);
 		}

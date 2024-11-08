@@ -110,8 +110,8 @@ public class AgeVerification : MonoBehaviour
 		case State.CAUTION_AGE_VERIFICATION:
 		{
 			GeneralWindow.CInfo info2 = default(GeneralWindow.CInfo);
-			info2.caption = TextUtility.GetCommonText("Shop", "gw_age_verification_caption");
-			info2.message = TextUtility.GetCommonText("Shop", "gw_age_verification_text");
+			info2.caption = Text.TextUtility.GetCommonText("Shop", "gw_age_verification_caption");
+			info2.message = Text.TextUtility.GetCommonText("Shop", "gw_age_verification_text");
 			info2.buttonType = GeneralWindow.ButtonType.Ok;
 			GeneralWindow.Create(info2);
 			m_state = State.CAUTION_AGE_VERIFICATION_WAIT;
@@ -156,8 +156,8 @@ public class AgeVerification : MonoBehaviour
 		case State.FINISHED_AGE_VERIFICATION:
 		{
 			GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
-			info.caption = TextUtility.GetCommonText("Shop", "gw_age_verification_success_caption");
-			info.message = TextUtility.GetCommonText("Shop", "gw_age_verification_success_text");
+			info.caption = Text.TextUtility.GetCommonText("Shop", "gw_age_verification_success_caption");
+			info.message = Text.TextUtility.GetCommonText("Shop", "gw_age_verification_success_text");
 			info.anchor_path = m_anchorPath;
 			info.buttonType = GeneralWindow.ButtonType.Ok;
 			GeneralWindow.Create(info);
