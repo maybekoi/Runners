@@ -1,6 +1,6 @@
-# SRU18 
+# SRU19
 
-* A port of the Sonic Runners Decomp to Unity 2018.2.19f1
+* A port of the Sonic Runners Decomp to Unity 2019.1.14
 
 # Current Issues
 
@@ -10,22 +10,22 @@
 
 # Credits
 
-* YoPhlox - Port to Unity 2018
+* YoPhlox - Port to Unity 2019
 
 * MattKc, FairPlay137, and F121Live - Decomp
 
-* F121Live - NGUI :D
+* F121Live - NGUI & CriWare SDK :D
 
 * fluofoxxo - Assets Server
 
-# How to setup SRU18
+# How to setup SRU19
 
 By: YoPhlox
 
 1. Download files from this repo using
 `git clone https://github.com/yophlox/SRU18.git --recursive`
 
-2. Download Unity 2018.2.19f1 if you don't have it (you can still use 2018.2.18f1 since there's no major differences lol)
+2. Download Unity 2019.1.14 if you don't have it.
 
 3. Open the project in Unity
 
