@@ -105,15 +105,6 @@
      <None Include="Assets\Plugins\CriWare\CriMana\Resources\CriMana\SofdecPrimeRgb\SofdecPrimeRgb.shader" />
      <None Include="Assets\Plugins\Android\AndroidManifest-sample.xml" />
      <None Include="Assets\Plugins\Criware details.txt" />
- <Reference Include="UnityEditor.StandardEvents">
- <HintPath>C:/Users/YoPhlox/Documents/Unity/SRU18/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
- </Reference>
- <Reference Include="Unity.TextMeshPro.Editor">
- <HintPath>C:/Users/YoPhlox/Documents/Unity/SRU18/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
- </Reference>
- <Reference Include="Unity.PackageManagerUI.Editor">
- <HintPath>C:/Users/YoPhlox/Documents/Unity/SRU18/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
- </Reference>
  <Reference Include="Unity.TextMeshPro">
  <HintPath>C:/Users/YoPhlox/Documents/Unity/SRU18/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
  </Reference>

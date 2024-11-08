@@ -222,13 +222,13 @@ public class GameModeTitle : MonoBehaviour
 		}
 		if (flag)
 		{
-			Caching.maximumAvailableDiskSpace = 524288000L;
+			//Caching.maximumAvailableDiskSpace = 524288000L;
 		}
 		else
 		{
-			Caching.maximumAvailableDiskSpace = 314572800L;
+			//Caching.maximumAvailableDiskSpace = 314572800L;
 		}
-		Caching.expirationDelay = 2592000;
+	//	Caching.expirationDelay = 2592000;
 		GameObject gameObject = GameObject.Find("StageInfo");
 		if (gameObject == null)
 		{

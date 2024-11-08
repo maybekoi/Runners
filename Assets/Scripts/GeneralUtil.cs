@@ -79,7 +79,7 @@ public class GeneralUtil
 
 	public static void CleanAllCache()
 	{
-		Caching.ClearCache();
+		//Caching.ClearCache();
 		if (InformationImageManager.Instance != null)
 		{
 			InformationImageManager.Instance.DeleteImageFiles();

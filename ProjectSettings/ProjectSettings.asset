@@ -605,8 +605,8 @@ PlayerSettings:
   psp2NPCommsSig: 
   psp2ParamSfxPath: 
   psp2ManualPath: 
-  psp2LiveAreaGatePath: 
-  psp2LiveAreaBackroundPath: 
+  psp2LiveAreaGatePath: sce_sys/startup.png
+  psp2LiveAreaBackroundPath: sce_sys/bg.png
   psp2LiveAreaPath: 
   psp2LiveAreaTrialPath: 
   psp2PatchChangeInfoPath: 
@@ -626,8 +626,8 @@ PlayerSettings:
   psp2PackagedResourcesPath: 
   psp2SaveDataQuota: 10240
   psp2ParentalLevel: 1
-  psp2ShortTitle: Not Set
-  psp2ContentID: IV0000-ABCD12345_00-0123456789ABCDEF
+  psp2ShortTitle: Sonic Runners
+  psp2ContentID: IV0000-SRUP12345_00-0123456789SRUPEF
   psp2Category: 0
   psp2MasterVersion: 01.00
   psp2AppVersion: 01.00
