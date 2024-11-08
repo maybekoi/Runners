@@ -283,7 +283,7 @@ public class SettingPartsPushNotice : SettingBase
 			UILabel component5 = gameObject6.GetComponent<UILabel>();
 			if (component5 != null)
 			{
-				TextUtility.SetText(component5, type, "Option", "push_notification");
+				Text.TextUtility.SetText(component5, type, "Option", "push_notification");
 			}
 		}
 		GameObject gameObject7 = GameObjectUtil.FindChildGameObject(m_object, "Lbl_pushinfo_setting_sub");
@@ -292,7 +292,7 @@ public class SettingPartsPushNotice : SettingBase
 			UILabel component6 = gameObject7.GetComponent<UILabel>();
 			if (component6 != null)
 			{
-				TextUtility.SetText(component6, type, "Option", "push_notification_info");
+				Text.TextUtility.SetText(component6, type, "Option", "push_notification_info");
 			}
 		}
 		m_uiAnimation = base.gameObject.AddComponent<UIPlayAnimation>();

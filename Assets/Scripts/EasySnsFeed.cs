@@ -160,9 +160,9 @@ public class EasySnsFeed
 					{
 						itemGetWindow2.Create(new ItemGetWindow.CInfo
 						{
-							caption = TextUtility.GetCommonText("SnsFeed", "gw_feed_incentive_caption"),
+							caption = Text.TextUtility.GetCommonText("SnsFeed", "gw_feed_incentive_caption"),
 							serverItemId = serverPresentState.m_itemId,
-							imageCount = TextUtility.GetCommonText("SnsFeed", "gw_feed_incentive_text", "{COUNT}", HudUtility.GetFormatNumString(serverPresentState.m_numItem))
+							imageCount = Text.TextUtility.GetCommonText("SnsFeed", "gw_feed_incentive_text", "{COUNT}", HudUtility.GetFormatNumString(serverPresentState.m_numItem))
 						});
 					}
 					HudMenuUtility.SendMsgUpdateSaveDataDisplay();

@@ -121,7 +121,7 @@ public class window_staffroll : WindowBase
 	{
 		Initialize();
 		m_creditFlag = true;
-		TextUtility.SetCommonText(m_headerTextLabel, "Option", "staff_credit");
+		Text.TextUtility.SetCommonText(m_headerTextLabel, "Option", "staff_credit");
 		if (string.IsNullOrEmpty(m_creditText))
 		{
 			if (m_staffrollLabel != null)
@@ -142,7 +142,7 @@ public class window_staffroll : WindowBase
 	{
 		Initialize();
 		m_creditFlag = false;
-		TextUtility.SetCommonText(m_headerTextLabel, "Option", "copyright");
+		Text.TextUtility.SetCommonText(m_headerTextLabel, "Option", "copyright");
 		if (string.IsNullOrEmpty(m_copyrightText))
 		{
 			if (m_staffrollLabel != null)

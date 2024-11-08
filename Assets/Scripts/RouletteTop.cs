@@ -439,9 +439,9 @@ public class RouletteTop : CustomGameObject
 						itemGetWindow.Create(new ItemGetWindow.CInfo
 						{
 							name = "TutorialEndAddSp",
-							caption = TextUtility.GetCommonText("MainMenu", "tutorial_sp_egg1_caption"),
+							caption = Text.TextUtility.GetCommonText("MainMenu", "tutorial_sp_egg1_caption"),
 							serverItemId = 220000,
-							imageCount = TextUtility.GetCommonText("MainMenu", "tutorial_sp_egg1_text", "{COUNT}", 10.ToString())
+							imageCount = Text.TextUtility.GetCommonText("MainMenu", "tutorial_sp_egg1_text", "{COUNT}", 10.ToString())
 						});
 						SoundManager.SePlay("sys_specialegg");
 					}

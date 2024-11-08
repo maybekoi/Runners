@@ -31,7 +31,7 @@ public class ErrorHandleServerNextVersion : ErrorHandleBase
 	{
 		if (!string.IsNullOrEmpty(srcText) && !string.IsNullOrEmpty(tag) && !string.IsNullOrEmpty(replace))
 		{
-			return TextUtility.Replace(srcText, tag, replace);
+			return Text.TextUtility.Replace(srcText, tag, replace);
 		}
 		return srcText;
 	}
@@ -48,14 +48,14 @@ public class ErrorHandleServerNextVersion : ErrorHandleBase
 		if (m_titleBack)
 		{
 			info.buttonType = NetworkErrorWindow.ButtonType.Ok;
-			info.caption = TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "NetworkError", "ui_Lbl_caption");
-			info.message = TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "NetworkError", "ui_Lbl_reset");
+			info.caption = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "NetworkError", "ui_Lbl_caption");
+			info.message = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "NetworkError", "ui_Lbl_reset");
 			info.message += -19990;
 		}
 		else
 		{
 			m_userId = SystemSaveManager.GetGameID();
-			info.caption = TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "NetworkError", "ui_Lbl_notification_caption");
+			info.caption = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "NetworkError", "ui_Lbl_notification_caption");
 			string text = (Env.language != 0) ? ServerInterface.NextVersionState.m_eMsg : ServerInterface.NextVersionState.m_jMsg;
 			if (m_userId != "0" && IsRegionJapan())
 			{
@@ -75,7 +75,7 @@ public class ErrorHandleServerNextVersion : ErrorHandleBase
 					}
 				}
 				info.buttonType = NetworkErrorWindow.ButtonType.Repayment;
-				string text2 = TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "NetworkError", "ui_Lbl_user_info_text");
+				string text2 = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "NetworkError", "ui_Lbl_user_info_text");
 				text2 = GetReplaceText(text2, "{PARAM1}", m_userName);
 				text2 = GetReplaceText(text2, "{PARAM2}", m_userId);
 				text2 = GetReplaceText(text2, "{PARAM3}", m_buyRSRNum.ToString());

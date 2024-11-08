@@ -90,7 +90,7 @@ public class HudLoadingCharaInfo : MonoBehaviour
 		}
 		string url = string.Empty;
 		string serverUrl = NetBaseUtil.InformationServerURL;
-		url = serverUrl + "title_load/title_load_index_" + TextUtility.GetSuffixe() + ".html";
+		url = serverUrl + "title_load/title_load_index_" + Text.TextUtility.GetSuffixe() + ".html";
 		Debug.Log("HudLoadingCharaInfo LoadWWW url:" + url + " !!!!");
 		GameObject gameObjectParser = HtmlParserFactory.Create(url, HtmlParser.SyncType.TYPE_ASYNC, HtmlParser.SyncType.TYPE_ASYNC);
 		if (!(gameObjectParser != null))

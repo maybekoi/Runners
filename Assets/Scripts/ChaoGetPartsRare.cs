@@ -35,7 +35,7 @@ public class ChaoGetPartsRare : ChaoGetPartsBase
 		UILabel uILabel2 = GameObjectUtil.FindChildGameObjectComponent<UILabel>(chaoGetObjectRoot, "Lbl_chao_lv");
 		if (uILabel2 != null)
 		{
-			uILabel2.text = TextUtility.GetTextLevel("0");
+			uILabel2.text = Text.TextUtility.GetTextLevel("0");
 		}
 		UISprite uISprite2 = GameObjectUtil.FindChildGameObjectComponent<UISprite>(chaoGetObjectRoot, "img_type_icon");
 		if (uISprite2 != null)

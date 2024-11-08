@@ -14,7 +14,7 @@ public class InfoDecoderWorldRanking : InfoDecoder
 
 	public override string GetCaption()
 	{
-		string commonText = TextUtility.GetCommonText("Ranking", "ranking_result_all_caption");
+		string commonText = Text.TextUtility.GetCommonText("Ranking", "ranking_result_all_caption");
 		if (!string.IsNullOrEmpty(commonText))
 		{
 			return commonText;

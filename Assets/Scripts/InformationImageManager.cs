@@ -263,7 +263,7 @@ public class InformationImageManager : MonoBehaviour
 		string str4 = GetEtagFloderPath() + "ad_" + imageId;
 		for (int i = 0; i <= 10; i++)
 		{
-			string str5 = "_" + TextUtility.GetSuffix((Env.Language)i);
+			string str5 = "_" + Text.TextUtility.GetSuffix((Env.Language)i);
 			string path = str + str5 + ".jpg";
 			string path2 = str2 + str5 + ".jpg";
 			string path3 = str + str5 + ".png";
@@ -310,7 +310,7 @@ public class InformationImageManager : MonoBehaviour
 	{
 		if (!string.IsNullOrEmpty(imageId))
 		{
-			string suffixe = TextUtility.GetSuffixe();
+			string suffixe = Text.TextUtility.GetSuffixe();
 			return getSavePath() + imageId + "_" + suffixe + ".jpg";
 		}
 		return null;
@@ -320,7 +320,7 @@ public class InformationImageManager : MonoBehaviour
 	{
 		if (!string.IsNullOrEmpty(imageId))
 		{
-			string suffixe = TextUtility.GetSuffixe();
+			string suffixe = Text.TextUtility.GetSuffixe();
 			return GetEtagFloderPath() + imageId + "_" + suffixe + ".etag";
 		}
 		return null;
@@ -335,7 +335,7 @@ public class InformationImageManager : MonoBehaviour
 	{
 		if (!string.IsNullOrEmpty(imageId))
 		{
-			string text = "_" + TextUtility.GetSuffix(Env.language);
+			string text = "_" + Text.TextUtility.GetSuffix(Env.language);
 			return NetBaseUtil.InformationServerURL + "pictures/infoImage/" + imageId + text + ".jpg";
 		}
 		return null;

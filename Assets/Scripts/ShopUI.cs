@@ -727,7 +727,7 @@ public class ShopUI : MonoBehaviour
 			GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
 			info.name = "RsrBuyLegal";
 			info.buttonType = GeneralWindow.ButtonType.Ok;
-			info.caption = TextUtility.GetCommonText("Shop", "ui_Lbl_word_legal_caption");
+			info.caption = Text.TextUtility.GetCommonText("Shop", "ui_Lbl_word_legal_caption");
 			info.message = legalText;
 			GeneralWindow.Create(info);
 		}
@@ -800,7 +800,7 @@ public class ShopUI : MonoBehaviour
 		string text = TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "Shop", cellName).text;
 		if (dicReplaces != null)
 		{
-			text = TextUtility.Replaces(text, dicReplaces);
+			text = Text.TextUtility.Replaces(text, dicReplaces);
 		}
 		return text;
 	}

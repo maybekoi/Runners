@@ -335,10 +335,10 @@ public class MileageMapUtility
 
 	public static string GetText(string cellName, Dictionary<string, string> dicReplaces = null)
 	{
-		string text = TextUtility.GetCommonText("MileageMap", cellName);
+		string text = Text.TextUtility.GetCommonText("MileageMap", cellName);
 		if (dicReplaces != null)
 		{
-			text = TextUtility.Replaces(text, dicReplaces);
+			text = Text.TextUtility.Replaces(text, dicReplaces);
 		}
 		return text;
 	}

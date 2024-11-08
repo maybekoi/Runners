@@ -53,9 +53,9 @@ public class EventRankingServerInfoConverter
 				return null;
 			}
 			string text = null;
-			text = ((!m_isPresented) ? TextUtility.GetCommonText("Ranking", "ranking_result_event_text_1") : TextUtility.GetCommonText("Ranking", "ranking_result_event_text_2"));
+			text = ((!m_isPresented) ? Text.TextUtility.GetCommonText("Ranking", "ranking_result_event_text_1") : Text.TextUtility.GetCommonText("Ranking", "ranking_result_event_text_2"));
 			string eventName = GetEventName();
-			return TextUtility.Replaces(text, new Dictionary<string, string>
+			return Text.TextUtility.Replaces(text, new Dictionary<string, string>
 			{
 				{
 					"{PARAM1}",
@@ -139,13 +139,13 @@ public class EventRankingServerInfoConverter
 			switch (EventManager.GetCollectEventType(m_eventId))
 			{
 			case EventManager.CollectEventType.GET_ANIMALS:
-				result = TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Menu", "ui_Lbl_word_animl_get_event");
+				result = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Menu", "ui_Lbl_word_animl_get_event");
 				break;
 			case EventManager.CollectEventType.GET_RING:
-				result = TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Menu", "ui_Lbl_word_ring_get_event");
+				result = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Menu", "ui_Lbl_word_ring_get_event");
 				break;
 			case EventManager.CollectEventType.RUN_DISTANCE:
-				result = TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Menu", "ui_Lbl_word_run_distance_event");
+				result = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Menu", "ui_Lbl_word_run_distance_event");
 				break;
 			}
 			break;

@@ -112,7 +112,7 @@ public class HudChaoPanel : MonoBehaviour
 		}
 		if (chao_id >= 0)
 		{
-			string chaoText = TextUtility.GetChaoText("Chao", "name_for_menu_" + chao_id.ToString("D4"));
+			string chaoText = Text.TextUtility.GetChaoText("Chao", "name_for_menu_" + chao_id.ToString("D4"));
 			if (chaoText != null)
 			{
 				component.text = chaoText;
@@ -156,7 +156,7 @@ public class HudChaoPanel : MonoBehaviour
 				if (level > -1)
 				{
 					obj.SetActive(true);
-					component.text = TextUtility.GetTextLevel(level.ToString());
+					component.text = Text.TextUtility.GetTextLevel(level.ToString());
 				}
 			}
 		}

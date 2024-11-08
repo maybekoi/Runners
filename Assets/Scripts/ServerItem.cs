@@ -371,13 +371,13 @@ public struct ServerItem
 			case IdType.EQUIP_ITEM:
 			{
 				string cellID = string.Format("name{0}", num % 100 + 1);
-				result = TextUtility.GetCommonText("ShopItem", cellID);
+				result = Text.TextUtility.GetCommonText("ShopItem", cellID);
 				break;
 			}
 			case IdType.EGG_ITEM:
 			{
 				string cellID = "sp_egg_name";
-				result = TextUtility.GetCommonText("ChaoRoulette", cellID);
+				result = Text.TextUtility.GetCommonText("ChaoRoulette", cellID);
 				break;
 			}
 			case IdType.CHARA:
@@ -386,56 +386,56 @@ public struct ServerItem
 				if (dataByServerID != null)
 				{
 					string cellID = dataByServerID.m_name.ToLower();
-					result = TextUtility.GetCommonText("CharaName", cellID);
+					result = Text.TextUtility.GetCommonText("CharaName", cellID);
 				}
 				break;
 			}
 			case IdType.CHAO:
 			{
 				string cellID2 = "name" + chaoId.ToString("D4");
-				result = TextUtility.GetChaoText("Chao", cellID2);
+				result = Text.TextUtility.GetChaoText("Chao", cellID2);
 				break;
 			}
 			case IdType.RSRING:
 			{
 				string cellID = "red_star_ring";
-				result = TextUtility.GetCommonText("Item", cellID);
+				result = Text.TextUtility.GetCommonText("Item", cellID);
 				break;
 			}
 			case IdType.RING:
 			{
 				string cellID = "ring";
-				result = TextUtility.GetCommonText("Item", cellID);
+				result = Text.TextUtility.GetCommonText("Item", cellID);
 				break;
 			}
 			case IdType.ENERGY:
 			{
 				string cellID = "energy";
-				result = TextUtility.GetCommonText("Item", cellID);
+				result = Text.TextUtility.GetCommonText("Item", cellID);
 				break;
 			}
 			case IdType.ENERGY_MAX:
 			{
 				string cellID = "energy";
-				result = TextUtility.GetCommonText("Item", cellID);
+				result = Text.TextUtility.GetCommonText("Item", cellID);
 				break;
 			}
 			case IdType.RAIDRING:
 			{
 				string cellID = "raidboss_ring";
-				result = TextUtility.GetCommonText("Item", cellID);
+				result = Text.TextUtility.GetCommonText("Item", cellID);
 				break;
 			}
 			case IdType.ITEM_ROULLETE_TICKET:
 			{
 				string cellID = "item_roulette_ticket";
-				result = TextUtility.GetCommonText("Item", cellID);
+				result = Text.TextUtility.GetCommonText("Item", cellID);
 				break;
 			}
 			case IdType.PREMIUM_ROULLETE_TICKET:
 			{
 				string cellID = "premium_roulette_ticket";
-				result = TextUtility.GetCommonText("Item", cellID);
+				result = Text.TextUtility.GetCommonText("Item", cellID);
 				break;
 			}
 			}
@@ -469,7 +469,7 @@ public struct ServerItem
 			case IdType.EQUIP_ITEM:
 			{
 				string cellID = string.Format("details{0}", num % 100 + 1);
-				result = TextUtility.GetCommonText("ShopItem", cellID);
+				result = Text.TextUtility.GetCommonText("ShopItem", cellID);
 				break;
 			}
 			case IdType.ROULLETE_TOKEN:
@@ -489,7 +489,7 @@ public struct ServerItem
 			case IdType.EGG_ITEM:
 			{
 				string cellID = "sp_egg_details";
-				result = TextUtility.GetCommonText("ChaoRoulette", cellID);
+				result = Text.TextUtility.GetCommonText("ChaoRoulette", cellID);
 				break;
 			}
 			case IdType.CHARA:
@@ -498,32 +498,32 @@ public struct ServerItem
 				if (dataByServerID != null)
 				{
 					string cellID = string.Format("chara_attribute_{0}", dataByServerID.m_name.ToLower());
-					result = TextUtility.GetCommonText("WindowText", cellID);
+					result = Text.TextUtility.GetCommonText("WindowText", cellID);
 				}
 				break;
 			}
 			case IdType.RSRING:
 			{
 				string cellID = "red_star_ring_details";
-				result = TextUtility.GetCommonText("Item", cellID);
+				result = Text.TextUtility.GetCommonText("Item", cellID);
 				break;
 			}
 			case IdType.RING:
 			{
 				string cellID = "ring_details";
-				result = TextUtility.GetCommonText("Item", cellID);
+				result = Text.TextUtility.GetCommonText("Item", cellID);
 				break;
 			}
 			case IdType.ENERGY:
 			{
 				string cellID = "energy_details";
-				result = TextUtility.GetCommonText("Item", cellID);
+				result = Text.TextUtility.GetCommonText("Item", cellID);
 				break;
 			}
 			case IdType.ENERGY_MAX:
 			{
 				string cellID = "energy_details";
-				result = TextUtility.GetCommonText("Item", cellID);
+				result = Text.TextUtility.GetCommonText("Item", cellID);
 				break;
 			}
 			}

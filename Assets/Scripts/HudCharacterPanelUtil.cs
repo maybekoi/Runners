@@ -41,7 +41,7 @@ public class HudCharacterPanelUtil
 		{
 			if (chara_type != CharaType.UNKNOWN)
 			{
-				component.text = TextUtility.GetCommonText("CharaName", CharaName.Name[(int)chara_type]);
+				component.text = Text.TextUtility.GetCommonText("CharaName", CharaName.Name[(int)chara_type]);
 			}
 			else
 			{
@@ -57,7 +57,7 @@ public class HudCharacterPanelUtil
 			UILabel component = obj.GetComponent<UILabel>();
 			if (component != null)
 			{
-				component.text = TextUtility.GetTextLevel(SaveDataUtil.GetCharaLevel(chara_type).ToString());
+				component.text = Text.TextUtility.GetTextLevel(SaveDataUtil.GetCharaLevel(chara_type).ToString());
 			}
 		}
 	}

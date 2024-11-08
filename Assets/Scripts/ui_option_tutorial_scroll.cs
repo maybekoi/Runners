@@ -73,13 +73,13 @@ public class ui_option_tutorial_scroll : MonoBehaviour
 		switch (m_scrollInfo.DispType)
 		{
 		case window_tutorial.DisplayType.TUTORIAL:
-			text = TextUtility.GetCommonText("Option", "tutorial");
+			text = Text.TextUtility.GetCommonText("Option", "tutorial");
 			break;
 		case window_tutorial.DisplayType.QUICK:
-			text = TextUtility.GetCommonText("Tutorial", "caption_quickmode_tutorial");
+			text = Text.TextUtility.GetCommonText("Tutorial", "caption_quickmode_tutorial");
 			break;
 		case window_tutorial.DisplayType.CHARA:
-			text = TextUtility.GetCommonText("CharaName", CharaName.Name[(int)m_scrollInfo.Chara]);
+			text = Text.TextUtility.GetCommonText("CharaName", CharaName.Name[(int)m_scrollInfo.Chara]);
 			break;
 		case window_tutorial.DisplayType.BOSS_MAP_1:
 			text = BossTypeUtil.GetTextCommonBossName(BossType.MAP1);

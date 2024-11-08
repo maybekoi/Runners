@@ -67,7 +67,7 @@ public class RankingResultLeague : WindowBase
 		UILabel uILabel2 = GameObjectUtil.FindChildGameObjectComponent<UILabel>(base.gameObject, "Lbl_caption_sh");
 		if (uILabel != null && uILabel2 != null)
 		{
-			string text2 = uILabel2.text = (uILabel.text = TextUtility.GetCommonText("Ranking", (!m_quickMode) ? "ui_Lbl_caption_endless_result" : "ui_Lbl_caption_quickmode_result"));
+			string text2 = uILabel2.text = (uILabel.text = Text.TextUtility.GetCommonText("Ranking", (!m_quickMode) ? "ui_Lbl_caption_endless_result" : "ui_Lbl_caption_quickmode_result"));
 		}
 		string text3 = TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "Ranking", "ranking_result_league_stay").text;
 		switch (m_rankingData.leagueResult)
@@ -79,7 +79,7 @@ public class RankingResultLeague : WindowBase
 			text3 = TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "Ranking", "ranking_result_league_down").text;
 			break;
 		}
-		string text4 = TextUtility.Replaces(text3, new Dictionary<string, string>
+		string text4 = Text.TextUtility.Replaces(text3, new Dictionary<string, string>
 		{
 			{
 				"{PARAM}",

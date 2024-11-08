@@ -142,8 +142,8 @@ public class DailyInfo : MonoBehaviour
 		GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
 		info.name = "ShowDailyBattleHelp";
 		info.buttonType = GeneralWindow.ButtonType.Ok;
-		info.caption = TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_help_caption");
-		info.message = TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_help_text");
+		info.caption = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_help_caption");
+		info.message = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_help_text");
 		GeneralWindow.Create(info);
 		SoundManager.SePlay("sys_menu_decide");
 	}

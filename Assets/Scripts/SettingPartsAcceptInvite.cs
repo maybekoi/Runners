@@ -234,8 +234,8 @@ public class SettingPartsAcceptInvite : SettingBase
 		GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
 		info.buttonType = GeneralWindow.ButtonType.YesNo;
 		TextManager.TextType type = TextManager.TextType.TEXTTYPE_FIXATION_TEXT;
-		info.caption = TextUtility.GetText(type, "FaceBook", "ui_Lbl_verification");
-		info.message = TextUtility.GetText(type, "FaceBook", "ui_Lbl_accept_invite_text", "{FRIEND_NAME}", friendData.Name);
+		info.caption = Text.TextUtility.GetText(type, "FaceBook", "ui_Lbl_verification");
+		info.message = Text.TextUtility.GetText(type, "FaceBook", "ui_Lbl_accept_invite_text", "{FRIEND_NAME}", friendData.Name);
 		GeneralWindow.Create(info);
 		m_decidedFriendData = friendData;
 		m_state = State.DECIDE_FRIEND;
@@ -315,7 +315,7 @@ public class SettingPartsAcceptInvite : SettingBase
 			UILabel component2 = gameObject3.GetComponent<UILabel>();
 			if (component2 != null)
 			{
-				TextUtility.SetCommonText(component2, "Option", "acceptance_of_invite");
+				Text.TextUtility.SetCommonText(component2, "Option", "acceptance_of_invite");
 			}
 		}
 		GameObject gameObject4 = GameObjectUtil.FindChildGameObject(m_object, "Lbl_invite_sub");
@@ -324,7 +324,7 @@ public class SettingPartsAcceptInvite : SettingBase
 			UILabel component3 = gameObject4.GetComponent<UILabel>();
 			if (component3 != null)
 			{
-				TextUtility.SetCommonText(component3, "Option", "acceptance_of_invite_info");
+				Text.TextUtility.SetCommonText(component3, "Option", "acceptance_of_invite_info");
 			}
 		}
 		UIPanel component4 = m_object.GetComponent<UIPanel>();
@@ -340,8 +340,8 @@ public class SettingPartsAcceptInvite : SettingBase
 		GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
 		info.buttonType = GeneralWindow.ButtonType.Ok;
 		TextManager.TextType type = TextManager.TextType.TEXTTYPE_FIXATION_TEXT;
-		info.caption = TextUtility.GetText(type, "FaceBook", "ui_Lbl_ask_accept_invite_caption");
-		info.message = TextUtility.GetText(type, "FaceBook", "ui_Lbl_accept_invite_end_text");
+		info.caption = Text.TextUtility.GetText(type, "FaceBook", "ui_Lbl_ask_accept_invite_caption");
+		info.message = Text.TextUtility.GetText(type, "FaceBook", "ui_Lbl_accept_invite_end_text");
 		info.name = "CreateEndAcceptWindow";
 		GeneralWindow.Create(info);
 	}

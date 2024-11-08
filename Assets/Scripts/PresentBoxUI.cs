@@ -507,8 +507,8 @@ public class PresentBoxUI : MonoBehaviour
 		GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
 		info.name = "presentbox";
 		info.buttonType = GeneralWindow.ButtonType.Ok;
-		info.caption = TextUtility.GetCommonText("PresentBox", "out_of_date_caption");
-		info.message = TextUtility.GetCommonText("PresentBox", "out_of_date_text");
+		info.caption = Text.TextUtility.GetCommonText("PresentBox", "out_of_date_caption");
+		info.message = Text.TextUtility.GetCommonText("PresentBox", "out_of_date_text");
 		info.parentGameObject = base.gameObject;
 		GeneralWindow.Create(info);
 		while (!GeneralWindow.IsButtonPressed)
@@ -531,7 +531,7 @@ public class PresentBoxUI : MonoBehaviour
 			GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
 			info.name = "presentbox";
 			info.buttonType = GeneralWindow.ButtonType.Ok;
-			info.caption = TextUtility.GetCommonText("PresentBox", "present_box");
+			info.caption = Text.TextUtility.GetCommonText("PresentBox", "present_box");
 			info.message = PresentBoxUtility.GetPresetTextList(msg.m_presentStateList);
 			info.parentGameObject = base.gameObject;
 			GeneralWindow.Create(info);
@@ -541,8 +541,8 @@ public class PresentBoxUI : MonoBehaviour
 			GeneralWindow.CInfo info2 = default(GeneralWindow.CInfo);
 			info2.name = "presentbox";
 			info2.buttonType = GeneralWindow.ButtonType.Ok;
-			info2.caption = TextUtility.GetCommonText("PresentBox", "present_box");
-			info2.message = TextUtility.GetCommonText("PresentBox", "not_receive_message");
+			info2.caption = Text.TextUtility.GetCommonText("PresentBox", "present_box");
+			info2.message = Text.TextUtility.GetCommonText("PresentBox", "not_receive_message");
 			info2.parentGameObject = base.gameObject;
 			GeneralWindow.Create(info2);
 		}
@@ -556,8 +556,8 @@ public class PresentBoxUI : MonoBehaviour
 			GeneralWindow.CInfo info3 = default(GeneralWindow.CInfo);
 			info3.name = "presentbox";
 			info3.buttonType = GeneralWindow.ButtonType.Ok;
-			info3.caption = TextUtility.GetCommonText("PresentBox", "present_box");
-			info3.message = TextUtility.GetCommonText("PresentBox", "miss_message");
+			info3.caption = Text.TextUtility.GetCommonText("PresentBox", "present_box");
+			info3.message = Text.TextUtility.GetCommonText("PresentBox", "miss_message");
 			info3.parentGameObject = base.gameObject;
 			GeneralWindow.Create(info3);
 			while (!GeneralWindow.IsButtonPressed)
@@ -571,8 +571,8 @@ public class PresentBoxUI : MonoBehaviour
 			GeneralWindow.CInfo info4 = default(GeneralWindow.CInfo);
 			info4.name = "presentbox";
 			info4.buttonType = GeneralWindow.ButtonType.Ok;
-			info4.caption = TextUtility.GetCommonText("PresentBox", "out_of_date_caption");
-			info4.message = TextUtility.GetCommonText("PresentBox", "out_of_date_text");
+			info4.caption = Text.TextUtility.GetCommonText("PresentBox", "out_of_date_caption");
+			info4.message = Text.TextUtility.GetCommonText("PresentBox", "out_of_date_text");
 			info4.parentGameObject = base.gameObject;
 			GeneralWindow.Create(info4);
 			while (!GeneralWindow.IsButtonPressed)
@@ -721,8 +721,8 @@ public class PresentBoxUI : MonoBehaviour
 			GeneralWindow.CInfo info5 = default(GeneralWindow.CInfo);
 			info5.name = "presentbox";
 			info5.buttonType = GeneralWindow.ButtonType.YesNo;
-			info5.caption = TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "FaceBook", "ui_Lbl_verification");
-			info5.message = TextUtility.GetCommonText("PresentBox", "player_set_text");
+			info5.caption = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "FaceBook", "ui_Lbl_verification");
+			info5.message = Text.TextUtility.GetCommonText("PresentBox", "player_set_text");
 			info5.parentGameObject = base.gameObject;
 			GeneralWindow.Create(info5);
 			while (!GeneralWindow.IsButtonPressed)
@@ -742,8 +742,8 @@ public class PresentBoxUI : MonoBehaviour
 			GeneralWindow.CInfo info6 = default(GeneralWindow.CInfo);
 			info6.name = "presentbox";
 			info6.buttonType = GeneralWindow.ButtonType.YesNo;
-			info6.caption = TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "FaceBook", "ui_Lbl_verification");
-			info6.message = TextUtility.GetCommonText("PresentBox", "chao_set_text");
+			info6.caption = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "FaceBook", "ui_Lbl_verification");
+			info6.message = Text.TextUtility.GetCommonText("PresentBox", "chao_set_text");
 			info6.parentGameObject = base.gameObject;
 			GeneralWindow.Create(info6);
 			while (!GeneralWindow.IsButtonPressed)

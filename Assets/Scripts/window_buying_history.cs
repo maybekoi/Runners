@@ -144,22 +144,22 @@ public class window_buying_history : WindowBase
 		value = Mathf.Clamp(value, 0, 99999999);
 		value2 = Mathf.Clamp(value2, 0, 99999999);
 		value3 = Mathf.Clamp(value3, 0, 99999999);
-		TextUtility.SetCommonText(m_headerTextLabel, "Option", "buying_info");
-		TextUtility.SetCommonText(m_redRingText, "Item", "red_star_ring");
-		TextUtility.SetCommonText(m_ringText, "Item", "ring");
-		TextUtility.SetCommonText(m_energyText, "Item", "energy");
-		TextUtility.SetCommonText(m_redRingGetText, "Option", "take");
-		TextUtility.SetCommonText(m_ringGetText, "Option", "take");
-		TextUtility.SetCommonText(m_energyGetText, "Option", "take");
-		TextUtility.SetCommonText(m_redRingBuyText, "Option", "buy");
-		TextUtility.SetCommonText(m_ringBuyText, "Option", "buy");
-		TextUtility.SetCommonText(m_energyBuyText, "Option", "buy");
-		TextUtility.SetCommonText(m_redRingGetScoreText, "Score", "number_of_pieces", "{NUM}", HudUtility.GetFormatNumString(value));
-		TextUtility.SetCommonText(m_ringGetScoreText, "Score", "number_of_pieces", "{NUM}", HudUtility.GetFormatNumString(value2));
-		TextUtility.SetCommonText(m_energyGetScoreText, "Score", "number_of_pieces", "{NUM}", HudUtility.GetFormatNumString(value3));
-		TextUtility.SetCommonText(m_redRingBuyScoreText, "Score", "number_of_pieces", "{NUM}", HudUtility.GetFormatNumString(num));
-		TextUtility.SetCommonText(m_ringBuyScoreText, "Score", "number_of_pieces", "{NUM}", HudUtility.GetFormatNumString(num2));
-		TextUtility.SetCommonText(m_energyBuyScoreText, "Score", "number_of_pieces", "{NUM}", HudUtility.GetFormatNumString(num3));
+		Text.TextUtility.SetCommonText(m_headerTextLabel, "Option", "buying_info");
+		Text.TextUtility.SetCommonText(m_redRingText, "Item", "red_star_ring");
+		Text.TextUtility.SetCommonText(m_ringText, "Item", "ring");
+		Text.TextUtility.SetCommonText(m_energyText, "Item", "energy");
+		Text.TextUtility.SetCommonText(m_redRingGetText, "Option", "take");
+		Text.TextUtility.SetCommonText(m_ringGetText, "Option", "take");
+		Text.TextUtility.SetCommonText(m_energyGetText, "Option", "take");
+		Text.TextUtility.SetCommonText(m_redRingBuyText, "Option", "buy");
+		Text.TextUtility.SetCommonText(m_ringBuyText, "Option", "buy");
+		Text.TextUtility.SetCommonText(m_energyBuyText, "Option", "buy");
+		Text.TextUtility.SetCommonText(m_redRingGetScoreText, "Score", "number_of_pieces", "{NUM}", HudUtility.GetFormatNumString(value));
+		Text.TextUtility.SetCommonText(m_ringGetScoreText, "Score", "number_of_pieces", "{NUM}", HudUtility.GetFormatNumString(value2));
+		Text.TextUtility.SetCommonText(m_energyGetScoreText, "Score", "number_of_pieces", "{NUM}", HudUtility.GetFormatNumString(value3));
+		Text.TextUtility.SetCommonText(m_redRingBuyScoreText, "Score", "number_of_pieces", "{NUM}", HudUtility.GetFormatNumString(num));
+		Text.TextUtility.SetCommonText(m_ringBuyScoreText, "Score", "number_of_pieces", "{NUM}", HudUtility.GetFormatNumString(num2));
+		Text.TextUtility.SetCommonText(m_energyBuyScoreText, "Score", "number_of_pieces", "{NUM}", HudUtility.GetFormatNumString(num3));
 	}
 
 	public void PlayOpenWindow()

@@ -524,9 +524,9 @@ public class FirstLaunchUserSetting : MonoBehaviour
 			{
 				itemGetWindow2.Create(new ItemGetWindow.CInfo
 				{
-					caption = TextUtility.GetCommonText("MainMenu", "tutorial_sp_egg1_caption"),
+					caption = Text.TextUtility.GetCommonText("MainMenu", "tutorial_sp_egg1_caption"),
 					serverItemId = 220000,
-					imageCount = TextUtility.GetCommonText("MainMenu", "tutorial_sp_egg1_text", "{COUNT}", 9.ToString())
+					imageCount = Text.TextUtility.GetCommonText("MainMenu", "tutorial_sp_egg1_text", "{COUNT}", 9.ToString())
 				});
 				SoundManager.SePlay("sys_specialegg");
 			}

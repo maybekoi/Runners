@@ -20,8 +20,8 @@ public class OptionBackTitle : MonoBehaviour
 	{
 		GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
 		info.name = "BackTitle";
-		info.caption = TextUtility.GetCommonText("MainMenu", "back_title_caption");
-		info.message = TextUtility.GetCommonText("MainMenu", "back_title_text");
+		info.caption = Text.TextUtility.GetCommonText("MainMenu", "back_title_caption");
+		info.message = Text.TextUtility.GetCommonText("MainMenu", "back_title_text");
 		info.anchor_path = "Camera/Anchor_5_MC";
 		info.buttonType = GeneralWindow.ButtonType.YesNo;
 		GeneralWindow.Create(info);

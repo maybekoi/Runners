@@ -301,7 +301,7 @@ public class DailyBattleDetailWindow : WindowBase
 			UILabel caption = GameObjectUtil.FindChildGameObjectComponent<UILabel>(root, "Lbl_caption");
 			if (caption != null)
 			{
-				caption.text = TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_detail_caption");
+				caption.text = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_detail_caption");
 			}
 		}
 		m_isEnd = false;
@@ -376,15 +376,15 @@ public class DailyBattleDetailWindow : WindowBase
 			}
 			else if (winOrLose == 4 && !GeneralUtil.IsOverTime(m_battleData.endTime))
 			{
-				m_result.text = TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_result_still");
+				m_result.text = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_result_still");
 			}
 			else if (winOrLose == 1)
 			{
-				m_result.text = TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_result_lose");
+				m_result.text = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_result_lose");
 			}
 			else
 			{
-				m_result.text = TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_result_win");
+				m_result.text = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_result_win");
 			}
 		}
 		if (m_winFlag == 0)
@@ -402,7 +402,7 @@ public class DailyBattleDetailWindow : WindowBase
 			}
 			if (m_result != null)
 			{
-				m_result.text = TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_result_failure");
+				m_result.text = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_result_failure");
 			}
 		}
 	}

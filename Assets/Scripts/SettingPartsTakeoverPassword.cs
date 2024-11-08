@@ -188,7 +188,7 @@ public class SettingPartsTakeoverPassword : SettingBase
 			UILabel component4 = gameObject4.GetComponent<UILabel>();
 			if (component4 != null)
 			{
-				TextUtility.SetCommonText(component4, "Option", "take_over_password_setting");
+				Text.TextUtility.SetCommonText(component4, "Option", "take_over_password_setting");
 			}
 		}
 		GameObject gameObject5 = GameObjectUtil.FindChildGameObject(m_object, "Lbl_name_setting_sub");
@@ -197,7 +197,7 @@ public class SettingPartsTakeoverPassword : SettingBase
 			UILabel component5 = gameObject5.GetComponent<UILabel>();
 			if (component5 != null)
 			{
-				TextUtility.SetCommonText(component5, "Option", "take_over_password_setting_info");
+				Text.TextUtility.SetCommonText(component5, "Option", "take_over_password_setting_info");
 			}
 		}
 		GameObject gameObject6 = GameObjectUtil.FindChildGameObject(m_object, "Lbl_input_password");
@@ -206,7 +206,7 @@ public class SettingPartsTakeoverPassword : SettingBase
 			m_label = gameObject6.GetComponent<UILabel>();
 			if (m_label != null)
 			{
-				TextUtility.SetCommonText(m_label, "Option", "take_over_password_input");
+				Text.TextUtility.SetCommonText(m_label, "Option", "take_over_password_input");
 			}
 		}
 		m_uiAnimation = base.gameObject.AddComponent<UIPlayAnimation>();
@@ -240,7 +240,7 @@ public class SettingPartsTakeoverPassword : SettingBase
 			}
 			if (m_label != null)
 			{
-				TextUtility.SetCommonText(m_label, "Option", "take_over_password_input");
+				Text.TextUtility.SetCommonText(m_label, "Option", "take_over_password_input");
 			}
 			SoundManager.SePlay("sys_window_open");
 		}

@@ -13,7 +13,7 @@ public class MenuPlayerSetLevelStateMax : MenuPlayerSetLevelState
 		UILabel uILabel = GameObjectUtil.FindChildGameObjectComponent<UILabel>(base.gameObject, "Lbl_item_lv");
 		if (uILabel != null)
 		{
-			uILabel.text = TextUtility.GetTextLevel(level.ToString());
+			uILabel.text = Text.TextUtility.GetTextLevel(level.ToString());
 		}
 		GameObject gameObject = GameObjectUtil.FindChildGameObject(base.gameObject, "Lbl_item_price");
 		if (gameObject != null)

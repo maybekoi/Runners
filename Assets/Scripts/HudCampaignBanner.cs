@@ -156,7 +156,7 @@ public class HudCampaignBanner : MonoBehaviour
 				InformationWindow.Information info = default(InformationWindow.Information);
 				info.pattern = InformationWindow.ButtonPattern.OK;
 				info.imageId = eventItem.ImageId;
-				info.caption = TextUtility.GetCommonText("Informaion", "announcement");
+				info.caption = Text.TextUtility.GetCommonText("Informaion", "announcement");
 				GameObject cameraUIObject = HudMenuUtility.GetCameraUIObject();
 				if (cameraUIObject != null)
 				{

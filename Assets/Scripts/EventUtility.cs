@@ -205,7 +205,7 @@ public class EventUtility : MonoBehaviour
 			text = text + "p_" + EventManager.GetSpecificId();
 			break;
 		}
-		return TextUtility.GetText(type, "EventBossName", text);
+		return Text.TextUtility.GetText(type, "EventBossName", text);
 	}
 
 	public static void UpdateCollectObjectCount()

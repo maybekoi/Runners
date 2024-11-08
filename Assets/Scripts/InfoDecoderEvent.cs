@@ -14,7 +14,7 @@ public class InfoDecoderEvent : InfoDecoder
 
 	public override string GetCaption()
 	{
-		string commonText = TextUtility.GetCommonText("Ranking", "ranking_result_event_caption");
+		string commonText = Text.TextUtility.GetCommonText("Ranking", "ranking_result_event_caption");
 		if (!string.IsNullOrEmpty(commonText))
 		{
 			return commonText;

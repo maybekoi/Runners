@@ -108,7 +108,7 @@ public class RaidBossDamageRewardWindow : WindowBase
 			if (!string.IsNullOrEmpty(rewardText))
 			{
 				string text = TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "MainMenu", "raid_reward_text").text;
-				m_topRewardItem.text = TextUtility.Replaces(text, new Dictionary<string, string>
+				m_topRewardItem.text = Text.TextUtility.Replaces(text, new Dictionary<string, string>
 				{
 					{
 						"{PARAM}",

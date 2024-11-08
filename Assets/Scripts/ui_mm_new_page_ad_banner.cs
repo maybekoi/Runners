@@ -84,7 +84,7 @@ public class ui_mm_new_page_ad_banner : MonoBehaviour
 	{
 		if (m_bannerInfo != null)
 		{
-			m_easySnsFeed = new EasySnsFeed(base.gameObject, "Camera/Anchor_5_MC", TextUtility.GetCommonText("ItemRoulette", "feed_jackpot_caption"), m_bannerInfo.info.bodyText);
+			m_easySnsFeed = new EasySnsFeed(base.gameObject, "Camera/Anchor_5_MC", Text.TextUtility.GetCommonText("ItemRoulette", "feed_jackpot_caption"), m_bannerInfo.info.bodyText);
 		}
 	}
 
@@ -253,7 +253,7 @@ public class ui_mm_new_page_ad_banner : MonoBehaviour
 		bool result = false;
 		if (m_uiTexture != null)
 		{
-			string name = "ui_tex_ranking_rival_endless_" + TextUtility.GetSuffixe();
+			string name = "ui_tex_ranking_rival_endless_" + Text.TextUtility.GetSuffixe();
 			GameObject gameObject = GameObject.Find(name);
 			if (gameObject != null)
 			{
@@ -268,7 +268,7 @@ public class ui_mm_new_page_ad_banner : MonoBehaviour
 	{
 		if (m_uiTexture != null)
 		{
-			string name = "ui_tex_ranking_rival_quick_" + TextUtility.GetSuffixe();
+			string name = "ui_tex_ranking_rival_quick_" + Text.TextUtility.GetSuffixe();
 			GameObject gameObject = GameObject.Find(name);
 			if (gameObject != null)
 			{

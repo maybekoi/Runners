@@ -118,8 +118,8 @@ public class MainMenuWindow : MonoBehaviour
 			m_window_type = window_type;
 			GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
 			info.buttonType = m_windowInfo[(int)m_window_type].ButtonType;
-			info.caption = TextUtility.GetCommonText(m_windowInfo[(int)m_window_type].CaptionGroup, m_windowInfo[(int)m_window_type].CaptionCell);
-			info.message = TextUtility.GetCommonText(m_windowInfo[(int)m_window_type].MessageGroup, m_windowInfo[(int)m_window_type].MessageCell);
+			info.caption = Text.TextUtility.GetCommonText(m_windowInfo[(int)m_window_type].CaptionGroup, m_windowInfo[(int)m_window_type].CaptionCell);
+			info.message = Text.TextUtility.GetCommonText(m_windowInfo[(int)m_window_type].MessageGroup, m_windowInfo[(int)m_window_type].MessageCell);
 			info.isPlayErrorSe = m_windowInfo[(int)m_window_type].ErrorSe;
 			info.name = "MainMenuWindow";
 			GeneralWindow.Create(info);

@@ -55,13 +55,13 @@ public class PresentBoxUtility
 			switch (info.messageType)
 			{
 			case ServerMessageEntry.MessageType.SendEnergy:
-				result = TextUtility.GetCommonText("PresentBox", "present_from_friend", "{FRIEND_NAME}", info.name);
+				result = Text.TextUtility.GetCommonText("PresentBox", "present_from_friend", "{FRIEND_NAME}", info.name);
 				break;
 			case ServerMessageEntry.MessageType.ReturnSendEnergy:
-				result = TextUtility.GetCommonText("PresentBox", "remuneration_friend_present");
+				result = Text.TextUtility.GetCommonText("PresentBox", "remuneration_friend_present");
 				break;
 			case ServerMessageEntry.MessageType.InviteCode:
-				result = TextUtility.GetCommonText("PresentBox", "remuneration_friend_invite");
+				result = Text.TextUtility.GetCommonText("PresentBox", "remuneration_friend_invite");
 				break;
 			}
 		}
@@ -73,18 +73,18 @@ public class PresentBoxUtility
 		string empty = string.Empty;
 		if (expireTime == 0)
 		{
-			return TextUtility.GetCommonText("PresentBox", "unlimited_duration");
+			return Text.TextUtility.GetCommonText("PresentBox", "unlimited_duration");
 		}
 		int num = expireTime - NetUtil.GetCurrentUnixTime();
 		if (num >= 86400)
 		{
-			return TextUtility.GetCommonText("PresentBox", "expire_days", "{DAYS}", (num / 86400).ToString());
+			return Text.TextUtility.GetCommonText("PresentBox", "expire_days", "{DAYS}", (num / 86400).ToString());
 		}
 		if (num >= 3600)
 		{
-			return TextUtility.GetCommonText("PresentBox", "expire_hours", "{HOURS}", (num / 3600).ToString());
+			return Text.TextUtility.GetCommonText("PresentBox", "expire_hours", "{HOURS}", (num / 3600).ToString());
 		}
-		return TextUtility.GetCommonText("PresentBox", "expire_minutes", "{MINUTES}", (num / 60).ToString());
+		return Text.TextUtility.GetCommonText("PresentBox", "expire_minutes", "{MINUTES}", (num / 60).ToString());
 	}
 
 	public static bool IsWithinTimeLimit(int expireTime)

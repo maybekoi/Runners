@@ -698,7 +698,7 @@ public class RankingUtil
 		GetMyLeagueData(rankingMode, ref leagueIndex, ref upCount, ref downCount);
 		icon0.spriteName = GetLeagueIconNameL((LeagueType)leagueIndex);
 		icon1.spriteName = GetLeagueIconNameL2((LeagueType)leagueIndex);
-		rankText0.text = TextUtility.Replaces(TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "Ranking", "ranking_league_tab_1").text, new Dictionary<string, string>
+		rankText0.text = Text.TextUtility.Replaces(TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "Ranking", "ranking_league_tab_1").text, new Dictionary<string, string>
 		{
 			{
 				"{PARAM_1}",
@@ -709,7 +709,7 @@ public class RankingUtil
 		empty = ((RankingManager.EndlessRivalRankingScoreType != 0) ? TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "Ranking", "ui_Lbl_total_score").text : TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "Ranking", "ui_Lbl_high_score").text);
 		if (upCount == 0)
 		{
-			rankText1.text = TextUtility.Replaces(TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "Ranking", "ranking_league_tab_4").text, new Dictionary<string, string>
+			rankText1.text = Text.TextUtility.Replaces(TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "Ranking", "ranking_league_tab_4").text, new Dictionary<string, string>
 			{
 				{
 					"{SCORE}",
@@ -723,7 +723,7 @@ public class RankingUtil
 		}
 		else if (downCount == 0)
 		{
-			rankText1.text = TextUtility.Replaces(TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "Ranking", "ranking_league_tab_3").text, new Dictionary<string, string>
+			rankText1.text = Text.TextUtility.Replaces(TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "Ranking", "ranking_league_tab_3").text, new Dictionary<string, string>
 			{
 				{
 					"{SCORE}",
@@ -737,7 +737,7 @@ public class RankingUtil
 		}
 		else
 		{
-			rankText1.text = TextUtility.Replaces(TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "Ranking", "ranking_league_tab_2").text, new Dictionary<string, string>
+			rankText1.text = Text.TextUtility.Replaces(TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "Ranking", "ranking_league_tab_2").text, new Dictionary<string, string>
 			{
 				{
 					"{SCORE}",
@@ -1089,7 +1089,7 @@ public class RankingUtil
 		{
 			str = TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "Ranking", "ranking_reset").text + "\n";
 		}
-		return str + TextUtility.Replaces(TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "Ranking", (span.Days > 0) ? "ranking_reset_days" : ((span.Hours > 0) ? "ranking_reset_hours" : ((span.Minutes <= 0) ? "ranking_reset_seconds" : "ranking_reset_minutes"))).text, new Dictionary<string, string>
+		return str + Text.TextUtility.Replaces(TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "Ranking", (span.Days > 0) ? "ranking_reset_days" : ((span.Hours > 0) ? "ranking_reset_hours" : ((span.Minutes <= 0) ? "ranking_reset_seconds" : "ranking_reset_minutes"))).text, new Dictionary<string, string>
 		{
 			{
 				"{DAYS}",

@@ -61,7 +61,7 @@ public class GlowUpCharacter : MonoBehaviour
 		UILabel levelLabel = GameObjectUtil.FindChildGameObjectComponent<UILabel>(base.gameObject, "Lbl_player_lv");
 		if (levelLabel != null)
 		{
-			levelLabel.text = TextUtility.GetTextLevel(m_baseInfo.level.ToString());
+			levelLabel.text = Text.TextUtility.GetTextLevel(m_baseInfo.level.ToString());
 		}
 		UILabel charaNameLabel = GameObjectUtil.FindChildGameObjectComponent<UILabel>(base.gameObject, "Lbl_player_name");
 		if (charaNameLabel != null)
@@ -161,7 +161,7 @@ public class GlowUpCharacter : MonoBehaviour
 		UILabel uILabel = GameObjectUtil.FindChildGameObjectComponent<UILabel>(base.gameObject, "Lbl_player_lv");
 		if (uILabel != null)
 		{
-			uILabel.text = TextUtility.GetTextLevel(level.ToString());
+			uILabel.text = Text.TextUtility.GetTextLevel(level.ToString());
 		}
 		GameObject gameObject = GameObjectUtil.FindChildGameObject(base.gameObject, "img_slot_mask");
 		if (gameObject != null)

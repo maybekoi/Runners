@@ -104,7 +104,7 @@ public class HudEventResultRaidBoss : HudEventResultParts
 			}
 			if (GameResultUtility.GetBossDestroyFlag())
 			{
-				string text = TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Menu", "ui_Lbl_word_reward_get");
+				string text = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Menu", "ui_Lbl_word_reward_get");
 				UILabel uILabel = GameObjectUtil.FindChildGameObjectComponent<UILabel>(m_DamageDetailsButton.gameObject, "Lbl_word_damage_details");
 				if (uILabel != null)
 				{

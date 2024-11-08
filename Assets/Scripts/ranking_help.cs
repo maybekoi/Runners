@@ -131,7 +131,7 @@ public class ranking_help : WindowBase
 		{
 			string itemText = RankingLeagueTable.GetItemText(leagueData.highScoreOpe);
 			string itemText2 = RankingLeagueTable.GetItemText(leagueData.totalScoreOpe);
-			result = TextUtility.Replaces(TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "Ranking", "ranking_help_1").text, new Dictionary<string, string>
+			result = Text.TextUtility.Replaces(TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "Ranking", "ranking_help_1").text, new Dictionary<string, string>
 			{
 				{
 					"{PARAM1}",
@@ -170,7 +170,7 @@ public class ranking_help : WindowBase
 	{
 		string empty = string.Empty;
 		string text = TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "Ranking", "ranking_help_5").text;
-		return TextUtility.Replaces(text, new Dictionary<string, string>
+		return Text.TextUtility.Replaces(text, new Dictionary<string, string>
 		{
 			{
 				"{PARAM_1}",
@@ -191,7 +191,7 @@ public class ranking_help : WindowBase
 		switch (num2)
 		{
 		case 1:
-			return TextUtility.Replaces(TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "Ranking", "ranking_help_3").text, new Dictionary<string, string>
+			return Text.TextUtility.Replaces(TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "Ranking", "ranking_help_3").text, new Dictionary<string, string>
 			{
 				{
 					"{PARAM_1}",
@@ -209,7 +209,7 @@ public class ranking_help : WindowBase
 		default:
 			if (downCount > 0)
 			{
-				return TextUtility.Replaces(TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "Ranking", "ranking_help_2").text, new Dictionary<string, string>
+				return Text.TextUtility.Replaces(TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "Ranking", "ranking_help_2").text, new Dictionary<string, string>
 				{
 					{
 						"{PARAM_1}",
@@ -231,7 +231,7 @@ public class ranking_help : WindowBase
 			}
 			goto case 21;
 		case 21:
-			return TextUtility.Replaces(TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "Ranking", "ranking_help_4").text, new Dictionary<string, string>
+			return Text.TextUtility.Replaces(TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "Ranking", "ranking_help_4").text, new Dictionary<string, string>
 			{
 				{
 					"{PARAM_1}",
@@ -308,7 +308,7 @@ public class ranking_help : WindowBase
 					string itemText = RankingLeagueTable.GetItemText(serverLeagueOperatorData.highScoreOpe);
 					string itemText2 = RankingLeagueTable.GetItemText(serverLeagueOperatorData.totalScoreOpe);
 					string empty = string.Empty;
-					empty = (uILabel.text = TextUtility.Replaces(TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "Ranking", "ranking_help_1").text, new Dictionary<string, string>
+					empty = (uILabel.text = Text.TextUtility.Replaces(TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "Ranking", "ranking_help_1").text, new Dictionary<string, string>
 					{
 						{
 							"{PARAM1}",

@@ -880,7 +880,7 @@ public class RouletteUtility
 		string text = TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "ItemRoulette", cellName).text;
 		if (dicReplaces != null)
 		{
-			text = TextUtility.Replaces(text, dicReplaces);
+			text = Text.TextUtility.Replaces(text, dicReplaces);
 		}
 		return text;
 	}

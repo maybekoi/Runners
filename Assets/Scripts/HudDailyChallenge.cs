@@ -42,7 +42,7 @@ public class HudDailyChallenge : MonoBehaviour
 			UILabel uILabel = GameObjectUtil.FindChildGameObjectComponent<UILabel>(gameObject, "Lbl_player_main_lv");
 			if (uILabel != null)
 			{
-				uILabel.text = TextUtility.GetCommonText("ChaoSet", "bonus_percent", "{BONUS}", num.ToString());
+				uILabel.text = Text.TextUtility.GetCommonText("ChaoSet", "bonus_percent", "{BONUS}", num.ToString());
 			}
 		}
 	}

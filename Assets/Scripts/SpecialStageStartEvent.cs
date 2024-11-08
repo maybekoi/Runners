@@ -143,7 +143,7 @@ public class SpecialStageStartEvent : MonoBehaviour
 
 	private string GetText(string cellID)
 	{
-		string text = TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_SPECIFIC, "Production", cellID);
+		string text = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_SPECIFIC, "Production", cellID);
 		if (text == null)
 		{
 			text = "NoText";

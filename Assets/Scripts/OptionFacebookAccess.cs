@@ -158,8 +158,8 @@ public class OptionFacebookAccess : MonoBehaviour
 		GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
 		info.name = "FacebookLogout";
 		info.buttonType = GeneralWindow.ButtonType.YesNo;
-		info.caption = TextUtility.GetCommonText("Option", "logout");
-		info.message = TextUtility.GetCommonText("Option", "logout_message");
+		info.caption = Text.TextUtility.GetCommonText("Option", "logout");
+		info.message = Text.TextUtility.GetCommonText("Option", "logout_message");
 		GeneralWindow.Create(info);
 	}
 
@@ -168,8 +168,8 @@ public class OptionFacebookAccess : MonoBehaviour
 		GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
 		info.name = "LogoutComplete";
 		info.buttonType = GeneralWindow.ButtonType.Ok;
-		info.caption = TextUtility.GetCommonText("Option", "logout");
-		info.message = TextUtility.GetCommonText("Option", "logout_complete");
+		info.caption = Text.TextUtility.GetCommonText("Option", "logout");
+		info.message = Text.TextUtility.GetCommonText("Option", "logout_complete");
 		GeneralWindow.Create(info);
 	}
 

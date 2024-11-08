@@ -675,8 +675,8 @@ public class MainMenu : MonoBehaviour
 		GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
 		info.name = "BackTitle";
 		info.buttonType = GeneralWindow.ButtonType.YesNo;
-		info.caption = TextUtility.GetCommonText("MainMenu", "back_title_caption");
-		info.message = TextUtility.GetCommonText("MainMenu", "back_title_text");
+		info.caption = Text.TextUtility.GetCommonText("MainMenu", "back_title_caption");
+		info.message = Text.TextUtility.GetCommonText("MainMenu", "back_title_text");
 		GeneralWindow.Create(info);
 	}
 
@@ -1596,14 +1596,14 @@ public class MainMenu : MonoBehaviour
 			{
 				UnityEngine.Random.seed = NetUtil.GetCurrentUnixTime();
 				int num = UnityEngine.Random.Range(1, 13);
-				info.m_titleText = TextUtility.GetCommonText("quick", "loading_title");
+				info.m_titleText = Text.TextUtility.GetCommonText("quick", "loading_title");
 				if (num == 1)
 				{
-					info.m_mainText = TextUtility.GetCommonText("quick", "loading_text");
+					info.m_mainText = Text.TextUtility.GetCommonText("quick", "loading_text");
 				}
 				else
 				{
-					info.m_mainText = TextUtility.GetCommonText("quick", "loading_text" + num);
+					info.m_mainText = Text.TextUtility.GetCommonText("quick", "loading_text" + num);
 				}
 			}
 		}
@@ -1654,8 +1654,8 @@ public class MainMenu : MonoBehaviour
 			if (loadingEventData != null)
 			{
 				TextManager.TextType type = TextManager.TextType.TEXTTYPE_EVENT_SPECIFIC;
-				info.m_titleText = TextUtility.GetText(type, "Production", loadingEventData.title_cell_id);
-				info.m_mainText = TextUtility.GetText(type, "Production", loadingEventData.body[0].text_cell_id);
+				info.m_titleText = Text.TextUtility.GetText(type, "Production", loadingEventData.title_cell_id);
+				info.m_mainText = Text.TextUtility.GetText(type, "Production", loadingEventData.body[0].text_cell_id);
 				info.m_texture = EventUtility.GetLoadingFaceTexture();
 			}
 		}
@@ -1716,9 +1716,9 @@ public class MainMenu : MonoBehaviour
 			if (info != null)
 			{
 				string cellID = CharaName.Name[0];
-				string commonText = TextUtility.GetCommonText("CharaName", cellID);
-				info.m_titleText = TextUtility.GetCommonText("Option", "chara_operation_method", "{CHARA_NAME}", commonText);
-				info.m_mainText = TextUtility.GetCommonText("Option", "sonic_operation_comment");
+				string commonText = Text.TextUtility.GetCommonText("CharaName", cellID);
+				info.m_titleText = Text.TextUtility.GetCommonText("Option", "chara_operation_method", "{CHARA_NAME}", commonText);
+				info.m_mainText = Text.TextUtility.GetCommonText("Option", "sonic_operation_comment");
 				info.m_optionTutorial = true;
 				int face_id = 1;
 				info.m_texture = MileageMapUtility.GetFaceTexture(face_id);
@@ -3241,7 +3241,7 @@ public class MainMenu : MonoBehaviour
 			{
 				AddSceneLoader("MileageDataTable");
 			}
-			string suffixe = TextUtility.GetSuffixe();
+			string suffixe = Text.TextUtility.GetSuffixe();
 			if (GameObject.Find("ui_tex_ranking_" + suffixe) == null)
 			{
 				AddSceneLoader("ui_tex_ranking_" + suffixe);
@@ -4137,8 +4137,8 @@ public class MainMenu : MonoBehaviour
 		GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
 		info.name = "SchemeCheck";
 		info.buttonType = GeneralWindow.ButtonType.Ok;
-		info.message = TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Title", "atom_check");
-		info.caption = TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Title", "atom_check_caption");
+		info.message = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Title", "atom_check");
+		info.caption = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Title", "atom_check_caption");
 		GeneralWindow.Create(info);
 	}
 
@@ -4148,13 +4148,13 @@ public class MainMenu : MonoBehaviour
 		string empty2 = string.Empty;
 		if (m_communicateFlag.Test(5))
 		{
-			empty = TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Title", m_atomInvalidTextId);
-			empty2 = TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Title", "atom_failure_caption");
+			empty = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Title", m_atomInvalidTextId);
+			empty2 = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Title", "atom_failure_caption");
 		}
 		else
 		{
-			empty = TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Title", "atom_present_get");
-			empty2 = TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Title", "atom_success_caption");
+			empty = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Title", "atom_present_get");
+			empty2 = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Title", "atom_success_caption");
 		}
 		GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
 		info.name = "SchemeResult";
@@ -5318,8 +5318,8 @@ public class MainMenu : MonoBehaviour
 		GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
 		info.name = "chara_level_up";
 		info.buttonType = GeneralWindow.ButtonType.Ok;
-		info.caption = TextUtility.GetCommonText("MainMenu", "chara_level_up_move_explan_caption");
-		info.message = TextUtility.GetCommonText("MainMenu", "chara_level_up_move_explan");
+		info.caption = Text.TextUtility.GetCommonText("MainMenu", "chara_level_up_move_explan_caption");
+		info.message = Text.TextUtility.GetCommonText("MainMenu", "chara_level_up_move_explan");
 		GeneralWindow.Create(info);
 	}
 
@@ -5425,8 +5425,8 @@ public class MainMenu : MonoBehaviour
 				GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
 				info.name = name;
 				info.buttonType = GeneralWindow.ButtonType.Ok;
-				info.caption = TextUtility.GetCommonText("Option", "take_over_attention");
-				info.message = TextUtility.GetCommonText("MainMenu", "title_back_message");
+				info.caption = Text.TextUtility.GetCommonText("Option", "take_over_attention");
+				info.message = Text.TextUtility.GetCommonText("MainMenu", "title_back_message");
 				GeneralWindow.Create(info);
 			}
 			else
@@ -5434,8 +5434,8 @@ public class MainMenu : MonoBehaviour
 				GeneralWindow.CInfo info2 = default(GeneralWindow.CInfo);
 				info2.name = name;
 				info2.buttonType = GeneralWindow.ButtonType.Ok;
-				info2.caption = TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "NetworkError", "ui_Lbl_reboot_app_caption");
-				info2.message = TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "NetworkError", "ui_Lbl_reboot_app");
+				info2.caption = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "NetworkError", "ui_Lbl_reboot_app_caption");
+				info2.message = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "NetworkError", "ui_Lbl_reboot_app");
 				GeneralWindow.Create(info2);
 			}
 		}

@@ -86,8 +86,8 @@ namespace DataTable
 					s_chaoDataTableMarker[num].Add(item);
 				}
 				chaoData.index = item++;
-				chaoData.name = TextUtility.GetChaoText("Chao", "name" + chaoData.id.ToString("D4"));
-				chaoData.nameTwolines = TextUtility.GetChaoText("Chao", "name_for_menu_" + chaoData.id.ToString("D4"));
+				chaoData.name = Text.TextUtility.GetChaoText("Chao", "name" + chaoData.id.ToString("D4"));
+				chaoData.nameTwolines = Text.TextUtility.GetChaoText("Chao", "name_for_menu_" + chaoData.id.ToString("D4"));
 				chaoData.StatusUpdate();
 				num2 = num;
 			}

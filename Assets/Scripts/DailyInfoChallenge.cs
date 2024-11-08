@@ -27,7 +27,7 @@ public class DailyInfoChallenge : MonoBehaviour
 		}
 		if (uILabel != null)
 		{
-			uILabel.text = TextUtility.Replaces(TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "day").text, new Dictionary<string, string>
+			uILabel.text = Text.TextUtility.Replaces(TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "day").text, new Dictionary<string, string>
 			{
 				{
 					"{DAY}",
@@ -48,7 +48,7 @@ public class DailyInfoChallenge : MonoBehaviour
 			}
 			if (uILabel2 != null)
 			{
-				uILabel2.text = TextUtility.Replaces(m_info.TodayMissionText, new Dictionary<string, string>
+				uILabel2.text = Text.TextUtility.Replaces(m_info.TodayMissionText, new Dictionary<string, string>
 				{
 					{
 						"{QUOTA}",

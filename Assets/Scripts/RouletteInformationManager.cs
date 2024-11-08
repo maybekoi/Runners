@@ -69,7 +69,7 @@ public class RouletteInformationManager : MonoBehaviour
 		{
 			return;
 		}
-		string commonText = TextUtility.GetCommonText("Informaion", "announcement");
+		string commonText = Text.TextUtility.GetCommonText("Informaion", "announcement");
 		using (List<NetNoticeItem>.Enumerator enumerator = list.GetEnumerator())
 		{
 			if (enumerator.MoveNext())

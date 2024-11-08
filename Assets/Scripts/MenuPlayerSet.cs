@@ -112,8 +112,8 @@ public class MenuPlayerSet : MonoBehaviour
 		GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
 		info.name = "chara_level_up_explan";
 		info.buttonType = GeneralWindow.ButtonType.Ok;
-		info.caption = TextUtility.GetCommonText("MainMenu", "chara_level_up_explan_caption");
-		info.message = TextUtility.GetCommonText("MainMenu", "chara_level_up_explan");
+		info.caption = Text.TextUtility.GetCommonText("MainMenu", "chara_level_up_explan_caption");
+		info.message = Text.TextUtility.GetCommonText("MainMenu", "chara_level_up_explan");
 		info.finishedCloseDelegate = GeneralWindowCharaLevelUpCloseCallback;
 		GeneralWindow.Create(info);
 		string[] value = new string[1];

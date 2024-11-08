@@ -112,7 +112,7 @@ public class ConnectAlertMaskUI : MonoBehaviour
 			if (!string.IsNullOrEmpty(m_lblBonus.text))
 			{
 				UILabel lblBonus = m_lblBonus;
-				lblBonus.text = lblBonus.text + "\n" + TextUtility.GetChaoText("Chao", "level_max");
+				lblBonus.text = lblBonus.text + "\n" + Text.TextUtility.GetChaoText("Chao", "level_max");
 			}
 			switch (chaoData.rarity)
 			{
@@ -186,7 +186,7 @@ public class ConnectAlertMaskUI : MonoBehaviour
 			{
 				int num = UnityEngine.Random.Range(1, categoryCellCount);
 				string cellID = "tips_message_" + num;
-				text = TextUtility.GetCommonText("Tips", cellID);
+				text = Text.TextUtility.GetCommonText("Tips", cellID);
 			}
 			if (text != null)
 			{
@@ -202,12 +202,12 @@ public class ConnectAlertMaskUI : MonoBehaviour
 		{
 			if (category == dispCategory.CHAO_INFO)
 			{
-				uILabel.text = TextUtility.GetCommonText("MainMenu", "loading_chaoInfo_caption");
+				uILabel.text = Text.TextUtility.GetCommonText("MainMenu", "loading_chaoInfo_caption");
 				SetChaoInfo();
 			}
 			else
 			{
-				uILabel.text = TextUtility.GetCommonText("MainMenu", "loading_tipsInfo_caption");
+				uILabel.text = Text.TextUtility.GetCommonText("MainMenu", "loading_tipsInfo_caption");
 				SetTipsInfo();
 			}
 		}
@@ -278,19 +278,19 @@ public class ConnectAlertMaskUI : MonoBehaviour
 							break;
 						}
 					}
-					result = ((!flag) ? TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Common", "ui_Lbl_word_header_event_roulette_o") : TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Common", "ui_Lbl_word_header_event_roulette_c"));
+					result = ((!flag) ? Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Common", "ui_Lbl_word_header_event_roulette_o") : Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Common", "ui_Lbl_word_header_event_roulette_c"));
 				}
 				else
 				{
-					result = TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Common", "ui_Lbl_word_header_event_roulette_o");
+					result = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Common", "ui_Lbl_word_header_event_roulette_o");
 				}
 				break;
 			}
 			case EventManager.AdvertEventType.CHARACTER:
-				result = TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Common", "ui_Lbl_word_header_event_character");
+				result = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Common", "ui_Lbl_word_header_event_character");
 				break;
 			case EventManager.AdvertEventType.SHOP:
-				result = TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Common", "ui_Lbl_word_header_event_shop");
+				result = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Common", "ui_Lbl_word_header_event_shop");
 				break;
 			}
 		}

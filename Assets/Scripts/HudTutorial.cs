@@ -855,12 +855,12 @@ public class HudTutorial : MonoBehaviour
 		switch (GetKind(id))
 		{
 		case Kind.MISSION:
-			result = TextUtility.GetCommonText("Tutorial", "caption" + (int)(id + 1));
+			result = Text.TextUtility.GetCommonText("Tutorial", "caption" + (int)(id + 1));
 			break;
 		case Kind.FEVERBOSS:
 		{
 			TextObject text7 = TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "Tutorial", "caption_explan2_2");
-			string commonText2 = TextUtility.GetCommonText("BossName", "ferver");
+			string commonText2 = Text.TextUtility.GetCommonText("BossName", "ferver");
 			text7.ReplaceTag("{PARAM_NAME}", commonText2);
 			result = text7.text;
 			break;
@@ -895,8 +895,8 @@ public class HudTutorial : MonoBehaviour
 		}
 		case Kind.QUICK:
 		{
-			string commonText = TextUtility.GetCommonText("Tutorial", "caption_quickmode_tutorial");
-			result = TextUtility.GetCommonText("Tutorial", "caption_explan2", "{PARAM_NAME}", commonText);
+			string commonText = Text.TextUtility.GetCommonText("Tutorial", "caption_quickmode_tutorial");
+			result = Text.TextUtility.GetCommonText("Tutorial", "caption_explan2", "{PARAM_NAME}", commonText);
 			break;
 		}
 		case Kind.ITEM_BUTTON:
@@ -947,44 +947,44 @@ public class HudTutorial : MonoBehaviour
 		{
 			if (page == 0)
 			{
-				result = TextUtility.GetCommonText("Tutorial", "explan" + (int)(id + 1));
+				result = Text.TextUtility.GetCommonText("Tutorial", "explan" + (int)(id + 1));
 				break;
 			}
 			string arg2 = "_" + page;
-			result = TextUtility.GetCommonText("Tutorial", "explan" + (int)(id + 1) + arg2);
+			result = Text.TextUtility.GetCommonText("Tutorial", "explan" + (int)(id + 1) + arg2);
 			break;
 		}
 		case Kind.MISSION_END:
-			result = TextUtility.GetCommonText("Tutorial", "end");
+			result = Text.TextUtility.GetCommonText("Tutorial", "end");
 			break;
 		case Kind.FEVERBOSS:
-			result = TextUtility.GetCommonText("Tutorial", "fever_boss");
+			result = Text.TextUtility.GetCommonText("Tutorial", "fever_boss");
 			break;
 		case Kind.MAPBOSS:
 		{
 			if (page == 0)
 			{
-				result = TextUtility.GetCommonText("Tutorial", "boss" + (int)(id - 10 + 1));
+				result = Text.TextUtility.GetCommonText("Tutorial", "boss" + (int)(id - 10 + 1));
 				break;
 			}
 			string arg = "_" + page;
-			result = TextUtility.GetCommonText("Tutorial", "boss" + (int)(id - 10 + 1) + arg);
+			result = Text.TextUtility.GetCommonText("Tutorial", "boss" + (int)(id - 10 + 1) + arg);
 			break;
 		}
 		case Kind.ITEM:
-			result = TextUtility.GetCommonText("Tutorial", "item_" + (int)(id - 15 + 1));
+			result = Text.TextUtility.GetCommonText("Tutorial", "item_" + (int)(id - 15 + 1));
 			break;
 		case Kind.QUICK:
-			result = TextUtility.GetCommonText("Tutorial", "quick" + (int)(id - 54 + 1));
+			result = Text.TextUtility.GetCommonText("Tutorial", "quick" + (int)(id - 54 + 1));
 			break;
 		case Kind.CHARA:
-			result = TextUtility.GetCommonText("Tutorial", "chara" + (int)(id - 24 + 1));
+			result = Text.TextUtility.GetCommonText("Tutorial", "chara" + (int)(id - 24 + 1));
 			break;
 		case Kind.ACTION:
-			result = TextUtility.GetCommonText("Tutorial", "action" + (int)(id - 52 + 1));
+			result = Text.TextUtility.GetCommonText("Tutorial", "action" + (int)(id - 52 + 1));
 			break;
 		case Kind.ITEM_BUTTON:
-			result = TextUtility.GetCommonText("Tutorial", "item_btn");
+			result = Text.TextUtility.GetCommonText("Tutorial", "item_btn");
 			break;
 		}
 		return result;

@@ -1492,7 +1492,7 @@ public class DebugGameObject : SingletonGameObject<DebugGameObject>
 			if (array != null && array.Length > 1)
 			{
 				string text = array[array.Length - 1];
-				if (!string.IsNullOrEmpty(text) && TextUtility.IsSuffix(text))
+				if (!string.IsNullOrEmpty(text) && Text.TextUtility.IsSuffix(text))
 				{
 					result = true;
 				}
@@ -1510,7 +1510,7 @@ public class DebugGameObject : SingletonGameObject<DebugGameObject>
 			if (array != null && array.Length > 1)
 			{
 				string text = array[array.Length - 1];
-				if (!string.IsNullOrEmpty(text) && TextUtility.IsSuffix(text))
+				if (!string.IsNullOrEmpty(text) && Text.TextUtility.IsSuffix(text))
 				{
 					result = string.Empty;
 					for (int i = 0; i < array.Length - 1; i++)

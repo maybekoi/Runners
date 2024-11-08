@@ -123,8 +123,8 @@ public class DailyInfoHistory : MonoBehaviour
 			{
 				if (m_wins != null)
 				{
-					string text = TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_result");
-					m_wins.text = TextUtility.Replaces(text, new Dictionary<string, string>
+					string text = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_result");
+					m_wins.text = Text.TextUtility.Replaces(text, new Dictionary<string, string>
 					{
 						{
 							"{WIN}",
@@ -144,7 +144,7 @@ public class DailyInfoHistory : MonoBehaviour
 				{
 					if (instance.currentStatus.goOnWin > 1)
 					{
-						string text2 = TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_continuous_win");
+						string text2 = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_continuous_win");
 						m_winStreak.text = text2.Replace("{PARAM}", instance.currentStatus.goOnWin.ToString());
 					}
 					else

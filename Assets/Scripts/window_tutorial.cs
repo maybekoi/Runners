@@ -144,7 +144,7 @@ public class window_tutorial : WindowBase
 				uIButtonMessage.functionName = "OnClickCloseButton";
 			}
 		}
-		TextUtility.SetCommonText(m_headerTextLabel, "Option", "tutorial");
+		Text.TextUtility.SetCommonText(m_headerTextLabel, "Option", "tutorial");
 		m_uiAnimation = base.gameObject.AddComponent<UIPlayAnimation>();
 		if (m_uiAnimation != null)
 		{

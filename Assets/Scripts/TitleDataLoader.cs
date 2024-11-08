@@ -230,7 +230,7 @@ public class TitleDataLoader : MonoBehaviour
 				m_loadInfo.Add(item2);
 			}
 		}
-		string suffixe = TextUtility.GetSuffixe();
+		string suffixe = Text.TextUtility.GetSuffixe();
 		string name = "text_common_text_" + suffixe;
 		string name2 = "text_event_common_text_" + suffixe;
 		string name3 = "text_chao_text_" + suffixe;

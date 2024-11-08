@@ -144,7 +144,7 @@ public class DailyInfoBattle : MonoBehaviour
 			{
 				if (m_limitTime != null)
 				{
-					string text = TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_limit_time");
+					string text = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_limit_time");
 					string timeLimitString = GeneralUtil.GetTimeLimitString(m_currentEndTime);
 					m_limitTime.text = text.Replace("{TIME}", timeLimitString);
 				}
@@ -342,7 +342,7 @@ public class DailyInfoBattle : MonoBehaviour
 			{
 				if (m_currentStatus != null && m_currentStatus.goOnWin > 1)
 				{
-					string text = TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_continuous_win");
+					string text = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_continuous_win");
 					m_wins.text = text.Replace("{PARAM}", m_currentStatus.goOnWin.ToString());
 				}
 				else
@@ -352,7 +352,7 @@ public class DailyInfoBattle : MonoBehaviour
 			}
 			if (m_limitTime != null)
 			{
-				string text2 = TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_limit_time");
+				string text2 = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_limit_time");
 				string timeLimitString = GeneralUtil.GetTimeLimitString(m_currentEndTime);
 				m_limitTime.text = text2.Replace("{TIME}", timeLimitString);
 			}
@@ -628,8 +628,8 @@ public class DailyInfoBattle : MonoBehaviour
 			{
 				bool flag = ServerInterface.IsRSREnable();
 				GeneralWindow.CInfo info2 = default(GeneralWindow.CInfo);
-				info2.caption = TextUtility.GetCommonText("ChaoRoulette", "gw_cost_caption");
-				info2.message = ((!flag) ? TextUtility.GetCommonText("ChaoRoulette", "gw_cost_caption_text_2") : TextUtility.GetCommonText("ChaoRoulette", "gw_cost_caption_text"));
+				info2.caption = Text.TextUtility.GetCommonText("ChaoRoulette", "gw_cost_caption");
+				info2.message = ((!flag) ? Text.TextUtility.GetCommonText("ChaoRoulette", "gw_cost_caption_text_2") : Text.TextUtility.GetCommonText("ChaoRoulette", "gw_cost_caption_text"));
 				info2.buttonType = ((!flag) ? GeneralWindow.ButtonType.Ok : GeneralWindow.ButtonType.ShopCancel);
 				info2.finishedCloseDelegate = GeneralWindowClosedCallback;
 				info2.name = "MatchingCostErrorRSRing";
@@ -641,8 +641,8 @@ public class DailyInfoBattle : MonoBehaviour
 			case ServerItem.Id.RING:
 			{
 				GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
-				info.caption = TextUtility.GetCommonText("ItemRoulette", "gw_cost_caption");
-				info.message = TextUtility.GetCommonText("ItemRoulette", "gw_cost_text");
+				info.caption = Text.TextUtility.GetCommonText("ItemRoulette", "gw_cost_caption");
+				info.message = Text.TextUtility.GetCommonText("ItemRoulette", "gw_cost_text");
 				info.buttonType = GeneralWindow.ButtonType.ShopCancel;
 				info.name = "MatchingCostErrorRing";
 				info.finishedCloseDelegate = GeneralWindowClosedCallback;
@@ -700,15 +700,15 @@ public class DailyInfoBattle : MonoBehaviour
 			if (list != null)
 			{
 				int goOnWin = m_currentStatus.goOnWin;
-				string text = TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_win");
-				string text2 = TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_win_over");
+				string text = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_win");
+				string text2 = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_win_over");
 				string itemText = RankingLeagueTable.GetItemText(list, text, text2, goOnWin - 1);
 				if (!string.IsNullOrEmpty(itemText))
 				{
 					GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
 					info.name = "ShowReward";
 					info.buttonType = GeneralWindow.ButtonType.Ok;
-					info.caption = TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_reward_caption");
+					info.caption = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_reward_caption");
 					info.message = itemText;
 					GeneralWindow.Create(info);
 				}
@@ -719,7 +719,7 @@ public class DailyInfoBattle : MonoBehaviour
 			GeneralWindow.CInfo info2 = default(GeneralWindow.CInfo);
 			info2.name = "ShowReward";
 			info2.buttonType = GeneralWindow.ButtonType.Ok;
-			info2.caption = TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_reward_caption");
+			info2.caption = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_reward_caption");
 			info2.message = "Reward Failed";
 			info2.isPlayErrorSe = true;
 			GeneralWindow.Create(info2);
@@ -731,8 +731,8 @@ public class DailyInfoBattle : MonoBehaviour
 		GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
 		info.name = "ShowMatchingInfo";
 		info.buttonType = GeneralWindow.ButtonType.YesNo;
-		info.caption = TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_reset_caption");
-		info.message = TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_reset_text");
+		info.caption = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_reset_caption");
+		info.message = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_reset_text");
 		GeneralWindow.Create(info);
 	}
 
@@ -748,8 +748,8 @@ public class DailyInfoBattle : MonoBehaviour
 			GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
 			info.name = "ShowMatchingResult";
 			info.buttonType = GeneralWindow.ButtonType.Ok;
-			info.caption = TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_reset_result_caption");
-			info.message = TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_reset_result_succeed");
+			info.caption = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_reset_result_caption");
+			info.message = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_reset_result_succeed");
 			GeneralWindow.Create(info);
 		}
 		else
@@ -757,8 +757,8 @@ public class DailyInfoBattle : MonoBehaviour
 			GeneralWindow.CInfo info2 = default(GeneralWindow.CInfo);
 			info2.name = "ShowMatchingResult";
 			info2.buttonType = GeneralWindow.ButtonType.Ok;
-			info2.caption = TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_reset_result_caption");
-			info2.message = TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_reset_result_failure");
+			info2.caption = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_reset_result_caption");
+			info2.message = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_reset_result_failure");
 			info2.isPlayErrorSe = true;
 			GeneralWindow.Create(info2);
 		}

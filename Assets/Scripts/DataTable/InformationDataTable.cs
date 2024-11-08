@@ -197,7 +197,7 @@ namespace DataTable
 				InformationData[] infoDataTable = m_infoDataTable;
 				foreach (InformationData informationData in infoDataTable)
 				{
-					if (informationData.tag == TypeName[(int)type] && informationData.sfx == TextUtility.GetSuffixe())
+					if (informationData.tag == TypeName[(int)type] && informationData.sfx == Text.TextUtility.GetSuffixe())
 					{
 						Debug.Log("GetUrl type=" + type.ToString() + " sfx=" + informationData.sfx + " tag=" + informationData.tag + " url=" + informationData.url);
 						return informationData.url;

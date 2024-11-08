@@ -472,13 +472,13 @@ public class GameResult : MonoBehaviour
 			info.buttonType = GeneralWindow.ButtonType.Ok;
 			if (m_isBossTutorialClear)
 			{
-				info.caption = TextUtility.GetCommonText("ChaoRoulette", "sp_egg_get_caption");
-				info.message = TextUtility.GetCommonText("ChaoRoulette", "sp_egg_get_text");
+				info.caption = Text.TextUtility.GetCommonText("ChaoRoulette", "sp_egg_get_caption");
+				info.message = Text.TextUtility.GetCommonText("ChaoRoulette", "sp_egg_get_text");
 			}
 			else
 			{
-				info.caption = TextUtility.GetCommonText("ChaoRoulette", "sp_egg_max_caption");
-				info.message = TextUtility.GetCommonText("ChaoRoulette", "sp_egg_max_text");
+				info.caption = Text.TextUtility.GetCommonText("ChaoRoulette", "sp_egg_max_caption");
+				info.message = Text.TextUtility.GetCommonText("ChaoRoulette", "sp_egg_max_text");
 			}
 			GeneralWindow.Create(info);
 			return TinyFsmState.End();

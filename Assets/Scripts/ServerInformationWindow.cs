@@ -217,7 +217,7 @@ public class ServerInformationWindow : MonoBehaviour
 				info.pattern = InformationWindow.ButtonPattern.OK;
 				info.imageId = netNoticeItem.ImageId;
 			}
-			info.caption = TextUtility.GetCommonText("Informaion", "announcement");
+			info.caption = Text.TextUtility.GetCommonText("Informaion", "announcement");
 			info.bodyText = netNoticeItem.Message;
 			m_window.Create(info, m_windowObj);
 		}

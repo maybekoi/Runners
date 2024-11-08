@@ -87,8 +87,8 @@ public class window_id_info : WindowBase
 			m_uiAnimation.target = component3;
 			m_uiAnimation.clipName = "ui_menu_option_window_Anim";
 		}
-		TextUtility.SetCommonText(m_headerTextLabel, "Option", "id_check");
-		TextUtility.SetCommonText(m_yourIDLabel, "Option", "your_id");
+		Text.TextUtility.SetCommonText(m_headerTextLabel, "Option", "id_check");
+		Text.TextUtility.SetCommonText(m_yourIDLabel, "Option", "your_id");
 		if (m_idLabel != null)
 		{
 			string viewUserID = GetViewUserID();

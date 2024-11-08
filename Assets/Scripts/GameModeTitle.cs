@@ -685,8 +685,8 @@ public class GameModeTitle : MonoBehaviour
 						GeneralWindow.Close();
 						GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
 						info.name = "cache_clear_end";
-						info.caption = TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Option", "cash_cashclear_confirmation_bar");
-						info.message = TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Option", "cash_cashclear_confirmation_title");
+						info.caption = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Option", "cash_cashclear_confirmation_bar");
+						info.message = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Option", "cash_cashclear_confirmation_title");
 						info.anchor_path = "Camera/Anchor_5_MC";
 						info.buttonType = GeneralWindow.ButtonType.Ok;
 						GeneralWindow.Create(info);
@@ -1539,8 +1539,8 @@ public class GameModeTitle : MonoBehaviour
 						m_atomInfo.campain = campaign;
 						m_atomInfo.serial = serial;
 						GeneralWindow.CInfo info3 = default(GeneralWindow.CInfo);
-						info3.message = TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Title", "atom_check");
-						info3.caption = TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Title", "atom_check_caption");
+						info3.message = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Title", "atom_check");
+						info3.caption = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Title", "atom_check_caption");
 						info3.anchor_path = "Camera/Anchor_5_MC";
 						info3.buttonType = GeneralWindow.ButtonType.Ok;
 						GeneralWindow.Create(info3);
@@ -1618,8 +1618,8 @@ public class GameModeTitle : MonoBehaviour
 			case 61495:
 			{
 				GeneralWindow.CInfo info2 = default(GeneralWindow.CInfo);
-				info2.message = TextUtility.GetText(type, "Title", "atom_present_get");
-				info2.caption = TextUtility.GetText(type, "Title", "atom_success_caption");
+				info2.message = Text.TextUtility.GetText(type, "Title", "atom_present_get");
+				info2.caption = Text.TextUtility.GetText(type, "Title", "atom_success_caption");
 				info2.anchor_path = "Camera/Anchor_5_MC";
 				info2.buttonType = GeneralWindow.ButtonType.Ok;
 				GeneralWindow.Create(info2);
@@ -1635,8 +1635,8 @@ public class GameModeTitle : MonoBehaviour
 					cellID = "atom_used_serial";
 				}
 				GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
-				info.message = TextUtility.GetText(type, "Title", cellID);
-				info.caption = TextUtility.GetText(type, "Title", "atom_failure_caption");
+				info.message = Text.TextUtility.GetText(type, "Title", cellID);
+				info.caption = Text.TextUtility.GetText(type, "Title", "atom_failure_caption");
 				info.anchor_path = "Camera/Anchor_5_MC";
 				info.buttonType = GeneralWindow.ButtonType.Ok;
 				GeneralWindow.Create(info);
@@ -2518,8 +2518,8 @@ public class GameModeTitle : MonoBehaviour
 		Debug.Log("GameModeTitle:cache clear button pressed");
 		GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
 		info.name = "cache_clear";
-		info.caption = TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Option", "cash_cashclear_bar");
-		info.message = TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Option", "cash_cashclear_explanation_title");
+		info.caption = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Option", "cash_cashclear_bar");
+		info.message = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Option", "cash_cashclear_explanation_title");
 		info.anchor_path = "Camera/Anchor_5_MC";
 		info.buttonType = GeneralWindow.ButtonType.YesNo;
 		GeneralWindow.Create(info);
@@ -2652,8 +2652,8 @@ public class GameModeTitle : MonoBehaviour
 		SetUIEffect(false);
 		GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
 		info.name = "quit_app";
-		info.caption = TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Title", "gw_quit_app_caption");
-		info.message = TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Title", "gw_quit_app_text");
+		info.caption = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Title", "gw_quit_app_caption");
+		info.message = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Title", "gw_quit_app_text");
 		info.anchor_path = "Camera/Anchor_5_MC";
 		info.buttonType = GeneralWindow.ButtonType.YesNo;
 		GeneralWindow.Create(info);
@@ -2708,7 +2708,7 @@ public class GameModeTitle : MonoBehaviour
 			if (info != null)
 			{
 				string cellID = CharaName.Name[0];
-				string commonText = TextUtility.GetCommonText("CharaName", cellID);
+				string commonText = Text.TextUtility.GetCommonText("CharaName", cellID);
 				info.m_titleText = TextManager.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "FirstLoading", "ui_Lbl_title_text").text;
 				info.m_mainText = TextManager.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "FirstLoading", "ui_Lbl_main_text").text;
 				info.m_optionTutorial = true;

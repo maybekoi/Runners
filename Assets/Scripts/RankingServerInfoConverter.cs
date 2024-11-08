@@ -127,7 +127,7 @@ public class RankingServerInfoConverter
 				return null;
 			}
 			text2 = ((m_sendPresent > 0) ? TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "Ranking", "ranking_result_text_3").text : TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "Ranking", "ranking_result_text_4").text);
-			return TextUtility.Replaces(text2, new Dictionary<string, string>
+			return Text.TextUtility.Replaces(text2, new Dictionary<string, string>
 			{
 				{
 					"{PARAM1}",
@@ -152,7 +152,7 @@ public class RankingServerInfoConverter
 				return null;
 			}
 			text2 = ((m_sendPresentRival > 0) ? TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "Ranking", "ranking_result_text_1").text : TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "Ranking", "ranking_result_text_2").text);
-			return TextUtility.Replaces(text2, new Dictionary<string, string>
+			return Text.TextUtility.Replaces(text2, new Dictionary<string, string>
 			{
 				{
 					"{PARAM1}",

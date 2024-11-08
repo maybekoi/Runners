@@ -315,7 +315,7 @@ public class daily_challenge : MonoBehaviour
 		UILabel uILabel = GameObjectUtil.FindChildGameObjectComponent<UILabel>(base.gameObject, "Lbl_days");
 		if (uILabel != null)
 		{
-			uILabel.text = TextUtility.Replaces(TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "day").text, new Dictionary<string, string>
+			uILabel.text = Text.TextUtility.Replaces(TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "day").text, new Dictionary<string, string>
 			{
 				{
 					"{DAY}",
@@ -326,7 +326,7 @@ public class daily_challenge : MonoBehaviour
 		UILabel uILabel2 = GameObjectUtil.FindChildGameObjectComponent<UILabel>(base.gameObject, "Lbl_daily_challenge");
 		if (uILabel2 != null)
 		{
-			uILabel2.text = TextUtility.Replaces(m_info.TodayMissionText, new Dictionary<string, string>
+			uILabel2.text = Text.TextUtility.Replaces(m_info.TodayMissionText, new Dictionary<string, string>
 			{
 				{
 					"{QUOTA}",
@@ -359,7 +359,7 @@ public class daily_challenge : MonoBehaviour
 				{
 					num = 100f;
 				}
-				uILabel3.text = TextUtility.Replaces(TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "clear_percent").text, new Dictionary<string, string>
+				uILabel3.text = Text.TextUtility.Replaces(TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "clear_percent").text, new Dictionary<string, string>
 				{
 					{
 						"{PARAM}",

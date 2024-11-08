@@ -172,7 +172,7 @@ public class ChaoSetWindowUI : MonoBehaviour
 		}
 		if (m_chaoLevelLabel != null)
 		{
-			m_chaoLevelLabel.text = TextUtility.GetTextLevel(m_chaoInfo.level.ToString());
+			m_chaoLevelLabel.text = Text.TextUtility.GetTextLevel(m_chaoInfo.level.ToString());
 		}
 		string text = m_chaoInfo.charaAttribute.ToString().ToLower();
 		if (m_chaoTypeSprite != null)
@@ -181,7 +181,7 @@ public class ChaoSetWindowUI : MonoBehaviour
 		}
 		if (m_chaoTypeLabel != null)
 		{
-			m_chaoTypeLabel.text = TextUtility.GetCommonText("CharaAtribute", text);
+			m_chaoTypeLabel.text = Text.TextUtility.GetCommonText("CharaAtribute", text);
 		}
 		if (m_chaoTexture != null)
 		{

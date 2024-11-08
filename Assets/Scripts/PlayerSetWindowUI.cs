@@ -551,7 +551,7 @@ public class PlayerSetWindowUI : WindowBase
 		{
 			gameObject.SetActive(!m_charaState.IsUnlocked);
 		}
-		string commonText = TextUtility.GetCommonText("CharaName", CharaName.Name[(int)m_charaType]);
+		string commonText = Text.TextUtility.GetCommonText("CharaName", CharaName.Name[(int)m_charaType]);
 		string charaAttributeSpriteName = HudUtility.GetCharaAttributeSpriteName(m_charaType);
 		string teamAttributeSpriteName = HudUtility.GetTeamAttributeSpriteName(m_charaType);
 		string charaAttributeText = m_charaState.GetCharaAttributeText();
@@ -620,7 +620,7 @@ public class PlayerSetWindowUI : WindowBase
 		}
 		uISprite.spriteName = charaAttributeSpriteName;
 		uISprite2.spriteName = teamAttributeSpriteName;
-		uILabel.text = TextUtility.GetTextLevel(string.Format("{0:000}", totalLevel));
+		uILabel.text = Text.TextUtility.GetTextLevel(string.Format("{0:000}", totalLevel));
 		uILabel2.text = commonText;
 		uILabel3.text = charaAttributeText;
 	}
@@ -777,14 +777,14 @@ public class PlayerSetWindowUI : WindowBase
 					switch (itemId)
 					{
 					case ServerItem.Id.RING:
-						text = ((!m_charaState.IsUnlocked) ? TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "WindowText", "chara_unlock_ring_text") : TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "WindowText", "chara_unlock_ring_text_2"));
+						text = ((!m_charaState.IsUnlocked) ? Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "WindowText", "chara_unlock_ring_text") : Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "WindowText", "chara_unlock_ring_text_2"));
 						break;
 					case ServerItem.Id.RSRING:
-						text = ((!m_charaState.IsUnlocked) ? TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "WindowText", "chara_unlock_rsring_text") : TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "WindowText", "chara_unlock_rsring_text_2"));
+						text = ((!m_charaState.IsUnlocked) ? Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "WindowText", "chara_unlock_rsring_text") : Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "WindowText", "chara_unlock_rsring_text_2"));
 						break;
 					}
 					text = text.Replace("{RING_COST}", HudUtility.GetFormatNumString(cost));
-					empty = ((!m_charaState.IsUnlocked) ? TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "WindowText", "chara_unlock_caption") : TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "WindowText", "chara_unlock_caption_2"));
+					empty = ((!m_charaState.IsUnlocked) ? Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "WindowText", "chara_unlock_caption") : Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "WindowText", "chara_unlock_caption_2"));
 					GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
 					info.name = "BuyCharacter";
 					info.buttonType = GeneralWindow.ButtonType.YesNo;
@@ -806,14 +806,14 @@ public class PlayerSetWindowUI : WindowBase
 					{
 					case ServerItem.Id.RING:
 						name = "SpinCostErrorRing";
-						caption = TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "ItemRoulette", "gw_cost_caption");
-						message = TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "ItemRoulette", "gw_cost_text");
+						caption = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "ItemRoulette", "gw_cost_caption");
+						message = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "ItemRoulette", "gw_cost_text");
 						m_costErrorType = ButtonInfoTable.ButtonType.RING_TO_SHOP;
 						break;
 					case ServerItem.Id.RSRING:
 						name = "SpinCostErrorRSRing";
-						caption = TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "ChaoRoulette", "gw_cost_caption");
-						message = ((!flag) ? TextUtility.GetCommonText("ChaoRoulette", "gw_cost_caption_text_2") : TextUtility.GetCommonText("ChaoRoulette", "gw_cost_caption_text"));
+						caption = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "ChaoRoulette", "gw_cost_caption");
+						message = ((!flag) ? Text.TextUtility.GetCommonText("ChaoRoulette", "gw_cost_caption_text_2") : Text.TextUtility.GetCommonText("ChaoRoulette", "gw_cost_caption_text"));
 						buttonType = ((!flag) ? GeneralWindow.ButtonType.Ok : GeneralWindow.ButtonType.ShopCancel);
 						m_costErrorType = ButtonInfoTable.ButtonType.REDSTAR_TO_SHOP;
 						break;

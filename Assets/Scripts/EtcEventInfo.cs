@@ -12,27 +12,27 @@ public class EtcEventInfo : EventBaseInfo
 			return;
 		}
 		string cellID = "ui_Lbl_word_animl_get_event";
-		string text = TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Result", "ui_Lbl_word_animal_get_total");
+		string text = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Result", "ui_Lbl_word_animal_get_total");
 		m_totalPointTarget = EVENT_AGGREGATE_TARGET.ANIMAL;
-		m_rightTitle = TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Menu", "ui_Lbl_word_animal_get_total");
+		m_rightTitle = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Menu", "ui_Lbl_word_animal_get_total");
 		switch (EventManager.Instance.CollectType)
 		{
 		case EventManager.CollectEventType.GET_RING:
 			m_totalPointTarget = EVENT_AGGREGATE_TARGET.RING;
-			m_rightTitle = TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Menu", "ui_Lbl_word_ring_get_total");
+			m_rightTitle = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Menu", "ui_Lbl_word_ring_get_total");
 			cellID = "ui_Lbl_word_ring_get_event";
-			text = TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Result", "ui_Lbl_word_ring_get_total");
+			text = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Result", "ui_Lbl_word_ring_get_total");
 			break;
 		case EventManager.CollectEventType.RUN_DISTANCE:
 			m_totalPointTarget = EVENT_AGGREGATE_TARGET.DISTANCE;
-			m_rightTitle = TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Menu", "ui_Lbl_word_run_distance_total");
+			m_rightTitle = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Menu", "ui_Lbl_word_run_distance_total");
 			cellID = "ui_Lbl_word_run_distance_event";
-			text = TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Result", "ui_Lbl_word_run_distance_get_total");
+			text = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Result", "ui_Lbl_word_run_distance_get_total");
 			break;
 		}
-		m_eventName = TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Menu", cellID);
+		m_eventName = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Menu", cellID);
 		m_totalPoint = EventManager.Instance.CollectCount;
-		m_caption = TextUtility.GetCommonText("Event", "ui_Lbl_event_reward_list");
+		m_caption = Text.TextUtility.GetCommonText("Event", "ui_Lbl_event_reward_list");
 		m_rightTitleIcon = "ui_event_object_icon";
 		m_eventMission = new List<EventMission>();
 		List<ServerEventReward> rewardList = EventManager.Instance.RewardList;
@@ -68,7 +68,7 @@ public class EtcEventInfo : EventBaseInfo
 			}
 		}
 		int chaoLevel = ChaoTable.ChaoMaxLevel();
-		m_leftTitle = TextUtility.GetCommonText("Roulette", "ui_Lbl_word_recommended_chao");
+		m_leftTitle = Text.TextUtility.GetCommonText("Roulette", "ui_Lbl_word_recommended_chao");
 		if (m_rewardChao.Count > 0)
 		{
 			m_leftName = m_rewardChao[0].nameTwolines;

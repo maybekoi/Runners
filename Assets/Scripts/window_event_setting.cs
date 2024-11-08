@@ -136,24 +136,24 @@ public class window_event_setting : WindowBase
 			bool lightValue2 = IsLightMode();
 			bool texValue = IsHighTexture();
 			UpdateButtonImage(lightValue2, texValue);
-			TextUtility.SetCommonText(m_headerTextLabel, "Option", "weight_saving");
-			TextUtility.SetCommonText(m_headerSubTextLabel, "Option", "weight_saving_info");
-			TextUtility.SetCommonText(m_ButtonOnTextLabel, "Option", "button_on");
-			TextUtility.SetCommonText(m_ButtonOnSubTextLabel, "Option", "button_on");
-			TextUtility.SetCommonText(m_ButtonOffTextLabel, "Option", "button_off");
-			TextUtility.SetCommonText(m_ButtonOffSubTextLabel, "Option", "button_off");
+			Text.TextUtility.SetCommonText(m_headerTextLabel, "Option", "weight_saving");
+			Text.TextUtility.SetCommonText(m_headerSubTextLabel, "Option", "weight_saving_info");
+			Text.TextUtility.SetCommonText(m_ButtonOnTextLabel, "Option", "button_on");
+			Text.TextUtility.SetCommonText(m_ButtonOnSubTextLabel, "Option", "button_on");
+			Text.TextUtility.SetCommonText(m_ButtonOffTextLabel, "Option", "button_off");
+			Text.TextUtility.SetCommonText(m_ButtonOffSubTextLabel, "Option", "button_off");
 			break;
 		}
 		case TextType.FACEBOOK_ACCESS:
 		{
 			bool lightValue = IsLogin();
 			UpdateButtonImage(lightValue, false);
-			TextUtility.SetCommonText(m_headerTextLabel, "Option", "facebook_access");
-			TextUtility.SetCommonText(m_headerSubTextLabel, "Option", "facebook_access_info");
-			TextUtility.SetCommonText(m_ButtonOnTextLabel, "Option", "login");
-			TextUtility.SetCommonText(m_ButtonOnSubTextLabel, "Option", "login");
-			TextUtility.SetCommonText(m_ButtonOffTextLabel, "Option", "logout");
-			TextUtility.SetCommonText(m_ButtonOffSubTextLabel, "Option", "logout");
+			Text.TextUtility.SetCommonText(m_headerTextLabel, "Option", "facebook_access");
+			Text.TextUtility.SetCommonText(m_headerSubTextLabel, "Option", "facebook_access_info");
+			Text.TextUtility.SetCommonText(m_ButtonOnTextLabel, "Option", "login");
+			Text.TextUtility.SetCommonText(m_ButtonOnSubTextLabel, "Option", "login");
+			Text.TextUtility.SetCommonText(m_ButtonOffTextLabel, "Option", "logout");
+			Text.TextUtility.SetCommonText(m_ButtonOffSubTextLabel, "Option", "logout");
 			break;
 		}
 		}
@@ -387,8 +387,8 @@ public class window_event_setting : WindowBase
 			GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
 			info.name = "BackTitleSelect";
 			info.buttonType = GeneralWindow.ButtonType.Ok;
-			info.caption = TextUtility.GetCommonText("MainMenu", "back_title_caption");
-			info.message = TextUtility.GetCommonText("Option", "weight_saving_back_title_text");
+			info.caption = Text.TextUtility.GetCommonText("MainMenu", "back_title_caption");
+			info.message = Text.TextUtility.GetCommonText("Option", "weight_saving_back_title_text");
 			GeneralWindow.Create(info);
 			base.enabled = true;
 			break;
@@ -411,8 +411,8 @@ public class window_event_setting : WindowBase
 			GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
 			info.name = "BackTitleSelect";
 			info.buttonType = GeneralWindow.ButtonType.Ok;
-			info.caption = TextUtility.GetCommonText("MainMenu", "back_title_caption");
-			info.message = TextUtility.GetCommonText("Option", "weight_saving_back_title_text");
+			info.caption = Text.TextUtility.GetCommonText("MainMenu", "back_title_caption");
+			info.message = Text.TextUtility.GetCommonText("Option", "weight_saving_back_title_text");
 			GeneralWindow.Create(info);
 			base.enabled = true;
 			break;
@@ -435,8 +435,8 @@ public class window_event_setting : WindowBase
 			GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
 			info.name = "BackTitleSelect";
 			info.buttonType = GeneralWindow.ButtonType.Ok;
-			info.caption = TextUtility.GetCommonText("MainMenu", "back_title_caption");
-			info.message = TextUtility.GetCommonText("Option", "weight_saving_back_title_text");
+			info.caption = Text.TextUtility.GetCommonText("MainMenu", "back_title_caption");
+			info.message = Text.TextUtility.GetCommonText("Option", "weight_saving_back_title_text");
 			GeneralWindow.Create(info);
 			base.enabled = true;
 			break;
@@ -458,8 +458,8 @@ public class window_event_setting : WindowBase
 			GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
 			info.name = "BackTitleSelect";
 			info.buttonType = GeneralWindow.ButtonType.Ok;
-			info.caption = TextUtility.GetCommonText("MainMenu", "back_title_caption");
-			info.message = TextUtility.GetCommonText("Option", "weight_saving_back_title_text");
+			info.caption = Text.TextUtility.GetCommonText("MainMenu", "back_title_caption");
+			info.message = Text.TextUtility.GetCommonText("Option", "weight_saving_back_title_text");
 			GeneralWindow.Create(info);
 			base.enabled = true;
 			break;

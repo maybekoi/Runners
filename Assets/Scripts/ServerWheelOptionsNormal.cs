@@ -689,8 +689,8 @@ public class ServerWheelOptionsNormal : ServerWheelOptionsOrg
 		{
 			result = "SpinCostErrorRing";
 			GeneralWindow.CInfo info2 = default(GeneralWindow.CInfo);
-			info2.caption = TextUtility.GetCommonText("ItemRoulette", "gw_cost_caption");
-			info2.message = TextUtility.GetCommonText("ItemRoulette", "gw_cost_text");
+			info2.caption = Text.TextUtility.GetCommonText("ItemRoulette", "gw_cost_caption");
+			info2.message = Text.TextUtility.GetCommonText("ItemRoulette", "gw_cost_text");
 			info2.buttonType = GeneralWindow.ButtonType.ShopCancel;
 			info2.name = "SpinCostErrorRing";
 			info2.isPlayErrorSe = true;
@@ -702,8 +702,8 @@ public class ServerWheelOptionsNormal : ServerWheelOptionsOrg
 			result = "SpinCostErrorRSRing";
 			bool flag = ServerInterface.IsRSREnable();
 			GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
-			info.caption = TextUtility.GetCommonText("ChaoRoulette", "gw_cost_caption");
-			info.message = ((!flag) ? TextUtility.GetCommonText("ChaoRoulette", "gw_cost_caption_text_2") : TextUtility.GetCommonText("ChaoRoulette", "gw_cost_caption_text"));
+			info.caption = Text.TextUtility.GetCommonText("ChaoRoulette", "gw_cost_caption");
+			info.message = ((!flag) ? Text.TextUtility.GetCommonText("ChaoRoulette", "gw_cost_caption_text_2") : Text.TextUtility.GetCommonText("ChaoRoulette", "gw_cost_caption_text"));
 			info.buttonType = ((!flag) ? GeneralWindow.ButtonType.Ok : GeneralWindow.ButtonType.ShopCancel);
 			info.name = "SpinCostErrorRSRing";
 			info.isPlayErrorSe = true;

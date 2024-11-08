@@ -170,7 +170,7 @@ public class ui_event_raid_scroll : MonoBehaviour
 			if (m_bossLv != null)
 			{
 				string text = TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "MainMenu", "ui_LevelNumber").text;
-				m_bossLv.text = TextUtility.Replace(text, "{PARAM}", m_bossData.lv.ToString());
+				m_bossLv.text = Text.TextUtility.Replace(text, "{PARAM}", m_bossData.lv.ToString());
 			}
 			if (m_bossIcon != null && m_bossRarity != null)
 			{

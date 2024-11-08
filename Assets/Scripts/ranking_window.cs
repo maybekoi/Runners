@@ -191,7 +191,7 @@ public class ranking_window : WindowBase
 		m_leagueIcon.spriteName = RankingUtil.GetLeagueIconName((LeagueType)ranker.leagueIndex);
 		m_leagueIcon2.spriteName = RankingUtil.GetLeagueIconName2((LeagueType)ranker.leagueIndex);
 		TimeSpan timeSpan = NetUtil.GetCurrentTime() - ranker.loginTime;
-		m_daysLabel.text = TextUtility.Replaces(TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "Ranking", (timeSpan.Days > 0) ? "login_days" : ((timeSpan.Hours <= 0) ? "login_minutes" : "login_hours")).text, new Dictionary<string, string>
+		m_daysLabel.text = Text.TextUtility.Replaces(TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "Ranking", (timeSpan.Days > 0) ? "login_days" : ((timeSpan.Hours <= 0) ? "login_minutes" : "login_hours")).text, new Dictionary<string, string>
 		{
 			{
 				"{DAYS}",
@@ -207,7 +207,7 @@ public class ranking_window : WindowBase
 			}
 		});
 		m_charaNameLabel.text = TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "CharaName", CharaName.Name[(int)ranker.charaType]).text;
-		m_charaLevelLabel.text = TextUtility.GetTextLevel(ranker.charaLevel.ToString("D3"));
+		m_charaLevelLabel.text = Text.TextUtility.GetTextLevel(ranker.charaLevel.ToString("D3"));
 		SetChara(m_mainCharaTex, ranker.charaType);
 		SetChara(m_subCharaTex, ranker.charaSubType);
 		SetChao(0, ranker.mainChaoId, ranker.mainChaoRarity, ranker.mainChaoLevel);
@@ -248,7 +248,7 @@ public class ranking_window : WindowBase
 			m_leagueIcon.spriteName = RankingUtil.GetLeagueIconName((LeagueType)m_ranker.leagueIndex);
 			m_leagueIcon2.spriteName = RankingUtil.GetLeagueIconName2((LeagueType)m_ranker.leagueIndex);
 			TimeSpan timeSpan = NetUtil.GetCurrentTime() - m_ranker.loginTime;
-			m_daysLabel.text = TextUtility.Replaces(TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "Ranking", (timeSpan.Days > 0) ? "login_days" : ((timeSpan.Hours <= 0) ? "login_minutes" : "login_hours")).text, new Dictionary<string, string>
+			m_daysLabel.text = Text.TextUtility.Replaces(TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "Ranking", (timeSpan.Days > 0) ? "login_days" : ((timeSpan.Hours <= 0) ? "login_minutes" : "login_hours")).text, new Dictionary<string, string>
 			{
 				{
 					"{DAYS}",
@@ -264,7 +264,7 @@ public class ranking_window : WindowBase
 				}
 			});
 			m_charaNameLabel.text = TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "CharaName", CharaName.Name[(int)m_ranker.charaType]).text;
-			m_charaLevelLabel.text = TextUtility.GetTextLevel(m_ranker.charaLevel.ToString("D3"));
+			m_charaLevelLabel.text = Text.TextUtility.GetTextLevel(m_ranker.charaLevel.ToString("D3"));
 			SetChara(m_mainCharaTex, m_ranker.charaType);
 			SetChara(m_subCharaTex, m_ranker.charaSubType);
 			SetChao(0, m_ranker.mainChaoId, m_ranker.mainChaoRarity, m_ranker.mainChaoLevel);
@@ -383,7 +383,7 @@ public class ranking_window : WindowBase
 			m_chaoBgSprite[index].gameObject.SetActive(true);
 			m_chaoLevelLabel[index].gameObject.SetActive(true);
 			m_chaoBgSprite[index].spriteName = "ui_tex_chao_bg_" + chaoRarity;
-			m_chaoLevelLabel[index].text = TextUtility.GetTextLevel(chaoLevel.ToString());
+			m_chaoLevelLabel[index].text = Text.TextUtility.GetTextLevel(chaoLevel.ToString());
 		}
 		else
 		{

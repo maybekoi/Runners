@@ -269,8 +269,8 @@ public class GeneralUtil
 		GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
 		info.name = windowName;
 		info.buttonType = GeneralWindow.ButtonType.Ok;
-		info.caption = TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "NetworkError", "ui_Lbl_caption");
-		info.message = TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "NetworkError", "ui_Lbl_cutoff");
+		info.caption = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "NetworkError", "ui_Lbl_caption");
+		info.message = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "NetworkError", "ui_Lbl_cutoff");
 		info.isPlayErrorSe = true;
 		GeneralWindow.Create(info);
 	}
@@ -280,8 +280,8 @@ public class GeneralUtil
 		GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
 		info.name = windowName;
 		info.buttonType = GeneralWindow.ButtonType.Ok;
-		info.caption = TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Common", "event_finished_game_result_caption");
-		info.message = TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Common", "event_finished_guidance");
+		info.caption = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Common", "event_finished_game_result_caption");
+		info.message = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Common", "event_finished_guidance");
 		info.isPlayErrorSe = true;
 		GeneralWindow.Create(info);
 	}

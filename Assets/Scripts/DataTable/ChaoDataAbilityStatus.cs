@@ -175,9 +175,9 @@ namespace DataTable
 		{
 			if (m_abilityIndex == 0)
 			{
-				return TextUtility.GetChaoText("Chao", callId + m_chaoId.ToString("D4"));
+				return Text.TextUtility.GetChaoText("Chao", callId + m_chaoId.ToString("D4"));
 			}
-			return TextUtility.GetChaoText("Chao", callId + m_chaoId.ToString("D4") + "_" + m_abilityIndex);
+			return Text.TextUtility.GetChaoText("Chao", callId + m_chaoId.ToString("D4") + "_" + m_abilityIndex);
 		}
 	}
 }

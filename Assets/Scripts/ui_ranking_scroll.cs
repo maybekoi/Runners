@@ -447,7 +447,7 @@ public class ui_ranking_scroll : MonoBehaviour
 		}
 		else
 		{
-			string text = TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_continuous_win");
+			string text = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "battle_continuous_win");
 			if (ranker.rankIndex > 1)
 			{
 				m_rankingLabel.text = text.Replace("{PARAM}", ranker.rankIndex.ToString());

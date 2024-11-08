@@ -237,7 +237,7 @@ public class SettingTakeoverInput : SettingBase
 				UILabel component = gameObject4.GetComponent<UILabel>();
 				if (component != null)
 				{
-					TextUtility.SetText(component, type, "Title", textParamTable[i].text_label);
+					Text.TextUtility.SetText(component, type, "Title", textParamTable[i].text_label);
 				}
 			}
 		}

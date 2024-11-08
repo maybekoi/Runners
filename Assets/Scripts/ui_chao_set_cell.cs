@@ -285,7 +285,7 @@ public class ui_chao_set_cell : MonoBehaviour
 			m_setSprite.spriteName = ((chaoData.id == mainChaoId) ? "ui_chao_set_cursor_0" : ((chaoData.id != subChaoId) ? null : "ui_chao_set_cursor_1"));
 			m_chaoTex.color = Color.white;
 			m_chaoDefault.color = Color.white;
-			m_chaoLevelLabel.text = TextUtility.GetTextLevel(chaoData.level.ToString());
+			m_chaoLevelLabel.text = Text.TextUtility.GetTextLevel(chaoData.level.ToString());
 			string str = m_chaoData.charaAtribute.ToString().ToLower();
 			m_chaoTypeSprite.spriteName = "ui_chao_set_type_icon_" + str;
 			if (m_bonusTypeSprite != null)

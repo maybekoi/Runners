@@ -170,8 +170,8 @@ public class HudContinue : MonoBehaviour
 				GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
 				info.name = "ErrorRSRing";
 				info.buttonType = GeneralWindow.ButtonType.Ok;
-				info.caption = TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "ChaoRoulette", "gw_cost_caption");
-				info.message = TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "ChaoRoulette", "gw_cost_caption_text_2");
+				info.caption = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "ChaoRoulette", "gw_cost_caption");
+				info.message = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "ChaoRoulette", "gw_cost_caption_text_2");
 				info.isPlayErrorSe = true;
 				GeneralWindow.Create(info);
 			}

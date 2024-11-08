@@ -124,7 +124,7 @@ public class LoginBonusWindowUI : WindowBase
 					}
 					if (m_type == LoginBonusType.FIRST)
 					{
-						Label_days.text = TextUtility.Replaces(TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "LoginBonus", "count").text, new Dictionary<string, string>
+						Label_days.text = Text.TextUtility.Replaces(TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "LoginBonus", "count").text, new Dictionary<string, string>
 						{
 							{
 								"{COUNT}",
@@ -134,7 +134,7 @@ public class LoginBonusWindowUI : WindowBase
 					}
 					else
 					{
-						Label_days.text = TextUtility.Replaces(TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "LoginBonus", "day").text, new Dictionary<string, string>
+						Label_days.text = Text.TextUtility.Replaces(TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "LoginBonus", "day").text, new Dictionary<string, string>
 						{
 							{
 								"{DAY}",

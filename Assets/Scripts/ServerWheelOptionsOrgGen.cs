@@ -709,8 +709,8 @@ public class ServerWheelOptionsOrgGen : ServerWheelOptionsOrg
 		{
 			result = "SpinCostErrorRing";
 			GeneralWindow.CInfo info3 = default(GeneralWindow.CInfo);
-			info3.caption = TextUtility.GetCommonText("ItemRoulette", "gw_cost_caption");
-			info3.message = TextUtility.GetCommonText("ItemRoulette", "gw_cost_text");
+			info3.caption = Text.TextUtility.GetCommonText("ItemRoulette", "gw_cost_caption");
+			info3.message = Text.TextUtility.GetCommonText("ItemRoulette", "gw_cost_text");
 			info3.buttonType = GeneralWindow.ButtonType.ShopCancel;
 			info3.name = "SpinCostErrorRing";
 			info3.isPlayErrorSe = true;
@@ -722,8 +722,8 @@ public class ServerWheelOptionsOrgGen : ServerWheelOptionsOrg
 			result = "SpinCostErrorRSRing";
 			bool flag = ServerInterface.IsRSREnable();
 			GeneralWindow.CInfo info2 = default(GeneralWindow.CInfo);
-			info2.caption = TextUtility.GetCommonText("ChaoRoulette", "gw_cost_caption");
-			info2.message = ((!flag) ? TextUtility.GetCommonText("ChaoRoulette", "gw_cost_caption_text_2") : TextUtility.GetCommonText("ChaoRoulette", "gw_cost_caption_text"));
+			info2.caption = Text.TextUtility.GetCommonText("ChaoRoulette", "gw_cost_caption");
+			info2.message = ((!flag) ? Text.TextUtility.GetCommonText("ChaoRoulette", "gw_cost_caption_text_2") : Text.TextUtility.GetCommonText("ChaoRoulette", "gw_cost_caption_text"));
 			info2.buttonType = ((!flag) ? GeneralWindow.ButtonType.Ok : GeneralWindow.ButtonType.ShopCancel);
 			info2.name = "SpinCostErrorRSRing";
 			info2.isPlayErrorSe = true;
@@ -734,8 +734,8 @@ public class ServerWheelOptionsOrgGen : ServerWheelOptionsOrg
 		{
 			result = "SpinCostErrorRaidRing";
 			GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
-			info.caption = TextUtility.GetCommonText("Roulette", "gw_raid_cost_caption");
-			info.message = TextUtility.GetCommonText("Roulette", "gw_raid_cost_caption_text");
+			info.caption = Text.TextUtility.GetCommonText("Roulette", "gw_raid_cost_caption");
+			info.message = Text.TextUtility.GetCommonText("Roulette", "gw_raid_cost_caption_text");
 			info.buttonType = GeneralWindow.ButtonType.Ok;
 			info.name = "SpinCostErrorRaidRing";
 			info.isPlayErrorSe = true;

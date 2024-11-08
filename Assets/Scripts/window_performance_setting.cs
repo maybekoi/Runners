@@ -201,8 +201,8 @@ public class window_performance_setting : WindowBase
 			GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
 			info.name = "BackTitleSelect";
 			info.buttonType = GeneralWindow.ButtonType.Ok;
-			info.caption = TextUtility.GetCommonText("MainMenu", "back_title_caption");
-			info.message = TextUtility.GetCommonText("Option", "weight_saving_back_title_text");
+			info.caption = Text.TextUtility.GetCommonText("MainMenu", "back_title_caption");
+			info.message = Text.TextUtility.GetCommonText("Option", "weight_saving_back_title_text");
 			GeneralWindow.Create(info);
 			m_selected = true;
 			base.enabled = true;

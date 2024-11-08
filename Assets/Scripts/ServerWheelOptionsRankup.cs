@@ -545,8 +545,8 @@ public class ServerWheelOptionsRankup : ServerWheelOptionsOrg
 		{
 			text = "SpinCostErrorRing";
 			GeneralWindow.CInfo info2 = default(GeneralWindow.CInfo);
-			info2.caption = TextUtility.GetCommonText("ItemRoulette", "gw_cost_caption");
-			info2.message = TextUtility.GetCommonText("ItemRoulette", "gw_cost_text");
+			info2.caption = Text.TextUtility.GetCommonText("ItemRoulette", "gw_cost_caption");
+			info2.message = Text.TextUtility.GetCommonText("ItemRoulette", "gw_cost_text");
 			info2.buttonType = GeneralWindow.ButtonType.ShopCancel;
 			info2.name = "SpinCostErrorRing";
 			info2.isPlayErrorSe = true;

@@ -20,8 +20,8 @@ public class OptionCacheClear : MonoBehaviour
 	{
 		GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
 		info.name = "cache_clear";
-		info.caption = TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Option", "cash_cashclear_bar");
-		info.message = TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Option", "cash_cashclear_explanation");
+		info.caption = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Option", "cash_cashclear_bar");
+		info.message = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Option", "cash_cashclear_explanation");
 		info.anchor_path = "Camera/Anchor_5_MC";
 		info.buttonType = GeneralWindow.ButtonType.YesNo;
 		GeneralWindow.Create(info);
@@ -38,8 +38,8 @@ public class OptionCacheClear : MonoBehaviour
 				GeneralWindow.Close();
 				GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
 				info.name = "cache_clear_end";
-				info.caption = TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Option", "cash_cashclear_confirmation_bar");
-				info.message = TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Option", "cash_cashclear_confirmation");
+				info.caption = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Option", "cash_cashclear_confirmation_bar");
+				info.message = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_FIXATION_TEXT, "Option", "cash_cashclear_confirmation");
 				info.anchor_path = "Camera/Anchor_5_MC";
 				info.buttonType = GeneralWindow.ButtonType.Ok;
 				GeneralWindow.Create(info);

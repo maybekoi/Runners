@@ -139,7 +139,7 @@ public class RaidBossInfo : EventBaseInfo
 			return;
 		}
 		m_eventName = "RaidBoss(正式なテキストを追加してください)";
-		string text = TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Result", "ui_Lbl_word_boss_destroy");
+		string text = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Result", "ui_Lbl_word_boss_destroy");
 		List<ServerEventReward> rewardList = EventManager.Instance.RewardList;
 		m_eventMission = new List<EventMission>();
 		if (rewardList != null)
@@ -174,7 +174,7 @@ public class RaidBossInfo : EventBaseInfo
 			}
 		}
 		int chaoLevel = ChaoTable.ChaoMaxLevel();
-		m_leftTitle = TextUtility.GetCommonText("Roulette", "ui_Lbl_word_best_chao");
+		m_leftTitle = Text.TextUtility.GetCommonText("Roulette", "ui_Lbl_word_best_chao");
 		if (m_rewardChao.Count > 0)
 		{
 			m_leftName = m_rewardChao[0].nameTwolines;
@@ -204,8 +204,8 @@ public class RaidBossInfo : EventBaseInfo
 				break;
 			}
 		}
-		m_caption = TextUtility.GetCommonText("Event", "ui_Lbl_event_reward_list");
-		m_rightTitle = TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Menu", "ui_Lbl_word_destroy_total");
+		m_caption = Text.TextUtility.GetCommonText("Event", "ui_Lbl_event_reward_list");
+		m_rightTitle = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Menu", "ui_Lbl_word_destroy_total");
 		m_rightTitleIcon = "ui_event_object_icon";
 		m_init = true;
 	}

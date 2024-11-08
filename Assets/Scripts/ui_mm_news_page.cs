@@ -23,7 +23,7 @@ public class ui_mm_news_page : MonoBehaviour
 
 	private void SetInfomation()
 	{
-		string commonText = TextUtility.GetCommonText("Informaion", "announcement");
+		string commonText = Text.TextUtility.GetCommonText("Informaion", "announcement");
 		m_bannerInfoList.Clear();
 		ServerNoticeInfo noticeInfo = ServerInterface.NoticeInfo;
 		if (noticeInfo == null)

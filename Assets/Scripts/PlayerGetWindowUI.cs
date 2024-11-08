@@ -70,7 +70,7 @@ public class PlayerGetWindowUI : MonoBehaviour
 	{
 		CharaType charaType = serverItem.charaType;
 		m_nameLabel.text = TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "CharaName", CharaName.Name[(int)charaType]).text;
-		m_levelLabel.text = TextUtility.GetTextLevel(MenuPlayerSetUtil.GetTotalLevel(charaType).ToString("D3"));
+		m_levelLabel.text = Text.TextUtility.GetTextLevel(MenuPlayerSetUtil.GetTotalLevel(charaType).ToString("D3"));
 		m_detailsLabel.text = TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "WindowText", "chara_attribute_" + CharaName.Name[(int)charaType]).text;
 		m_playerSprite.spriteName = HudUtility.MakeCharaTextureName(charaType, HudUtility.TextureType.TYPE_L);
 		CharacterAttribute characterAttribute = CharacterAttribute.UNKNOWN;

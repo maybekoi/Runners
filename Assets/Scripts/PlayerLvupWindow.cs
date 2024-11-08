@@ -238,7 +238,7 @@ public class PlayerLvupWindow : WindowBase
 		if (labLv != null)
 		{
 			int totalLevel = MenuPlayerSetUtil.GetTotalLevel(m_charaType);
-			labLv.text = TextUtility.GetTextLevel(string.Format("{0:000}", totalLevel));
+			labLv.text = Text.TextUtility.GetTextLevel(string.Format("{0:000}", totalLevel));
 		}
 		if (labCost != null)
 		{

@@ -245,8 +245,8 @@ public class SettingUserName : SettingBase
 		case -3:
 		{
 			GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
-			info.caption = TextUtility.GetCommonText("UserName", "input_error");
-			info.message = TextUtility.GetCommonText("UserName", "input_error_info_1");
+			info.caption = Text.TextUtility.GetCommonText("UserName", "input_error");
+			info.message = Text.TextUtility.GetCommonText("UserName", "input_error_info_1");
 			info.buttonType = GeneralWindow.ButtonType.Ok;
 			GeneralWindow.Create(info);
 			return TinyFsmState.End();
@@ -272,8 +272,8 @@ public class SettingUserName : SettingBase
 		case -3:
 		{
 			GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
-			info.caption = TextUtility.GetCommonText("UserName", "input_error");
-			info.message = TextUtility.GetCommonText("UserName", "input_error_info_2");
+			info.caption = Text.TextUtility.GetCommonText("UserName", "input_error");
+			info.message = Text.TextUtility.GetCommonText("UserName", "input_error_info_2");
 			info.buttonType = GeneralWindow.ButtonType.Ok;
 			GeneralWindow.Create(info);
 			return TinyFsmState.End();
@@ -299,8 +299,8 @@ public class SettingUserName : SettingBase
 		case -3:
 		{
 			GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
-			info.caption = TextUtility.GetCommonText("UserName", "input_error");
-			info.message = TextUtility.GetCommonText("UserName", "input_error_info_ng_word");
+			info.caption = Text.TextUtility.GetCommonText("UserName", "input_error");
+			info.message = Text.TextUtility.GetCommonText("UserName", "input_error_info_ng_word");
 			info.buttonType = GeneralWindow.ButtonType.Ok;
 			GeneralWindow.Create(info);
 			return TinyFsmState.End();
@@ -328,9 +328,9 @@ public class SettingUserName : SettingBase
 			SettingPartsUserName component = base.gameObject.GetComponent<SettingPartsUserName>();
 			string inputText = component.InputText;
 			GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
-			info.caption = TextUtility.GetCommonText("UserName", "entry_user");
+			info.caption = Text.TextUtility.GetCommonText("UserName", "entry_user");
 			string tag = "{NAME}";
-			info.message = TextUtility.GetCommonText("UserName", "entry_user_info", tag, inputText);
+			info.message = Text.TextUtility.GetCommonText("UserName", "entry_user_info", tag, inputText);
 			info.buttonType = GeneralWindow.ButtonType.YesNo;
 			GeneralWindow.Create(info);
 			return TinyFsmState.End();
@@ -441,9 +441,9 @@ public class SettingUserName : SettingBase
 			SettingPartsUserName component = base.gameObject.GetComponent<SettingPartsUserName>();
 			string inputText = component.InputText;
 			GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
-			info.caption = TextUtility.GetCommonText("UserName", "end_entry_user");
+			info.caption = Text.TextUtility.GetCommonText("UserName", "end_entry_user");
 			string tag = "{NAME}";
-			info.message = TextUtility.GetCommonText("UserName", "end_entry_user_info", tag, inputText);
+			info.message = Text.TextUtility.GetCommonText("UserName", "end_entry_user_info", tag, inputText);
 			info.buttonType = GeneralWindow.ButtonType.Ok;
 			GeneralWindow.Create(info);
 			ServerInterface loggedInServerInterface = ServerInterface.LoggedInServerInterface;

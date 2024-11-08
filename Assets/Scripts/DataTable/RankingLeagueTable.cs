@@ -256,7 +256,7 @@ namespace DataTable
 					if (ranking == ranking2)
 					{
 						string text5 = text4;
-						text5 = TextUtility.Replaces(text5, new Dictionary<string, string>
+						text5 = Text.TextUtility.Replaces(text5, new Dictionary<string, string>
 						{
 							{
 								"{PARAM}",
@@ -271,7 +271,7 @@ namespace DataTable
 						string text6 = text4;
 						if (ranking2 != num)
 						{
-							text6 = TextUtility.Replaces(text6, new Dictionary<string, string>
+							text6 = Text.TextUtility.Replaces(text6, new Dictionary<string, string>
 							{
 								{
 									"{PARAM}",
@@ -282,7 +282,7 @@ namespace DataTable
 						}
 						else if (!string.IsNullOrEmpty(unitTextMore))
 						{
-							text5 = TextUtility.Replaces(unitTextMore, new Dictionary<string, string>
+							text5 = Text.TextUtility.Replaces(unitTextMore, new Dictionary<string, string>
 							{
 								{
 									"{PARAM}",
@@ -341,7 +341,7 @@ namespace DataTable
 				int idIndex2 = serverItem.idIndex;
 				if ((uint)idIndex2 < CharaName.Name.Length)
 				{
-					return TextUtility.GetCommonText("CharaName", CharaName.Name[idIndex2]);
+					return Text.TextUtility.GetCommonText("CharaName", CharaName.Name[idIndex2]);
 				}
 				break;
 			}

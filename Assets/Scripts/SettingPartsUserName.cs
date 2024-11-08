@@ -163,7 +163,7 @@ public class SettingPartsUserName : SettingBase
 			UILabel component4 = gameObject3.GetComponent<UILabel>();
 			if (component4 != null)
 			{
-				TextUtility.SetCommonText(component4, "UserName", "name_setting");
+				Text.TextUtility.SetCommonText(component4, "UserName", "name_setting");
 			}
 		}
 		GameObject gameObject4 = GameObjectUtil.FindChildGameObject(m_object, "Lbl_name_setting_sub");
@@ -172,7 +172,7 @@ public class SettingPartsUserName : SettingBase
 			UILabel component5 = gameObject4.GetComponent<UILabel>();
 			if (component5 != null)
 			{
-				TextUtility.SetCommonText(component5, "UserName", "name_setting_info");
+				Text.TextUtility.SetCommonText(component5, "UserName", "name_setting_info");
 			}
 		}
 		GameObject gameObject5 = GameObjectUtil.FindChildGameObject(m_object, "Lbl_input_name");
@@ -189,7 +189,7 @@ public class SettingPartsUserName : SettingBase
 				}
 				if (string.IsNullOrEmpty(text))
 				{
-					TextUtility.SetCommonText(m_label, "UserName", "input_name");
+					Text.TextUtility.SetCommonText(m_label, "UserName", "input_name");
 				}
 				else
 				{

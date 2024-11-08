@@ -198,7 +198,7 @@ public class ItemGetWindow : WindowBase
 			if (chaoData != null)
 			{
 				text = chaoData.name;
-				m_info.imageCount = TextUtility.GetTextLevel(chaoData.level.ToString());
+				m_info.imageCount = Text.TextUtility.GetTextLevel(chaoData.level.ToString());
 			}
 			GameObject gameObject = GameObjectUtil.FindChildGameObject(m_imgEventTex, "img_tex_flame");
 			if (gameObject != null)
@@ -213,7 +213,7 @@ public class ItemGetWindow : WindowBase
 			{
 				m_itemImageSpriteName = "ui_cmn_icon_item_" + 8;
 				active4 = false;
-				text = TextUtility.GetCommonText("Item", "ring");
+				text = Text.TextUtility.GetCommonText("Item", "ring");
 			}
 			else
 			{

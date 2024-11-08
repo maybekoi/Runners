@@ -112,17 +112,17 @@ public class ChaoMergeWindow : WindowBase
 		UILabel uILabel = GameObjectUtil.FindChildGameObjectComponent<UILabel>(base.gameObject, "Lbl_chao_1_lv");
 		if (uILabel != null)
 		{
-			uILabel.text = TextUtility.GetTextLevel((m_level - 1).ToString());
+			uILabel.text = Text.TextUtility.GetTextLevel((m_level - 1).ToString());
 		}
 		UILabel uILabel2 = GameObjectUtil.FindChildGameObjectComponent<UILabel>(base.gameObject, "Lbl_chao_2_lv");
 		if (uILabel2 != null)
 		{
-			uILabel2.text = TextUtility.GetTextLevel("0");
+			uILabel2.text = Text.TextUtility.GetTextLevel("0");
 		}
 		UILabel uILabel3 = GameObjectUtil.FindChildGameObjectComponent<UILabel>(base.gameObject, "Lbl_chao_3_lv");
 		if (uILabel3 != null)
 		{
-			uILabel3.text = TextUtility.GetTextLevel(m_level.ToString());
+			uILabel3.text = Text.TextUtility.GetTextLevel(m_level.ToString());
 		}
 		UILabel uILabel4 = GameObjectUtil.FindChildGameObjectComponent<UILabel>(base.gameObject, "Lbl_chao_name");
 		if (uILabel4 != null)
@@ -132,7 +132,7 @@ public class ChaoMergeWindow : WindowBase
 		UILabel uILabel5 = GameObjectUtil.FindChildGameObjectComponent<UILabel>(base.gameObject, "Lbl_chao_lv");
 		if (uILabel5 != null)
 		{
-			uILabel5.text = TextUtility.GetTextLevel(m_level.ToString());
+			uILabel5.text = Text.TextUtility.GetTextLevel(m_level.ToString());
 		}
 		UISprite uISprite2 = GameObjectUtil.FindChildGameObjectComponent<UISprite>(base.gameObject, "img_type_icon");
 		if (uISprite2 != null)

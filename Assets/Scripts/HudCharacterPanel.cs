@@ -147,7 +147,7 @@ public class HudCharacterPanel : MonoBehaviour
 			UILabel component = obj.GetComponent<UILabel>();
 			if (component != null)
 			{
-				component.text = TextUtility.Replaces(TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "clear_percent").text, new Dictionary<string, string>
+				component.text = Text.TextUtility.Replaces(TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "clear_percent").text, new Dictionary<string, string>
 				{
 					{
 						"{PARAM}",

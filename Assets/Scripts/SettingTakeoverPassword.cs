@@ -220,8 +220,8 @@ public class SettingTakeoverPassword : SettingBase
 		case -3:
 		{
 			GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
-			info.caption = TextUtility.GetCommonText("Option", "take_over_password_input_error");
-			info.message = TextUtility.GetCommonText("Option", "take_over_password_input_error_info");
+			info.caption = Text.TextUtility.GetCommonText("Option", "take_over_password_input_error");
+			info.message = Text.TextUtility.GetCommonText("Option", "take_over_password_input_error_info");
 			info.buttonType = GeneralWindow.ButtonType.Ok;
 			GeneralWindow.Create(info);
 			return TinyFsmState.End();
@@ -247,8 +247,8 @@ public class SettingTakeoverPassword : SettingBase
 		case -3:
 		{
 			GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
-			info.caption = TextUtility.GetCommonText("Option", "take_over_password_input_error");
-			info.message = TextUtility.GetCommonText("Option", "take_over_password_input_error_info");
+			info.caption = Text.TextUtility.GetCommonText("Option", "take_over_password_input_error");
+			info.message = Text.TextUtility.GetCommonText("Option", "take_over_password_input_error_info");
 			info.buttonType = GeneralWindow.ButtonType.Ok;
 			GeneralWindow.Create(info);
 			return TinyFsmState.End();

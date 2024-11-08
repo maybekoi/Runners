@@ -149,7 +149,7 @@ public class MenuPlayerSetCharaButton : MonoBehaviour
 		if (m_charaLevel != null)
 		{
 			int totalLevel = MenuPlayerSetUtil.GetTotalLevel(m_charaType);
-			m_charaLevel.text = TextUtility.GetTextLevel(string.Format("{0:000}", totalLevel));
+			m_charaLevel.text = Text.TextUtility.GetTextLevel(string.Format("{0:000}", totalLevel));
 		}
 		UpdateRibbon();
 		m_fsm = base.gameObject.AddComponent<TinyFsmBehavior>();
@@ -171,7 +171,7 @@ public class MenuPlayerSetCharaButton : MonoBehaviour
 		m_animEndCallback = callback;
 		m_animEnd = false;
 		int totalLevel = MenuPlayerSetUtil.GetTotalLevel(m_charaType);
-		m_charaLevel.text = TextUtility.GetTextLevel(string.Format("{0:000}", totalLevel));
+		m_charaLevel.text = Text.TextUtility.GetTextLevel(string.Format("{0:000}", totalLevel));
 		Animation animation = GameObjectUtil.FindChildGameObjectComponent<Animation>(base.gameObject, "Btn_player_main");
 		if (animation != null)
 		{

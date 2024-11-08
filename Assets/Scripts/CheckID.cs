@@ -126,8 +126,8 @@ public class CheckID : MonoBehaviour
 		GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
 		info.name = "FirstCaution";
 		info.buttonType = GeneralWindow.ButtonType.Ok;
-		info.caption = TextUtility.GetCommonText("Option", "take_over_attention");
-		info.message = TextUtility.GetCommonText("Option", "take_over_attention_text");
+		info.caption = Text.TextUtility.GetCommonText("Option", "take_over_attention");
+		info.message = Text.TextUtility.GetCommonText("Option", "take_over_attention_text");
 		GeneralWindow.Create(info);
 		m_State = State.FIRST_CAUTION;
 	}

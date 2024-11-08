@@ -81,7 +81,7 @@ public class FirstLaunchInviteFriend : MonoBehaviour
 		case -3:
 		{
 			GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
-			info.caption = TextUtility.GetCommonText("FaceBook", "ui_Lbl_facebook_invite_friend_caption");
+			info.caption = Text.TextUtility.GetCommonText("FaceBook", "ui_Lbl_facebook_invite_friend_caption");
 			int num = 5;
 			ServerInterface loggedInServerInterface = ServerInterface.LoggedInServerInterface;
 			if (loggedInServerInterface != null)
@@ -92,7 +92,7 @@ public class FirstLaunchInviteFriend : MonoBehaviour
 					num = settingState.m_invitBaseIncentive.m_num;
 				}
 			}
-			string text = info.message = TextUtility.GetCommonText("FaceBook", "ui_Lbl_facebook_invite_friend_text", "{RED_STAR_RING_NUM}", num.ToString());
+			string text = info.message = Text.TextUtility.GetCommonText("FaceBook", "ui_Lbl_facebook_invite_friend_text", "{RED_STAR_RING_NUM}", num.ToString());
 			info.anchor_path = m_anchorPath;
 			info.buttonType = GeneralWindow.ButtonType.Ok;
 			GeneralWindow.Create(info);

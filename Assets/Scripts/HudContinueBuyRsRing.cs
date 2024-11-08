@@ -380,8 +380,8 @@ public class HudContinueBuyRsRing : MonoBehaviour
 			cellID2 = "gw_purchase_deferred_text";
 		}
 		GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
-		info.caption = TextUtility.GetCommonText("Shop", cellID);
-		info.message = TextUtility.GetCommonText("Shop", cellID2);
+		info.caption = Text.TextUtility.GetCommonText("Shop", cellID);
+		info.message = Text.TextUtility.GetCommonText("Shop", cellID2);
 		info.anchor_path = "Camera/Anchor_5_MC";
 		info.buttonType = GeneralWindow.ButtonType.Ok;
 		info.isPlayErrorSe = true;
@@ -393,8 +393,8 @@ public class HudContinueBuyRsRing : MonoBehaviour
 	private void PurchaseCanceledCallback()
 	{
 		GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
-		info.caption = TextUtility.GetCommonText("Shop", "gw_purchase_canceled_caption");
-		info.message = TextUtility.GetCommonText("Shop", "gw_purchase_canceled_text");
+		info.caption = Text.TextUtility.GetCommonText("Shop", "gw_purchase_canceled_caption");
+		info.message = Text.TextUtility.GetCommonText("Shop", "gw_purchase_canceled_text");
 		info.anchor_path = "Camera/Anchor_5_MC";
 		info.buttonType = GeneralWindow.ButtonType.Ok;
 		info.isPlayErrorSe = true;

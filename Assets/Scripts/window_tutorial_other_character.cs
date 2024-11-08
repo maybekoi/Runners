@@ -249,33 +249,33 @@ public class window_tutorial_other_character : WindowBase
 			{
 			case window_tutorial.DisplayType.QUICK:
 			{
-				string commonText2 = TextUtility.GetCommonText("Tutorial", "caption_quickmode_tutorial");
-				text = TextUtility.GetCommonText("Tutorial", "caption_explan2", "{PARAM_NAME}", commonText2);
+				string commonText2 = Text.TextUtility.GetCommonText("Tutorial", "caption_quickmode_tutorial");
+				text = Text.TextUtility.GetCommonText("Tutorial", "caption_explan2", "{PARAM_NAME}", commonText2);
 				break;
 			}
 			case window_tutorial.DisplayType.CHARA:
 			{
 				string cellID = CharaName.Name[(int)m_scrollInfo.Chara];
-				string commonText = TextUtility.GetCommonText("CharaName", cellID);
-				text = TextUtility.GetCommonText("Option", "chara_operation_method", "{CHARA_NAME}", commonText);
+				string commonText = Text.TextUtility.GetCommonText("CharaName", cellID);
+				text = Text.TextUtility.GetCommonText("Option", "chara_operation_method", "{CHARA_NAME}", commonText);
 				break;
 			}
 			case window_tutorial.DisplayType.BOSS_MAP_1:
 			{
 				string textCommonBossName3 = BossTypeUtil.GetTextCommonBossName(BossType.MAP1);
-				text = TextUtility.GetCommonText("Option", "boss_attack_method", "{BOSS_NAME}", textCommonBossName3);
+				text = Text.TextUtility.GetCommonText("Option", "boss_attack_method", "{BOSS_NAME}", textCommonBossName3);
 				break;
 			}
 			case window_tutorial.DisplayType.BOSS_MAP_2:
 			{
 				string textCommonBossName2 = BossTypeUtil.GetTextCommonBossName(BossType.MAP2);
-				text = TextUtility.GetCommonText("Option", "boss_attack_method", "{BOSS_NAME}", textCommonBossName2);
+				text = Text.TextUtility.GetCommonText("Option", "boss_attack_method", "{BOSS_NAME}", textCommonBossName2);
 				break;
 			}
 			case window_tutorial.DisplayType.BOSS_MAP_3:
 			{
 				string textCommonBossName = BossTypeUtil.GetTextCommonBossName(BossType.MAP3);
-				text = TextUtility.GetCommonText("Option", "boss_attack_method", "{BOSS_NAME}", textCommonBossName);
+				text = Text.TextUtility.GetCommonText("Option", "boss_attack_method", "{BOSS_NAME}", textCommonBossName);
 				break;
 			}
 			}

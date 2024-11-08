@@ -601,7 +601,7 @@ public class ChaoSetUI : MonoBehaviour
 			chaoSerializeFields.m_chaoSprite.enabled = false;
 			chaoSerializeFields.m_chaoRankSprite.spriteName = "ui_chao_set_bg_l_" + (int)chaoData.rarity;
 			chaoSerializeFields.m_chaoNameLabel.text = chaoData.nameTwolines;
-			chaoSerializeFields.m_chaoLevelLabel.text = TextUtility.GetTextLevel(chaoData.level.ToString());
+			chaoSerializeFields.m_chaoLevelLabel.text = Text.TextUtility.GetTextLevel(chaoData.level.ToString());
 			string str = chaoData.charaAtribute.ToString().ToLower();
 			chaoSerializeFields.m_chaoTypeSprite.spriteName = "ui_chao_set_type_icon_" + str;
 			chaoSerializeFields.m_bonusLabel.gameObject.SetActive(false);

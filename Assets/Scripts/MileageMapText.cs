@@ -60,18 +60,18 @@ public class MileageMapText : MonoBehaviour
 		if (label.IndexOf("cmn_") == 0)
 		{
 			TextManager.TextType type = TextManager.TextType.TEXTTYPE_MILEAGE_MAP_COMMON;
-			return TextUtility.GetText(type, "MileageMap", label);
+			return Text.TextUtility.GetText(type, "MileageMap", label);
 		}
 		int startEpisode = GetStartEpisode(episode);
 		if (m_start_episode == startEpisode)
 		{
 			TextManager.TextType type2 = TextManager.TextType.TEXTTYPE_MILEAGE_MAP_EPISODE;
-			return TextUtility.GetText(type2, "MileageMap", label);
+			return Text.TextUtility.GetText(type2, "MileageMap", label);
 		}
 		if (m_start_pre_episode == startEpisode)
 		{
 			TextManager.TextType type3 = TextManager.TextType.TEXTTYPE_MILEAGE_MAP_PRE_EPISODE;
-			return TextUtility.GetText(type3, "MileageMap", label);
+			return Text.TextUtility.GetText(type3, "MileageMap", label);
 		}
 		return null;
 	}
@@ -81,7 +81,7 @@ public class MileageMapText : MonoBehaviour
 		if (label.IndexOf("cmn_") == 0)
 		{
 			TextManager.TextType type = TextManager.TextType.TEXTTYPE_MILEAGE_MAP_COMMON;
-			return TextUtility.GetText(type, "MileageMap", label);
+			return Text.TextUtility.GetText(type, "MileageMap", label);
 		}
 		return null;
 	}

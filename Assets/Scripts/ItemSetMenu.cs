@@ -787,8 +787,8 @@ public class ItemSetMenu : MonoBehaviour
 						GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
 						info.name = "RaidbossTimeOver";
 						info.buttonType = GeneralWindow.ButtonType.Ok;
-						info.caption = TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Menu", "ui_Lbl_word_raid_boss_bye");
-						info.message = TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Menu", "ui_Lbl_word_raid_boss_bye2");
+						info.caption = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Menu", "ui_Lbl_word_raid_boss_bye");
+						info.message = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Menu", "ui_Lbl_word_raid_boss_bye2");
 						info.anchor_path = "Camera/menu_Anim/ItemSet_3_UI/Anchor_5_MC";
 						GeneralWindow.Create(info);
 						m_isRaidbossTimeOver = true;

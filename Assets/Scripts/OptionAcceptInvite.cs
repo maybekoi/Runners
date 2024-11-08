@@ -28,8 +28,8 @@ public class OptionAcceptInvite : MonoBehaviour
 			GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
 			info.name = "AcceptedInvite";
 			info.buttonType = GeneralWindow.ButtonType.Ok;
-			info.caption = TextUtility.GetCommonText("Option", "accepted_invite_caption");
-			info.message = TextUtility.GetCommonText("Option", "accepted_invite_text");
+			info.caption = Text.TextUtility.GetCommonText("Option", "accepted_invite_caption");
+			info.message = Text.TextUtility.GetCommonText("Option", "accepted_invite_text");
 			GeneralWindow.Create(info);
 		}
 		else

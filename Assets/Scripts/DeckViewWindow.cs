@@ -445,7 +445,7 @@ public class DeckViewWindow : WindowBase
 	{
 		if (bonusLabel != null)
 		{
-			bonusLabel.text = TextUtility.Replaces(TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "clear_percent").text, new Dictionary<string, string>
+			bonusLabel.text = Text.TextUtility.Replaces(TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "DailyMission", "clear_percent").text, new Dictionary<string, string>
 			{
 				{
 					"{PARAM}",
@@ -834,7 +834,7 @@ public class DeckViewWindow : WindowBase
 			if (lv != null)
 			{
 				string text = TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "MainMenu", "ui_LevelNumber").text;
-				lv.text = TextUtility.Replace(text, "{PARAM}", chaoData.level.ToString());
+				lv.text = Text.TextUtility.Replace(text, "{PARAM}", chaoData.level.ToString());
 			}
 			if (name != null)
 			{

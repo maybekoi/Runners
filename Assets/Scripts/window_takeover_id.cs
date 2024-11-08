@@ -52,8 +52,8 @@ public class window_takeover_id : WindowBase
 				uIButtonMessage.functionName = "OnClickCloseButton";
 			}
 		}
-		TextUtility.SetCommonText(m_headerTextLabel, "Option", "take_over");
-		TextUtility.SetCommonText(m_passwordTextLabel, "Option", "password");
+		Text.TextUtility.SetCommonText(m_headerTextLabel, "Option", "take_over");
+		Text.TextUtility.SetCommonText(m_passwordTextLabel, "Option", "password");
 		m_uiAnimation = base.gameObject.AddComponent<UIPlayAnimation>();
 		if (m_uiAnimation != null)
 		{

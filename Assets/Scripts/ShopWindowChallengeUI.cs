@@ -143,7 +143,7 @@ public class ShopWindowChallengeUI : MonoBehaviour
 		{
 			bool flag = ServerInterface.IsRSREnable();
 			GeneralWindow.ButtonType buttonType = (!flag) ? GeneralWindow.ButtonType.Ok : GeneralWindow.ButtonType.YesNo;
-			string message = (!flag) ? TextUtility.GetCommonText("ChaoRoulette", "gw_cost_caption_text_2") : ShopUI.GetText("gw_rsring_short_error_text");
+			string message = (!flag) ? Text.TextUtility.GetCommonText("ChaoRoulette", "gw_cost_caption_text_2") : ShopUI.GetText("gw_rsring_short_error_text");
 			GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
 			info.name = "RingShortError";
 			info.buttonType = buttonType;

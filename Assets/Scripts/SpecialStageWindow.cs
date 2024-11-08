@@ -851,7 +851,7 @@ public class SpecialStageWindow : EventWindowBase
 			chaoInfo.detail = chaoData.GetDetailsLevel(chaoInfo.level);
 			if (chaoInfo.level == ChaoTable.ChaoMaxLevel())
 			{
-				chaoInfo.detail = chaoInfo.detail + "\n" + TextUtility.GetChaoText("Chao", "level_max");
+				chaoInfo.detail = chaoInfo.detail + "\n" + Text.TextUtility.GetChaoText("Chao", "level_max");
 			}
 			window.OpenWindow(chaoInfo, ChaoSetWindowUI.WindowType.WINDOW_ONLY);
 		}

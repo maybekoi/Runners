@@ -90,10 +90,10 @@ public class window_sound_setiing : WindowBase
 				}
 			}
 		}
-		TextUtility.SetCommonText(m_headerTextLabel, "Option", "sound_config");
-		TextUtility.SetCommonText(m_headerSubTextLabel, "Option", "sound_config_info");
-		TextUtility.SetCommonText(m_BGMTextLabel, "Option", "sound_bgm");
-		TextUtility.SetCommonText(m_SETextLabel, "Option", "sound_se");
+		Text.TextUtility.SetCommonText(m_headerTextLabel, "Option", "sound_config");
+		Text.TextUtility.SetCommonText(m_headerSubTextLabel, "Option", "sound_config_info");
+		Text.TextUtility.SetCommonText(m_BGMTextLabel, "Option", "sound_bgm");
+		Text.TextUtility.SetCommonText(m_SETextLabel, "Option", "sound_se");
 		if (m_closeBtn != null)
 		{
 			UIPlayAnimation component = m_closeBtn.GetComponent<UIPlayAnimation>();

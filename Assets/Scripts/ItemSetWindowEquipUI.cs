@@ -188,7 +188,7 @@ public class ItemSetWindowEquipUI : MonoBehaviour
 	public static string GetItemDetailsText(ShopItemData shopItemData)
 	{
 		ItemType id = (ItemType)shopItemData.id;
-		return TextUtility.Replaces(shopItemData.details, new Dictionary<string, string>
+		return Text.TextUtility.Replaces(shopItemData.details, new Dictionary<string, string>
 		{
 			{
 				"{LEVEL}",

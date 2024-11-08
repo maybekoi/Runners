@@ -117,8 +117,8 @@ public class FirstLaunchRecommendReview : MonoBehaviour
 		case -3:
 		{
 			GeneralWindow.CInfo info = default(GeneralWindow.CInfo);
-			info.caption = TextUtility.GetCommonText("FaceBook", "ui_Lbl_recommend_review_caption");
-			string text = info.message = TextUtility.GetCommonText("FaceBook", "ui_Lbl_recommend_review_text", "{RED_STAR_RING_NUM}", "5");
+			info.caption = Text.TextUtility.GetCommonText("FaceBook", "ui_Lbl_recommend_review_caption");
+			string text = info.message = Text.TextUtility.GetCommonText("FaceBook", "ui_Lbl_recommend_review_text", "{RED_STAR_RING_NUM}", "5");
 			info.anchor_path = m_anchorPath;
 			info.buttonType = GeneralWindow.ButtonType.YesNo;
 			GeneralWindow.Create(info);

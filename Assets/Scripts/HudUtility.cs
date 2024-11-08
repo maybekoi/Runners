@@ -72,13 +72,13 @@ public class HudUtility
 	public static string GetEventStageName(int specificId)
 	{
 		string cellID = "sp_stage_name_" + specificId;
-		return TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Name", cellID);
+		return Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Name", cellID);
 	}
 
 	public static string GetEventSpObjectName(int specificId)
 	{
 		string cellID = "sp_object_name_" + specificId;
-		return TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Name", cellID);
+		return Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Name", cellID);
 	}
 
 	public static string MakeCharaTextureName(CharaType chara, TextureType texType)
@@ -296,7 +296,7 @@ public class HudUtility
 
 	public static string GetChaoCountBonusText(float value)
 	{
-		return TextUtility.Replace(TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "ChaoSet", "bonus_percent").text, "{BONUS}", value.ToString("F1"));
+		return Text.TextUtility.Replace(TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "ChaoSet", "bonus_percent").text, "{BONUS}", value.ToString("F1"));
 	}
 
 	public static void SetChaoTexture(UITexture uiTex, int chaoId, bool refreshFlag)

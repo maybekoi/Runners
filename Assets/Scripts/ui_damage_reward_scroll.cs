@@ -186,7 +186,7 @@ public class ui_damage_reward_scroll : MonoBehaviour
 				}
 			}
 			string text2 = TextManager.GetText(TextManager.TextType.TEXTTYPE_COMMON_TEXT, "ItemRoulette", "odds").text;
-			m_damageRateLabel.text = TextUtility.Replace(text2, "{ODDS}", string.Empty + num2);
+			m_damageRateLabel.text = Text.TextUtility.Replace(text2, "{ODDS}", string.Empty + num2);
 			m_damage.value = num;
 			m_damage.ForceUpdate();
 		}

@@ -68,7 +68,7 @@ public class DailyBattleRewardWindow : WindowBase
 				{
 					winWindow.SetActive(false);
 					loseWindow.SetActive(true);
-					string loseText = TextUtility.GetCommonText("DailyMission", "battle_vsreward_text3");
+					string loseText = Text.TextUtility.GetCommonText("DailyMission", "battle_vsreward_text3");
 					UILabel loseLabel = GameObjectUtil.FindChildGameObjectComponent<UILabel>(loseWindow, "Lbl_daily_battle_lose");
 					if (loseLabel != null)
 					{

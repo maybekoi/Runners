@@ -37,7 +37,7 @@ public class SpecialStageInfo : EventBaseInfo
 		m_eventCaption = m_eventName;
 		m_eventText = "スペシャルステージイベント説明（デバック）\n\n\u3000あいうえお\n\u30001234567890\n\u3000ABCDEFG\n\n\u3000期間: XX/XX  XX:XX  -  XX/XX  XX:XX";
 		m_eventMission = new List<EventMission>();
-		string text = TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Result", "ui_Lbl_word_get_total");
+		string text = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Result", "ui_Lbl_word_get_total");
 		List<ServerEventReward> rewardList = EventManager.Instance.RewardList;
 		if (rewardList != null)
 		{
@@ -45,7 +45,7 @@ public class SpecialStageInfo : EventBaseInfo
 			{
 				ServerEventReward serverEventReward = rewardList[i];
 				string eventSpObjectName = HudUtility.GetEventSpObjectName();
-				string name = TextUtility.Replace(text, "{PARAM_OBJ}", eventSpObjectName);
+				string name = Text.TextUtility.Replace(text, "{PARAM_OBJ}", eventSpObjectName);
 				m_eventMission.Add(new EventMission(name, serverEventReward.Param, serverEventReward.m_itemId, serverEventReward.m_num));
 			}
 		}
@@ -73,7 +73,7 @@ public class SpecialStageInfo : EventBaseInfo
 			}
 		}
 		int chaoLevel = ChaoTable.ChaoMaxLevel();
-		m_leftTitle = TextUtility.GetCommonText("Roulette", "ui_Lbl_word_best_chao");
+		m_leftTitle = Text.TextUtility.GetCommonText("Roulette", "ui_Lbl_word_best_chao");
 		if (m_rewardChao.Count > 0)
 		{
 			m_leftName = m_rewardChao[0].nameTwolines;
@@ -103,8 +103,8 @@ public class SpecialStageInfo : EventBaseInfo
 				break;
 			}
 		}
-		m_caption = TextUtility.GetCommonText("Event", "ui_Lbl_event_reward_list");
-		m_rightTitle = TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Menu", "ui_Lbl_word_get_total");
+		m_caption = Text.TextUtility.GetCommonText("Event", "ui_Lbl_event_reward_list");
+		m_rightTitle = Text.TextUtility.GetText(TextManager.TextType.TEXTTYPE_EVENT_COMMON_TEXT, "Menu", "ui_Lbl_word_get_total");
 		m_rightTitleIcon = "ui_event_object_icon";
 		m_init = true;
 	}

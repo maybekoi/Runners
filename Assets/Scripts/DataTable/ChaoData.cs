@@ -349,7 +349,7 @@ namespace DataTable
 		public string GetFeaturedDetail()
 		{
 			string cellID = "featured_footnote" + id.ToString("D4");
-			return TextUtility.GetChaoText("Chao", cellID);
+			return Text.TextUtility.GetChaoText("Chao", cellID);
 		}
 
 		public string GetDetailLevelPlusSP(int chaoLevel)
@@ -476,7 +476,7 @@ namespace DataTable
 				}
 			}
 			Dictionary<string, string> replaceDic = CreateReplacesDic(loadingLongDetails, param, param2);
-			return TextUtility.Replaces(loadingLongDetails, replaceDic);
+			return Text.TextUtility.Replaces(loadingLongDetails, replaceDic);
 		}
 
 		public string GetDetailsLevel(int chaoLevel)
@@ -500,7 +500,7 @@ namespace DataTable
 				}
 			}
 			Dictionary<string, string> replaceDic = CreateReplacesDic(details, param, param2);
-			return TextUtility.Replaces(details, replaceDic);
+			return Text.TextUtility.Replaces(details, replaceDic);
 		}
 
 		public string GetKingArtherDetailsLevel(int chaoLevel, bool loadingLoingDetalFlag)
@@ -532,7 +532,7 @@ namespace DataTable
 				currentAbility = 0;
 			}
 			Dictionary<string, string> replaceDic = CreateReplacesDic(text, param, param2, param3, param4);
-			return TextUtility.Replaces(text, replaceDic);
+			return Text.TextUtility.Replaces(text, replaceDic);
 		}
 
 		public string GetSPDetailsLevel(int chaoLevel)
@@ -593,7 +593,7 @@ namespace DataTable
 				}
 			}
 			Dictionary<string, string> replaceDic = CreateReplacesDic(growDetails, param, param2, param3, param4);
-			return TextUtility.Replaces(growDetails, replaceDic);
+			return Text.TextUtility.Replaces(growDetails, replaceDic);
 		}
 
 		private string GetKingArtherGrowDetailsLevel(int chaoLevel)
@@ -639,7 +639,7 @@ namespace DataTable
 			}
 			List<float> paramList = new List<float>(array);
 			Dictionary<string, string> replaceDic = CreateReplacesDic(growDetails, paramList);
-			return TextUtility.Replaces(growDetails, replaceDic);
+			return Text.TextUtility.Replaces(growDetails, replaceDic);
 		}
 
 		public string GetSPGrowDetailsLevel(int chaoLevel)
@@ -682,7 +682,7 @@ namespace DataTable
 				}
 			}
 			Dictionary<string, string> replaceDic = CreateReplacesDic(loadingDetails, param, param2);
-			return TextUtility.Replaces(loadingDetails, replaceDic);
+			return Text.TextUtility.Replaces(loadingDetails, replaceDic);
 		}
 
 		public string GetKingArtherLoadingDetailsLevel(int chaoLevel)
@@ -713,7 +713,7 @@ namespace DataTable
 				currentAbility = 0;
 			}
 			Dictionary<string, string> replaceDic = CreateReplacesDic(loadingDetails, param, param2, param3, param4);
-			return TextUtility.Replaces(loadingDetails, replaceDic);
+			return Text.TextUtility.Replaces(loadingDetails, replaceDic);
 		}
 
 		public string GetSPLoadingDetailsLevel(int chaoLevel)
@@ -752,7 +752,7 @@ namespace DataTable
 				}
 			}
 			Dictionary<string, string> replaceDic = CreateReplacesDic(menuDetails, param, param2);
-			return TextUtility.Replaces(menuDetails, replaceDic);
+			return Text.TextUtility.Replaces(menuDetails, replaceDic);
 		}
 
 		public string GetKingArtherMainMenuDetailsLevel(int chaoLevel)
@@ -783,7 +783,7 @@ namespace DataTable
 				currentAbility = 0;
 			}
 			Dictionary<string, string> replaceDic = CreateReplacesDic(menuDetails, param, param2, param3, param4);
-			return TextUtility.Replaces(menuDetails, replaceDic);
+			return Text.TextUtility.Replaces(menuDetails, replaceDic);
 		}
 
 		public string GetSPMainMenuDetailsLevel(int chaoLevel)
