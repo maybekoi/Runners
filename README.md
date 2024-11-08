@@ -16,6 +16,8 @@
 
 * F121Live - NGUI :D
 
+* fluofoxxo - Assets Server
+
 # How to setup SRU18
 
 By: YoPhlox
