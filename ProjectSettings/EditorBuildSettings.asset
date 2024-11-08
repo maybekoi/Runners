@@ -1,0 +1,3167 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Runners Assets/Scenes/Title/s_title.unity
+  - enabled: 1
+    path: Assets/Runners Assets/Scenes/Title/s_title_reset.unity
+  - enabled: 1
+    path: Assets/Runners Assets/Scenes/Debug/DebugMenu.unity
+  - enabled: 1
+    path: Assets/Runners Assets/Scenes/stage/s_playingstage.unity
+  - enabled: 1
+    path: Assets/Runners Assets/Scenes/Menu/MainMenu.unity
+  - enabled: 1
+    path: Assets/Runners Assets/Scenes/ResourceData/CommonObjectPrefabs.unity
+  - enabled: 1
+    path: Assets/Runners Assets/Scenes/ResourceData/CommonEnemyPrefabs.unity
+  - enabled: 1
+    path: Assets/Runners Assets/Scenes/UI/Roulette/RouletteAnim.unity
+  - enabled: 1
+    path: Assets/Runners Assets/Scenes/UI/Roulette/TutorialAnim.unity
+  - enabled: 1
+    path: Assets/Runners Assets/Scenes/UI/ShopMenu/AgeVerificationWindow.unity
+  - enabled: 1
+    path: Assets/AssetBundles/AchievementTable.unity
+  - enabled: 1
+    path: Assets/AssetBundles/AgeVerificationWindow.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_0000.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_0001.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_0002.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_0003.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_0004.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_0005.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_0006.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_0007.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_0008.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_0009.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_0010.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_0011.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_0012.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_0013.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_0014.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_0015.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_0016.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_0017.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_0018.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_0019.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_0020.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_0021.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_0022.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_0023.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_0024.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_0025.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_0026.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1000.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1001.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1002.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1003.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1004.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1005.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1006.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1007.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1008.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1009.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1010.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1011.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1012.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1013.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1014.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1015.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1016.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1017.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1018.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1019.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1020.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1021.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1022.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1023.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1024.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1025.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1026.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1027.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1028.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1029.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1030.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1031.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1032.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1033.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1034.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1035.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1036.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1037.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1038.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1039.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1040.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1041.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1042.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1043.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1044.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1045.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1046.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_1047.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_2000.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_2001.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_2002.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_2003.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_2004.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_2005.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_2006.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_2007.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_2008.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_2009.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_2010.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_2011.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_2012.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_2013.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_2014.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_2015.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_2016.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_2017.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_2018.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_2019.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_2020.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_2021.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_2022.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_2023.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_2024.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_2025.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_2026.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_2027.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_2028.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_2029.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_2030.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_2031.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_2032.unity
+  - enabled: 1
+    path: Assets/AssetBundles/chao_2034.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ChaoDataTable.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ChaoSetUIPage.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ChaoSetWindowUI.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ChaoTextures.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ChaoWindows.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharaAbilityDataTable.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterCommonResource.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterDataNameInfo.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterEffectAmitieAmy.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterEffectAmy.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterEffectBig.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterEffectBlaze.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterEffectCharmy.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterEffectClassicSonic.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterEffectCream.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterEffectEspio.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterEffectGothicAmy.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterEffectHalloweenOmega.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterEffectHalloweenRouge.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterEffectHalloweenShadow.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterEffectKnuckles.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterEffectMephiles.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterEffectMetalSonic.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterEffectOmega.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterEffectPsiSilver.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterEffectRouge.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterEffectShadow.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterEffectSilver.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterEffectSonic.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterEffectSticks.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterEffectTails.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterEffectTikal.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterEffectVector.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterEffectWerehog.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterEffectXmasKnuckles.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterEffectXmasSonic.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterEffectXmasTails.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterModelAmitieAmy.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterModelAmy.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterModelBig.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterModelBlaze.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterModelCharmy.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterModelClassicSonic.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterModelCream.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterModelEspio.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterModelGothicAmy.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterModelHalloweenOmega.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterModelHalloweenRouge.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterModelHalloweenShadow.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterModelKnuckles.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterModelMephiles.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterModelMetalSonic.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterModelOmega.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterModelPsiSilver.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterModelRouge.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterModelShadow.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterModelSilver.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterModelSonic.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterModelSticks.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterModelTails.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterModelTikal.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterModelVector.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterModelWerehog.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterModelXmasKnuckles.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterModelXmasSonic.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CharacterModelXmasTails.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CommonEnemyResource.unity
+  - enabled: 1
+    path: Assets/AssetBundles/CommonObjectResource.unity
+  - enabled: 1
+    path: Assets/AssetBundles/DailyBattleDetailWindow.unity
+  - enabled: 1
+    path: Assets/AssetBundles/DailybattleRewardWindowUI.unity
+  - enabled: 1
+    path: Assets/AssetBundles/DailyInfoUI.unity
+  - enabled: 1
+    path: Assets/AssetBundles/DailyWindowUI.unity
+  - enabled: 1
+    path: Assets/AssetBundles/DeckViewWindow.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceCommonAdvert_50001.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceCommonAdvert_50002.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceCommonAdvert_50003.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceCommonAdvert_51001.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceCommonAdvert_52001.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceCommonBGM_70001.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceCommonBGM_70002.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceCommonBGM_70003.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceCommonBGM_70004.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceCommonBGM_70005.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceCommonCollectObject_30000.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceCommonCollectObject_30001.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceCommonCollectObject_30002.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceCommonCollectObject_30003.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceCommonGacha_40001.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceCommonGacha_40002.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceCommonGacha_40003.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceCommonGacha_40004.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceCommonGacha_40005.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceCommonGacha_40006.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceCommonQuick_60001.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceCommonQuick_60002.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceCommonQuick_60003.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceCommonQuick_60004.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceCommonQuick_60005.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceCommonQuick_60006.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceCommonRaidBoss_20001.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceCommonRaidBoss_20002.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceCommonSpecialStage_10000.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceCommonSpecialStage_10001.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceCommonSpecialStage_10002.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceCommonSpecialStage_10003.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceCommonSpecialStage_10004.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceCommonSpecialStage_10005.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceCommonSpecialStage_10006.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceMenuCollectObject_30000.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceMenuCollectObject_30001.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceMenuCollectObject_30002.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceMenuCollectObject_30003.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceMenuQuick_60001.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceMenuRaidBoss_20001.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceMenuRaidBoss_20002.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceMenuSpecialStage_10000.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceMenuSpecialStage_10001.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceMenuSpecialStage_10002.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceMenuSpecialStage_10003.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceMenuSpecialStage_10004.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceMenuSpecialStage_10005.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceMenuSpecialStage_10006.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceStageCollectObject_30000.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceStageCollectObject_30001.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceStageCollectObject_30002.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceStageCollectObject_30003.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceStageQuick_60001.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceStageQuick_60002.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceStageQuick_60003.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceStageQuick_60004.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceStageQuick_60005.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceStageQuick_60006.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceStageRaidBoss_20001.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceStageRaidBoss_20002.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceStageSpecialStage_10000.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceStageSpecialStage_10001.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceStageSpecialStage_10002.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceStageSpecialStage_10003.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceStageSpecialStage_10004.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceStageSpecialStage_10005.unity
+  - enabled: 1
+    path: Assets/AssetBundles/EventResourceStageSpecialStage_10006.unity
+  - enabled: 1
+    path: Assets/AssetBundles/InformationUI.unity
+  - enabled: 1
+    path: Assets/AssetBundles/item_get_Window.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ItemSet_3_UI.unity
+  - enabled: 1
+    path: Assets/AssetBundles/LeagueResultWindowUI.unity
+  - enabled: 1
+    path: Assets/AssetBundles/LoginWindowUI.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MainMenuPages.unity
+  - enabled: 1
+    path: Assets/AssetBundles/Mileage_rankup.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageDataTable.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData001_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData002_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData003_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData004_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData005_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData006_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData006_02.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData007_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData008_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData009_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData010_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData011_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData011_02.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData012_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData013_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData014_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData015_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData016_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData016_02.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData017_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData018_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData019_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData019_02.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData020_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData020_02.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData021_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData022_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData022_02.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData023_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData023_02.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData024_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData024_02.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData025_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData026_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData027_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData028_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData029_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData029_02.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData030_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData031_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData031_02.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData032_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData033_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData033_02.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData034_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData035_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData036_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData036_02.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData037_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData038_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData038_02.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData039_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData039_02.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData040_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData040_02.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData040_03.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData041_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData041_02.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData041_03.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData042_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData042_02.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData043_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData043_02.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData044_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData044_02.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData045_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData046_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData046_02.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData047_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData047_02.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData048_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData048_02.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData049_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData049_02.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData050_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData050_02.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData050_03.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData050_04.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData050_05.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData901_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData901_02.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MileageMapData902_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/MissionTable.unity
+  - enabled: 1
+    path: Assets/AssetBundles/NewsWindow.unity
+  - enabled: 1
+    path: Assets/AssetBundles/NGWordTable.unity
+  - enabled: 1
+    path: Assets/AssetBundles/OptionUI.unity
+  - enabled: 1
+    path: Assets/AssetBundles/OptionWindows.unity
+  - enabled: 1
+    path: Assets/AssetBundles/OverlapBonusTable.unity
+  - enabled: 1
+    path: Assets/AssetBundles/PlayerSet_3_UI.unity
+  - enabled: 1
+    path: Assets/AssetBundles/PlayerSetWindowUI.unity
+  - enabled: 1
+    path: Assets/AssetBundles/PresentBoxUI.unity
+  - enabled: 1
+    path: Assets/AssetBundles/RankingFriendOptionWindow.unity
+  - enabled: 1
+    path: Assets/AssetBundles/RankingResultBitWindow.unity
+  - enabled: 1
+    path: Assets/AssetBundles/RankingWindowUI.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ResourcesCommonEffect.unity
+  - enabled: 1
+    path: Assets/AssetBundles/RouletteTopUI.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ShopPage.unity
+  - enabled: 1
+    path: Assets/AssetBundles/StageTimeTable.unity
+  - enabled: 1
+    path: Assets/AssetBundles/StartDashWindowUI.unity
+  - enabled: 1
+    path: Assets/AssetBundles/TenseEffectTable.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_chao_text_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_chao_text_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_chao_text_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_chao_text_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_chao_text_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_chao_text_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_chao_text_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_chao_text_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_chao_text_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_chao_text_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_chao_text_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_common_text_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_common_text_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_common_text_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_common_text_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_common_text_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_common_text_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_common_text_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_common_text_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_common_text_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_common_text_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_common_text_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10001_text_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10001_text_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10001_text_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10001_text_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10001_text_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10001_text_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10001_text_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10001_text_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10001_text_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10001_text_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10001_text_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10002_text_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10002_text_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10002_text_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10002_text_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10002_text_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10002_text_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10002_text_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10002_text_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10002_text_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10002_text_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10002_text_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10003_text_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10003_text_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10003_text_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10003_text_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10003_text_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10003_text_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10003_text_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10003_text_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10003_text_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10003_text_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10003_text_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10004_text_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10004_text_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10004_text_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10004_text_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10004_text_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10004_text_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10004_text_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10004_text_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10004_text_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10004_text_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10004_text_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10005_text_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10005_text_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10005_text_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10005_text_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10005_text_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10005_text_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10005_text_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10005_text_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10005_text_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10005_text_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10005_text_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10006_text_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10006_text_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10006_text_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10006_text_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10006_text_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10006_text_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10006_text_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10006_text_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10006_text_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10006_text_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_10006_text_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_20001_text_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_20001_text_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_20001_text_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_20001_text_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_20001_text_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_20001_text_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_20001_text_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_20001_text_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_20001_text_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_20001_text_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_20001_text_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_20002_text_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_20002_text_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_20002_text_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_20002_text_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_20002_text_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_20002_text_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_20002_text_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_20002_text_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_20002_text_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_20002_text_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_20002_text_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_common_text_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_common_text_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_common_text_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_common_text_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_common_text_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_common_text_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_common_text_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_common_text_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_common_text_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_common_text_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_event_common_text_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_common_text_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_common_text_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_common_text_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_common_text_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_common_text_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_common_text_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_common_text_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_common_text_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_common_text_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_common_text_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_common_text_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_01_to_10_text_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_01_to_10_text_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_01_to_10_text_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_01_to_10_text_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_01_to_10_text_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_01_to_10_text_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_01_to_10_text_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_01_to_10_text_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_01_to_10_text_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_01_to_10_text_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_01_to_10_text_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_11_to_20_text_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_11_to_20_text_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_11_to_20_text_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_11_to_20_text_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_11_to_20_text_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_11_to_20_text_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_11_to_20_text_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_11_to_20_text_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_11_to_20_text_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_11_to_20_text_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_11_to_20_text_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_21_to_30_text_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_21_to_30_text_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_21_to_30_text_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_21_to_30_text_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_21_to_30_text_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_21_to_30_text_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_21_to_30_text_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_21_to_30_text_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_21_to_30_text_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_21_to_30_text_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_21_to_30_text_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_31_to_40_text_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_31_to_40_text_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_31_to_40_text_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_31_to_40_text_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_31_to_40_text_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_31_to_40_text_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_31_to_40_text_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_31_to_40_text_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_31_to_40_text_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_31_to_40_text_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_31_to_40_text_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_41_to_50_text_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_41_to_50_text_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_41_to_50_text_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_41_to_50_text_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_41_to_50_text_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_41_to_50_text_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_41_to_50_text_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_41_to_50_text_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_41_to_50_text_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_41_to_50_text_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/text_mileage_map_episode_41_to_50_text_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_cmn_item_Atlas.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_cmn_player_bundle_Atlas.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10000_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10000_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10000_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10000_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10000_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10000_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10000_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10000_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10000_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10000_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10001_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10001_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10001_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10001_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10001_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10001_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10001_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10001_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10001_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10001_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10001_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10002_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10002_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10002_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10002_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10002_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10002_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10002_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10002_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10002_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10002_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10002_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10003_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10003_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10003_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10003_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10003_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10003_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10003_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10003_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10003_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10003_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10003_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10004_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10004_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10004_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10004_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10004_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10004_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10004_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10004_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10004_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10004_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10004_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10005_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10005_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10005_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10005_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10005_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10005_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10005_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10005_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10005_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10005_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10005_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10006_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10006_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10006_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10006_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10006_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10006_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10006_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10006_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10006_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10006_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_10006_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_20000_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_20000_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_20000_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_20000_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_20000_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_20000_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_20000_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_20000_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_20000_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_20000_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_20000_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_20001_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_20001_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_20001_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_20001_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_20001_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_20001_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_20001_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_20001_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_20001_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_20001_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_20001_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_20002_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_20002_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_20002_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_20002_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_20002_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_20002_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_20002_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_20002_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_20002_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_20002_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_20002_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_30000_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_30000_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_30000_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_30000_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_30000_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_30000_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_30000_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_30000_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_30000_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_30000_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_30000_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_30001_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_30001_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_30001_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_30001_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_30001_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_30001_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_30001_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_30001_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_30001_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_30001_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_30001_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_30002_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_30002_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_30002_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_30002_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_30002_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_30002_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_30002_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_30002_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_30002_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_30002_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_30002_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_30003_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_30003_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_30003_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_30003_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_30003_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_30003_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_30003_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_30003_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_30003_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_30003_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_30003_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40001_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40001_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40001_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40001_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40001_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40001_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40001_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40001_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40001_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40001_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40001_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40002_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40002_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40002_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40002_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40002_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40002_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40002_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40002_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40002_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40002_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40002_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40003_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40003_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40003_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40003_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40003_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40003_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40003_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40003_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40003_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40003_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40003_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40004_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40004_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40004_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40004_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40004_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40004_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40004_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40004_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40004_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40004_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40004_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40005_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40005_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40005_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40005_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40005_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40005_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40005_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40005_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40005_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40005_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40005_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40006_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40006_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40006_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40006_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40006_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40006_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40006_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40006_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40006_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40006_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_40006_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_50001_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_50001_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_50001_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_50001_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_50001_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_50001_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_50001_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_50001_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_50001_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_50001_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_50001_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_50002_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_50002_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_50002_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_50002_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_50002_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_50002_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_50002_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_50002_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_50002_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_50002_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_50002_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_50003_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_50003_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_50003_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_50003_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_50003_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_50003_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_50003_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_50003_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_50003_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_50003_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_50003_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_51001_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_51001_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_51001_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_51001_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_51001_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_51001_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_51001_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_51001_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_51001_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_51001_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_51001_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_52001_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_52001_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_52001_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_52001_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_52001_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_52001_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_52001_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_52001_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_52001_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_52001_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_52001_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60001_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60001_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60001_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60001_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60001_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60001_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60001_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60001_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60001_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60001_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60001_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60002_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60002_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60002_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60002_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60002_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60002_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60002_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60002_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60002_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60002_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60002_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60003_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60003_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60003_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60003_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60003_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60003_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60003_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60003_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60003_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60003_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60003_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60004_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60004_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60004_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60004_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60004_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60004_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60004_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60004_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60004_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60004_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60004_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60005_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60005_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60005_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60005_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60005_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60005_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60005_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60005_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60005_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60005_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60005_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60006_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60006_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60006_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60006_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60006_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60006_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60006_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60006_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60006_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60006_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_60006_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70001_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70001_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70001_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70001_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70001_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70001_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70001_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70001_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70001_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70001_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70001_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70002_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70002_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70002_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70002_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70002_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70002_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70002_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70002_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70002_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70002_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70002_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70003_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70003_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70003_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70003_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70003_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70003_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70003_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70003_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70003_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70003_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70003_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70004_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70004_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70004_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70004_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70004_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70004_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70004_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70004_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70004_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70004_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70004_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70005_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70005_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70005_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70005_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70005_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70005_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70005_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70005_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70005_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70005_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_event_70005_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_gp_bit_word_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_gp_bit_word_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_gp_bit_word_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_gp_bit_word_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_gp_bit_word_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_gp_bit_word_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_gp_bit_word_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_gp_bit_word_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_gp_bit_word_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_gp_bit_word_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_gp_bit_word_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_gp_word_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_gp_word_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_gp_word_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_gp_word_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_gp_word_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_gp_word_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_gp_word_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_gp_word_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_gp_word_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_gp_word_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_gp_word_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_item_set_2_word_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_item_set_2_word_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_item_set_2_word_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_item_set_2_word_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_item_set_2_word_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_item_set_2_word_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_item_set_2_word_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_item_set_2_word_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_item_set_2_word_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_item_set_2_word_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_item_set_2_word_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_load_word_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_load_word_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_load_word_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_load_word_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_load_word_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_load_word_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_load_word_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_load_word_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_load_word_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_load_word_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_load_word_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_mm_contents_word_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_mm_contents_word_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_mm_contents_word_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_mm_contents_word_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_mm_contents_word_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_mm_contents_word_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_mm_contents_word_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_mm_contents_word_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_mm_contents_word_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_mm_contents_word_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_mm_contents_word_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_mm_info_page_word_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_mm_info_page_word_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_mm_info_page_word_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_mm_info_page_word_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_mm_info_page_word_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_mm_info_page_word_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_mm_info_page_word_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_mm_info_page_word_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_mm_info_page_word_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_mm_info_page_word_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_mm_info_page_word_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_mm_main2_page.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_mm_mileage2_page.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_mm_ranking_page.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_player_set_2_word_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_player_set_2_word_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_player_set_2_word_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_player_set_2_word_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_player_set_2_word_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_player_set_2_word_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_player_set_2_word_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_player_set_2_word_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_player_set_2_word_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_player_set_2_word_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_player_set_2_word_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_ranking_word_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_ranking_word_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_ranking_word_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_ranking_word_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_ranking_word_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_ranking_word_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_ranking_word_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_ranking_word_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_ranking_word_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_ranking_word_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_ranking_word_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_result_Atlas.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_result_word_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_result_word_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_result_word_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_result_word_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_result_word_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_result_word_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_result_word_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_result_word_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_result_word_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_result_word_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_result_word_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_roulette_word_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_roulette_word_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_roulette_word_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_roulette_word_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_roulette_word_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_roulette_word_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_roulette_word_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_roulette_word_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_roulette_word_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_roulette_word_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_roulette_word_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_shop_word_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_shop_word_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_shop_word_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_shop_word_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_shop_word_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_shop_word_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_shop_word_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_shop_word_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_shop_word_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_shop_word_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_shop_word_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_0000.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_0001.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_0002.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_0003.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_0004.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_0005.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_0006.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_0007.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_0008.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_0009.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_0010.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_0011.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_0012.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_0013.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_0014.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_0015.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_0016.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_0017.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_0018.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_0019.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_0020.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_0021.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_0022.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_0023.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_0024.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_0025.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1000.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1001.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1002.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1003.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1004.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1005.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1006.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1007.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1008.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1009.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1010.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1011.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1012.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1013.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1014.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1015.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1016.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1017.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1018.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1019.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1020.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1021.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1022.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1023.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1024.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1025.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1026.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1027.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1028.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1029.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1030.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1031.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1032.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1033.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1034.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1035.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1036.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1037.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1038.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1039.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1040.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1041.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1042.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1043.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1044.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1045.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1046.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_1047.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_2000.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_2001.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_2002.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_2003.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_2004.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_2005.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_2006.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_2007.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_2008.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_2009.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_2010.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_2011.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_2012.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_2013.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_2014.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_2015.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_2016.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_2017.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_2018.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_2019.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_2020.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_2021.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_2022.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_2023.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_2024.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_2025.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_2026.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_2027.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_2028.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_2029.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_2030.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_2031.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_2032.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_chao_2034.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0000.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0001.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0002.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0003.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0004.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0005.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0006.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0007.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0008.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0009.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0010.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0011.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0012.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0013.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0014.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0015.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0016.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0017.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0018.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0019.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0020.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0021.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0022.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0023.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0024.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0025.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0026.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0027.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0028.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0029.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0030.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0031.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0032.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0033.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0034.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0035.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0036.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0037.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0038.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0039.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0040.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0041.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0042.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0043.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0044.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0045.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0046.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0047.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0048.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0049.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0050.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0051.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0052.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0053.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0054.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0055.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0056.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0057.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0058.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0059.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0060.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0061.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0062.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0063.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0064.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0065.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0066.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0067.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0068.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0069.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0070.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0071.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0072.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0073.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0074.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0075.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0076.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0077.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0078.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0079.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0080.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0081.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0082.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0083.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0084.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0085.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0086.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0087.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0088.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0089.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0090.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0091.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0092.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0093.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0094.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0095.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0096.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0097.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0098.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0099.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0100.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0101.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0102.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0103.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0104.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0105.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0106.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0107.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0108.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0109.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0110.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0111.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0112.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0113.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0114.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0115.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0116.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0117.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0118.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0119.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0120.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0121.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0122.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0123.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0124.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0125.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0126.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0127.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0128.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0129.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0130.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0131.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0132.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0133.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0134.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0135.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0136.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0137.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0138.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0139.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0140.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0141.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0142.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0143.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0144.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0145.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0146.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0147.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0148.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0149.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0150.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0151.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0152.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0153.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0154.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0155.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0156.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0157.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0158.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0159.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0160.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0161.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0162.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0163.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0164.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0165.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0166.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0167.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0168.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0169.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0170.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0171.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0172.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0173.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0174.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0175.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0176.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0177.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0178.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0179.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0180.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0181.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0182.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0183.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0184.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0185.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0186.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0187.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0188.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0189.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0190.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0191.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0192.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0193.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0194.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0195.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0196.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0197.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0198.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0199.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0200.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0201.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0202.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0203.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0204.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0205.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0206.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0207.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0208.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0209.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0210.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0211.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0212.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0213.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0214.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0215.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0216.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0217.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0218.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0219.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0220.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0221.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0222.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0223.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0224.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0225.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0226.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0227.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0228.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0229.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0230.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0231.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0232.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0233.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0234.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0235.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0236.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0237.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0238.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0239.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0240.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0241.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0242.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0243.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0244.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0245.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0246.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0247.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0248.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0249.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0250.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0251.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0252.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0253.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_event_0254.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_mile_w01A.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_mile_w01B.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_mile_w02A.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_mile_w02B.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_mile_w03A.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_mile_w03B.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_mile_w04A.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_mile_w05A.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_mile_w06A.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_mile_w07A.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_mile_w12A.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_mile_w13A.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_mm_ep_001.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_mm_ep_002.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_mm_ep_003.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_mm_ep_004.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_mm_ep_005.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_mm_ep_006.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_mm_ep_007.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_mm_ep_008.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_mm_ep_009.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_player_00_son.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_player_01_tai.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_player_02_knu.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_player_03_amy.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_player_04_sha.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_player_05_bla.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_player_06_rou.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_player_07_ome.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_player_08_big.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_player_09_cre.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_player_10_esp.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_player_11_cha.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_player_12_vec.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_player_13_sil.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_player_14_met.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_player_15_ami.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_player_16_cla.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_player_17_tik.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_player_18_gam.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_player_19_hsh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_player_20_hro.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_player_21_hom.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_player_22_mep.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_player_23_psi.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_player_24_xso.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_player_25_xta.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_player_26_xkn.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_player_27_wer.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_player_28_sti.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_ranking_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_ranking_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_ranking_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_ranking_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_ranking_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_ranking_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_ranking_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_ranking_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_ranking_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_ranking_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_ranking_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_tutorial_action_1.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_tutorial_chara_0.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_tutorial_chara_1.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_tutorial_chara_10.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_tutorial_chara_11.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_tutorial_chara_12.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_tutorial_chara_13.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_tutorial_chara_14.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_tutorial_chara_15.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_tutorial_chara_16.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_tutorial_chara_17.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_tutorial_chara_18.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_tutorial_chara_19.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_tutorial_chara_2.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_tutorial_chara_20.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_tutorial_chara_21.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_tutorial_chara_22.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_tutorial_chara_23.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_tutorial_chara_24.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_tutorial_chara_25.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_tutorial_chara_26.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_tutorial_chara_27.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_tutorial_chara_28.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_tutorial_chara_3.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_tutorial_chara_4.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_tutorial_chara_5.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_tutorial_chara_6.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_tutorial_chara_7.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_tutorial_chara_8.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_tutorial_chara_9.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_tutorial_feverboss.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_tutorial_item.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_tutorial_mapboss_0.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_tutorial_mapboss_1.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_tutorial_mapboss_2.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_tutorial_mission.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_tutorial_quick_1.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tex_tutorial_rank_01.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tutrial_word_Atlas_de.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tutrial_word_Atlas_en.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tutrial_word_Atlas_es.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tutrial_word_Atlas_fr.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tutrial_word_Atlas_it.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tutrial_word_Atlas_ja.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tutrial_word_Atlas_ko.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tutrial_word_Atlas_pt.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tutrial_word_Atlas_ru.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tutrial_word_Atlas_zh.unity
+  - enabled: 1
+    path: Assets/AssetBundles/ui_tutrial_word_Atlas_zhj.unity
+  - enabled: 1
+    path: Assets/AssetBundles/w01_StageResource.unity
+  - enabled: 1
+    path: Assets/AssetBundles/w01_TerrainData.unity
+  - enabled: 1
+    path: Assets/AssetBundles/w02_StageResource.unity
+  - enabled: 1
+    path: Assets/AssetBundles/w02_TerrainData.unity
+  - enabled: 1
+    path: Assets/AssetBundles/w03_StageResource.unity
+  - enabled: 1
+    path: Assets/AssetBundles/w03_TerrainData.unity
+  - enabled: 1
+    path: Assets/AssetBundles/w04_StageResource.unity
+  - enabled: 1
+    path: Assets/AssetBundles/w04_TerrainData.unity
+  - enabled: 1
+    path: Assets/AssetBundles/w05_StageResource.unity
+  - enabled: 1
+    path: Assets/AssetBundles/w05_TerrainData.unity
+  - enabled: 1
+    path: Assets/AssetBundles/w06_StageResource.unity
+  - enabled: 1
+    path: Assets/AssetBundles/w06_TerrainData.unity
+  - enabled: 1
+    path: Assets/AssetBundles/w07_StageResource.unity
+  - enabled: 1
+    path: Assets/AssetBundles/w07_TerrainData.unity
+  - enabled: 1
+    path: Assets/AssetBundles/w08_StageResource.unity
+  - enabled: 1
+    path: Assets/AssetBundles/w08_TerrainData.unity
+  - enabled: 1
+    path: Assets/AssetBundles/w09_StageResource.unity
+  - enabled: 1
+    path: Assets/AssetBundles/w09_TerrainData.unity
+  - enabled: 1
+    path: Assets/AssetBundles/w10_StageResource.unity
+  - enabled: 1
+    path: Assets/AssetBundles/w10_TerrainData.unity
+  - enabled: 1
+    path: Assets/AssetBundles/w11_StageResource.unity
+  - enabled: 1
+    path: Assets/AssetBundles/w11_TerrainData.unity
+  - enabled: 1
+    path: Assets/AssetBundles/w12_StageResource.unity
+  - enabled: 1
+    path: Assets/AssetBundles/w12_TerrainData.unity
+  - enabled: 1
+    path: Assets/AssetBundles/w13_StageResource.unity
+  - enabled: 1
+    path: Assets/AssetBundles/w13_TerrainData.unity
+  - enabled: 1
+    path: Assets/AssetBundles/window_name_setting.unity
+  - enabled: 1
+    path: Assets/AssetBundles/WorldRankingWindowUI.unity
