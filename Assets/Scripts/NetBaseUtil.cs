@@ -4,39 +4,39 @@ using SaveData;
 internal class NetBaseUtil
 {
 	private static string m_debugServerUrl = null;
-
+	
 	private static string m_assetServerVersionUrl = string.Empty;
-
+	
 	private static string[] mActionServerUrlTable = new string[11]
 	{
-		"http://127.0.0.1:9001/",
-		"http://127.0.0.1:9001/",
-		"http://127.0.0.1:9001/",
-		"http://127.0.0.1:9001/",
-		"http://127.0.0.1:9001/",
-		"http://127.0.0.1:9001/",
-		"http://127.0.0.1:9001/",
-		"http://127.0.0.1:9001/",
-		"http://127.0.0.1:9001/",
-		"http://127.0.0.1:9001/",
-		"http://127.0.0.1:9001/"
+		"http://localhost:9001/",
+		"http://localhost:9001/",
+		"http://localhost:9001/",
+		"http://localhost:9001/",
+		"http://localhost:9001/",
+		"http://localhost:9001/",
+		"http://localhost:9001/",
+		"http://localhost:9001/",
+		"http://localhost:9001/",
+		"http://localhost:9001/",
+		"http://localhost:9001/"
 	};
-
+	
 	private static string[] mSecureActionServerUrlTable = new string[11]
 	{
-		"http://127.0.0.1:9001/",
-		"http://127.0.0.1:9001/",
-		"http://127.0.0.1:9001/",
-		"http://127.0.0.1:9001/",
-		"http://127.0.0.1:9001/",
-		"http://127.0.0.1:9001/",
-		"http://127.0.0.1:9001/",
-		"http://127.0.0.1:9001/",
-		"http://127.0.0.1:9001/",
-		"http://127.0.0.1:9001/",
-		"http://127.0.0.1:9001/"
+		"http://localhost:9001/",
+		"http://localhost:9001/",
+		"http://localhost:9001/",
+		"http://localhost:9001/",
+		"http://localhost:9001/",
+		"http://localhost:9001/",
+		"http://localhost:9001/",
+		"http://localhost:9001/",
+		"http://localhost:9001/",
+		"http://localhost:9001/",
+		"http://localhost:9001/"
 	};
-
+	
 	private static string[] mServerTypeStringTable = new string[11]
 	{
 		"_L1",
@@ -51,39 +51,39 @@ internal class NetBaseUtil
 		string.Empty,
 		"a"
 	};
-
+	
 	private static string[] mAssetURLTable = new string[11]
 	{
-		"https://tydevx.github.io/Runners-Assets/assets/",
-		"https://tydevx.github.io/Runners-Assets/assets/",
-		"https://tydevx.github.io/Runners-Assets/assets/",
-		"https://tydevx.github.io/Runners-Assets/assets/",
-		"https://tydevx.github.io/Runners-Assets/assets/",
-		"https://tydevx.github.io/Runners-Assets/assets/",
-		"https://tydevx.github.io/Runners-Assets/assets/",
-		"https://tydevx.github.io/Runners-Assets/assets/",
-		"https://tydevx.github.io/Runners-Assets/assets/",
-		"https://tydevx.github.io/Runners-Assets/assets/",
-		"https://tydevx.github.io/Runners-Assets/assets/"
+		"http://pbassets.fluofoxxo.pw:9002/assets/",
+		"http://pbassets.fluofoxxo.pw:9002/assets/",
+		"http://pbassets.fluofoxxo.pw:9002/assets/",
+		"http://pbassets.fluofoxxo.pw:9002/assets/",
+		"http://pbassets.fluofoxxo.pw:9002/assets/",
+		"http://pbassets.fluofoxxo.pw:9002/assets/",
+		"http://pbassets.fluofoxxo.pw:9002/assets/",
+		"http://pbassets.fluofoxxo.pw:9002/assets/",
+		"http://pbassets.fluofoxxo.pw:9002/assets/",
+		"http://pbassets.fluofoxxo.pw:9002/assets/",
+		"http://pbassets.fluofoxxo.pw:9002/assets/"
 	};
-
+	
 	private static string[] mInformationURLTable = new string[11]
 	{
-		"https://tydevx.github.io/Runners-Assets/information/",
-		"https://tydevx.github.io/Runners-Assets/information/",
-		"https://tydevx.github.io/Runners-Assets/information/",
-		"https://tydevx.github.io/Runners-Assets/information/",
-		"https://tydevx.github.io/Runners-Assets/information/",
-		"https://tydevx.github.io/Runners-Assets/information/",
-		"https://tydevx.github.io/Runners-Assets/information/",
-		"https://tydevx.github.io/Runners-Assets/information/",
-		"https://tydevx.github.io/Runners-Assets/information/",
-		"https://tydevx.github.io/Runners-Assets/information/",
-		"https://tydevx.github.io/Runners-Assets/information/"
+		"http://pbassets.fluofoxxo.pw:9002/information/",
+		"http://pbassets.fluofoxxo.pw:9002/information/",
+		"http://pbassets.fluofoxxo.pw:9002/information/",
+		"http://pbassets.fluofoxxo.pw:9002/information/",
+		"http://pbassets.fluofoxxo.pw:9002/information/",
+		"http://pbassets.fluofoxxo.pw:9002/information/",
+		"http://pbassets.fluofoxxo.pw:9002/information/",
+		"http://pbassets.fluofoxxo.pw:9002/information/",
+		"http://pbassets.fluofoxxo.pw:9002/information/",
+		"http://pbassets.fluofoxxo.pw:9002/information/",
+		"http://pbassets.fluofoxxo.pw:9002/information/"
 	};
-
+	
 	private static string mRedirectInstallPageUrl = "https://play.google.com/store/apps/details?id=com.sega.sonicrunners";
-
+	
 	public static string DebugServerUrl
 	{
 		get
@@ -95,7 +95,7 @@ internal class NetBaseUtil
 			m_debugServerUrl = value;
 		}
 	}
-
+	
 	public static bool IsDebugServer
 	{
 		get
@@ -110,7 +110,7 @@ internal class NetBaseUtil
 		{
 		}
 	}
-
+	
 	public static string ActionServerURL
 	{
 		get
@@ -122,7 +122,7 @@ internal class NetBaseUtil
 			return mActionServerUrlTable[(int)Env.actionServerType];
 		}
 	}
-
+	
 	public static string SecureActionServerURL
 	{
 		get
@@ -134,7 +134,7 @@ internal class NetBaseUtil
 			return mSecureActionServerUrlTable[(int)Env.actionServerType];
 		}
 	}
-
+	
 	public static string ServerTypeString
 	{
 		get
@@ -146,7 +146,7 @@ internal class NetBaseUtil
 			return mServerTypeStringTable[(int)Env.actionServerType];
 		}
 	}
-
+	
 	public static string AssetServerURL
 	{
 		get
@@ -158,7 +158,7 @@ internal class NetBaseUtil
 			return mAssetURLTable[(int)Env.actionServerType];
 		}
 	}
-
+	
 	public static string InformationServerURL
 	{
 		get
@@ -177,7 +177,7 @@ internal class NetBaseUtil
 			return text2;
 		}
 	}
-
+	
 	public static string RedirectInstallPageUrl
 	{
 		get
@@ -188,7 +188,7 @@ internal class NetBaseUtil
 		{
 		}
 	}
-
+	
 	public static string RedirectTrmsOfServicePageUrlForTitle
 	{
 		get
@@ -200,7 +200,7 @@ internal class NetBaseUtil
 			return "http://www.sega.com/legal";
 		}
 	}
-
+	
 	public static string RedirectTrmsOfServicePageUrl
 	{
 		get
@@ -212,7 +212,7 @@ internal class NetBaseUtil
 			return "http://sonicrunners.sega-net.com/rule.html";
 		}
 	}
-
+	
 	public static void SetAssetServerURL()
 	{
 		ServerLoginState loginState = ServerInterface.LoginState;
@@ -235,7 +235,7 @@ internal class NetBaseUtil
 			m_assetServerVersionUrl += "tablet/";
 		}
 	}
-
+	
 	public static int GetVersionValue(string versionString, int scaleOffset)
 	{
 		string[] array = versionString.Split('.');
@@ -263,7 +263,7 @@ internal class NetBaseUtil
 		}
 		return -1;
 	}
-
+	
 	public static int GetVersionValue(string versionString)
 	{
 		return GetVersionValue(versionString, 10);
