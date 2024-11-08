@@ -68,16 +68,16 @@ namespace Player
 				{
 					m_stick = Vector3.zero;
 				}
-				if (Input.GetMouseButtonDown(0) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began))
+				if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.JoystickButton0) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began))
 				{
 					m_touchedStatus.Set(0, true);
 					m_touchedStatus.Set(1, true);
 				}
-				else if (Input.GetMouseButton(0) || (Input.touchCount > 0 && (Input.GetTouch(0).phase == TouchPhase.Moved || Input.GetTouch(0).phase == TouchPhase.Stationary)))
+				else if (Input.GetMouseButton(0) || Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.JoystickButton0) || (Input.touchCount > 0 && (Input.GetTouch(0).phase == TouchPhase.Moved || Input.GetTouch(0).phase == TouchPhase.Stationary)))
 				{
 					m_touchedStatus.Set(1, true);
 				}
-				if (Input.GetMouseButtonUp(0) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended))
+				if (Input.GetMouseButtonUp(0) || Input.GetKeyUp(KeyCode.Space) || Input.GetKeyUp(KeyCode.JoystickButton0) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended))
 				{
 					m_touchedStatus.Set(2, true);
 				}
