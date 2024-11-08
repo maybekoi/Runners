@@ -510,7 +510,7 @@ public class SoundManager : MonoBehaviour
 		{
 			criWareErrorHandler.enabled = false;
 		}
-		CriAtomEx.RegisterAcf(null, Path.Combine(CriWare.streamingAssetsPath, PLATFORM_DATA_PATH + "Sonic_Runners_Sound.acf"));
+		CriAtomEx.RegisterAcf(null, Path.Combine(CriWare.Common.streamingAssetsPath, PLATFORM_DATA_PATH + "Sonic_Runners_Sound.acf"));
 		for (int i = 0; i < m_sources.Length; i++)
 		{
 			m_sources[i] = new Source(base.gameObject.AddComponent<CriAtomSource>());
@@ -655,7 +655,7 @@ public class SoundManager : MonoBehaviour
 
 	public static string GetDownloadedDataPath()
 	{
-		return CriWare.installTargetPath + "/";
+		return CriWare.Common.installTargetPath + "/";
 	}
 
 	public static void AddCueSheet(string cueSheetName, string acbFile, string awbFile, bool isUrlLoad = false)

@@ -1,26 +1,18 @@
-/****************************************************************************
+ï»¿/****************************************************************************
  *
  * Copyright (c) 2011 CRI Middleware Co., Ltd.
  *
  ****************************************************************************/
 
 /*---------------------------
- * Sequence Callback Defines
+ * Force Load Data with Async Method Defines
  *---------------------------*/
-#if UNITY_EDITOR || UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX || UNITY_ANDROID || UNITY_IOS || UNITY_TVOS || UNITY_WINRT || UNITY_STANDALONE_LINUX
-	#define CRIWARE_SUPPORT_SEQUENCE_CALLBACK
-	/* Callback Implentation Defines */
-	#if UNITY_EDITOR || UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX || UNITY_ANDROID || UNITY_WINRT || UNITY_STANDALONE_LINUX
-		#define CRIWARE_CALLBACK_IMPL_NATIVE2MANAGED
-	#elif UNITY_IOS || UNITY_TVOS
-		#define CRIWARE_CALLBACK_IMPL_UNITYSENDMESSAGE
-	#else
-		#error supported platform must select one of callback implementations
-	#endif
-#elif UNITY_PSP2 || UNITY_PS3 || UNITY_PS4 || UNITY_XBOXONE || UNITY_WEBGL || UNITY_SWITCH
-	#define CRIWARE_UNSUPPORT_SEQUENCE_CALLBACK
-#else
-	#error undefined platform if supporting sequence callback
+#if UNITY_WEBGL
+	#define CRIWARE_FORCE_LOAD_ASYNC
+#endif
+
+#if !(!UNITY_EDITOR && UNITY_IOS && ENABLE_MONO)
+	#define CRIWARE_SUPPORT_NATIVE_CALLBACK
 #endif
 
 using UnityEngine;
@@ -29,14 +21,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.IO;
+#if !UNITY_EDITOR && (UNITY_WINRT && !ENABLE_IL2CPP)
+using System.Reflection;
+#endif
+
 
 public static class CriAtomPlugin
 {
-	#region Version Info.
-	public const string criAtomUnityEditorVersion = "Ver.0.21.07";
-	#endregion
-
-	#region Editor/Runtime‹¤’Ê
+	#region Editor/Runtimeå…±é€š
 
 #if UNITY_EDITOR
 	public static bool showDebugLog = false;
@@ -53,124 +45,177 @@ public static class CriAtomPlugin
 	#endif
 	}
 
-	/* ‰Šú‰»ƒJƒEƒ“ƒ^ */
+	/* åˆæœŸåŒ–ã‚«ã‚¦ãƒ³ã‚¿ */
 	private static int initializationCount = 0;
 
 	public static bool isInitialized { get { return initializationCount > 0; } }
 
-    private static IntPtr GetSpatializerCoreInterfaceFromAtomOculusAudioBridge() {
-        /* Ambisonic ƒf[ƒ^‚ğÄ¶‚·‚é‚½‚ß‚ÉAƒvƒ‰ƒbƒgƒtƒH[ƒ€‚É‚æ‚Á‚Ä‚ÍƒuƒŠƒbƒWƒvƒ‰ƒOƒCƒ“‚ğ•K—v‚Æ‚·‚é‚©‚à‚µ‚ê‚È‚¢
-         * —á‚¦‚Î PC ‚Å‚Í Oculus Audio ƒuƒŠƒbƒWƒvƒ‰ƒOƒCƒ“‚ğg‚¤B
-         * —á‚¦‚Î PS4 ‚Å‚Í ƒuƒŠƒbƒWƒvƒ‰ƒOƒCƒ“‚ğg‚í‚È‚¢ */
-        /* ˆÈ‰ºACRI Atom Oculus Audio ƒuƒŠƒbƒWƒvƒ‰ƒOƒCƒ“‚ªƒCƒ“ƒ|[ƒg‚³‚ê‚Ä‚¢‚éê‡‚Ìˆ— */
-        Type type = Type.GetType("CriAtomOculusAudio");
-        if (type == null) {
-            /* BridgePlugin‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½ */
-            Debug.LogError("[CRIWARE] ERROR: Cri Atom Oculus Audio Bridge Plugin is not imported.");
-        } else {
-            /* Œ»İ‚Ìƒvƒ‰ƒbƒgƒtƒH[ƒ€‚Í Oculus Audio Bridge Plugin ‚ğƒTƒ|[ƒg‚µ‚Ä‚¢‚é‚©Šm”F */
-            System.Reflection.MethodInfo method_support_current_platform = type.GetMethod("SupportCurrentPlatform");
-            if (method_support_current_platform == null)
-            {
-                Debug.LogError("[CRIWARE] ERROR: CriAtomOculusAudio.SupportCurrentPlatform method is not found.");
-                return IntPtr.Zero;
-            }
-            bool current_platform_supports_oculus_audio = (bool)method_support_current_platform.Invoke(null, null);
-            /* ƒJƒŒƒ“ƒgƒvƒ‰ƒbƒgƒtƒH[ƒ€‚ğƒTƒ|[ƒg‚µ‚Ä‚¢‚é‚È‚ç€”õB
-                * ƒTƒ|[ƒg‚µ‚Ä‚¢‚È‚¢‚È‚çƒXƒLƒbƒvBˆø‚«‘±‚« Atom ‰Šú‰»ˆ—‚ğs‚¤ */
-            if (current_platform_supports_oculus_audio)
-            {
-                /* •K—v‚Èƒƒ\ƒbƒhî•ñ‚ğæ“¾ */
-                System.Reflection.MethodInfo method_get_spatializer_core_interface = type.GetMethod("GetSpatializerCoreInterface");
-                if (method_get_spatializer_core_interface == null)
-                {
-                    Debug.LogError("[CRIWARE] ERROR: CriAtomOculusAudio.GetSpatializerCoreInterface method is not found.");
-                    return IntPtr.Zero;
-                }
-                /* Spatilalizer ‚Ì‰Šú‰»‚É•K—v‚Èî•ñ‚ğæ“¾ */
-                return (IntPtr)method_get_spatializer_core_interface.Invoke(null, null);
-            }
-        }
-        return IntPtr.Zero;
-    }
+	private static List<IntPtr> effectInterfaceList = null;
+	public static bool GetAudioEffectInterfaceList(out List<IntPtr> effect_interface_list)
+	{
+		if (CriAtomPlugin.IsLibraryInitialized() == true) {
+			effect_interface_list = null;
+			return false;
+		}
+		if (effectInterfaceList == null) {
+			effectInterfaceList = new List<IntPtr>();
+		}
+		effect_interface_list = effectInterfaceList;
+		return true;
+	}
 
-    public static void SetConfigParameters(int max_virtual_voices,
+	private static IntPtr GetSpatializerCoreInterfaceFromAtomOculusAudioBridge()
+	{
+		/* Ambisonic ãƒ‡ãƒ¼ã‚¿ã‚’å†ç”Ÿã™ã‚‹ãŸã‚ã«ã€ãƒ—ãƒ©ãƒƒãƒˆãƒ•ã‚©ãƒ¼ãƒ ã«ã‚ˆã£ã¦ã¯ãƒ–ãƒªãƒƒã‚¸ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚’å¿…è¦ã¨ã™ã‚‹ã‹ã‚‚ã—ã‚Œãªã„
+		 * ä¾‹ãˆã° PC ã§ã¯ Oculus Audio ãƒ–ãƒªãƒƒã‚¸ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚’ä½¿ã†ã€‚
+		 * ä¾‹ãˆã° PS4 ã§ã¯ ãƒ–ãƒªãƒƒã‚¸ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚’ä½¿ã‚ãªã„ */
+		/* ä»¥ä¸‹ã€CRI Atom Oculus Audio ãƒ–ãƒªãƒƒã‚¸ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãŒã‚¤ãƒ³ãƒãƒ¼ãƒˆã•ã‚Œã¦ã„ã‚‹å ´åˆã®å‡¦ç† */
+		Type type = Type.GetType("CriAtomOculusAudio");
+		if (type == null) {
+			/* BridgePluginãŒè¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸ */
+			Debug.LogError("[CRIWARE] ERROR: Cri Atom Oculus Audio Bridge Plugin is not imported.");
+		} else {
+			/* ç¾åœ¨ã®ãƒ—ãƒ©ãƒƒãƒˆãƒ•ã‚©ãƒ¼ãƒ ã¯ Oculus Audio Bridge Plugin ã‚’ã‚µãƒãƒ¼ãƒˆã—ã¦ã„ã‚‹ã‹ç¢ºèª */
+#if !UNITY_EDITOR && (UNITY_WINRT && !ENABLE_IL2CPP)
+			System.Reflection.MethodInfo method_support_current_platform = type.GetTypeInfo().GetDeclaredMethod("SupportCurrentPlatform");
+#else
+			System.Reflection.MethodInfo method_support_current_platform = type.GetMethod("SupportCurrentPlatform");
+#endif
+			if (method_support_current_platform == null) {
+				Debug.LogError("[CRIWARE] ERROR: CriAtomOculusAudio.SupportCurrentPlatform method is not found.");
+				return IntPtr.Zero;
+			}
+			bool current_platform_supports_oculus_audio = (bool)method_support_current_platform.Invoke(null, null);
+			/* ã‚«ãƒ¬ãƒ³ãƒˆãƒ—ãƒ©ãƒƒãƒˆãƒ•ã‚©ãƒ¼ãƒ ã‚’ã‚µãƒãƒ¼ãƒˆã—ã¦ã„ã‚‹ãªã‚‰æº–å‚™ã€‚
+				* ã‚µãƒãƒ¼ãƒˆã—ã¦ã„ãªã„ãªã‚‰ã‚¹ã‚­ãƒƒãƒ—ã€‚å¼•ãç¶šã Atom åˆæœŸåŒ–å‡¦ç†ã‚’è¡Œã† */
+			if (current_platform_supports_oculus_audio) {
+				/* å¿…è¦ãªãƒ¡ã‚½ãƒƒãƒ‰æƒ…å ±ã‚’å–å¾— */
+#if !UNITY_EDITOR && (UNITY_WINRT && !ENABLE_IL2CPP)
+				System.Reflection.MethodInfo method_get_spatializer_core_interface = type.GetTypeInfo().GetDeclaredMethod("GetSpatializerCoreInterface");
+#else
+				System.Reflection.MethodInfo method_get_spatializer_core_interface = type.GetMethod("GetSpatializerCoreInterface");
+#endif
+				if (method_get_spatializer_core_interface == null) {
+					Debug.LogError("[CRIWARE] ERROR: CriAtomOculusAudio.GetSpatializerCoreInterface method is not found.");
+					return IntPtr.Zero;
+				}
+				/* Spatilalizer ã®åˆæœŸåŒ–ã«å¿…è¦ãªæƒ…å ±ã‚’å–å¾— */
+				return (IntPtr)method_get_spatializer_core_interface.Invoke(null, null);
+			}
+		}
+		return IntPtr.Zero;
+	}
+
+	public static void SetConfigParameters(int max_virtual_voices,
 		int max_voice_limit_groups, int max_categories,
+		int max_sequence_events_per_frame, int max_beatsync_callbacks_per_frame,
 		int num_standard_memory_voices, int num_standard_streaming_voices,
 		int num_hca_mx_memory_voices, int num_hca_mx_streaming_voices,
 		int output_sampling_rate, int num_asr_output_channels,
 		bool uses_in_game_preview, float server_frequency,
 		int max_parameter_blocks,  int categories_per_playback,
 		int num_buses, bool vr_mode)
-    {
-        IntPtr spatializer_core_interface = IntPtr.Zero;
-        /* Ambisonic ƒf[ƒ^‚ÌÄ¶‚É•K—v‚È‰Šú‰»ƒpƒ‰ƒ[ƒ^‚ğæ“¾‚·‚é */
-        if (vr_mode) {
-#if UNITY_EDITOR || UNITY_STANDALONE_WIN || UNITY_ANDROID 
-            spatializer_core_interface = CriAtomPlugin.GetSpatializerCoreInterfaceFromAtomOculusAudioBridge();
+	{
+		IntPtr spatializer_core_interface = IntPtr.Zero;
+		/* Ambisonic ãƒ‡ãƒ¼ã‚¿ã®å†ç”Ÿã«å¿…è¦ãªåˆæœŸåŒ–ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’å–å¾—ã™ã‚‹ */
+		if (vr_mode) {
+#if UNITY_EDITOR || UNITY_STANDALONE_WIN || UNITY_ANDROID
+			spatializer_core_interface = CriAtomPlugin.GetSpatializerCoreInterfaceFromAtomOculusAudioBridge();
 #endif
-        }
-        criAtomUnity_SetConfigParameters(max_virtual_voices,
+		}
+#if UNITY_WEBGL
+		/* WebGLã§ã¯æ™®é€šã®ãƒœã‚¤ã‚¹ã¯ä½œæˆã™ã‚‹ã“ã¨ãŒã§ããªã„ */
+		num_standard_memory_voices = 0;
+		num_standard_streaming_voices = 0;
+		num_hca_mx_memory_voices = 0;
+		num_hca_mx_streaming_voices = 0;
+#endif
+		CRIWARE5C6445EA(max_virtual_voices,
 			max_voice_limit_groups, max_categories,
+			max_sequence_events_per_frame, max_beatsync_callbacks_per_frame,
 			num_standard_memory_voices, num_standard_streaming_voices,
 			num_hca_mx_memory_voices, num_hca_mx_streaming_voices,
 			output_sampling_rate, num_asr_output_channels,
 			uses_in_game_preview, server_frequency,
 			max_parameter_blocks, categories_per_playback,
 			num_buses, vr_mode,
-            spatializer_core_interface);
+			spatializer_core_interface);
+
+		CriAtomPlugin.isConfigured = true;
 	}
 
 	public static void SetConfigAdditionalParameters_PC(long buffering_time_pc)
 	{
-		criAtomUnity_SetConfigAdditionalParameters_PC(buffering_time_pc);
+		CRIWARECBE1F916(buffering_time_pc);
+	}
+
+	public static void SetConfigAdditionalParameters_LINUX(CriAtomConfig.LinuxOutput output, int pulse_latency_usec)
+	{
+		CRIWARE5E9729B2((int)output, pulse_latency_usec);
 	}
 
 	public static void SetConfigAdditionalParameters_IOS(uint buffering_time_ios, bool override_ipod_music_ios)
 	{
-		criAtomUnity_SetConfigAdditionalParameters_IOS(buffering_time_ios, override_ipod_music_ios);
+		CRIWARE6E6C4A31(buffering_time_ios, override_ipod_music_ios);
 	}
 
 	public static void SetConfigAdditionalParameters_ANDROID(int num_low_delay_memory_voices, int num_low_delay_streaming_voices,
-															 int sound_buffering_time,		  int sound_start_buffering_time,
-                                                             IntPtr android_context)
+															 int sound_buffering_time,        int sound_start_buffering_time,
+															 bool use_fast_mixer,             bool use_aaudio)
 	{
-		criAtomUnity_SetConfigAdditionalParameters_ANDROID(num_low_delay_memory_voices, num_low_delay_streaming_voices,
-														   sound_buffering_time,		sound_start_buffering_time,
-														   android_context);
+		CRIWARE4A98FA9C(num_low_delay_memory_voices, num_low_delay_streaming_voices,
+														   sound_buffering_time,        sound_start_buffering_time,
+														   use_fast_mixer);
+#if !UNITY_EDITOR && UNITY_ANDROID
+		if (use_fast_mixer == true) {
+			IntPtr android_context = IntPtr.Zero;
+			using (AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+			using (AndroidJavaObject activity = jc.GetStatic<AndroidJavaObject>("currentActivity")) {
+				android_context = activity.GetRawObject();
+				CRIWARE8E759390(android_context);
+			}
+		}
+		CRIWARE6948E155(use_aaudio);
+#endif
 	}
 
 	public static void SetConfigAdditionalParameters_VITA(int num_atrac9_memory_voices, int num_atrac9_streaming_voices, int num_mana_decoders)
 	{
 		#if !UNITY_EDITOR && UNITY_PSP2
-		criAtomUnity_SetConfigAdditionalParameters_VITA(num_atrac9_memory_voices, num_atrac9_streaming_voices, num_mana_decoders);
+		CRIWARE6579138F(num_atrac9_memory_voices, num_atrac9_streaming_voices, num_mana_decoders);
 		#endif
 	}
 
 	public static void SetConfigAdditionalParameters_PS4(int num_atrac9_memory_voices, int num_atrac9_streaming_voices,
 														 bool use_audio3d, int num_audio3d_memory_voices, int num_audio3d_streaming_voices)
 	{
-		#if !UNITY_EDITOR && UNITY_PS4
-		criAtomUnity_SetConfigAdditionalParameters_PS4(num_atrac9_memory_voices, num_atrac9_streaming_voices,
+		#if !UNITY_EDITOR && (UNITY_PS4 || UNITY_PS5)
+		CRIWAREE8B849A6(num_atrac9_memory_voices, num_atrac9_streaming_voices,
 														use_audio3d, num_audio3d_memory_voices, num_audio3d_streaming_voices);
+		#endif
+	}
+
+	public static void SetConfigAdditionalParameters_SWITCH(int num_opus_memory_voices, int num_opus_streaming_voices, bool init_socket) {
+		#if !UNITY_EDITOR && UNITY_SWITCH
+		CRIWARECA73AE32(num_opus_memory_voices, num_opus_streaming_voices, init_socket);
 		#endif
 	}
 
 	public static void SetConfigAdditionalParameters_WEBGL(int num_webaudio_voices)
 	{
-		#if (!UNITY_EDITOR || UNITY_EDITOR_OSX) && UNITY_WEBGL
-		criAtomUnity_SetConfigAdditionalParameters_WEBGL(num_webaudio_voices);
+		#if UNITY_WEBGL
+		CRIWAREE41FBC60(num_webaudio_voices);
 		#endif
 	}
 
 	public static void SetMaxSamplingRateForStandardVoicePool(int sampling_rate_for_memory, int sampling_rate_for_streaming)
 	{
-		criAtomUnity_SetMaxSamplingRateForStandardVoicePool(sampling_rate_for_memory, sampling_rate_for_streaming);
+		CRIWARE413373CC(sampling_rate_for_memory, sampling_rate_for_streaming);
 	}
 
 	public static int GetRequiredMaxVirtualVoices(CriAtomConfig atomConfig)
 	{
-		/* ƒo[ƒ`ƒƒƒ‹ƒ{ƒCƒX‚ÍA‘Sƒ{ƒCƒXƒv[ƒ‹‚Ìƒ{ƒCƒX‚Ì‡Œv’l‚æ‚è‚à‘½‚­‚È‚­‚Ä‚Í‚È‚ç‚È‚¢ */
+		/* ãƒãƒ¼ãƒãƒ£ãƒ«ãƒœã‚¤ã‚¹ã¯ã€å…¨ãƒœã‚¤ã‚¹ãƒ—ãƒ¼ãƒ«ã®ãƒœã‚¤ã‚¹ã®åˆè¨ˆå€¤ã‚ˆã‚Šã‚‚å¤šããªãã¦ã¯ãªã‚‰ãªã„ */
 		int requiredVirtualVoices = 0;
 
 		requiredVirtualVoices += atomConfig.standardVoicePoolConfig.memoryVoices;
@@ -191,28 +236,46 @@ public static class CriAtomPlugin
 
 	public static void InitializeLibrary()
 	{
-		/* ‰Šú‰»ƒJƒEƒ“ƒ^‚ÌXV */
+		/* åˆæœŸåŒ–ã‚«ã‚¦ãƒ³ã‚¿ã®æ›´æ–° */
 		CriAtomPlugin.initializationCount++;
 		if (CriAtomPlugin.initializationCount != 1) {
 			return;
 		}
 
-		/* CriWareInitializer‚ªÀsÏ‚İ‚©‚Ç‚¤‚©‚ğŠm”F */
-		bool initializerWorking = CriWareInitializer.IsInitialized();
-		if (initializerWorking == false) {
-			Debug.Log("[CRIWARE] CriWareInitializer is not working. "
+		/* ã‚·ãƒ¼ãƒ³å®Ÿè¡Œå‰ã«åˆæœŸåŒ–æ¸ˆã¿ã®å ´åˆã¯çµ‚äº†ã•ã›ã‚‹ */
+		if (CriAtomPlugin.IsLibraryInitialized() == true) {
+			CriAtomPlugin.FinalizeLibrary();
+			CriAtomPlugin.initializationCount = 1;
+		}
+
+		/* åˆæœŸåŒ–ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãŒè¨­å®šæ¸ˆã¿ã‹ã©ã†ã‹ã‚’ç¢ºèª */
+		if (CriAtomPlugin.isConfigured == false) {
+			Debug.Log("[CRIWARE] Atom initialization parameters are not configured. "
 				+ "Initializes Atom by default parameters.");
 		}
 
-		/* ˆË‘¶ƒ‰ƒCƒuƒ‰ƒŠ‚Ì‰Šú‰» */
+		/* ä¾å­˜ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®åˆæœŸåŒ– */
 		CriFsPlugin.InitializeLibrary();
 
-		/* ƒ‰ƒCƒuƒ‰ƒŠ‚Ì‰Šú‰» */
-		CriAtomPlugin.criAtomUnity_Initialize();
+		/* ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®åˆæœŸåŒ– */
+		CriAtomPlugin.CRIWARE044F4CBD();
 
-		/* CriAtomServer‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğ¶¬ */
+		/* ãƒ¦ãƒ¼ã‚¶ã‚«ã‚¹ã‚¿ãƒ ã‚¨ãƒ•ã‚§ã‚¯ãƒˆãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹ã‚’ç™»éŒ² */
+	#if !UNITY_EDITOR && UNITY_PSP2
+		// unsupported
+	#else
+		if (effectInterfaceList != null)
+		{
+			for (int i = 0; i < effectInterfaceList.Count; i++)
+			{
+				CriAtomExAsr.RegisterEffectInterface(effectInterfaceList[i]);
+			}
+		}
+	#endif
+
+		/* CriAtomServerã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆ */
 		#if UNITY_EDITOR
-		/* ƒQ[ƒ€ƒvƒŒƒrƒ…[‚Ì‚İ¶¬‚·‚é */
+		/* ã‚²ãƒ¼ãƒ ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼æ™‚ã®ã¿ç”Ÿæˆã™ã‚‹ */
 		if (UnityEngine.Application.isPlaying) {
 			CriAtomServer.CreateInstance();
 		}
@@ -220,45 +283,70 @@ public static class CriAtomPlugin
 		CriAtomServer.CreateInstance();
 		#endif
 
-		/* CriAtomListener ‚Ì‹¤—LƒlƒCƒeƒBƒuƒŠƒXƒi[‚ğ¶¬ */
-		CriAtomListener.CreateSharedNativeListener();
+		/* CriAtomListenerãŒå­˜åœ¨ã—ãªã„å ´åˆã®ãŸã‚ã®ãƒ€ãƒŸãƒ¼ãƒªã‚¹ãƒŠãƒ¼ã‚’ç”Ÿæˆ */
+		CriAtomListener.CreateDummyNativeListener();
+	}
+
+	public static bool IsLibraryInitialized()
+	{
+		/* ãƒ©ã‚¤ãƒ–ãƒ©ãƒªãŒåˆæœŸåŒ–æ¸ˆã¿ã‹ãƒã‚§ãƒƒã‚¯ */
+		return CRIWARE74F13712();
 	}
 
 	public static void FinalizeLibrary()
 	{
-		/* ‰Šú‰»ƒJƒEƒ“ƒ^‚ÌXV */
+		/* åˆæœŸåŒ–ã‚«ã‚¦ãƒ³ã‚¿ã®æ›´æ–° */
 		CriAtomPlugin.initializationCount--;
 		if (CriAtomPlugin.initializationCount < 0) {
-			Debug.LogError("[CRIWARE] ERROR: Atom library is already finalized.");
-			return;
+			CriAtomPlugin.initializationCount = 0;
+			if (CriAtomPlugin.IsLibraryInitialized() == false) {
+				return;
+			}
 		}
 		if (CriAtomPlugin.initializationCount != 0) {
 			return;
 		}
 
-		/* CriAtomListener ‚Ì‹¤—LƒlƒCƒeƒBƒuƒŠƒXƒi[‚ğ”jŠü */
-		CriAtomListener.DestroySharedNativeListener();
+		/* CriAtomListenerãŒå­˜åœ¨ã—ãªã„å ´åˆã®ãŸã‚ã®ãƒ€ãƒŸãƒ¼ãƒªã‚¹ãƒŠãƒ¼ã‚’ç ´æ£„ */
+		CriAtomListener.DestroyDummyNativeListener();
 
-		/* CriAtomServer‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğ”jŠü */
+		/* CriAtomServerã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç ´æ£„ */
 		CriAtomServer.DestroyInstance();
 
-		/* ƒ‰ƒCƒuƒ‰ƒŠ‚ÌI—¹ */
-		CriAtomPlugin.criAtomUnity_Finalize();
+		/* æœªç ´æ£„ã®Disposableã‚’ç ´æ£„ */
+		CriDisposableObjectManager.CallOnModuleFinalization(CriDisposableObjectManager.ModuleType.Atom);
 
-		/* ˆË‘¶ƒ‰ƒCƒuƒ‰ƒŠ‚ÌI—¹ */
+		/* ãƒ¦ãƒ¼ã‚¶ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹ã®ãƒªã‚¹ãƒˆã‚’ã‚¯ãƒªã‚¢ */
+		if (effectInterfaceList != null) {
+			effectInterfaceList.Clear();
+			effectInterfaceList = null;
+		}
+
+		/* ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®çµ‚äº† */
+		CriAtomPlugin.CRIWARE0AC46773();
+
+		/* ä¾å­˜ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®çµ‚äº† */
 		CriFsPlugin.FinalizeLibrary();
 	}
 
 	public static void Pause(bool pause)
 	{
 		if (isInitialized) {
-			criAtomUnity_Pause(pause);
+			CRIWARED0B3D8F4(pause);
 		}
 	}
 
+	#if !UNITY_EDITOR && UNITY_IOS
+	public static void CallOnApplicationResume_IOS()
+	{
+		criAtomUnity_SleepToDelay_IOS(100);
+	}
+	#endif
+
+	private static bool isConfigured = false;
 	private static float timeSinceStartup = Time.realtimeSinceStartup;
-	private static CriWare.CpuUsage cpuUsage;
-	public static CriWare.CpuUsage GetCpuUsage()
+	private static CriWare.Common.CpuUsage cpuUsage;
+	public static CriWare.Common.CpuUsage GetCpuUsage()
 	{
 		float currentTimeSinceStartup = Time.realtimeSinceStartup;
 		if (currentTimeSinceStartup - timeSinceStartup > 1.0f) {
@@ -275,69 +363,202 @@ public static class CriAtomPlugin
 		return cpuUsage;
 	}
 
-    [DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-    private static extern void criAtomUnity_SetConfigParameters(int max_virtual_voices,
-        int max_voice_limit_groups, int max_categories,
-        int num_standard_memory_voices, int num_standard_streaming_voices,
-        int num_hca_mx_memory_voices, int num_hca_mx_streaming_voices,
-        int output_sampling_rate, int num_asr_output_channels,
-        bool uses_in_game_preview, float server_frequency,
-        int max_parameter_blocks, int categories_per_playback,
-        int num_buses, bool use_ambisonics,
-        IntPtr spatializer_core_interface);
+	private static int CRIATOMUNITY_PARAMETER_ID_LOOP_COUNT = 0;
+	private static ushort CRIATOMPARAMETER2_ID_INVALID = ushort.MaxValue;
 
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-	private static extern void criAtomUnity_SetConfigAdditionalParameters_PC(long buffering_time_pc);
+	public static ushort GetLoopCountParameterId()
+	{
+		ushort ret = CRIWARE39B30E48(CRIATOMUNITY_PARAMETER_ID_LOOP_COUNT);
+		if (ret == CRIATOMPARAMETER2_ID_INVALID) {
+			throw new Exception("GetNativeParameterId failed.");
+		}
+		return ret;
+	}
 
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-	private static extern void criAtomUnity_SetConfigAdditionalParameters_IOS(uint buffering_time_ios, bool override_ipod_music_ios);
+	public static void DecryptAcb(IntPtr acb_hn, ulong key, ulong nonce)
+	{
+		temporalStorage = key ^ 0x0017D207B5350050UL;
+		CRIWARE6E8A70F0(acb_hn, CallbackFromNative, IntPtr.Zero);
+		temporalStorage = 0;
+	}
 
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-	private static extern void criAtomUnity_SetConfigAdditionalParameters_ANDROID(int num_low_delay_memory_voices, int num_low_delay_streaming_voices,
-																				  int sound_buffering_time,		   int sound_start_buffering_time,
-																				  IntPtr android_context);
-	#if !UNITY_EDITOR && UNITY_PSP2
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-	private static extern void criAtomUnity_SetConfigAdditionalParameters_VITA(int num_atrac9_memory_voices, int num_atrac9_streaming_voices, int num_mana_decoders);
+	/* å¤‰æ•°ã®ä¸€æ™‚çš„ãªæ ¼ç´å ´æ‰€ */
+	private static ulong temporalStorage = 0;
+
+	#region Private Methods
+	[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+	public delegate ulong CallbackFromNativeDelegate(System.IntPtr ptr1);
+
+	[AOT.MonoPInvokeCallback(typeof(CallbackFromNativeDelegate))]
+	private static ulong CallbackFromNative(System.IntPtr ptr1)
+	{
+		return temporalStorage;
+	}
+	#endregion
+
+	#region DLL Import
+	#if !CRIWARE_ENABLE_HEADLESS_MODE
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern void CRIWARE5C6445EA(int max_virtual_voices,
+		int max_voice_limit_groups, int max_categories,
+		int max_sequence_events_per_frame, int max_beatsync_callbacks_per_frame,
+		int num_standard_memory_voices, int num_standard_streaming_voices,
+		int num_hca_mx_memory_voices, int num_hca_mx_streaming_voices,
+		int output_sampling_rate, int num_asr_output_channels,
+		bool uses_in_game_preview, float server_frequency,
+		int max_parameter_blocks, int categories_per_playback,
+		int num_buses, bool use_ambisonics,
+		IntPtr spatializer_core_interface);
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern void CRIWARECBE1F916(long buffering_time_pc);
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern void CRIWARE5E9729B2(int output, int pulse_latency_usec);
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern void CRIWARE6E6C4A31(uint buffering_time_ios, bool override_ipod_music_ios);
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern void CRIWARE4A98FA9C(int num_low_delay_memory_voices, int num_low_delay_streaming_voices,
+																				  int sound_buffering_time,        int sound_start_buffering_time,
+																				  bool apply_hw_property);
+
+	#if !UNITY_EDITOR && UNITY_ANDROID
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern void CRIWARE8E759390(IntPtr android_context);
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern void CRIWARE6948E155(bool flag);
 	#endif
 
-    #if !UNITY_EDITOR && UNITY_PS4
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-	private static extern void criAtomUnity_SetConfigAdditionalParameters_PS4(int num_atrac9_memory_voices, int num_atrac9_streaming_voices,
+	#if !UNITY_EDITOR && UNITY_PSP2
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern void CRIWARE6579138F(int num_atrac9_memory_voices, int num_atrac9_streaming_voices, int num_mana_decoders);
+	#endif
+
+	#if !UNITY_EDITOR && (UNITY_PS4 || UNITY_PS5)
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern void CRIWAREE8B849A6(int num_atrac9_memory_voices, int num_atrac9_streaming_voices,
 																			  bool use_audio3d, int num_audio3d_memory_voices, int num_audio3d_streaming_voices);
 	#endif
 
-	#if (!UNITY_EDITOR || UNITY_EDITOR_OSX) && UNITY_WEBGL
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-	private static extern void criAtomUnity_SetConfigAdditionalParameters_WEBGL(int num_webaudio_voices);
+	#if !UNITY_EDITOR && UNITY_SWITCH
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern void CRIWARECA73AE32(int num_opus_memory_voices, int num_opus_streaming_voices, bool init_socket);
 	#endif
 
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-	private static extern void criAtomUnity_Initialize();
+	#if UNITY_WEBGL
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern void CRIWAREE41FBC60(int num_webaudio_voices);
+	#endif
 
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-	private static extern void criAtomUnity_Finalize();
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern void CRIWARE044F4CBD();
 
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-	private static extern void criAtomUnity_Pause(bool pause);
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	public static extern bool CRIWARE74F13712();
 
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-	public static extern uint criAtomUnity_GetAllocatedHeapSize();
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern void CRIWARE0AC46773();
 
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-	public static extern void criAtomUnity_ControlDataCompatibility(int code);
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern void CRIWARED0B3D8F4(bool pause);
 
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-	public static extern void criAtomUnitySeqencer_SetEventCallback(IntPtr cbfunc, string gameobj_name, string func_name, string separator_string);
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	public static extern uint CRIWAREAEE74CFB();
 
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-	private static extern void criAtomUnity_SetMaxSamplingRateForStandardVoicePool(int sampling_rate_for_memory, int sampling_rate_for_streaming);
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	public static extern void CRIWARE7A85BD74(int code);
 
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-	public static extern void criAtomUnity_BeginLeCompatibleMode();
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	public static extern void CRIWARE2D38DDC8(IntPtr cbfunc, string separator_string);
 
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-	public static extern void criAtomUnity_EndLeCompatibleMode();
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	public static extern void CRIWAREDDEFE97E();
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	public static extern void CRIWARE6388ABF2(IntPtr cbfunc);
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	public static extern void CRIWARE34DD9B8F();
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern void CRIWARE413373CC(int sampling_rate_for_memory, int sampling_rate_for_streaming);
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	public static extern void CRIWARE34BFBEA8();
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	public static extern void CRIWAREA0ABAC50();
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	public static extern void CRIWARE6E8A70F0(IntPtr acb_hn, CallbackFromNativeDelegate func, IntPtr obj);
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	public static extern ushort CRIWARE39B30E48(int id);
+
+	#if !UNITY_EDITOR && UNITY_IOS
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	public static extern void criAtomUnity_SleepToDelay_IOS(int milliseconds);
+	#endif
+	#else
+	private static void CRIWARE5C6445EA(int max_virtual_voices,
+		int max_voice_limit_groups, int max_categories,
+		int max_sequence_events_per_frame, int max_beatsync_callbacks_per_frame,
+		int num_standard_memory_voices, int num_standard_streaming_voices,
+		int num_hca_mx_memory_voices, int num_hca_mx_streaming_voices,
+		int output_sampling_rate, int num_asr_output_channels,
+		bool uses_in_game_preview, float server_frequency,
+		int max_parameter_blocks, int categories_per_playback,
+		int num_buses, bool use_ambisonics,
+		IntPtr spatializer_core_interface) { }
+	private static void CRIWARECBE1F916(long buffering_time_pc) { }
+	private static void CRIWARE5E9729B2(int output, int pulse_latency_usec) { }
+	private static void CRIWARE6E6C4A31(uint buffering_time_ios, bool override_ipod_music_ios) { }
+	private static void CRIWARE4A98FA9C(int num_low_delay_memory_voices, int num_low_delay_streaming_voices,
+																			int sound_buffering_time,          int sound_start_buffering_time,
+																			bool apply_hw_property) { }
+	#if !UNITY_EDITOR && UNITY_ANDROID
+	private static void CRIWARE8E759390(IntPtr android_context) { }
+	private static void CRIWARE6948E155(bool flag) { }
+	#endif
+
+	#if !UNITY_EDITOR && UNITY_PSP2
+	private static void CRIWARE6579138F(int num_atrac9_memory_voices, int num_atrac9_streaming_voices,
+																		int num_mana_decoders) { }
+	#endif
+	#if !UNITY_EDITOR && UNITY_PS4
+	private static void CRIWAREE8B849A6(int num_atrac9_memory_voices, int num_atrac9_streaming_voices,
+																		bool use_audio3d, int num_audio3d_memory_voices, int num_audio3d_streaming_voices) { }
+	#endif
+	#if !UNITY_EDITOR && UNITY_SWITCH
+	private static void CRIWARECA73AE32(int num_opus_memory_voices, int num_opus_streaming_voices, bool init_socket) { }
+	#endif
+	#if UNITY_WEBGL
+	private static void CRIWAREE41FBC60(int num_webaudio_voices) { }
+	#endif
+	private static bool _dummyInitialized = false;
+	private static void CRIWARE044F4CBD() { _dummyInitialized = true; }
+	public static bool CRIWARE74F13712() { return _dummyInitialized; }
+	private static void CRIWARE0AC46773() { _dummyInitialized = false; }
+	private static void CRIWARED0B3D8F4(bool pause) { }
+	public static uint CRIWAREAEE74CFB() { return 0; }
+	public static void CRIWARE7A85BD74(int code) { }
+	public static void CRIWARE2D38DDC8(IntPtr cbfunc, string separator_string) { }
+	public static void CRIWAREDDEFE97E() { }
+	public static void CRIWARE6388ABF2(IntPtr cbfunc) { }
+	public static void CRIWARE34DD9B8F() { }
+	private static void CRIWARE413373CC(int sampling_rate_for_memory, int sampling_rate_for_streaming) { }
+	public static void CRIWARE34BFBEA8() { }
+	public static void CRIWAREA0ABAC50() { }
+	public static void CRIWARE6E8A70F0(IntPtr acb_hn, CallbackFromNativeDelegate func, IntPtr obj) { }
+	public static ushort CRIWARE39B30E48(int id) { return 0; }
+#if !UNITY_EDITOR && UNITY_IOS
+	public static void criAtomUnity_SleepToDelay_IOS(int milliseconds) { }
+#endif
+	#endif
+	#endregion
 
 	#endregion
 }
@@ -349,63 +570,64 @@ public class CriAtomCueSheet
 	public string acbFile = "";
 	public string awbFile = "";
 	public CriAtomExAcb acb;
-	public bool IsLoading { get { return acb == null; } }
-
-#if (!UNITY_EDITOR || UNITY_EDITOR_OSX) && UNITY_WEBGL
-	public CriAtomExAcbAsync async;
-#endif
+	public CriAtomExAcbLoader.Status loaderStatus = CriAtomExAcbLoader.Status.Stop;
+	public bool IsLoading { get { return loaderStatus == CriAtomExAcbLoader.Status.Loading; } }
+	public bool IsError { get { return (loaderStatus == CriAtomExAcbLoader.Status.Error) || (!IsLoading && acb == null); } }
 }
 
-/// \addtogroup CRIATOM_UNITY_COMPONENT
-/// @{
+
 /**
- * <summary>ƒTƒEƒ“ƒhÄ¶‘S‘Ì‚ğ§Œä‚·‚é‚½‚ß‚ÌƒRƒ“ƒ|[ƒlƒ“ƒg‚Å‚·B</summary>
- * \par à–¾:
- * ŠeƒV[ƒ“‚É‚Ğ‚Æ‚Â—pˆÓ‚µ‚Ä‚¨‚­•K—v‚ª‚ ‚è‚Ü‚·B<br/>
- * UnityEditorã‚ÅCRI AtomƒEƒBƒ“ƒhƒE‚ğg—p‚µ‚Ä CriAtomSource ‚ğì¬‚µ‚½ê‡A
- * uCRIWAREv‚Æ‚¢‚¤–¼‘O‚ğ‚ÂƒIƒuƒWƒFƒNƒg‚Æ‚µ‚Ä©“®“I‚Éì¬‚³‚ê‚Ü‚·B’Êí‚Íƒ†[ƒU[‚ªì¬‚·‚é•K—v‚Í‚ ‚è‚Ü‚¹‚ñB
+ * \addtogroup CRIATOM_UNITY_COMPONENT
+ * @{
+ */
+
+
+/**
+ * <summary>A component for controlling the overall sound playback.</summary>
+ * <remarks>
+ * <para header='Description'>You need to prepare one for each scene.<br/>
+ * If you create a CriAtomSource using the CRI Atom window on UnityEditor,
+ * it will automatically be created as an object with the name "CRIWARE". Normally, you do not need to create it.</para>
+ * </remarks>
  */
 [AddComponentMenu("CRIWARE/CRI Atom")]
-public class CriAtom : MonoBehaviour
+public class CriAtom : CriMonoBehaviour
 {
 
 	/* @cond DOXYGEN_IGNORE */
 	public string acfFile = "";
-#if (!UNITY_EDITOR || UNITY_EDITOR_OSX) && UNITY_WEBGL
-	private byte[] acfData = null;
 	private bool acfIsLoading = false;
+#if CRIWARE_FORCE_LOAD_ASYNC
+	private byte[] acfData = null;
 #endif
 	public CriAtomCueSheet[] cueSheets = {};
 	public string dspBusSetting = "";
 	public bool dontDestroyOnLoad = false;
+#if CRIWARE_SUPPORT_NATIVE_CALLBACK
+	private static CriAtomExSequencer.EventCbFunc eventUserCbFunc = null;
+	private static CriAtomExBeatSync.CbFunc beatsyncUserCbFunc = null;
+#endif
 	private static CriAtom instance {
 		get; set;
 	}
-#if CRIWARE_SUPPORT_SEQUENCE_CALLBACK
-	private static CriAtomExSequencer.EventCbFunc eventUserCbFunc = null;
-	#if CRIWARE_CALLBACK_IMPL_UNITYSENDMESSAGE
-	//  no use of  event queue since event is directly passed  from native to managed
-	#elif CRIWARE_CALLBACK_IMPL_NATIVE2MANAGED
-	private static Queue<string> eventQueue = new Queue<string>();
-	#endif
-#endif
+
 	/* @endcond */
 
 	#region Functions
 
 	/**
-	 * <summary>DSPƒoƒXİ’è‚ÌƒAƒ^ƒbƒ`</summary>
-	 * <param name="settingName">DSPƒoƒXİ’è‚Ì–¼‘O</param>
-	 * \par à–¾:
-	 * DSPƒoƒXİ’è‚©‚çDSPƒoƒX‚ğ\’z‚µ‚ÄƒTƒEƒ“ƒhƒŒƒ“ƒ_ƒ‰‚ÉƒAƒ^ƒbƒ`‚µ‚Ü‚·B<br/>
-	 * Œ»İİ’è’†‚ÌDSPƒoƒXİ’è‚ğØ‚è‘Ö‚¦‚éê‡‚ÍAˆê“xƒfƒ^ƒbƒ`‚µ‚Ä‚©‚çÄƒAƒ^ƒbƒ`‚µ‚Ä‚­‚¾‚³‚¢B
-	 * <br/>
-	 * \attention
-	 * –{ŠÖ”‚ÍŠ®—¹•œ‹AŒ^‚ÌŠÖ”‚Å‚·B<br/>
-	 * –{ŠÖ”‚ğÀs‚·‚é‚ÆA‚µ‚Î‚ç‚­‚ÌŠÔAtomƒ‰ƒCƒuƒ‰ƒŠ‚ÌƒT[ƒoˆ—‚ªƒuƒƒbƒN‚³‚ê‚Ü‚·B<br/>
-	 * ‰¹ºÄ¶’†‚É–{ŠÖ”‚ğÀs‚·‚é‚ÆA‰¹“rØ‚ê“™‚Ì•s‹ï‡‚ª”­¶‚·‚é‰Â”\«‚ª‚ ‚é‚½‚ßA
-	 * –{ŠÖ”‚ÌŒÄ‚Ño‚µ‚ÍƒV[ƒ“‚ÌØ‚è‘Ö‚í‚è“™A•‰‰×•Ï“®‚ğ‹–—e‚Å‚«‚éƒ^ƒCƒ~ƒ“ƒO‚Ås‚Á‚Ä‚­‚¾‚³‚¢B<br/>
-	 * \sa CriAtom::DetachDspBusSetting
+	 * <summary>Attaching the DSP bus settings</summary>
+	 * <param name='settingName'>Name of the DSP bus setting</param>
+	 * <remarks>
+	 * <para header='Description'>Builds a DSP bus from the DSP bus settings and attaches it to the sound renderer.<br/>
+	 * If you want to switch the DSP bus settings currently set, detach the bus and then reattach it.
+	 * <br/></para>
+	 * <para header='Note'>This function is a return-on-complete function.<br/>
+	 * Calling this function blocks the server processing of the Atom library for a while.<br/>
+	 * If this function is called during sound playback, problems such as sound interruption may occur,
+	 * so call this function at a timing when load fluctuations is accepted such as when switching scenes.<br/></para>
+	 * </remarks>
+	 * <seealso cref='CriAtom::DetachDspBusSetting'/>
 	 */
 	public static void AttachDspBusSetting(string settingName)
 	{
@@ -418,16 +640,16 @@ public class CriAtom : MonoBehaviour
 	}
 
 	/**
-	 * <summary>DSPƒoƒXİ’è‚Ìƒfƒ^ƒbƒ`</summary>
-	 * \par à–¾:
-	 * DSPƒoƒXİ’è‚ğƒfƒ^ƒbƒ`‚µ‚Ü‚·B<br/>
-	 * <br/>
-	 * \attention
-	 * –{ŠÖ”‚ÍŠ®—¹•œ‹AŒ^‚ÌŠÖ”‚Å‚·B<br/>
-	 * –{ŠÖ”‚ğÀs‚·‚é‚ÆA‚µ‚Î‚ç‚­‚ÌŠÔAtomƒ‰ƒCƒuƒ‰ƒŠ‚ÌƒT[ƒoˆ—‚ªƒuƒƒbƒN‚³‚ê‚Ü‚·B<br/>
-	 * ‰¹ºÄ¶’†‚É–{ŠÖ”‚ğÀs‚·‚é‚ÆA‰¹“rØ‚ê“™‚Ì•s‹ï‡‚ª”­¶‚·‚é‰Â”\«‚ª‚ ‚é‚½‚ßA
-	 * –{ŠÖ”‚ÌŒÄ‚Ño‚µ‚ÍƒV[ƒ“‚ÌØ‚è‘Ö‚í‚è“™A•‰‰×•Ï“®‚ğ‹–—e‚Å‚«‚éƒ^ƒCƒ~ƒ“ƒO‚Ås‚Á‚Ä‚­‚¾‚³‚¢B<br/>
-	 * \sa CriAtom::DetachDspBusSetting
+	 * <summary>Detaches the DSP bus settings</summary>
+	 * <remarks>
+	 * <para header='Description'>Detaches the DSP bus settings.<br/>
+	 * <br/></para>
+	 * <para header='Note'>This function is a return-on-complete function.<br/>
+	 * Calling this function blocks the server processing of the Atom library for a while.<br/>
+	 * If this function is called during sound playback, problems such as sound interruption may occur,
+	 * so call this function at a timing when load fluctuations is accepted such as when switching scenes.<br/></para>
+	 * </remarks>
+	 * <seealso cref='CriAtom::DetachDspBusSetting'/>
 	 */
 	public static void DetachDspBusSetting()
 	{
@@ -436,11 +658,12 @@ public class CriAtom : MonoBehaviour
 	}
 
 	/**
-	 * <summary>ƒLƒ…[ƒV[ƒg‚Ìæ“¾</summary>
-	 * <param name="name">ƒLƒ…[ƒV[ƒg–¼</param>
-	 * <returns>ƒLƒ…[ƒV[ƒgƒIƒuƒWƒFƒNƒg</returns>
-	 * \par à–¾:
-	 * ˆø”‚Éw’è‚µ‚½ƒLƒ…[ƒV[ƒg–¼‚ğŒ³‚É“o˜^Ï‚İ‚ÌƒLƒ…[ƒV[ƒgƒIƒuƒWƒFƒNƒg‚ğæ“¾‚µ‚Ü‚·B<br/>
+	 * <summary>Gets a Cue Sheet</summary>
+	 * <param name='name'>Cue Sheet name</param>
+	 * <returns>Cue Sheet object</returns>
+	 * <remarks>
+	 * <para header='Description'>Gets the registered Cue Sheet object based on the Cue Sheet name specified in the argument.<br/></para>
+	 * </remarks>
 	 */
 	public static CriAtomCueSheet GetCueSheet(string name)
 	{
@@ -448,82 +671,167 @@ public class CriAtom : MonoBehaviour
 	}
 
 	/**
-	 * <summary>ƒLƒ…[ƒV[ƒg‚Ì’Ç‰Á</summary>
-	 * <param name="name">ƒLƒ…[ƒV[ƒg–¼</param>
-	 * <param name="acbFile">ACBƒtƒ@ƒCƒ‹ƒpƒX</param>
-	 * <param name="awbFile">AWBƒtƒ@ƒCƒ‹ƒpƒX</param>
-	 * <param name="binder">ƒoƒCƒ“ƒ_ƒIƒuƒWƒFƒNƒg(ƒIƒvƒVƒ‡ƒ“)</param>
-	 * <returns>ƒLƒ…[ƒV[ƒgƒIƒuƒWƒFƒNƒg</returns>
-	 * \par à–¾:
-	 * ˆø”‚Éw’è‚µ‚½ƒtƒ@ƒCƒ‹ƒpƒXî•ñ‚ğŒ³‚ÉƒLƒ…[ƒV[ƒg‚Ì’Ç‰Á‚ğs‚¢‚Ü‚·B<br/>
-	 * “¯‚É•¡”‚ÌƒLƒ…[ƒV[ƒg‚ğ“o˜^‚·‚é‚±‚Æ‚ª‰Â”\‚Å‚·B<br/>
+	 * <summary>Adds a Cue Sheet</summary>
+	 * <param name='name'>Cue Sheet name</param>
+	 * <param name='acbFile'>ACB file path</param>
+	 * <param name='awbFile'>AWB file path</param>
+	 * <param name='binder'>Binder object (optional)</param>
+	 * <returns>Cue Sheet object</returns>
+	 * <remarks>
+	 * <para header='Description'>A Cue Sheet is added based on the file path information specified in the argument.<br/>
+	 * It is possible to register multiple Cue Sheets at the same time.<br/>
 	 * <br/>
-	 * Šeƒtƒ@ƒCƒ‹ƒpƒX‚É‘Î‚µ‚Ä‘Š‘ÎƒpƒX‚ğw’è‚µ‚½ê‡‚Í StreamingAssets ƒtƒHƒ‹ƒ_‚©‚ç‚Ì‘Š‘Î‚Åƒtƒ@ƒCƒ‹‚ğƒ[ƒh‚µ‚Ü‚·B<br/>
-	 * â‘ÎƒpƒXA‚ ‚é‚¢‚ÍURL‚ğw’è‚µ‚½ê‡‚É‚Íw’è‚µ‚½ƒpƒX‚Åƒtƒ@ƒCƒ‹‚ğƒ[ƒh‚µ‚Ü‚·B<br/>
+	 * If a relative path is specified for each file path, the file is loaded relative to the StreamingAssets folder.<br/>
+	 * The file is loaded using the specified path if an absolute path or URL is specified.<br/>
 	 * <br/>
-	 * CPKƒtƒ@ƒCƒ‹‚ÉƒpƒbƒLƒ“ƒO‚³‚ê‚½ACBƒtƒ@ƒCƒ‹‚ÆAWBƒtƒ@ƒCƒ‹‚©‚çƒLƒ…[ƒV[ƒg‚ğ’Ç‰Á‚·‚éê‡‚ÍA
-	 * binderˆø”‚ÉCPK‚ğƒoƒCƒ“ƒh‚µ‚½ƒoƒCƒ“ƒ_‚ğw’è‚µ‚Ä‚­‚¾‚³‚¢B<br/>
-	 * ‚È‚¨AƒoƒCƒ“ƒ_‹@”\‚ÍADX2LE‚Å‚Í‚²—˜—p‚É‚È‚ê‚Ü‚¹‚ñB<br/>
+	 * When adding a Cue Sheet from the ACB and AWB files packed in the CPK file,
+	 * specify the binder which bound the CPK in the binder argument.<br/>
+	 * The binder function cannot be used in ADX2LE.<br/></para>
+	 * </remarks>
 	 */
 	public static CriAtomCueSheet AddCueSheet(string name, string acbFile, string awbFile, CriFsBinder binder = null)
 	{
+	#if CRIWARE_FORCE_LOAD_ASYNC
+		return CriAtom.AddCueSheetAsync(name, acbFile, awbFile, binder);
+	#else
 		CriAtomCueSheet cueSheet = CriAtom.instance.AddCueSheetInternal(name, acbFile, awbFile, binder);
 		if (Application.isPlaying) {
-		#if (!UNITY_EDITOR || UNITY_EDITOR_OSX) && UNITY_WEBGL
-			CriAtom.instance.LoadAcbFileAsync(cueSheet, binder, acbFile, awbFile);
-		#else
 			cueSheet.acb = CriAtom.instance.LoadAcbFile(binder, acbFile, awbFile);
-		#endif
+		}
+		return cueSheet;
+	#endif
+	}
+
+	/**
+	 * <summary>Adds a Cue Sheet asynchronously</summary>
+	 * <param name='name'>Cue Sheet name</param>
+	 * <param name='acbFile'>ACB file path</param>
+	 * <param name='awbFile'>AWB file path</param>
+	 * <param name='binder'>Binder object (optional)</param>
+	 * <param name='loadAwbOnMemory'>Whether to load the AWB file on the memory (optional)</param>
+	 * <returns>Cue Sheet object</returns>
+	 * <remarks>
+	 * <para header='Description'>A Cue Sheet is added asynchronously based on the file path information specified in the argument.<br/>
+	 * It is possible to register multiple Cue Sheets at the same time.<br/>
+	 * <br/>
+	 * If a relative path is specified for each file path, the file is loaded relative to the StreamingAssets folder.<br/>
+	 * The file is loaded using the specified path if an absolute path or URL is specified.<br/>
+	 * <br/>
+	 * When adding a Cue Sheet from the ACB and AWB files packed in the CPK file,
+	 * specify the binder which bound the CPK in the binder argument.<br/>
+	 * The binder function cannot be used in ADX2LE.<br/>
+	 * <br/>
+	 * Loading is in progress while the CriAtomCueSheet::isLoading member of the returned Cue Sheet object is True.<br/>
+	 * Be sure to check that it returns False before playing the Cue.<br/>
+	 * <br/>
+	 * If loadAwbOnMemory is set to False, only the header part of the AWB file is loaded on the memory and stream playback is performed.<br/>
+	 * If loadAwbOnMemory is set to True, the entire AWB file is loaded into memory, effectively resulting in memory playback.<br/>
+	 * In WebGL(Editor running), loadAwbOnMemory is forced to True for internal reasons.<br/></para>
+	 * </remarks>
+	 */
+	public static CriAtomCueSheet AddCueSheetAsync(string name, string acbFile, string awbFile, CriFsBinder binder = null, bool loadAwbOnMemory = false)
+	{
+	#if UNITY_EDITOR && UNITY_WEBGL
+		loadAwbOnMemory = true;
+	#endif
+		CriAtomCueSheet cueSheet = CriAtom.instance.AddCueSheetInternal(name, acbFile, awbFile, binder);
+		if (Application.isPlaying) {
+			CriAtom.instance.LoadAcbFileAsync(cueSheet, binder, acbFile, awbFile, loadAwbOnMemory);
 		}
 		return cueSheet;
 	}
 
 	/**
-	 * <summary>ƒLƒ…[ƒV[ƒg‚Ì’Ç‰Áiƒƒ‚ƒŠ‚©‚ç‚Ì“Ç‚İ‚İj</summary>
-	 * <param name="name">ƒLƒ…[ƒV[ƒg–¼</param>
-	 * <param name="acbData">ACBƒf[ƒ^</param>
-	 * <param name="awbFile">AWBƒtƒ@ƒCƒ‹ƒpƒX</param>
-	 * <param name="awbBinder">AWB—pƒoƒCƒ“ƒ_ƒIƒuƒWƒFƒNƒg(ƒIƒvƒVƒ‡ƒ“)</param>
-	 * <returns>ƒLƒ…[ƒV[ƒgƒIƒuƒWƒFƒNƒg</returns>
-	 * \par à–¾:
-	 * ˆø”‚Éw’è‚µ‚½ƒf[ƒ^‚Æƒtƒ@ƒCƒ‹ƒpƒXî•ñ‚©‚çƒLƒ…[ƒV[ƒg‚Ì’Ç‰Á‚ğs‚¢‚Ü‚·B<br/>
-	 * “¯‚É•¡”‚ÌƒLƒ…[ƒV[ƒg‚ğ“o˜^‚·‚é‚±‚Æ‚ª‰Â”\‚Å‚·B<br/>
+	 * <summary>Adds a Cue Sheet (reading from memory)</summary>
+	 * <param name='name'>Cue Sheet name</param>
+	 * <param name='acbData'>ACB data</param>
+	 * <param name='awbFile'>AWB file path</param>
+	 * <param name='awbBinder'>Binder object for AWB (optional)</param>
+	 * <returns>Cue Sheet object</returns>
+	 * <remarks>
+	 * <para header='Description'>Adds a Cue Sheet from the data and file path information specified in the arguments.<br/>
+	 * It is possible to register multiple Cue Sheets at the same time.<br/>
 	 * <br/>
-	 * ƒtƒ@ƒCƒ‹ƒpƒX‚É‘Î‚µ‚Ä‘Š‘ÎƒpƒX‚ğw’è‚µ‚½ê‡‚Í StreamingAssets ƒtƒHƒ‹ƒ_‚©‚ç‚Ì‘Š‘Î‚Åƒtƒ@ƒCƒ‹‚ğƒ[ƒh‚µ‚Ü‚·B<br/>
-	 * â‘ÎƒpƒXA‚ ‚é‚¢‚ÍURL‚ğw’è‚µ‚½ê‡‚É‚Íw’è‚µ‚½ƒpƒX‚Åƒtƒ@ƒCƒ‹‚ğƒ[ƒh‚µ‚Ü‚·B<br/>
+	 * If a relative path is specified for the file path, the file is loaded relative to the StreamingAssets folder.<br/>
+	 * The file is loaded using the specified path if an absolute path or URL is specified.<br/>
 	 * <br/>
-	 * CPKƒtƒ@ƒCƒ‹‚ÉƒpƒbƒLƒ“ƒO‚³‚ê‚½AWBƒtƒ@ƒCƒ‹‚©‚çƒLƒ…[ƒV[ƒg‚ğ’Ç‰Á‚·‚éê‡‚ÍA
-	 * awbBinderˆø”‚ÉCPK‚ğƒoƒCƒ“ƒh‚µ‚½ƒoƒCƒ“ƒ_‚ğw’è‚µ‚Ä‚­‚¾‚³‚¢B<br/>
-	 * ‚È‚¨AƒoƒCƒ“ƒ_‹@”\‚ÍADX2LE‚Å‚Í‚²—˜—p‚É‚È‚ê‚Ü‚¹‚ñB<br/>
+	 * When adding a Cue Sheet from the AWB file packed in the CPK file,
+	 * specify the binder which bound the CPK in the awbBinder argument.<br/>
+	 * The binder function cannot be used in ADX2LE.<br/></para>
+	 * </remarks>
 	 */
 	public static CriAtomCueSheet AddCueSheet(string name, byte[] acbData, string awbFile, CriFsBinder awbBinder = null)
 	{
+	#if CRIWARE_FORCE_LOAD_ASYNC
+		return CriAtom.AddCueSheetAsync(name, acbData, awbFile, awbBinder);
+	#else
 		CriAtomCueSheet cueSheet = CriAtom.instance.AddCueSheetInternal(name, "", awbFile, awbBinder);
 		if (Application.isPlaying) {
-		#if (!UNITY_EDITOR || UNITY_EDITOR_OSX) && UNITY_WEBGL
-			CriAtom.instance.LoadAcbDataAsync(cueSheet, acbData, awbBinder, awbFile);
-		#else
 			cueSheet.acb = CriAtom.instance.LoadAcbData(acbData, awbBinder, awbFile);
-		#endif
+		}
+		return cueSheet;
+	#endif
+	}
+
+	/**
+	 * <summary>Adds a Cue Sheet asynchronously (reading from memory)</summary>
+	 * <param name='name'>Cue Sheet name</param>
+	 * <param name='acbData'>ACB data</param>
+	 * <param name='awbFile'>AWB file path</param>
+	 * <param name='awbBinder'>Binder object for AWB (optional)</param>
+	 * <param name='loadAwbOnMemory'>Whether to load the AWB file on the memory (optional)</param>
+	 * <returns>Cue Sheet object</returns>
+	 * <remarks>
+	 * <para header='Description'>Adds a Cue Sheet from the data and file path information specified in the arguments.<br/>
+	 * It is possible to register multiple Cue Sheets at the same time.<br/>
+	 * <br/>
+	 * If a relative path is specified for the file path, the file is loaded relative to the StreamingAssets folder.<br/>
+	 * The file is loaded using the specified path if an absolute path or URL is specified.<br/>
+	 * <br/>
+	 * When adding a Cue Sheet from the AWB file packed in the CPK file,
+	 * specify the binder which bound the CPK in the awbBinder argument.<br/>
+	 * The binder function cannot be used in ADX2LE.<br/>
+	 * <br/>
+	 * Loading is in progress while the CriAtomCueSheet::isLoading member of the returned Cue Sheet object is True.<br/>
+	 * Be sure to check that it returns False before playing the Cue.<br/>
+	 * <br/>
+	 * If loadAwbOnMemory is set to False, only the header part of the AWB file is loaded on the memory and stream playback is performed.<br/>
+	 * If loadAwbOnMemory is set to True, the entire AWB file is loaded into memory, effectively resulting in memory playback.<br/>
+	 * In WebGL(Editor running), loadAwbOnMemory is forced to True for internal reasons.<br/></para>
+	 * </remarks>
+	 */
+	public static CriAtomCueSheet AddCueSheetAsync(string name, byte[] acbData, string awbFile, CriFsBinder awbBinder = null, bool loadAwbOnMemory = false)
+	{
+	#if UNITY_EDITOR && UNITY_WEBGL
+		loadAwbOnMemory = true;
+	#endif
+		CriAtomCueSheet cueSheet = CriAtom.instance.AddCueSheetInternal(name, "", awbFile, awbBinder);
+		if (Application.isPlaying) {
+			CriAtom.instance.LoadAcbDataAsync(cueSheet, acbData, awbBinder, awbFile, loadAwbOnMemory);
 		}
 		return cueSheet;
 	}
 
 	/**
-	 * <summary>ƒLƒ…[ƒV[ƒg‚Ìíœ</summary>
-	 * <param name="name">ƒLƒ…[ƒV[ƒg–¼</param>
-	 * \par à–¾:
-	 * ’Ç‰ÁÏ‚İ‚ÌƒLƒ…[ƒV[ƒg‚ğíœ‚µ‚Ü‚·B<br/>
+	 * <summary>Removes a Cue Sheet</summary>
+	 * <param name='name'>Cue Sheet name</param>
+	 * <remarks>
+	 * <para header='Description'>Removes the added Cue Sheet.<br/></para>
+	 * </remarks>
 	 */
 	public static void RemoveCueSheet(string name)
 	{
+		if (CriAtom.instance == null) {
+			return;
+		}
 		CriAtom.instance.RemoveCueSheetInternal(name);
 	}
 
 	/**
-	 * <summary>ƒLƒ…[ƒV[ƒg‚Ìƒ[ƒhŠ®—¹ƒ`ƒFƒbƒN</summary>
-	 * \par à–¾:
-	 * ‘S‚Ä‚ÌƒLƒ…[ƒV[ƒg‚Ìƒ[ƒhŠ®—¹‚ğƒ`ƒFƒbƒN‚µ‚Ü‚·B<br/>
+	 * <summary>Checks the completion of loading a Cue Sheet.</summary>
+	 * <remarks>
+	 * <para header='Description'>Checks the completion of loading all Cue Sheets.<br/></para>
+	 * </remarks>
 	 */
 	public static bool CueSheetsAreLoading {
 		get {
@@ -540,11 +848,12 @@ public class CriAtom : MonoBehaviour
 	}
 
 	/**
-	 * <summary>ACBƒIƒuƒWƒFƒNƒg‚Ìæ“¾</summary>
-	 * <param name="cueSheetName">ƒLƒ…[ƒV[ƒg–¼</param>
-	 * <returns>ACBƒIƒuƒWƒFƒNƒg</returns>
-	 * \par à–¾:
-	 * w’è‚µ‚½ƒLƒ…[ƒV[ƒg‚É‘Î‰‚·‚éACBƒIƒuƒWƒFƒNƒg‚ğæ“¾‚µ‚Ü‚·B<br/>
+	 * <summary>Gets the ACB object</summary>
+	 * <param name='cueSheetName'>Cue Sheet name</param>
+	 * <returns>ACB object</returns>
+	 * <remarks>
+	 * <para header='Description'>Gets the ACB object corresponding to the specified Cue Sheet.<br/></para>
+	 * </remarks>
 	 */
 	public static CriAtomExAcb GetAcb(string cueSheetName)
 	{
@@ -558,9 +867,9 @@ public class CriAtom : MonoBehaviour
 	}
 
 	/**
-	 * <summary>ƒJƒeƒSƒŠ–¼w’è‚ÅƒJƒeƒSƒŠƒ{ƒŠƒ…[ƒ€‚ğİ’è‚µ‚Ü‚·B</summary>
-	 * <param name="name">ƒJƒeƒSƒŠ–¼</param>
-	 * <param name="volume">ƒ{ƒŠƒ…[ƒ€</param>
+	 * <summary>Sets the Category volume by specifying the Category name.</summary>
+	 * <param name='name'>Category name</param>
+	 * <param name='volume'>Volume</param>
 	 */
 	public static void SetCategoryVolume(string name, float volume)
 	{
@@ -568,9 +877,9 @@ public class CriAtom : MonoBehaviour
 	}
 
 	/**
-	 * <summary>ƒJƒeƒSƒŠIDw’è‚ÅƒJƒeƒSƒŠƒ{ƒŠƒ…[ƒ€‚ğİ’è‚µ‚Ü‚·B</summary>
-	 * <param name="id">ƒJƒeƒSƒŠID</param>
-	 * <param name="volume">ƒ{ƒŠƒ…[ƒ€</param>
+	 * <summary>Sets the Category volume by specifying the Category ID.</summary>
+	 * <param name='id'>Category ID</param>
+	 * <param name='volume'>Volume</param>
 	 */
 	public static void SetCategoryVolume(int id, float volume)
 	{
@@ -578,18 +887,18 @@ public class CriAtom : MonoBehaviour
 	}
 
 	/**
-	 * <summary>ƒJƒeƒSƒŠ–¼w’è‚ÅƒJƒeƒSƒŠƒ{ƒŠƒ…[ƒ€‚ğæ“¾‚µ‚Ü‚·B</summary>
-	 * <param name="name">ƒJƒeƒSƒŠ–¼</param>
-	 * <returns>ƒ{ƒŠƒ…[ƒ€</returns>
+	 * <summary>Gets the Category volume by specifying the Category name.</summary>
+	 * <param name='name'>Category name</param>
+	 * <returns>Volume</returns>
 	 */
 	public static float GetCategoryVolume(string name)
 	{
 		return CriAtomExCategory.GetVolume(name);
 	}
 	/**
-	 * <summary>ƒJƒeƒSƒŠIDw’è‚ÅƒJƒeƒSƒŠƒ{ƒŠƒ…[ƒ€‚ğæ“¾‚µ‚Ü‚·B</summary>
-	 * <param name="id">ƒJƒeƒSƒŠID</param>
-	 * <returns>ƒ{ƒŠƒ…[ƒ€</returns>
+	 * <summary>Gets the Category volume by specifying the Category ID.</summary>
+	 * <param name='id'>Category ID</param>
+	 * <returns>Volume</returns>
 	 */
 	public static float GetCategoryVolume(int id)
 	{
@@ -597,8 +906,26 @@ public class CriAtom : MonoBehaviour
 	}
 
 	/**
-	 * <summary>ƒoƒXî•ñæ“¾‚ğ—LŒø‚É‚µ‚Ü‚·B</summary>
-	 * <param name="sw">true: æ“¾‚ğ—LŒø‚É‚·‚éB false: æ“¾‚ğ–³Œø‚É‚·‚é</param>
+	 * <summary>Enables the acquisition of the bus information</summary>
+	 * <param name='busName'>DSP bus name</param>
+	 * <param name='sw'>True: Enable acquisition. False: Disable acquisition.</param>
+	 */
+	public static void SetBusAnalyzer(string busName, bool sw)
+	{
+	#if !UNITY_EDITOR && UNITY_PSP2
+		// unsupported
+	#else
+		if (sw) {
+			CriAtomExAsr.AttachBusAnalyzer(busName, 50, 1000);
+		} else {
+			CriAtomExAsr.DetachBusAnalyzer(busName);
+		}
+	#endif
+	}
+
+	/**
+	 * <summary>Enables acquisition of all bus information.</summary>
+	 * <param name='sw'>True: Enable acquisition. False: Disable acquisition.</param>
 	 */
 	public static void SetBusAnalyzer(bool sw)
 	{
@@ -614,17 +941,29 @@ public class CriAtom : MonoBehaviour
 	}
 
 	/**
-	 * <summary>ƒoƒXî•ñ‚ğæ“¾‚µ‚Ü‚·B</summary>
-	 * <param name="bus">DSPƒoƒX”Ô†</param>
-	 * <returns>DSPƒoƒXî•ñ</returns>
+	 * <summary>Gets the bus information.</summary>
+	 * <param name='busName'>DSP bus name</param>
+	 * <returns>DSP bus information</returns>
 	 */
-	public static CriAtomExAsr.BusAnalyzerInfo GetBusAnalyzerInfo(int bus)
+	public static CriAtomExAsr.BusAnalyzerInfo GetBusAnalyzerInfo(string busName)
 	{
 		CriAtomExAsr.BusAnalyzerInfo info;
 	#if !UNITY_EDITOR && UNITY_PSP2
 		info = new CriAtomExAsr.BusAnalyzerInfo(null);
 	#else
-		CriAtomExAsr.GetBusAnalyzerInfo(bus, out info);
+		CriAtomExAsr.GetBusAnalyzerInfo(busName, out info);
+	#endif
+		return info;
+	}
+
+	[System.Obsolete("Use CriAtom.GetBusAnalyzerInfo(string busName)")]
+	public static CriAtomExAsr.BusAnalyzerInfo GetBusAnalyzerInfo(int busId)
+	{
+		CriAtomExAsr.BusAnalyzerInfo info;
+	#if !UNITY_EDITOR && UNITY_PSP2
+		info = new CriAtomExAsr.BusAnalyzerInfo(null);
+	#else
+		CriAtomExAsr.GetBusAnalyzerInfo(busId, out info);
 	#endif
 		return info;
 	}
@@ -634,14 +973,21 @@ public class CriAtom : MonoBehaviour
 	/* @cond DOXYGEN_IGNORE */
 	#region Functions for internal use
 
-	private void Setup()
+	public void Setup()
 	{
+		if (CriAtom.instance != null && CriAtom.instance != this) {
+			var obj = CriAtom.instance.gameObject;
+			CriAtom.instance.Shutdown();
+			CriAtomEx.UnregisterAcf();
+			GameObject.Destroy(obj);
+		}
+
 		CriAtom.instance = this;
 
 		CriAtomPlugin.InitializeLibrary();
 
 		if (!String.IsNullOrEmpty(this.acfFile)) {
-			string acfPath = Path.Combine(CriWare.streamingAssetsPath, this.acfFile);
+			string acfPath = Path.Combine(CriWare.Common.streamingAssetsPath, this.acfFile);
 			CriAtomEx.RegisterAcf(null, acfPath);
 		}
 
@@ -658,27 +1004,23 @@ public class CriAtom : MonoBehaviour
 		}
 	}
 
-	private void Shutdown()
+	public void Shutdown()
 	{
 		foreach (var cueSheet in this.cueSheets) {
 			if (cueSheet.acb != null) {
 				cueSheet.acb.Dispose();
 				cueSheet.acb = null;
 			}
-		#if (!UNITY_EDITOR || UNITY_EDITOR_OSX) && UNITY_WEBGL
-			if (cueSheet.async != null) {
-				cueSheet.async.Dispose();
-				cueSheet.async = null;
-			}
-		#endif
 		}
 		CriAtomPlugin.FinalizeLibrary();
-		CriAtom.instance = null;
+		if (CriAtom.instance == this) {
+			CriAtom.instance = null;
+		}
 	}
 
-	private void Awake()
+	void Awake()
 	{
-		if (CriAtom.instance != null) {
+		if (CriAtom.instance != null && CriAtom.instance != this) {
 			if (CriAtom.instance.acfFile != this.acfFile) {
 				var obj = CriAtom.instance.gameObject;
 				CriAtom.instance.Shutdown();
@@ -694,8 +1036,9 @@ public class CriAtom : MonoBehaviour
 		}
 	}
 
-	private void OnEnable()
+	protected override void OnEnable()
 	{
+		base.OnEnable();
 	#if UNITY_EDITOR
 		if (CriAtomPlugin.previewCallback != null) {
 			CriAtomPlugin.previewCallback();
@@ -705,14 +1048,14 @@ public class CriAtom : MonoBehaviour
 			return;
 		}
 
-	#if (!UNITY_EDITOR || UNITY_EDITOR_OSX) && UNITY_WEBGL
+	#if CRIWARE_FORCE_LOAD_ASYNC
 		this.SetupAsync();
 	#else
 		this.Setup();
 	#endif
 	}
 
-	private void OnDestroy()
+	void OnDestroy()
 	{
 		if (this != CriAtom.instance) {
 			return;
@@ -720,28 +1063,13 @@ public class CriAtom : MonoBehaviour
 		this.Shutdown();
 	}
 
-	private void Update()
+	public override void CriInternalUpdate()
 	{
-#if CRIWARE_SUPPORT_SEQUENCE_CALLBACK
-	#if CRIWARE_CALLBACK_IMPL_UNITYSENDMESSAGE
-		// no need to invoke the delegate since it will be invoked via the callback directly.
-	#elif CRIWARE_CALLBACK_IMPL_NATIVE2MANAGED
-		if (eventUserCbFunc != null) {
-			int numQues = eventQueue.Count;
-			string msg;
-
-			for (int i=0;i<numQues;i++) {
-				/* ƒLƒ…[ƒCƒ“ƒO‚³‚ê‚½ƒCƒxƒ“ƒg‚ª‚ ‚ê‚Î‚»‚ê‚ğÀs‚·‚é */
-				lock (((ICollection)eventQueue).SyncRoot)
-				{
-					msg = eventQueue.Dequeue();	/* ƒfƒLƒ…[‚ÌuŠÔ‚¾‚¯”r‘¼§Œä‚ğs‚¤ */
-				}
-				eventUserCbFunc(msg);
-			}
-		}
-	#endif
-#endif
+		CriAtomPlugin.CRIWAREDDEFE97E();
+		CriAtomPlugin.CRIWARE34DD9B8F();
 	}
+
+	public override void CriInternalLateUpdate() { }
 
 	public CriAtomCueSheet GetCueSheetInternal(string name)
 	{
@@ -789,12 +1117,6 @@ public class CriAtom : MonoBehaviour
 			cueSheet.acb.Dispose();
 			cueSheet.acb = null;
 		}
-	#if (!UNITY_EDITOR || UNITY_EDITOR_OSX) && UNITY_WEBGL
-		if (cueSheet.async != null) {
-			cueSheet.async.Dispose();
-			cueSheet.async = null;
-		}
-	#endif
 
 		var cueSheets = new CriAtomCueSheet[this.cueSheets.Length - 1];
 		Array.Copy(this.cueSheets, 0, cueSheets, 0, index);
@@ -805,8 +1127,8 @@ public class CriAtom : MonoBehaviour
 	public bool dontRemoveExistsCueSheet = false;
 
 	/*
-	 * newDontRemoveExistsCueSheet == false ‚Ìê‡AŒÃ‚¢ƒLƒ…[ƒV[ƒg‚ğ“o˜^‰ğœ‚µ‚ÄAV‚µ‚¢ƒLƒ…[ƒV[ƒg‚Ì“o˜^‚ğs‚¤B
-	 * ‚½‚¾‚µ“¯‚¶ƒLƒ…[ƒV[ƒg‚ÌÄ“o˜^‚Í‰ñ”ğ‚·‚é
+	 * newDontRemoveExistsCueSheet == false ã®å ´åˆã€å¤ã„ã‚­ãƒ¥ãƒ¼ã‚·ãƒ¼ãƒˆã‚’ç™»éŒ²è§£é™¤ã—ã¦ã€æ–°ã—ã„ã‚­ãƒ¥ãƒ¼ã‚·ãƒ¼ãƒˆã®ç™»éŒ²ã‚’è¡Œã†ã€‚
+	 * ãŸã ã—åŒã˜ã‚­ãƒ¥ãƒ¼ã‚·ãƒ¼ãƒˆã®å†ç™»éŒ²ã¯å›é¿ã™ã‚‹
 	 */
 	private void MargeCueSheet(CriAtomCueSheet[] newCueSheets, bool newDontRemoveExistsCueSheet)
 	{
@@ -836,14 +1158,14 @@ public class CriAtom : MonoBehaviour
 		}
 
 		string acbPath = acbFile;
-		if ((binder == null) && CriWare.IsStreamingAssetsPath(acbPath)) {
-			acbPath = Path.Combine(CriWare.streamingAssetsPath, acbPath);
+		if ((binder == null) && CriWare.Common.IsStreamingAssetsPath(acbPath)) {
+			acbPath = Path.Combine(CriWare.Common.streamingAssetsPath, acbPath);
 		}
 
 		string awbPath = awbFile;
 		if (!String.IsNullOrEmpty(awbPath)) {
-			if ((binder == null) && CriWare.IsStreamingAssetsPath(awbPath)) {
-				awbPath = Path.Combine(CriWare.streamingAssetsPath, awbPath);
+			if ((binder == null) && CriWare.Common.IsStreamingAssetsPath(awbPath)) {
+				awbPath = Path.Combine(CriWare.Common.streamingAssetsPath, awbPath);
 			}
 		}
 
@@ -858,15 +1180,15 @@ public class CriAtom : MonoBehaviour
 
 		string awbPath = awbFile;
 		if (!String.IsNullOrEmpty(awbPath)) {
-			if ((binder == null) && CriWare.IsStreamingAssetsPath(awbPath)) {
-				awbPath = Path.Combine(CriWare.streamingAssetsPath, awbPath);
+			if ((binder == null) && CriWare.Common.IsStreamingAssetsPath(awbPath)) {
+				awbPath = Path.Combine(CriWare.Common.streamingAssetsPath, awbPath);
 			}
 		}
 
 		return CriAtomExAcb.LoadAcbData(acbData, binder, awbPath);
 	}
 
-#if (!UNITY_EDITOR || UNITY_EDITOR_OSX) && UNITY_WEBGL
+#if CRIWARE_FORCE_LOAD_ASYNC
 	private void SetupAsync()
 	{
 		CriAtom.instance = this;
@@ -883,16 +1205,21 @@ public class CriAtom : MonoBehaviour
 		}
 
 		foreach (var cueSheet in this.cueSheets) {
-			StartCoroutine(LoadAcbFileCoroutine(cueSheet, null, cueSheet.acbFile, cueSheet.awbFile));
+			#if UNITY_EDITOR
+			bool loadAwbOnMemory = true;
+			#else
+			bool loadAwbOnMemory = false;
+			#endif
+			StartCoroutine(LoadAcbFileCoroutine(cueSheet, null, cueSheet.acbFile, cueSheet.awbFile, loadAwbOnMemory));
 		}
 	}
 
 	private IEnumerator RegisterAcfAsync(string acfFile, string dspBusSetting)
 	{
 	#if UNITY_EDITOR
-		string acfPath = "file://" + CriWare.streamingAssetsPath + "/" + acfFile;
+		string acfPath = "file://" + CriWare.Common.streamingAssetsPath + "/" + acfFile;
 	#else
-		string acfPath = CriWare.streamingAssetsPath + "/" + acfFile;
+		string acfPath = CriWare.Common.streamingAssetsPath + "/" + acfFile;
 	#endif
 		using (var req = new WWW(acfPath)) {
 			yield return req;
@@ -905,125 +1232,147 @@ public class CriAtom : MonoBehaviour
 		}
 		this.acfIsLoading = false;
 	}
+#endif
 
-	private void LoadAcbFileAsync(CriAtomCueSheet cueSheet, CriFsBinder binder, string acbFile, string awbFile)
+
+	private void LoadAcbFileAsync(CriAtomCueSheet cueSheet, CriFsBinder binder, string acbFile, string awbFile, bool loadAwbOnMemory)
 	{
 		if (String.IsNullOrEmpty(acbFile)) {
 			return;
 		}
 
-		StartCoroutine(LoadAcbFileCoroutine(cueSheet, binder, acbFile, awbFile));
+		StartCoroutine(LoadAcbFileCoroutine(cueSheet, binder, acbFile, awbFile, loadAwbOnMemory));
 	}
 
-	private IEnumerator LoadAcbFileCoroutine(CriAtomCueSheet cueSheet, CriFsBinder binder, string acbPath, string awbPath)
+	private IEnumerator LoadAcbFileCoroutine(CriAtomCueSheet cueSheet, CriFsBinder binder, string acbPath, string awbPath, bool loadAwbOnMemory)
 	{
-		if ((binder == null) && CriWare.IsStreamingAssetsPath(acbPath)) {
-			acbPath = Path.Combine(CriWare.streamingAssetsPath, acbPath);
+		cueSheet.loaderStatus = CriAtomExAcbLoader.Status.Loading;
+
+		if ((binder == null) && CriWare.Common.IsStreamingAssetsPath(acbPath)) {
+			acbPath = Path.Combine(CriWare.Common.streamingAssetsPath, acbPath);
 		}
 
 		if (!String.IsNullOrEmpty(awbPath)) {
-			if ((binder == null) && CriWare.IsStreamingAssetsPath(awbPath)) {
-				awbPath = Path.Combine(CriWare.streamingAssetsPath, awbPath);
+			if ((binder == null) && CriWare.Common.IsStreamingAssetsPath(awbPath)) {
+				awbPath = Path.Combine(CriWare.Common.streamingAssetsPath, awbPath);
 			}
 		}
 
 		while (this.acfIsLoading) {
-			yield return new WaitForEndOfFrame();
+			yield return null;
 		}
 
-		using (var async = CriAtomExAcbAsync.LoadAcbFile(binder, acbPath, awbPath)) {
-			cueSheet.async = async;
+		using (var asyncLoader = CriAtomExAcbLoader.LoadAcbFileAsync(binder, acbPath, awbPath, loadAwbOnMemory)) {
+			if (asyncLoader == null) {
+				cueSheet.loaderStatus = CriAtomExAcbLoader.Status.Error;
+				yield break;
+			}
+
 			while (true) {
-				var status = async.GetStatus();
-				if (status == CriAtomExAcbAsync.Status.Complete) {
-					cueSheet.acb = async.MoveAcb();
+				var status = asyncLoader.GetStatus();
+				cueSheet.loaderStatus = status;
+				if (status == CriAtomExAcbLoader.Status.Complete) {
+					cueSheet.acb = asyncLoader.MoveAcb();
 					break;
-				} else if (status == CriAtomExAcbAsync.Status.Error) {
+				} else if (status == CriAtomExAcbLoader.Status.Error) {
 					break;
 				}
-				yield return new WaitForEndOfFrame();
+				yield return null;
 			}
-			cueSheet.async = null;
 		}
 	}
 
-	private void LoadAcbDataAsync(CriAtomCueSheet cueSheet, byte[] acbData, CriFsBinder awbBinder, string awbFile)
+	private void LoadAcbDataAsync(CriAtomCueSheet cueSheet, byte[] acbData, CriFsBinder awbBinder, string awbFile, bool loadAwbOnMemory)
 	{
-		StartCoroutine(LoadAcbDataCoroutine(cueSheet, acbData, awbBinder, awbFile));
+		StartCoroutine(LoadAcbDataCoroutine(cueSheet, acbData, awbBinder, awbFile, loadAwbOnMemory));
 	}
 
-	private IEnumerator LoadAcbDataCoroutine(CriAtomCueSheet cueSheet, byte[] acbData, CriFsBinder awbBinder, string awbPath)
+	private IEnumerator LoadAcbDataCoroutine(CriAtomCueSheet cueSheet, byte[] acbData, CriFsBinder awbBinder, string awbPath, bool loadAwbOnMemory)
 	{
+		cueSheet.loaderStatus = CriAtomExAcbLoader.Status.Loading;
+
 		if (!String.IsNullOrEmpty(awbPath)) {
-			if ((awbBinder == null) && CriWare.IsStreamingAssetsPath(awbPath)) {
-				awbPath = Path.Combine(CriWare.streamingAssetsPath, awbPath);
+			if ((awbBinder == null) && CriWare.Common.IsStreamingAssetsPath(awbPath)) {
+				awbPath = Path.Combine(CriWare.Common.streamingAssetsPath, awbPath);
 			}
 		}
 
 		while (this.acfIsLoading) {
-			yield return new WaitForEndOfFrame();
+			yield return null;
 		}
 
-		using (var async = CriAtomExAcbAsync.LoadAcbData(acbData, awbBinder, awbPath)) {
-			cueSheet.async = async;
+		using (var asyncLoader = CriAtomExAcbLoader.LoadAcbDataAsync(acbData, awbBinder, awbPath, loadAwbOnMemory)) {
+			if (asyncLoader == null) {
+				cueSheet.loaderStatus = CriAtomExAcbLoader.Status.Error;
+				yield break;
+			}
+
 			while (true) {
-				var status = async.GetStatus();
-				if (status == CriAtomExAcbAsync.Status.Complete) {
-					cueSheet.acb = async.MoveAcb();
+				var status = asyncLoader.GetStatus();
+				cueSheet.loaderStatus = status;
+				if (status == CriAtomExAcbLoader.Status.Complete) {
+					cueSheet.acb = asyncLoader.MoveAcb();
 					break;
-				} else if (status == CriAtomExAcbAsync.Status.Error) {
+				} else if (status == CriAtomExAcbLoader.Status.Error) {
 					break;
 				}
-				yield return new WaitForEndOfFrame();
+				yield return null;
 			}
-			cueSheet.async = null;
 		}
 	}
-#endif
 
-#if CRIWARE_SUPPORT_SEQUENCE_CALLBACK
-	#if CRIWARE_CALLBACK_IMPL_UNITYSENDMESSAGE
-	public void EventCallbackFromNative(string eventString)
+#if CRIWARE_SUPPORT_NATIVE_CALLBACK
+	[AOT.MonoPInvokeCallback(typeof(CriAtomExSequencer.EventCbFunc))]
+	public static void SequenceEventCallbackFromNative(string eventString)
 	{
+		/* æœ¬é–¢æ•°ã¯ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ãƒ¡ã‚¤ãƒ³ã‚¹ãƒ¬ãƒƒãƒ‰ã® CriAtom.Update ã‹ã‚‰å‘¼ã³å‡ºã•ã‚Œã‚‹ */
 		if (eventUserCbFunc != null) {
 			eventUserCbFunc(eventString);
 		}
 	}
-	#elif CRIWARE_CALLBACK_IMPL_NATIVE2MANAGED
-	[AOT.MonoPInvokeCallback(typeof(CriAtomExSequencer.EventCbFunc))]
-	public static void EventCallbackFromNative(string eventString)
+
+	[AOT.MonoPInvokeCallback(typeof(CriAtomExBeatSync.CbFunc))]
+	public static void BeatSyncCallbackFromNative(ref CriAtomExBeatSync.Info info)
 	{
-		if (eventUserCbFunc != null) {
-			/* ƒCƒxƒ“ƒg‚ÌƒLƒ…[ƒCƒ“ƒO */
-			/* ”õl) iOSˆÈŠO‚ÍCRI Atom“à‚ÌƒXƒŒƒbƒh‚©‚çŒÄ‚Ño‚³‚ê‚é‚½‚ß */
-			lock (((ICollection)eventQueue).SyncRoot)
-			{
-				eventQueue.Enqueue(eventString);
-			}
+		/* æœ¬é–¢æ•°ã¯ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ãƒ¡ã‚¤ãƒ³ã‚¹ãƒ¬ãƒƒãƒ‰ã® CriAtom.Update ã‹ã‚‰å‘¼ã³å‡ºã•ã‚Œã‚‹ */
+		if (beatsyncUserCbFunc != null) {
+			beatsyncUserCbFunc(ref info);
 		}
 	}
-	#endif
 #endif
 
-	/* ƒvƒ‰ƒOƒCƒ““à•”—pAPI */
+	/* ãƒ—ãƒ©ã‚°ã‚¤ãƒ³å†…éƒ¨ç”¨API */
 	public static void SetEventCallback(CriAtomExSequencer.EventCbFunc func, string separator)
 	{
-#if CRIWARE_SUPPORT_SEQUENCE_CALLBACK
-		/* ƒlƒCƒeƒBƒuƒvƒ‰ƒOƒCƒ“‚ÉŠÖ”ƒ|ƒCƒ“ƒ^‚ğ“o˜^ */
+#if CRIWARE_SUPPORT_NATIVE_CALLBACK
+		/* ãƒã‚¤ãƒ†ã‚£ãƒ–ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã«é–¢æ•°ãƒã‚¤ãƒ³ã‚¿ã‚’ç™»éŒ² */
 		IntPtr ptr = IntPtr.Zero;
 		eventUserCbFunc = func;
 		if (func != null) {
-	#if CRIWARE_CALLBACK_IMPL_UNITYSENDMESSAGE
-			ptr = IntPtr.Zero;
-	#elif CRIWARE_CALLBACK_IMPL_NATIVE2MANAGED
 			CriAtomExSequencer.EventCbFunc delegateObject;
-			delegateObject = new CriAtomExSequencer.EventCbFunc(CriAtom.EventCallbackFromNative);
+			delegateObject = new CriAtomExSequencer.EventCbFunc(CriAtom.SequenceEventCallbackFromNative);
 			ptr = Marshal.GetFunctionPointerForDelegate(delegateObject);
-	#endif
-			CriAtomPlugin.criAtomUnitySeqencer_SetEventCallback(ptr, CriAtom.instance.gameObject.name, "EventCallbackFromNative", separator);
 		}
-#elif CRIWARE_UNSUPPORT_SEQUENCE_CALLBACK
-		Debug.LogError("This platform does not support event callback feature.");
+		CriAtomPlugin.CRIWARE2D38DDC8(ptr, separator);
+#else
+		Debug.LogError("[CRIWARE] Event callback is not supported for this scripting backend.");
+#endif
+	}
+
+	public static void SetBeatSyncCallback(CriAtomExBeatSync.CbFunc func)
+	{
+#if CRIWARE_SUPPORT_NATIVE_CALLBACK
+		/* ãƒã‚¤ãƒ†ã‚£ãƒ–ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã«é–¢æ•°ãƒã‚¤ãƒ³ã‚¿ã‚’ç™»éŒ² */
+		IntPtr ptr = IntPtr.Zero;
+		beatsyncUserCbFunc = func;
+		if (func != null) {
+			CriAtomExBeatSync.CbFunc delegateObject;
+			delegateObject = new CriAtomExBeatSync.CbFunc (CriAtom.BeatSyncCallbackFromNative);
+			ptr = Marshal.GetFunctionPointerForDelegate(delegateObject);
+		}
+		CriAtomPlugin.CRIWARE6388ABF2(ptr);
+#else
+		Debug.LogError("[CRIWARE] Beat sync callback is not supported for this scripting backend.");
 #endif
 	}
 
@@ -1032,5 +1381,5 @@ public class CriAtom : MonoBehaviour
 
 }
 
-/// @}
+/** @} */
 /* end of file */

@@ -1,13 +1,14 @@
 ﻿/****************************************************************************
  *
- * Copyright (c) 2015 CRI Middleware Co., Ltd.
+ * Copyright (c) 2015-2018 CRI Middleware Co., Ltd.
  *
  ****************************************************************************/
 
-#if UNITY_EDITOR || UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX || UNITY_PSP2 || UNITY_ANDROID || UNITY_IOS || UNITY_TVOS || UNITY_WEBGL || UNITY_STANDALONE_LINUX
+#if UNITY_EDITOR || UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX || UNITY_PSP2 || UNITY_IOS || UNITY_TVOS || UNITY_WEBGL || UNITY_STANDALONE_LINUX || UNITY_SWITCH || UNITY_STADIA
 
 using UnityEngine;
 using System;
+
 
 namespace CriMana.Detail
 {
@@ -19,16 +20,19 @@ namespace CriMana.Detail
 			public override RendererResource CreateRendererResource(int playerId, MovieInfo movieInfo, bool additive, Shader userShader)
 			{
 				bool isCodecSuitable = movieInfo.codecType == CodecType.SofdecPrime;
+				#if (UNITY_EDITOR || !UNITY_SWITCH)
+				isCodecSuitable |= movieInfo.codecType == CodecType.VP9;
+				#endif
 				bool isSuitable      = isCodecSuitable;
 				return isSuitable
 					? new RendererResourceSofdecPrimeYuv(playerId, movieInfo, additive, userShader)
 					: null;
 			}
-			
+
 			protected override void OnDisposeManaged()
 			{
 			}
-			
+
 			protected override void OnDisposeUnmanaged()
 			{
 			}
@@ -40,109 +44,138 @@ namespace CriMana.Detail
 
 	public class RendererResourceSofdecPrimeYuv : RendererResource
 	{
-		private int		width;
-		private int		height;
-		private bool	hasAlpha;
-		private bool	additive;
-		private bool	useUserShader;
-		
-		private Shader		shader;
+		private int     width;
+		private int     height;
+		private bool    useUserShader;
+		private CodecType   codecType;
 
-		private Vector4		movieTextureST = Vector4.zero;
+		private Vector4     movieTextureST = Vector4.zero;
+		private Vector4     movieChromaTextureST = Vector4.zero;
 
-		private Texture2D	textureY;
-		private Texture2D	textureU;
-		private Texture2D	textureV;
-		private Texture2D	textureA;
-		private IntPtr[] 	nativeTextures = new IntPtr[4];
+		private static Int32 NumTextureSets { get { return 1; } }
 
-		private Int32 		playerID;
+		private Texture2D[] textureY = new Texture2D[NumTextureSets];
+		private Texture2D[] textureU = new Texture2D[NumTextureSets];
+		private Texture2D[] textureV = new Texture2D[NumTextureSets];
+		private Texture2D[] textureA = new Texture2D[NumTextureSets];
+		private IntPtr[]  nativeTextures;
+		private Int32 currentTextureSet = 0;
+		private Int32 drawTextureSet = 0;
+
+		private Int32       playerID;
+		private bool hasTextureUpdated = false;
+		private bool isTextureReady = false;
+		private bool hasRenderedNewFrame = false;
 
 
 		public RendererResourceSofdecPrimeYuv(int playerId, MovieInfo movieInfo, bool additive, Shader userShader)
 		{
-#if UNITY_EDITOR || UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX || UNITY_PSP2 || UNITY_PS4 || UNITY_WINRT || UNITY_WEBGL || UNITY_STANDALONE_LINUX
-            width = Ceiling256((int)movieInfo.width);
+#if UNITY_EDITOR || UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX || UNITY_PSP2 || UNITY_PS4 || UNITY_WINRT || UNITY_WEBGL || UNITY_STANDALONE_LINUX || UNITY_SWITCH || UNITY_STADIA
+			width = Ceiling256((int)movieInfo.width);
 			height = Ceiling16((int)movieInfo.height);
-#elif UNITY_ANDROID || UNITY_IOS || UNITY_TVOS
+#elif UNITY_IOS || UNITY_TVOS
 			width  = NextPowerOfTwo(Ceiling64((int)movieInfo.width));
 			height = NextPowerOfTwo(Ceiling16((int)movieInfo.height));
 #else
 	#error unsupported platform
 #endif
-			hasAlpha		= movieInfo.hasAlpha;
-			this.additive	= additive;
-			useUserShader	= userShader != null;
+			this.additive   = additive;
+			hasAlpha        = movieInfo.hasAlpha;
+			useUserShader   = userShader != null;
+			codecType       = movieInfo.codecType;
 
 			if (useUserShader) {
 				shader = userShader;
 			} else {
-				string shaderName = 
-					hasAlpha	? additive	? "CriMana/SofdecPrimeYuvaAdditive"
-											: "CriMana/SofdecPrimeYuva"
-								: additive	? "CriMana/SofdecPrimeYuvAdditive"
-											: "CriMana/SofdecPrimeYuv";
+				string shaderName = "CriMana/SofdecPrimeYuv";
 				shader = Shader.Find(shaderName);
 			}
-			
+
 			UpdateMovieTextureST(movieInfo.dispWidth, movieInfo.dispHeight);
-			
-			textureY = new Texture2D(width, height, TextureFormat.Alpha8, false);
-			textureY.wrapMode = TextureWrapMode.Clamp;
-			textureU = new Texture2D(width / 2, height / 2, TextureFormat.Alpha8, false);
-			textureU.wrapMode = TextureWrapMode.Clamp;
-			textureV = new Texture2D(width / 2, height / 2, TextureFormat.Alpha8, false);
-			textureV.wrapMode = TextureWrapMode.Clamp;
-			nativeTextures[0] = textureY.GetNativeTexturePtr();
-			nativeTextures[1] = textureU.GetNativeTexturePtr();
-			nativeTextures[2] = textureV.GetNativeTexturePtr();
-			if (hasAlpha) {
-				textureA = new Texture2D(width, height, TextureFormat.Alpha8, false);
-				textureA.wrapMode = TextureWrapMode.Clamp;
-				nativeTextures[3] = textureA.GetNativeTexturePtr();
+
+			for (int i = 0; i < NumTextureSets; i++) {
+				textureY[i] = new Texture2D(width, height, TextureFormat.Alpha8, false);
+				textureY[i].wrapMode = TextureWrapMode.Clamp;
+				textureU[i] = new Texture2D(width / 2, height / 2, TextureFormat.Alpha8, false);
+				textureU[i].wrapMode = TextureWrapMode.Clamp;
+				textureV[i] = new Texture2D(width / 2, height / 2, TextureFormat.Alpha8, false);
+				textureV[i].wrapMode = TextureWrapMode.Clamp;
+				if (hasAlpha) {
+					textureA[i] = new Texture2D(width, height, TextureFormat.Alpha8, false);
+					textureA[i].wrapMode = TextureWrapMode.Clamp;
+				}
 			}
+			nativeTextures = new IntPtr[4];
 
 			playerID = playerId;
 		}
-		
+
 
 		protected override void OnDisposeManaged()
 		{
 		}
 
+		static private bool IsEditor {
+			get {
+#if UNITY_EDITOR
+				if (UnityEditor.EditorApplication.isPlaying == false) {
+					return true;
+				}
+#endif
+				return false;
+			}
+		}
 
 		protected override void OnDisposeUnmanaged()
 		{
-			if (textureY != null) {
-				Texture2D.Destroy(textureY);
-				textureY = null;
-			}
-			if (textureU != null) {
-				Texture2D.Destroy(textureU);
-				textureU = null;
-			}
-			if (textureV != null) {
-				Texture2D.Destroy(textureV);
-				textureV = null;
-			}
-			if (textureA != null) {
-				Texture2D.Destroy(textureA);
-				textureA = null;
+			for (int i = 0; i < NumTextureSets; i++) {
+				if (textureY[i] != null) {
+					if(IsEditor){
+						Texture2D.DestroyImmediate(textureY[i]);
+					} else{
+						Texture2D.Destroy(textureY[i]);
+					}
+					textureY[i] = null;
+				}
+				if (textureU[i] != null) {
+					if (IsEditor) {
+						Texture2D.DestroyImmediate(textureU[i]);
+					} else {
+						Texture2D.Destroy(textureU[i]);
+					}
+					textureU[i] = null;
+				}
+				if (textureV[i] != null) {
+					if (IsEditor) {
+						Texture2D.DestroyImmediate(textureV[i]);
+					} else {
+						Texture2D.Destroy(textureV[i]);
+					}
+					textureV[i] = null;
+				}
+				if (textureA[i] != null) {
+					if (IsEditor) {
+						Texture2D.DestroyImmediate(textureA[i]);
+					} else {
+						Texture2D.Destroy(textureA[i]);
+					}
+					textureA[i] = null;
+				}
 			}
 		}
-		
-		
+
+
 		public override bool IsPrepared()
-		{ return true; }
-		
-		
+		{ return isTextureReady; }
+
+
 		public override bool ContinuePreparing()
 		{ return true; }
-		
-		
+
+
 		public override bool IsSuitable(int playerId, MovieInfo movieInfo, bool additive, Shader userShader)
 		{
-			bool isCodecSuitable    = movieInfo.codecType == CodecType.SofdecPrime;
+			bool isCodecSuitable    = movieInfo.codecType == codecType;
 			bool isSizeSuitable     = (width >= (int)movieInfo.width) && (height >= (int)movieInfo.height);
 			bool isAlphaSuitable    = hasAlpha == movieInfo.hasAlpha;
 			bool isAdditiveSuitable = this.additive == additive;
@@ -151,35 +184,66 @@ namespace CriMana.Detail
 		}
 
 
-		public override void AttachToPlayer(int playerId)
-		{}
-
-
-		public override bool UpdateFrame(int playerId, FrameInfo frameInfo)
+		public override bool OnPlayerStopForSeek()
 		{
-			bool isFrameUpdated = criManaUnityPlayer_UpdateFrame(playerId, 0, null, frameInfo);
-			if (isFrameUpdated) {
+			hasRenderedNewFrame = false;
+			return true;
+		}
+
+
+		public override bool HasRenderedNewFrame()
+		{
+			return hasRenderedNewFrame;
+		}
+
+
+		public override void AttachToPlayer(int playerId)
+		{
+			hasRenderedNewFrame = false;
+			hasTextureUpdated = false;
+			isTextureReady = false;
+		}
+
+
+		public override bool UpdateFrame(int playerId, FrameInfo frameInfo, ref bool frameDrop)
+		{
+			bool isFrameUpdated = CRIWAREF463354B(playerId, 0, null, frameInfo, ref frameDrop);
+			if (isFrameUpdated && !frameDrop) {
 				UpdateMovieTextureST(frameInfo.dispWidth, frameInfo.dispHeight);
+				drawTextureSet = currentTextureSet;
+				currentTextureSet = (currentTextureSet + 1) % NumTextureSets;
+			}
+			if (hasTextureUpdated) {
+				isTextureReady = true;
 			}
 			return isFrameUpdated;
 		}
-		
-		
+
+
 		public override bool UpdateMaterial(Material material)
 		{
-			material.shader = shader;
-			material.SetTexture("_TextureY", textureY);
-			material.SetTexture("_TextureU", textureU);
-			material.SetTexture("_TextureV", textureV);
-            material.SetInt("_IsLinearColorSpace", (QualitySettings.activeColorSpace == ColorSpace.Linear) ? 1 : 0);
-			if (hasAlpha) {
-				material.SetTexture("_TextureA", textureA);
+			if (!isTextureReady && NumTextureSets > 1)
+				return false;
+
+			if (currentMaterial != material) {
+				currentMaterial = material;
+				SetupStaticMaterialProperties();
 			}
+			material.SetTexture("_TextureY", textureY[drawTextureSet]);
+			material.SetTexture("_TextureU", textureU[drawTextureSet]);
+			material.SetTexture("_TextureV", textureV[drawTextureSet]);
 			material.SetVector("_MovieTexture_ST", movieTextureST);
+			material.SetVector("_MovieChromaTexture_ST", movieChromaTextureST);
+			if (hasAlpha) {
+				material.SetTexture("_TextureA", textureA[drawTextureSet]);
+				material.SetVector("_MovieAlphaTexture_ST", movieTextureST);
+			}
+			hasRenderedNewFrame = isTextureReady;
+
 			return true;
 		}
-		
-		
+
+
 		private void UpdateMovieTextureST(System.UInt32 dispWidth, System.UInt32 dispHeight)
 		{
 			float uScale = (dispWidth != width) ? (float)(dispWidth - 1) / width : 1.0f;
@@ -188,16 +252,28 @@ namespace CriMana.Detail
 			movieTextureST.y = -vScale;
 			movieTextureST.z = 0.0f;
 			movieTextureST.w = vScale;
+
+			uScale = (dispWidth != width) ? (float)(dispWidth / 2 - 1) / width * 2 : 1.0f;
+			vScale = (dispHeight != height) ? (float)(dispHeight / 2 - 1) / height * 2 : 1.0f;
+			movieChromaTextureST.x = uScale;
+			movieChromaTextureST.y = -vScale;
+			movieChromaTextureST.z = 0.0f;
+			movieChromaTextureST.w = vScale;
 		}
+
 
 		public override void UpdateTextures()
 		{
 			int numTextures = 3;
+			nativeTextures[0] = textureY[currentTextureSet].GetNativeTexturePtr();
+			nativeTextures[1] = textureU[currentTextureSet].GetNativeTexturePtr();
+			nativeTextures[2] = textureV[currentTextureSet].GetNativeTexturePtr();
 			if (hasAlpha) {
 				numTextures = 4;
+				nativeTextures[3] = textureA[currentTextureSet].GetNativeTexturePtr();
 			}
 
-			criManaUnityPlayer_UpdateTextures(playerID, numTextures, nativeTextures);
+			hasTextureUpdated |= CRIWARE9B186887(playerID, numTextures, nativeTextures);
 		}
 	}
 }

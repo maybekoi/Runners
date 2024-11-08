@@ -11,95 +11,105 @@ using UnityEngine;
  * @{
  */
 
+
 /**
- * <summary>Unity UI上でムービを再生するためのコンポーネントです。</summary>
- * \par 説明:
- * Unity UI上でムービを再生するためのコンポーネントです。<br/>
- * UnityEngine.UI.Graphic にマテリアルを設定することで、ムービを表示します。<br/>
- * CriManaMovieMaterial を継承しています。<br/>
- * \par 注意:
- * 本クラスでは、再生・停止・ポーズの基本操作しか行えません。<br/>
- * 複雑な再生制御を行う場合は、playerプロパティでコアプレーヤに対して操作を行って下さい。<br/>
+ * <summary>A component for playing movie on Unity UI.</summary>
+ * <remarks>
+ * <para header='Description'>A component for playing movie on Unity UI.<br/>
+ * The movie is displayed by setting a Material to UnityEngine.UI.Graphic.<br/>
+ * It inherits CriManaMovieMaterial.<br/></para>
+ * <para header='Note'>In this class, you can only perform basic operations such as play, stop, or pause.<br/>
+ * If you want to perform complicated playback control, operate the core player using the player property.<br/></para>
+ * </remarks>
  */
 [AddComponentMenu("CRIWARE/CriManaMovieControllerForUI")]
 public class CriManaMovieControllerForUI : CriManaMovieMaterial
 {
 	#region Properties
 	/**
-	 * <summary>ムービマテリアルの設定対象の UnityEngine.UI.Graphic です。</summary>
-	 * \par 説明:
-	 * ムービマテリアルの設定対象の UnityEngine.UI.Graphic です。<br/>
-	 * 指定されていない場合はアタッチしているゲームオブジェクトの UnityEngine.UI.Graphic を使用します。
+	 * <summary>A UnityEngine.UI.Graphic to which the movie Material is set.</summary>
+	 * <remarks>
+	 * <para header='Description'>A UnityEngine.UI.Graphic to which the movie Material is set.<br/>
+	 * If not specified, UnityEngine.UI.Graphic of the attached game object is used.</para>
+	 * </remarks>
 	 */
-	public UnityEngine.UI.Graphic	target;
+	public UnityEngine.UI.Graphic   target;
 
 
 	/**
-	 * <summary>ムービフレームが使用できない場合にオリジナルのマテリアルを表示するか。</summary>
-	 * \par 説明:
-	 * ムービフレームが使用できない場合にオリジナルのマテリアルを表示するか。<br/>
-	 * true : ムービフレームが使用できない場合、オリジナルのマテリアルを表示します。<br/>
-	 * false : ムービフレームが使用できない場合、target の描画を無効にします。<br/>
-	 */	
-	public bool						useOriginalMaterial;
+	 * <summary>Whether to display the original Material when movie frames are not available.</summary>
+	 * <remarks>
+	 * <para header='Description'>Whether to display the original Material when movie frames are not available.<br/>
+	 * True: Displays the original Material if the movie frame is not available.<br/>
+	 * False: Disables target rendering if the movie frame is not available.<br/></para>
+	 * </remarks>
+	 */
+	public bool                     useOriginalMaterial;
 	#endregion
 
 
 	#region Internal Variables
-	private Material	originalMaterial;
+	private Material    originalMaterial;
 	#endregion
-	
-	
-	protected override void Start()
+
+
+	protected override void Awake()
 	{
-		base.Start();
-		if (target == null) {
-			target = gameObject.GetComponent<UnityEngine.UI.Graphic>();
-		}
-		if (target == null) {
-			Debug.LogError("[CRIWARE] error");
-			Destroy(this);
-			return;
-		}
-		originalMaterial = target.material;
-		if (!useOriginalMaterial) {
-			target.enabled = false;
-		}
+		uiRenderMode = true;
+		base.Awake();
 	}
 
-
-	protected override void Update()
+	public override void CriInternalUpdate()
 	{
-		base.Update();
+		base.CriInternalUpdate();
 
 		// If there is a target connected but current GameObject is not a Renderer,
 		// we check target activation an then update movie material if active.
-		if (renderMode == RenderMode.OnVisibility)
-		{
-			if (HaveRendererOwner == false && target != null && target.IsActive())
-			{
+		if (renderMode == RenderMode.OnVisibility) {
+			if (HaveRendererOwner == false && target != null && target.IsActive()) {
 				player.OnWillRenderObject(this);
 			}
 		}
 	}
 
 
-	protected override void OnDestroy()
+	public override bool RenderTargetManualSetup()
 	{
-		target.material = originalMaterial;
+		if (target == null) {
+			target = gameObject.GetComponent<UnityEngine.UI.Graphic>();
+		}
+		if (target == null) {
+			Debug.LogError("[CRIWARE] Missing render target for the Mana Controller component: Please add a renderer to the GameObject or specify the target manually.");
+			return false;
+		}
+		originalMaterial = target.materialForRendering;
 		if (!useOriginalMaterial) {
 			target.enabled = false;
 		}
-		originalMaterial = null;
-		base.OnDestroy();
+		return true;
 	}
-	
-	
+
+
+	public override void RenderTargetManualFinalize()
+	{
+		if (target != null) {
+			target.material = originalMaterial;
+			if (!useOriginalMaterial) {
+				target.enabled = false;
+			}
+		}
+		originalMaterial = null;
+	}
+
 	protected override void OnMaterialAvailableChanged()
 	{
+		if (target == null) {
+			return;
+		}
+
 		if (isMaterialAvailable) {
-			target.material	= material;
-			target.enabled	= true;
+			target.material = material;
+			target.enabled  = true;
 		} else {
 			target.material = originalMaterial;
 			if (!useOriginalMaterial) {

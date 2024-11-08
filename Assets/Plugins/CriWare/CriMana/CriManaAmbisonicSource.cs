@@ -8,14 +8,16 @@ using System.Collections;
 
 
 /**
- * <summary>Ambisonic 音声つきムービの音源を制御するためのコンポーネントです。</summary>
- * \par 説明:
- * Ambisonic 音声つきムービの音源を制御するためのコンポーネントです。
- * CriManaMovieMaterial の  Advanced Audio モードを有効化することで、本コンポーネントがアタッチされた Audio Source オブジェクトが作成されます。
- * 本コンポーネントは音源の方向の更新処理を行います。
- * 本コンポーネントがアタッチされた GameObject の角度 (transform.eulerAngles ) を元に、音源の方向ベクトルを回転します。
+ * <summary>A component for controlling the sound source of movies with Ambisonic sound.</summary>
+ * <remarks>
+ * <para header='Description'>A component for controlling the sound source of movies with Ambisonic sound.
+ * By enabling the Advanced Audio mode of CriManaMovieMaterial,
+ * an object Audio Source with this component attached is created.
+ * This component updates the orientation of the sound source.
+ * Rotates the orientation vector of the sound source based on the angle (transform.eulerAngles ) of the GameObject to which this component is attached.</para>
+ * </remarks>
  */
-public class CriManaAmbisonicSource : MonoBehaviour
+public class CriManaAmbisonicSource : CriMonoBehaviour
 {
     #region Internal Variables
     private CriAtomEx3dSource atomEx3DsourceForAmbisonics;
@@ -25,14 +27,17 @@ public class CriManaAmbisonicSource : MonoBehaviour
     #endregion
 
 
-    #region Public Method
-    void Update()
+    #region MonoBehaviour Methods
+    public override void CriInternalUpdate()
     {
         UpdateAmbisonicSourceOrientation();
     }
 
-    void OnEnable()
+    public override void CriInternalLateUpdate() { }
+
+    protected override void OnEnable()
     {
+        base.OnEnable();
         /* Ambisonic 音源の位置と向きを初期化 */
         atomEx3DsourceForAmbisonics = this.gameObject.transform.parent.GetComponent<CriManaMovieMaterial>().player.atomEx3DsourceForAmbisonics;
         if (atomEx3DsourceForAmbisonics == null)

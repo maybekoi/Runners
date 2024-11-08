@@ -4,6 +4,10 @@
  *
  ****************************************************************************/
 
+#if !UNITY_WEBGL
+	#define CRIWARE_TRANSCEIVER_N_ELEVATIONANGLEAISAC_SUPPORT
+#endif
+
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -18,239 +22,241 @@ using UnityEngine;
  * @{
  */
 
+
 /**
- * <summary>3D音源オブジェクト</summary>
- * \par 説明:
- * 3D音源を扱うためのオブジェクトです。<br>
- * 3Dポジショニング機能に使用します。<br>
- * <br>
- * 3D音源のパラメータ、位置情報の設定等は、3D音源オブジェクトを介して実行されます。
+ * <summary>3D sound source object</summary>
+ * <remarks>
+ * <para header='Description'>An object for handling the 3D sound source.<br/>
+ * Used for 3D Positioning.<br/>
+ * <br/>
+ * You set the parameters and position information of the 3D sound source through the 3D sound source object.</para>
+ * </remarks>
  */
-public class CriAtomEx3dSource : IDisposable
+public class CriAtomEx3dSource : CriDisposable
 {
-	private bool disposed = false;
-	
 	[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
 	public struct Config {
 		public int reserved;
 	}
 
 	/**
-	 * <summary>3D音源オブジェクトの作成</summary>
-	 * \par 説明:
-	 * 3D音源オブジェクト作成用コンフィグに基づいて、3D音源オブジェクトを作成します。<br>
-	 * \attention
-	 * 本関数を実行する前に、ライブラリを初期化しておく必要があります。<br>
+	 * <summary>Creates a 3D sound source object</summary>
+	 * <remarks>
+	 * <para header='Description'>Create a 3D sound source object based on the config for creating a 3D sound source object.<br/></para>
+	 * <para header='Note'>The library must be initialized before calling this function.<br/></para>
+	 * </remarks>
 	 */
 	public CriAtomEx3dSource()
 	{
 		Config config = new Config();
 		this.handle = criAtomEx3dSource_Create(ref config, IntPtr.Zero, 0);
+		CriDisposableObjectManager.Register(this, CriDisposableObjectManager.ModuleType.Atom);
 	}
 
 	/**
-	 * <summary>3D音源オブジェクトの破棄</summary>
-	 * \par 説明:
-	 * 3D音源オブジェクトを破棄します。<br>
-	 * 本関数を実行した時点で、3D音源オブジェクト作成時にDLL内で確保されたリソースが全て解放されます。<br>
-	 * 3D音源オブジェクトをセットしたAtomExプレーヤで再生している音声がある場合、
-	 * 本関数を実行する前に、それらの音声を停止するか、そのAtomExプレーヤを破棄してください。
+	 * <summary>Discards a 3D sound source object</summary>
+	 * <remarks>
+	 * <para header='Description'>Discards a 3D source object.<br/>
+	 * When this function is called, all the resources allocated in the DLL when creating the 3D sound source object are released.<br/>
+	 * If there are any sounds being played by an AtomExPlayer with the 3D sound source object set,
+	 * either stop those sounds or discard the AtomExPlayer before calling this function.</para>
+	 * </remarks>
 	 */
-	public void Dispose()
+	public override void Dispose()
 	{
 		this.Dispose(true);
 	}
-	
+
 	private void Dispose(bool disposing)
 	{
-		if (disposed) {
-			return;
+		CriDisposableObjectManager.Unregister(this);
+
+		if (this.handle != IntPtr.Zero) {
+			criAtomEx3dSource_Destroy(this.handle);
+			this.handle = IntPtr.Zero;
 		}
-		
-		criAtomEx3dSource_Destroy(this.handle);
-		
+
 		if (disposing) {
 			GC.SuppressFinalize(this);
 		}
-		
-		disposed = true;
 	}
 
 	public IntPtr nativeHandle
 	{
 		get {return this.handle;}
 	}
-	
+
 	/**
-	 * <summary>3D音源の更新</summary>
-	 * \par 説明:
-	 * 3D音源に設定されているパラメータを使用して、3D音源を更新します。<br>
-	 * 本関数では、3D音源に設定されているすべてのパラメータを更新します。<br>
-	 * パラメータをひとつ変更する度に本関数にて更新処理を行うよりも、
-	 * 複数のパラメータを変更してから更新処理を行った方が効率的です。<br>
-	 * \par 例:
-	 * \code
-	 * 	：
+	 * <summary>Updates the 3D sound source</summary>
+	 * <remarks>
+	 * <para header='Description'>Updates the 3D sound source using the parameters set to the 3D sound source.<br/>
+	 * This function updates all the parameters set to the 3D sound source.<br/>
+	 * It is more efficient to change multiple parameters before performing update
+	 * than to update using this function each time a parameter is changed.<br/></para>
+	 * <para header='Note'>This function runs independently of the parameter update in the AtomExPlayer
+	 * (::CriAtomExPlayer::UpdateAll, CriAtomExPlayer::Update).<br/>
+	 * When you change the parameter of the 3D sound source, perform the update process using this function.</para>
+	 * </remarks>
+	 * <example><code>
+	 *  ：
 	 * // 音源の作成
 	 * CriAtomEx3dSource source = new CriAtomEx3dSource();
-	 * 	：
+	 *  ：
 	 * // 音源の位置を設定
 	 * source.SetPosition(0.0f, 0.0f, 1.0f);
-	 * 
+	 *
 	 * // 音源の速度を設定
 	 * source.SetVelocity(1.0f, 0.0f, 0.0f);
-	 * 
+	 *
 	 * // 注意）この時点では音源の位置や速度はまだ変更されていません。
-	 * 
+	 *
 	 * // 変更の適用
 	 * source.Update();
-	 * 	：
-	 * \endcode
-	 * \attention
-	 * 本関数はAtomExプレーヤのパラメータ更新（ ::CriAtomExPlayer::UpdateAll, CriAtomExPlayer::Update ）
-	 * とは独立して動作します。<br>
-	 * 3D音源のパラメータを変更した際は、本関数にて更新処理を行ってください。
+	 *  ：
+	 * </code></example>
 	 */
 	public void Update()
 	{
 		criAtomEx3dSource_Update(this.handle);
 	}
-	
+
 	/**
-	 * <summary>3D音源パラメータの初期化</summary>
-	 * \par 説明:
-	 * 3D音源に設定されているパラメータをクリアし、初期値に戻します。<br>
-	 * \attention
-	 * クリアしたパラメータを実際に適用するには、 ::CriAtomEx3dSource::Update 関数を呼び出す必要があります。
-	 * \sa CriAtomEx3dSource::Update
+	 * <summary>Initializes 3D sound source parameters</summary>
+	 * <remarks>
+	 * <para header='Description'>Clears the parameters set to the 3D sound source and restores the initial values.<br/></para>
+	 * <para header='Note'>To actually apply the cleared parameters, you need to call the ::CriAtomEx3dSource::Update function.</para>
+	 * </remarks>
+	 * <seealso cref='CriAtomEx3dSource::Update'/>
 	 */
 	public void ResetParameters()
 	{
 		criAtomEx3dSource_ResetParameters(this.handle);
 	}
-	
+
 	/**
-	 * <summary>3D音源の位置の設定</summary>
-	 * <param name="x">X座標</param>
-	 * <param name="y">Y座標</param>
-	 * <param name="z">Z座標</param>
-	 * \par 説明:
-	 * 3D音源の位置を設定します。<br>
-	 * 位置は、距離減衰、および定位計算に使用されます。<br>
-	 * 位置は、3次元ベクトルで指定します。<br>
-	 * 位置の単位がいくつであるかは、3Dリスナーの距離計数
-	 * （ ::CriAtomEx3dListener::SetDistanceFactor 関数で設定 ）で決まります。<br>
-	 * デフォルト値は(0.0f, 0.0f, 0.0f)です。<br>
-	 * データ側には位置は設定できないため、常に本関数での設定値が使用されます。<br>
-	 * \attention
-	 * 設定したパラメータを実際に適用するには、 ::CriAtomEx3dSource::Update 関数を呼び出す必要があります。
-	 * \sa CriAtomEx3dSource::Update
+	 * <summary>Sets the position of the 3D sound source</summary>
+	 * <param name='x'>X coordinate</param>
+	 * <param name='y'>Y coordinate</param>
+	 * <param name='z'>Z coordinate</param>
+	 * <remarks>
+	 * <para header='Description'>Sets the position of the 3D sound source.<br/>
+	 * The position is used for calculating the distance attenuation and localization.<br/>
+	 * The position is specified as a 3D vector.<br/>
+	 * The unit of the position is determined by the distance factor
+	 * of the 3D listener (set using the ::CriAtomEx3dListener::SetDistanceFactor function).<br/>
+	 * The default is (0.0f, 0.0f, 0.0f).<br/>
+	 * Since the position cannot be set on the data, the value set using this function is always used.<br/></para>
+	 * <para header='Note'>To actually apply the set parameters, you need to call the ::CriAtomEx3dSource::Update function.</para>
+	 * </remarks>
+	 * <seealso cref='CriAtomEx3dSource::Update'/>
 	 */
 	public void SetPosition(float x, float y, float z)
 	{
-		CriAtomExVector position;
+		CriAtomEx.NativeVector position;
 		position.x = x;
 		position.y = y;
 		position.z = z;
 		criAtomEx3dSource_SetPosition(this.handle, ref position);
 	}
-	
+
 	/**
-	 * <summary>3D音源の速度の設定</summary>
-	 * <param name="x">X軸方向の速度</param>
-	 * <param name="y">Y軸方向の速度</param>
-	 * <param name="z">Z軸方向の速度</param>
-	 * \par 説明:
-	 * 3D音源の速度を設定します。<br>
-	 * 速度は、ドップラー効果の計算に使用されます。<br>
-	 * 速度は、3次元ベクトルで指定します。<br>
-	 * 速度の単位は、1秒あたりの移動距離です。<br>
-	 * 距離の単位がいくつであるかは、3Dリスナーの距離計数
-	 * （ ::CriAtomEx3dListener::SetDistanceFactor 関数で設定）で決まります。
-	 * デフォルト値は(0.0f, 0.0f, 0.0f)です。<br>
-	 * データ側には速度は設定できないため、常に本関数での設定値が使用されます。<br>
-	 * \attention
-	 * 設定したパラメータを実際に適用するには、 ::CriAtomEx3dSource::Update 関数を呼び出す必要があります。
-	 * \sa CriAtomEx3dSource::Update
+	 * <summary>Sets the velocity of the 3D sound source</summary>
+	 * <param name='x'>Velocity along X axis</param>
+	 * <param name='y'>Velocity along Y axis</param>
+	 * <param name='z'>Velocity along Z axis</param>
+	 * <remarks>
+	 * <para header='Description'>Sets the velocity of the 3D sound source.<br/>
+	 * The velocity is used to calculate the Doppler effect.<br/>
+	 * The velocity is specified as a 3D vector.<br/>
+	 * The unit of velocity is the distance traveled per second.<br/>
+	 * The unit of the distance is determined by the distance factor
+	 * of the 3D listener (set using the ::CriAtomEx3dListener::SetDistanceFactor function).
+	 * The default is (0.0f, 0.0f, 0.0f).<br/>
+	 * Since the velocity cannot be set on the data, the value set using this function is always used.<br/></para>
+	 * <para header='Note'>To actually apply the set parameters, you need to call the ::CriAtomEx3dSource::Update function.</para>
+	 * </remarks>
+	 * <seealso cref='CriAtomEx3dSource::Update'/>
 	 */
 	public void SetVelocity(float x, float y, float z)
 	{
-		CriAtomExVector velocity;
+		CriAtomEx.NativeVector velocity;
 		velocity.x = x;
 		velocity.y = y;
 		velocity.z = z;
 		criAtomEx3dSource_SetVelocity(this.handle, ref velocity);
 	}
 
-    /**
-	 * <summary>3D音源の向きの設定</summary>
-     */
-    public void SetOrientation(Vector3 front, Vector3 top)
-    {
-        CriAtomExVector src_front;
-        src_front.x = front.x;
-        src_front.y = front.y;
-        src_front.z = front.z;
-        CriAtomExVector src_top;
-        src_top.x = top.x;
-        src_top.y = top.y;
-        src_top.z = top.z;
-        criAtomEx3dSource_SetOrientation(this.handle, ref src_front, ref src_top);
-    }
-
-
-    /**
-	 * <summary>3D音源のサウンドコーンの向きの設定</summary>
-	 * <param name="x">X方向の値</param>
-	 * <param name="y">Y方向の値</param>
-	 * <param name="z">Z方向の値</param>
-	 * \par 説明:
-	 * 3D音源のサウンドコーンの向きを設定します。<br>
-	 * サウンドコーンは、音源から音が発生する方向を表し、音の指向性の表現に使用されます。<br>
-	 * サウンドコーンの向きは、3次元ベクトルで指定します。<br>
-	 * 設定された向きベクトルは、ライブラリ内部で正規化して使用されます。<br>
-	 * デフォルト値は(0.0f, 0.0f, -1.0f)です。<br>
-	 * データ側にはサウンドコーンの向きは設定できないため、常に本関数での設定値が使用されます。<br>
-	 * \attention
-	 * 設定したパラメータを実際に適用するには、 ::CriAtomEx3dSource::Update 関数を呼び出す必要があります。
-	 * \sa CriAtomEx3dSource::SetConeParameter, CriAtomEx3dSource::Update
+	/**
+	 * <summary>Sets the orientation of the 3D sound source</summary>
 	 */
-    public void SetConeOrientation(float x, float y, float z)
+	public void SetOrientation(Vector3 front, Vector3 top)
 	{
-		CriAtomExVector coneOrientation;
+		CriAtomEx.NativeVector src_front;
+		src_front.x = front.x;
+		src_front.y = front.y;
+		src_front.z = front.z;
+		CriAtomEx.NativeVector src_top;
+		src_top.x = top.x;
+		src_top.y = top.y;
+		src_top.z = top.z;
+		criAtomEx3dSource_SetOrientation(this.handle, ref src_front, ref src_top);
+	}
+
+
+	/**
+	 * <summary>Sets the orientation of the sound cone of the 3D sound source</summary>
+	 * <param name='x'>Value in X direction</param>
+	 * <param name='y'>Value in Y direction</param>
+	 * <param name='z'>Value in Z direction</param>
+	 * <remarks>
+	 * <para header='Description'>Sets the orientation of the sound cone of the 3D sound source.<br/>
+	 * The sound cone represents the direction in which sound is emitted from a sound source and is used to express the directionality of the sound.<br/>
+	 * The orientation of the sound cone is specified using a 3D vector.<br/>
+	 * The orientation vector that is set is normalized inside the library before being used.<br/>
+	 * The default is (0.0f, 0.0f, -1.0f).<br/>
+	 * As you cannot set the orientation of the sound cone on the data, the setting in this function is always used.<br/></para>
+	 * <para header='Note'>To actually apply the set parameters, you need to call the ::CriAtomEx3dSource::Update function.</para>
+	 * </remarks>
+	 * <seealso cref='CriAtomEx3dSource::SetConeParameter'/>
+	 * <seealso cref='CriAtomEx3dSource::Update'/>
+	 */
+	public void SetConeOrientation(float x, float y, float z)
+	{
+		CriAtomEx.NativeVector coneOrientation;
 		coneOrientation.x = x;
 		coneOrientation.y = y;
 		coneOrientation.z = z;
 		criAtomEx3dSource_SetConeOrientation(this.handle, ref coneOrientation);
 	}
-	
+
 	/**
-	 * <summary>3D音源のサウンドコーンパラメータの設定</summary>
-	 * <param name="insideAngle">サウンドコーンのインサイドアングル</param>
-	 * <param name="outsideAngle">サウンドコーンのアウトサイドアングル</param>
-	 * <param name="outsideVolume">サウンドコーンのアウトサイドボリューム</param>
-	 * \par 説明:
-	 * 3D音源のサウンドコーンパラメータを設定します。<br>
-	 * サウンドコーンは、音源から音が発生する方向を表し、音の指向性の表現に使用されます。<br>
-	 * サウンドコーンは、内側コーン、外側コーンで構成されます。インサイドアングルは内側コーンの角度、
-	 * アウトサイドアングルは外側コーンの角度、アウトサイドボリュームは外側コーンの角度以上の方向での音量をそれぞれ表します。<br>
-	 * 内側コーンの角度より小さい角度の方向では、コーンによる減衰を受けません。
-	 * 内側コーンと外側コーンの間の方向では、徐々にアウトサイドボリュームまで減衰します。<br>
-	 * インサイドアングルおよびアウトサイドアングルは、0.0f～360.0fを度で指定します。<br>
-	 * アウトサイドボリュームは、0.0f～1.0fを振幅に対する倍率で指定します（単位はデシベルではありません）。<br>
-	 * ライブラリ初期化時のデフォルト値は以下のとおりであり、コーンによる減衰は行われません。<br>
-	 * 	- インサイドアングル：360.0f
-	 * 	- アウトサイドアングル：360.0f
-	 * 	- アウトサイドボリューム：0.0f
-	 * 	.
-	 * データ側にサウンドコーンパラメータが設定されている場合に本関数を呼び出すと、以下のように適用されます。<br>
-	 * 	- インサイドアングル：加算
-	 * 	- アウトサイドアングル：加算
-	 * 	- アウトサイドボリューム：乗算
-	 * 	.
-	 * \attention
-	 * 設定したパラメータを実際に適用するには、 ::CriAtomEx3dSource::Update 関数を呼び出す必要があります。
-	 * \sa CriAtomEx3dSource::Update
+	 * <summary>Sets the sound cone parameters of the 3D sound source</summary>
+	 * <param name='insideAngle'>Sound cone inside angle</param>
+	 * <param name='outsideAngle'>Sound cone outside angle</param>
+	 * <param name='outsideVolume'>Sound cone outside volume</param>
+	 * <remarks>
+	 * <para header='Description'>Sets the sound cone parameters of the 3D sound source.<br/>
+	 * The sound cone represents the direction in which sound is emitted from a sound source and is used to express the directionality of the sound.<br/>
+	 * The sound cone consists of inner cone and outer cone. The inside angle represents the angle of the inner cone,
+	 * the outside angle represents the angle of the outer cone, and the outside volume represents the volume
+	 * beyond the outer cone angle.<br/>
+	 * At angles smaller than the inner cone angle, no attenuation is applied by the cone.
+	 * In the direction between the inner and outer cones, the sound is gradually attenuated to the outside volume.<br/>
+	 * The inside and outside angles are specified within the range of 0.0f to 360.0f.<br/>
+	 * The outside volume is specifies as a scale factor for the amplitude within the range of 0.0f to 1.0f (the unit is not decibel).<br/>
+	 * The default values when initializing the library are as follows, and no attenuation is applied by the cone.<br/>
+	 *  - Inside angle: 360.0f
+	 *  - Outside angle: 360.0f
+	 *  - Outside volume: 0.0f
+	 *  .
+	 * If this function is called when the sound cone parameters are set on the data, the following settings are applied:<br/>
+	 *  - Inside angle: Addition
+	 *  - Outside angle: Addition
+	 *  - Outside volume: Multiplication
+	 *  .</para>
+	 * <para header='Note'>To actually apply the set parameters, you need to call the ::CriAtomEx3dSource::Update function.</para>
+	 * </remarks>
+	 * <seealso cref='CriAtomEx3dSource::Update'/>
 	 */
 	public void SetConeParameter(float insideAngle, float outsideAngle, float outsideVolume)
 	{
@@ -258,149 +264,294 @@ public class CriAtomEx3dSource : IDisposable
 	}
 
 	/**
-	 * <summary>3D音源の最小距離／最大距離の設定</summary>
-	 * <param name="minDistance">最小距離</param>
-	 * <param name="maxDistance">最大距離</param>
-	 * \par 説明:
-	 * 3D音源の最小距離／最大距離を設定します。<br>
-	 * 最小距離は、これ以上音量が大きくならない距離を表します。<br>
-	 * 最大距離は、最小音量になる距離を表します。<br>
-	 * 距離の単位がいくつであるかは、3Dリスナーの距離計数
-	 * （ ::CriAtomEx3dListener::SetDistanceFactor 関数で設定）で決まります。<br>
-	 * ライブラリ初期化時のデフォルト値は以下のとおりです。<br>
-	 * 	- 最小距離：0.0f
-	 * 	- 最大距離：0.0f
-	 * 	.
-	 * データ側に最小距離／最大距離が設定されている場合に本関数を呼び出すと、データ側の値を上書き（無視）して適用されます。<br>
-	 * \attention
-	 * 設定したパラメータを実際に適用するには、 ::CriAtomEx3dSource::Update 関数を呼び出す必要があります。
-	 * \sa CriAtomEx3dSource::Update
+	 * <summary>Sets the minimum/maximum distances of the 3D sound source</summary>
+	 * <param name='minDistance'>Minimum distance</param>
+	 * <param name='maxDistance'>Maximum distance</param>
+	 * <remarks>
+	 * <para header='Description'>Sets the minimum/maximum distances of the 3D sound source.<br/>
+	 * The minimum distance represents the distance at which the volume cannot be increased any further.<br/>
+	 * The maximum distance is the distance with the lowest volume.<br/>
+	 * The unit of the distance is determined by the distance factor
+	 * of the 3D listener (set using the ::CriAtomEx3dListener::SetDistanceFactor function).<br/>
+	 * The default values when the library is initialized are as follows:<br/>
+	 *  - Minimum distance: 0.0f
+	 *  - Maximum distance: 0.0f
+	 *  .
+	 * When this function is called when the minimum/maximum distances are set on the data,
+	 * the values on the data are overridden (ignored).<br/></para>
+	 * <para header='Note'>To actually apply the set parameters, you need to call the ::CriAtomEx3dSource::Update function.</para>
+	 * </remarks>
+	 * <seealso cref='CriAtomEx3dSource::Update'/>
 	 */
 	public void SetMinMaxDistance(float minDistance, float maxDistance)
 	{
 		criAtomEx3dSource_SetMinMaxAttenuationDistance(this.handle, minDistance, maxDistance);
 	}
-	
+
 	/**
-	 * <summary>3D音源のドップラー係数の設定</summary>
-	 * <param name="dopplerFactor">ドップラー係数</param>
-	 * \par 説明:
-	 * 3D音源のドップラー係数を設定します。<br>
-	 * ドップラー係数は、音速を340m/sとして計算されたドップラー効果に対して、誇張表現するための倍率を指定します。<br>
-	 * 例えば、2.0fを指定すると、音速を340m/sとして計算したピッチを2倍して適用します。<br>
-	 * 0.0fを指定すると、ドップラー効果は無効になります。<br>
-	 * ライブラリ初期化時のデフォルト値は0.0fです。<br>
-	 * データ側にドップラー係数が設定されている場合に本関数を呼び出すと、データ側の値を上書き（無視）して適用されます。<br>
-	 * \attention
-	 * 設定したパラメータを実際に適用するには、 ::CriAtomEx3dSource::Update 関数を呼び出す必要があります。
-	 * \sa CriAtomEx3dSource::Update
+	 * <summary>Sets the interior Panning boundary distance of the 3D sound source</summary>
+	 * <param name='sourceRadius'>3D sound source radius</param>
+	 * <param name='interiorDistance'>Interior distance</param>
+	 * <remarks>
+	 * <para header='Description'>Sets the interior Panning boundary distance of the 3D sound source.<br/>
+	 * The radius of the 3D sound source is the radius when the 3D sound source is considered as a sphere.<br/>
+	 * Interior distance is the distance from the radius of the 3D sound source to which the interior Panning is applied.<br/>
+	 * Within the radius of the 3D sound source, interior Panning is applied, but since the interior distance is treated as 0.0,
+	 * the sound is played back from all speakers at the same volume.<br/>
+	 * Within the interior distance, interior Panning is applied.<br/>
+	 * Outside the interior distance, interior Panning is not applied and the sound is played from 1
+	 * or 2 speakers closest to the sound source position.<br/>
+	 * By default, the 3D sound source radius is set to 0.0f, and interior distance is set to 0.0f (depending on the minimum distance of the 3D sound source).</para>
+	 * <para header='Note'>To actually apply the set parameters, you need to call the ::CriAtomEx3dSource::Update function.</para>
+	 * </remarks>
+	 * <seealso cref='CriAtomEx3dSource::Update'/>
+	 * <seealso cref='CriAtomEx3dSource::SetMinMaxDistance'/>
+	 */
+	public void SetInteriorPanField(float sourceRadius, float interiorDistance)
+	{
+		criAtomEx3dSource_SetInteriorPanField(this.handle, sourceRadius, interiorDistance);
+	}
+
+	/**
+	 * <summary>Sets the Doppler coefficient of the 3D sound source</summary>
+	 * <param name='dopplerFactor'>Doppler coefficient</param>
+	 * <remarks>
+	 * <para header='Description'>Set the Doppler coefficient of the 3D sound source.<br/>
+	 * The Doppler coefficient specifies the scale factor for exaggerating the Doppler effect
+	 * calculated when the sound velocity of 340m/s.<br/>
+	 * For example, if you specify 2.0f, the pitch is multiplied by 2 if the velocity of the sound is 340m/s. <br/>
+	 * If you specify 0.0f, the Doppler effect is disabled.<br/>
+	 * The default value when the library is initialized is 0.0f.<br/>
+	 * When this function is called when the Doppler coefficient is set on the data,
+	 * the value on the data is overridden (ignored).<br/></para>
+	 * <para header='Note'>To actually apply the set parameters, you need to call the ::CriAtomEx3dSource::Update function.</para>
+	 * </remarks>
+	 * <seealso cref='CriAtomEx3dSource::Update'/>
 	 */
 	public void SetDopplerFactor(float dopplerFactor)
 	{
 		criAtomEx3dSource_SetDopplerFactor(this.handle, dopplerFactor);
 	}
-	
+
 	/**
-	 * <summary>3D音源のボリュームの設定</summary>
-	 * <param name="volume">ボリューム</param>
-	 * \par 説明:
-	 * 3D音源のボリュームを設定します。<br>
-	 * 3D音源のボリュームは、定位に関わる音量（L,R,SL,SR）にのみ影響し、LFEやセンターへの出力レベルには影響しません。<br>
-	 * ボリューム値には、0.0f～1.0fの範囲で実数値を指定します。<br>
-	 * ボリューム値は音声データの振幅に対する倍率です（単位はデシベルではありません）。<br>
-	 * 例えば、1.0fを指定した場合、原音はそのままのボリュームで出力されます。<br>
-	 * 0.5fを指定した場合、原音波形の振幅を半分にしたデータと同じ音量（-6dB）で
-	 * 音声が出力されます。<br>
-	 * 0.0fを指定した場合、音声はミュートされます（無音になります）。<br>
-	 * ライブラリ初期化時のデフォルト値は1.0fです。<br>
-	 * データ側に3D音源のボリュームが設定されている場合に本関数を呼び出すと、データ側の値と乗算して適用されます。<br>
-	 * \attention
-	 * 設定したパラメータを実際に適用するには、 ::CriAtomEx3dSource::Update 関数を呼び出す必要があります。
-	 * \sa CriAtomEx3dSource::Update
+	 * <summary>Sets the volume of the 3D sound source</summary>
+	 * <param name='volume'>Volume</param>
+	 * <remarks>
+	 * <para header='Description'>Sets the volume of the 3D sound source.<br/>
+	 * The volume of the 3D sound source affects only the volume related to localization (L,R,SL,SR),
+	 * and does not affect the output level of LFE or the center.<br/>
+	 * For the volume value, specify a real value in the range of 0.0f to 1.0f.<br/>
+	 * The volume value is a scale factor for the amplitude of the sound data (the unit is not decibel).<br/>
+	 * For example, if you specify 1.0f, the original sound is played at its unmodified volume.<br/>
+	 * If you specify 0.5f, the sound is played at the volume by halving the amplitude (-6dB)
+	 * of the original waveform.<br/>
+	 * If you specify 0.0f, the sound is muted (silent).<br/>
+	 * The default value when the library is initialized is 1.0f.<br/>
+	 * When this function is called when the volume of the 3D sound source is set on the data,
+	 * the value on the data is multiplied by this value.<br/></para>
+	 * <para header='Note'>To actually apply the set parameters, you need to call the ::CriAtomEx3dSource::Update function.</para>
+	 * </remarks>
+	 * <seealso cref='CriAtomEx3dSource::Update'/>
 	 */
 	public void SetVolume(float volume)
 	{
 		criAtomEx3dSource_SetVolume(this.handle, volume);
 	}
-	
+
 	/**
-	 * <summary>角度AISACコントロール値の最大変化量の設定</summary>
-	 * <param name="maxDelta">角度AISACコントロール値の最大変化量</param>
-	 * \par 説明:
-	 * 角度AISACによりAISACコントロール値が変更される際の、最大変化量を設定します。<br>
-	 * 最大変化量を低めに変更すると、音源とリスナー間の相対角度が急激に変わった場合でも、
-	 * 角度AISACによるAISACコントロール値の変化をスムーズにすることができます。<br>
-	 * 例えば、(0.5f / 30.0f)を設定すると、角度が0度→180度に変化した場合に、30フレームかけて変化するような変化量となります。<br>
-	 * デフォルト値は1.0f（制限なし）です。<br>
-	 * データ側では本パラメータは設定できないため、常に本関数での設定値が使用されます。<br>
-	 * \attention
-	 * 設定したパラメータを実際に適用するには、 ::CriAtomEx3dSource::Update 関数を呼び出す必要があります。<br>
-	 * 本関数で設定している最大変化量は、定位角度を元に計算されている、角度AISACコントロール値の変化にのみ適用されます。
-	 * 定位角度自体には影響はありません。
-	 * \sa CriAtomEx3dSource::Update
+	 * <summary>Sets the maximum amount of change in angle AISAC control value</summary>
+	 * <param name='maxDelta'>Maximum amount of change in angle AISAC control value</param>
+	 * <remarks>
+	 * <para header='Description'>Sets the maximum amount of change when the AISAC control value is changed by the angle AISAC.<br/>
+	 * By changing the maximum amount of change to a lower value, the change of the AISAC control value by
+	 * angle AISAC can be made smooth even if the relative angle between the sound source and the listener changes abruptly.<br/>
+	 * For example, if (0.5f / 30.0f) is set, the change takes place over 30 frames
+	 * when the angle changes from 0° to 180°.<br/>
+	 * The default value is 1.0f (no limit).<br/>
+	 * Since this parameter cannot be set on the data, the value set using this function is always used.<br/></para>
+	 * <para header='Note'>To actually apply the set parameters,
+	 * you need to call the ::CriAtomEx3dSource::Update function.<br/>
+	 * The maximum amount of change set by this function is applied
+	 * only to the change of the angle AISAC control value calculated based on the localization angle. It does not affect the localization angle itself.</para>
+	 * </remarks>
+	 * <seealso cref='CriAtomEx3dSource::Update'/>
 	 */
 	public void SetMaxAngleAisacDelta(float maxDelta)
 	{
 		criAtomEx3dSource_SetMaxAngleAisacDelta(this.handle, maxDelta);
 	}
 
+	/**
+	 * <summary>Sets the distance attenuation</summary>
+	 * <param name='flag'>Whether to enable the distance attenuation (True: enable, False: disable)</param>
+	 * <remarks>
+	 * <para header='Description'>Sets whether to enable or disable the volume variation by distance attenuation.<br/>
+	 * The default is True (enabled).<br/></para>
+	 * <para header='Note'>To actually apply the set parameters, you need to call the ::CriAtomEx3dSource::Update function.<br/></para>
+	 * </remarks>
+	 * <seealso cref='CriAtomEx3dSource::Update'/>
+	 * <seealso cref='CriAtomEx3dSource::GetAttenuationDistanceSetting'/>
+	 */
+	public void SetAttenuationDistanceSetting(bool flag)
+	{
+		criAtomEx3dSource_SetAttenuationDistanceSetting(this.handle, flag);
+	}
+
+	/**
+	 * <summary>Gets distance attenuation settings</summary>
+	 * <returns>Distance attenuation setting (True: enable, False: disable)</returns>
+	 * <remarks>
+	 * <para header='Description'>Gets whether the volume variation by distance attenuation is enabled or disabled.<br/>
+	 * The default is True (enabled).<br/></para>
+	 * </remarks>
+	 * <seealso cref='CriAtomEx3dSource::SetAttenuationDistanceSetting'/>
+	 */
+	public bool GetAttenuationDistanceSetting()
+	{
+		return criAtomEx3dSource_GetAttenuationDistanceSetting(this.handle);
+	}
+
+	/**
+	 * <summary>Sets the 3D region</summary>
+	 * <remarks>
+	 * <para header='Description'>Set the 3D regions to the 3D sound source.</para>
+	 * <para header='Note'>If the regions set to the 3D sound source and 3D listener set to the same ExPlayer are different,<br/>
+	 * and if there is no 3D Transceiver that has the same region as the 3D sound source, the sound is muted.<br/>
+	 * To actually apply the set parameters, you need to call the ::CriAtomEx3dSource::Update function.</para>
+	 * </remarks>
+	 * <seealso cref='CriAtomEx3dRegion::Create'/>
+	 * <seealso cref='CriAtomEx3dSource::Update'/>
+	 */
+	public void Set3dRegion(CriAtomEx3dRegion region3d)
+	{
+		IntPtr region3dHandle = (region3d == null) ? IntPtr.Zero : region3d.nativeHandle;
+		criAtomEx3dSource_Set3dRegionHn(this.handle, region3dHandle);
+	}
+
+	/**
+	 * <summary>Sets the listener reference elevation AISAC control setting ID</summary>
+	 * <param name='aisacControlId'>Listener reference elevation AISAC control ID</param>
+	 * <remarks>
+	 * <para header='Description'>Specifies the AISAC control ID linked to the elevation of the sound source seen from the listener.<br/>
+	 * The listener reference elevation AISAC control ID set on the data is overridden by this function.<br/></para>
+	 * <para header='Note'>To actually apply the set parameters, you need to call the ::CriAtomEx3dSource::Update function.</para>
+	 * </remarks>
+	 * <seealso cref='CriAtomEx3dSource::Update'/>
+	 */
+	public void SetListenerBasedElevationAngleAisacControlId(ushort aisacControlId)
+	{
+		criAtomEx3dSource_SetListenerBasedElevationAngleAisacControlId(this.handle, aisacControlId);
+	}
+
+	/**
+	 * <summary>Sets the sound source reference azimuth AISAC control ID</summary>
+	 * <param name='aisacControlId'>Sound source reference azimuth AISAC control ID</param>
+	 * <remarks>
+	 * <para header='Description'>Specifies the AISAC control ID linked to the azimuth of the listener as seen from the sound source.<br/>
+	 * The sound source reference azimuth AISAC control ID set on the data is overridden by this function.<br/></para>
+	 * <para header='Note'>To actually apply the set parameters, you need to call the ::CriAtomEx3dSource::Update function.</para>
+	 * </remarks>
+	 * <seealso cref='CriAtomEx3dSource::Update'/>
+	 */
+	public void SetSourceBasedElevationAngleAisacControlId(ushort aisacControlId)
+	{
+		criAtomEx3dSource_SetSourceBasedElevationAngleAisacControlId(this.handle, aisacControlId);
+	}
+
 	#region Internal Members
-	
+
 	~CriAtomEx3dSource()
 	{
 		this.Dispose(false);
 	}
 
 	private IntPtr handle = IntPtr.Zero;
-	
+
 	#endregion
 
 	#region DLL Import
-	
-	[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-	private struct CriAtomExVector
-	{
-		public float x, y, z;
-	}
-	
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+
+#if !CRIWARE_ENABLE_HEADLESS_MODE
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern IntPtr criAtomEx3dSource_Create(ref Config config, IntPtr work, int work_size);
-	
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern void criAtomEx3dSource_Destroy(IntPtr ex_3d_source);
-	
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern void criAtomEx3dSource_Update(IntPtr ex_3d_source);
-	
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern void criAtomEx3dSource_ResetParameters(IntPtr ex_3d_source);
-	
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-	private static extern void criAtomEx3dSource_SetPosition(IntPtr ex_3d_source, ref CriAtomExVector position);
-	
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-	private static extern void criAtomEx3dSource_SetVelocity(IntPtr ex_3d_source, ref CriAtomExVector velocity);
 
-    [DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-    private static extern void criAtomEx3dSource_SetOrientation(IntPtr ex_3d_source, ref CriAtomExVector front, ref CriAtomExVector top);
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern void criAtomEx3dSource_SetPosition(IntPtr ex_3d_source, ref CriAtomEx.NativeVector position);
 
-    [DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-	private static extern void criAtomEx3dSource_SetConeOrientation(IntPtr ex_3d_source, ref CriAtomExVector cone_orient);
-	
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern void criAtomEx3dSource_SetVelocity(IntPtr ex_3d_source, ref CriAtomEx.NativeVector velocity);
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern void criAtomEx3dSource_SetOrientation(IntPtr ex_3d_source, ref CriAtomEx.NativeVector front, ref CriAtomEx.NativeVector top);
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern void criAtomEx3dSource_SetConeOrientation(IntPtr ex_3d_source, ref CriAtomEx.NativeVector cone_orient);
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern void criAtomEx3dSource_SetConeParameter(IntPtr ex_3d_source, float inside_angle, float outside_angle, float outside_volume);
-	
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern void criAtomEx3dSource_SetMinMaxAttenuationDistance(IntPtr ex_3d_source, float min_distance, float max_distance);
-	
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern void criAtomEx3dSource_SetInteriorPanField(IntPtr ex_3d_source, float source_radius, float interior_distance);
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern void criAtomEx3dSource_SetDopplerFactor(IntPtr ex_3d_source, float doppler_factor);
-	
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern void criAtomEx3dSource_SetVolume(IntPtr ex_3d_source, float volume);
-	
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern void criAtomEx3dSource_SetMaxAngleAisacDelta(IntPtr ex_3d_source, float max_delta);
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern void criAtomEx3dSource_SetAttenuationDistanceSetting(IntPtr ex_3d_source, bool flag);
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern bool criAtomEx3dSource_GetAttenuationDistanceSetting(IntPtr ex_3d_source);
+#else
+	private static IntPtr criAtomEx3dSource_Create(ref Config config, IntPtr work, int work_size) { return IntPtr.Zero; }
+	private static void criAtomEx3dSource_Destroy(IntPtr ex_3d_source) { }
+	private static void criAtomEx3dSource_Update(IntPtr ex_3d_source) { }
+	private static void criAtomEx3dSource_ResetParameters(IntPtr ex_3d_source) { }
+	private static void criAtomEx3dSource_SetPosition(IntPtr ex_3d_source, ref CriAtomEx.NativeVector position) { }
+	private static void criAtomEx3dSource_SetVelocity(IntPtr ex_3d_source, ref CriAtomEx.NativeVector velocity) { }
+	private static void criAtomEx3dSource_SetOrientation(IntPtr ex_3d_source, ref CriAtomEx.NativeVector front, ref CriAtomEx.NativeVector top) { }
+	private static void criAtomEx3dSource_SetConeOrientation(IntPtr ex_3d_source, ref CriAtomEx.NativeVector cone_orient) { }
+	private static void criAtomEx3dSource_SetConeParameter(IntPtr ex_3d_source, float inside_angle, float outside_angle, float outside_volume) { }
+	private static void criAtomEx3dSource_SetMinMaxAttenuationDistance(IntPtr ex_3d_source, float min_distance, float max_distance) { }
+	private static void criAtomEx3dSource_SetInteriorPanField(IntPtr ex_3d_source, float source_radius, float interior_distance) { }
+	private static void criAtomEx3dSource_SetDopplerFactor(IntPtr ex_3d_source, float doppler_factor) { }
+	private static void criAtomEx3dSource_SetVolume(IntPtr ex_3d_source, float volume) { }
+	private static void criAtomEx3dSource_SetMaxAngleAisacDelta(IntPtr ex_3d_source, float max_delta) { }
+	private static void criAtomEx3dSource_SetAttenuationDistanceSetting(IntPtr ex_3d_source, bool flag) { }
+	private static bool criAtomEx3dSource_GetAttenuationDistanceSetting(IntPtr ex_3d_source) { return false; }
+#endif
+
+#if !CRIWARE_ENABLE_HEADLESS_MODE && CRIWARE_TRANSCEIVER_N_ELEVATIONANGLEAISAC_SUPPORT
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern void criAtomEx3dSource_Set3dRegionHn(IntPtr ex_3d_source, IntPtr ex_3d_region);
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern void criAtomEx3dSource_SetListenerBasedElevationAngleAisacControlId(IntPtr ex_3d_source, ushort aisac_control_id);
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern void criAtomEx3dSource_SetSourceBasedElevationAngleAisacControlId(IntPtr ex_3d_source, ushort aisac_control_id);
+#else
+	private static void criAtomEx3dSource_Set3dRegionHn(IntPtr ex_3d_source, IntPtr ex_3d_region) { }
+	private static void criAtomEx3dSource_SetListenerBasedElevationAngleAisacControlId(IntPtr ex_3d_source, ushort aisac_control_id) { }
+	private static void criAtomEx3dSource_SetSourceBasedElevationAngleAisacControlId(IntPtr ex_3d_source, ushort aisac_control_id) { }
+#endif
 
 	#endregion
 }

@@ -12,27 +12,33 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 
-/// \addtogroup CRIWARE_COMMON_CLASS
-/// @{
-
 /**
- * <summary>CRIWAREプラグインに関する補助的な機能を提供するクラスです。</summary>
- * \par 説明:
- * 各プラットフォーム共通で利用できる補助メソッドを提供します。<br/>
- * 本クラスのプロパティやメソッドを利用すれば、特殊なデータフォルダへのパス取得や
- * CRIWAREプラグインによるCPU / メモリの使用状況を確認できます。
+ * \addtogroup CRIWARE_COMMON_CLASS
+ * @{
  */
 
-public class CriWare
+namespace CriWare {
+
+/**
+ * <summary>A class which provides auxiliary functions related to the CRIWARE plug-in.</summary>
+ * <remarks>
+ * <para header='Description'>Provides an auxiliary method that can be commonly used in platforms.<br/>
+ * By using the properties and methods of this class, you can get a path to a special data folder
+ * or check the CPU /memory usage by CRIWARE plug-in.</para>
+ * </remarks>
+ */
+
+public class Common
 {
 	/* スクリプトバージョン */
-	private const string scriptVersionString = "2.24.01";
-	private const int scriptVersionNumber = 0x02240100;
+	private const string scriptVersionString = "2.35.33";
+	private const int scriptVersionNumber = 0x02353300;
 
 	/**
-	 * <summary>CriFsInstaller APIをサポートしているか</summary>
-	 * \par 説明:
-	 * CriFsInstaller APIが実行環境上で使用可能かどうかを判定するために使用します。
+	 * <summary>Whether CriFsInstaller API is supported or not</summary>
+	 * <remarks>
+	 * <para header='Description'>Used to determine if the CriFsInstaller API is available on the execution environment.</para>
+	 * </remarks>
 	 */
 	public const bool supportsCriFsInstaller =
 	#if UNITY_EDITOR || UNITY_STANDALONE_OSX || UNITY_STANDALONE_WIN || UNITY_IOS || UNITY_TVOS || UNITY_ANDROID || UNITY_WINRT
@@ -42,9 +48,10 @@ public class CriWare
 	#endif
 
 	/**
-	 * <summary>CriFsWebInstaller APIをサポートしているか</summary>
-	 * \par 説明:
-	 * CriFsWebInstaller APIが実行環境上で使用可能かどうかを判定するために使用します。
+	 * <summary>Whether CriFsWebInstaller API is supported or not</summary>
+	 * <remarks>
+	 * <para header='Description'>Used to determine if the CriFsWebInstaller API is available on the execution environment.</para>
+	 * </remarks>
 	 */
 	public const bool supportsCriFsWebInstaller =
 	#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || UNITY_IOS || UNITY_ANDROID
@@ -65,18 +72,18 @@ public class CriWare
     #if ENABLE_IL2CPP && (UNITY_STANDALONE_WIN || UNITY_WINRT)
         public const CallingConvention pluginCallingConvention = CallingConvention.Cdecl;
     #else
-        public const CallingConvention pluginCallingConvention = CallingConvention.Winapi;	/* default */
+        public const CallingConvention pluginCallingConvention = CallingConvention.Winapi;  /* default */
     #endif
 
 	/**
-	 * <summary>StreamingAssetsフォルダのパスです。</summary>
-	 * \par 説明:
-	 * 本プロパティはStreamingAssetsフォルダのパスを返します。値のsetはできません。
-	 * \attention
-	 * Android環境の場合、本プロパティは空文字列を返します。
-	 * CRIWAREプラグインの機能でStreamingAssets内のファイルにアクセスする際は
-	 * Android環境に限り、StreamingAssets以下の相対パスを直接指定してください。
-	 * この時、パスの先頭に"/"が入らないよう注意してください。
+	 * <summary>The path of the StreamingAssets folder.</summary>
+	 * <remarks>
+	 * <para header='Description'>This property returns the StreamingAssets folder path. The value cannot be set.</para>
+	 * <para header='Note'>In Android environment, this property returns an empty string.
+	 * When accessing the files in StreamingAssets using the function of the CRIWARE plug-in,
+	 * directly specify the relative path below StreamingAssets in Android environment only.
+	 * Note that "/" is not added to the beginning of the path.</para>
+	 * </remarks>
 	 */
 	public static string streamingAssetsPath
 	{
@@ -105,12 +112,12 @@ public class CriWare
 	}
 
 	/**
-	 * <summary>データフォルダのパスです。</summary>
-	 * \par 説明:
-	 * 本プロパティはデータフォルダのパスを返します。値のsetはできません。
-	 * \attention
-	 * iOS環境の場合、本フォルダへファイルの書き込みは、
-	 * AppStoreの審査で問題になる可能性があります。<br/>
+	 * <summary>The path of the data folder.</summary>
+	 * <remarks>
+	 * <para header='Description'>This property returns the data folder path. The value cannot be set.</para>
+	 * <para header='Note'>In the case of iOS environment, writing files in this folder
+	 * may cause problems in AppStore examination.<br/></para>
+	 * </remarks>
 	 */
 	public static string installTargetPath
 	{
@@ -118,22 +125,26 @@ public class CriWare
 			if (Application.platform == RuntimePlatform.IPhonePlayer) {
 				return Application.temporaryCachePath;
 			} else {
+	#if UNITY_EDITOR || !UNITY_SWITCH
 				return Application.persistentDataPath;
+	#else
+				return null;
+	#endif
 			}
 		}
 	}
 
 	/**
-	 * <summary>StreamingAssetsフォルダからの相対パスとして利用されるかを判定します。</summary>
-	 * <param name="path">ファイルパス</param>
-	 * <returns>StreamingAssetsフォルダからの相対パスとして利用されるか</returns>
-	 * \par 説明:
-	 * pathがCRIWAREプラグインでStreamingAssetsフォルダからの相対パスとして利用されるかを判定します。<br/>
-	 * CRIWAREプラグインでは以下の条件をすべて満たすものをStreamingAssetsフォルダからの相対パスとして利用します。
-	 *   - 絶対パスではない
-	 *   - ':'を含まない
-	 * \attention
-	 * 実際にStreamingAssetsフォルダからの相対パスとして利用されるかは、各APIのリファレンスを参照してください。
+	 * <summary>Determines whether it is used as a relative path from the StreamingAssets folder</summary>
+	 * <param name='path'>File path</param>
+	 * <returns>Whether it is used as a relative path from the StreamingAssets folder</returns>
+	 * <remarks>
+	 * <para header='Description'>Determines whether the path is used as a relative path from the StreamingAssets folder in the CRIWARE plug-in.<br/>
+	 * The CRIWARE plug-in uses the path that meets all the following conditions as a relative path from the StreamingAssets folder.
+	 *   - Is not an absolute path
+	 *   - Does not contain ':'</para>
+	 * <para header='Note'>Refer to the reference of each API to see if it is actually used as a relative path from the StreamingAssets folder.</para>
+	 * </remarks>
 	 */
 	public static bool IsStreamingAssetsPath(string path)
 	{
@@ -154,109 +165,99 @@ public class CriWare
 		}
 	}
 
-#if !UNITY_EDITOR && UNITY_WEBGL
-	[DllImport(pluginName, CallingConvention = pluginCallingConvention)]
-	public static extern int criWareUnity_SetDecryptionKey_EMSCRIPTEN(
-		ulong key
-		);
-#else
-	[DllImport(pluginName, CallingConvention = pluginCallingConvention)]
-	public static extern int criWareUnity_SetDecryptionKey(
-		ulong key, string authentication_file,
-		bool enable_atom_decryption, bool enable_mana_decryption
-		);
-#endif
-
-	[DllImport(pluginName, CallingConvention = pluginCallingConvention)]
-	public static extern int criWareUnity_GetVersionNumber();
-
-	[DllImport(pluginName, CallingConvention = pluginCallingConvention)]
-	public static extern void criWareUnity_SetRenderingEventOffsetForMana(int offset);
-
 	/**
-	 * <summary>スクリプトバージョン文字列の取得</summary>
-	 * \par 説明:
-	 * 本メソッドはCRIWAREのスクリプトバージョン文字列を返します。
+	 * <summary>Gets script version string</summary>
+	 * <remarks>
+	 * <para header='Description'>This method returns the script version string of CRIWARE.</para>
+	 * </remarks>
 	 */
 	 public static string GetScriptVersionString() {
 		return scriptVersionString;
 	}
 
 	/**
-	 * <summary>スクリプトバージョン番号の取得</summary>
-	 * \par 説明:
-	 * 本メソッドはCRIWAREのスクリプトバージョン番号を返します。
+	 * <summary>Gets script version number</summary>
+	 * <remarks>
+	 * <para header='Description'>This method returns the script version number of CRIWARE.</para>
+	 * </remarks>
 	 */
 	public static int GetScriptVersionNumber() {
 		return scriptVersionNumber;
 	}
 
 	/**
-	 * <summary>バイナリバージョン番号の取得</summary>
-	 * \par 説明:
-	 * 本メソッドはCRIWAREのバイナリバージョン番号を返します。
-	 * ここでのバイナリとは、CRIWAREプラグインに含まれるライブラリファイル(.dll等)を指します。
+	 * <summary>Gets the binary version number</summary>
+	 * <remarks>
+	 * <para header='Description'>This method returns the binary version number of CRIWARE.
+	 * The binary here means the library file (.dll etc.) included in the CRIWARE plug-in.</para>
+	 * </remarks>
 	 */
 	public static int GetBinaryVersionNumber() {
-		return criWareUnity_GetVersionNumber();
+		return CRIWARE7A6F98F1();
 	}
 
 	/**
-	 * <summary>スクリプトが要求するバイナリバージョンの取得</summary>
-	 * \par 説明:
-	 * 本メソッドはCRIWAREスクリプトが要求するランタイムバージョン番号を返します。
+	 * <summary>Gets the binary version required by the script</summary>
+	 * <remarks>
+	 * <para header='Description'>This method returns the runtime version number required by the CRIWARE script.</para>
+	 * </remarks>
 	 */
 	public static int GetRequiredBinaryVersionNumber() {
 #if true
-		return 0x02240100;
+		return 0x02353200;
 #else
 #if UNITY_EDITOR
 		switch (Application.platform) {
 			case RuntimePlatform.WindowsEditor:
-				return 0x02240100;
+				return 0x02353200;
 			case RuntimePlatform.OSXEditor:
-				return 0x02240100;
+				return 0x02353200;
 			default:
-				return 0x02240100;
+				return 0x02353200;
 		}
 #elif UNITY_STANDALONE_WIN
-		return 0x02240100;
+		return 0x02353200;
 #elif UNITY_STANDALONE_OSX
-		return 0x02240100;
+		return 0x02353200;
 #elif UNITY_IOS
-		return 0x02240100;
+		return 0x02353200;
 #elif UNITY_TVOS
-		return 0x02240100;
+		return 0x02353200;
 #elif UNITY_ANDROID
-		return 0x02240100;
+		return 0x02353200;
 #elif UNITY_PSP2
-		return 0x02240100;
+		return 0x02353200;
 #elif UNITY_PS3
-		return 0x02240100;
+		return 0x02353200;
 #elif UNITY_PS4
-		return 0x02240100;
+		return 0x02353200;
+#elif UNITY_PS5
+		return 0x02353200;
 #elif UNITY_XBOXONE
-		return 0x02240100;
+		return 0x02353200;
 #elif UNITY_WINRT
-		return 0x02240100;
+		return 0x02353200;
 #elif UNITY_WEBGL
-		return 0x02240100;
+		return 0x02353200;
 #elif UNITY_SWITCH
-		return 0x02240100;
+		return 0x02353200;
+#elif UNITY_STADIA
+        return 0x02353200;
 #elif UNITY_STANDALONE_LINUX
-		return 0x02240100;
+		return 0x02353200;
 #else
-		return 0x02240100;
+		return 0x02353200
 #endif
 #endif
     }
 
     /**
-	 * <summary> バイナリバージョンとスクリプトバージョンの整合性チェック </summary>
-	 * \par 説明:
-	 * 本メソッドは現在のバイナリがスクリプトの要求するバージョン番号と一致するかチェックします。<br>
-	 * 一致していれば整合性チェックに成功とみなし、trueを返します。<br>
-	 * 不一致であれば失敗とみなし、コンソールにエラーメッセージを出力した後でfalseを返します。
+	 * <summary>Checks the consistency between binary version and script version</summary>
+	 * <remarks>
+	 * <para header='Description'>This method checks if the current binary matches the version number required by the script.<br/>
+	 * If they match, the integrity check is considered successful and True is returned.<br/>
+	 * If they don't match, it is considered as a failure, an error message is output to the console, and False is returned.</para>
+	 * </remarks>
 	 */
     public static bool CheckBinaryVersionCompatibility() {
 		if (GetBinaryVersionNumber() == GetRequiredBinaryVersionNumber()) {
@@ -268,41 +269,44 @@ public class CriWare
 	}
 
 	/**
-	 * <summary>CRI FileSystemのメモリ使用量の取得</summary>
-	 * \par 説明:
-	 * 本メソッドはCRI FileSystemのメモリ使用量を返します。
+	 * <summary>Gets the memory usage of CRI FileSystem</summary>
+	 * <remarks>
+	 * <para header='Description'>This method returns the memory usage of CRI FileSystem.</para>
+	 * </remarks>
 	 */
 	public static uint GetFsMemoryUsage()
 	{
-		return CriFsPlugin.criFsUnity_GetAllocatedHeapSize();
+		return CriFsPlugin.CRIWARE1F0FB9BF();
 	}
 
 	/**
-	 * <summary>CRI Atomのメモリ使用量の取得</summary>
-	 * \par 説明:
-	 * 本メソッドはCRI Atomのメモリ使用量を返します。
+	 * <summary>Gets the memory usage of CRI Atom</summary>
+	 * <remarks>
+	 * <para header='Description'>This method returns the memory usage of CRI Atom.</para>
+	 * </remarks>
 	 */
 	public static uint GetAtomMemoryUsage()
 	{
-		return CriAtomPlugin.criAtomUnity_GetAllocatedHeapSize();
+		return CriAtomPlugin.CRIWAREAEE74CFB();
 	}
 
 	/**
-	 * <summary>CRI Manaのメモリ使用量の取得</summary>
-	 * \par 説明:
-	 * 本メソッドはCRI Manaのメモリ使用量を返します。
+	 * <summary>Gets the memory usage of CRI Mana</summary>
+	 * <remarks>
+	 * <para header='Description'>This method returns the memory usage of CRI Mana.</para>
+	 * </remarks>
 	 */
 	public static uint GetManaMemoryUsage()
 	{
 #if !UNITY_EDITOR && UNITY_WEBGL
         return 0;
 #else
-		return CriManaPlugin.criManaUnity_GetAllocatedHeapSize();
+		return CriManaPlugin.CRIWAREDCC73711();
 #endif
 	}
 
 	/**
-	 * <summary>CRIWAREプラグインのCPU使用状況</summary>
+	 * <summary>CPU usage of the CRIWARE plug-in</summary>
 	 */
 	public struct CpuUsage
 	{
@@ -312,17 +316,33 @@ public class CriWare
 	}
 
 	/**
-	 * <summary>CRIWAREプラグインのCPU使用状況の取得</summary>
-	 * \par 説明:
-	 * 本メソッドはCRIWAREプラグインのネイティブライブラリによる
-	 * CPU使用状況を返します。戻り値はCpuUsage構造体です。
+	 * <summary>Gets the CPU usage of the CRIWARE plug-in</summary>
+	 * <remarks>
+	 * <para header='Description'>This method returns the CPU usage by the native library of
+	 * CRIWARE plug-in. The return value is a CpuUsage structure.</para>
+	 * </remarks>
 	 */
 	 public static CpuUsage GetAtomCpuUsage()
 	{
 		return CriAtomPlugin.GetCpuUsage();
 	}
+
+	#region DLL Import
+	#if !CRIWARE_ENABLE_HEADLESS_MODE
+	[DllImport(pluginName, CallingConvention = pluginCallingConvention)]
+	public static extern int CRIWARE7A6F98F1();
+
+	[DllImport(pluginName, CallingConvention = pluginCallingConvention)]
+	public static extern void criWareUnity_SetRenderingEventOffsetForMana(int offset);
+	#else
+	public static int CRIWARE7A6F98F1() { return GetRequiredBinaryVersionNumber(); }
+	public static void criWareUnity_SetRenderingEventOffsetForMana(int offset) { }
+	#endif
+	#endregion
+
 } // end of class
 
-/// @}
+} //namespace CriWare
+/** @} */
 
 /* --- end of file --- */

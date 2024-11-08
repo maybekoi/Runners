@@ -1,15 +1,15 @@
-﻿/****************************************************************************
+/****************************************************************************
  *
- * Copyright (c) 2015 CRI Middleware Co., Ltd.
+ * Copyright (c) 2015 - 2019 CRI Middleware Co., Ltd.
  *
  ****************************************************************************/
 
 /*---------------------------
  * Cuepoint Callback Defines
  *---------------------------*/
-#if UNITY_EDITOR || UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX || UNITY_ANDROID || UNITY_IOS || UNITY_TVOS || UNITY_WINRT || UNITY_WEBGL || UNITY_STANDALONE_LINUX
+#if UNITY_EDITOR || UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX || UNITY_ANDROID || UNITY_IOS || UNITY_TVOS || UNITY_WINRT || UNITY_WEBGL || UNITY_STADIA || UNITY_STANDALONE_LINUX
 	#define CRIMANA_PLAYER_SUPPORT_CUEPOINT_CALLBACK
-#elif UNITY_PSP2 || UNITY_PS3 || UNITY_PS4 || UNITY_XBOXONE || UNITY_SWITCH
+#elif UNITY_PSP2 || UNITY_PS3 || UNITY_PS4 || UNITY_PS5 || UNITY_XBOXONE || UNITY_GAMECORE_SCARLETT || UNITY_SWITCH
 	#define CRIMANA_PLAYER_UNSUPPORT_CUEPOINT_CALLBACK
 #else
 	#error undefined platform if supporting cuepoint callback
@@ -20,13 +20,14 @@
 	#define CRIPLUGIN_USE_OLD_LOWLEVEL_INTERFACE
 #endif
 
+// Uncomment this for debug information.
 //#define CRIMANA_STAT
 
 using System;
 using System.Runtime.InteropServices;
+using UnityEngine;
 #if CRIMANA_STAT
 using System.Collections;
-using UnityEngine;
 using UnityEngine.UI;
 #endif
 
@@ -34,84 +35,131 @@ using UnityEngine.UI;
  * \addtogroup CRIMANA_NATIVE_WRAPPER
  * @{
  */
+
+
 namespace CriMana
 {
 
 /**
- * <summary>ムービ再生制御を行うネイティブプレーヤのラッパークラスです。</summary>
- * \par 説明:
+ * <summary>A wrapper class for native player that controls the movie playback.</summary>
+ * <remarks>
+ * <para header='Description'><br/>
+ * In general, it is used by extracting it from the CriManaMovieController or CriManaMovieControllerForUI component.
+ * Use this class when you want to perform complicated playback control beyond stopping/pausing playback.
  * <br/>
- * 通常、 CriManaMovieController や CriManaMovieControllerForUI コンポーネントから取り出して使用します。
- * 再生停止・ポーズ以上の複雑な再生制御を行う場合本クラスを使用してください。
- * <br/>
- * コンポーネントを使用せずに直接ムービ再生を制御したい場合、本オブジェクトを直接生成して使用することも可能です。
- * <br/>
- * \par 注意:
- * 本クラスのオブジェクトを直接アプリケーションから生成した場合、再生終了後に Player::Dispose 関数で必ず破棄してください。
+ * If you want to control movie playback directly without using a component, you can directly generate this object and use it.
+ * <br/></para>
+ * <para header='Note'>If you directly create an object of this class from the application, be sure to discard it using the Player::Dispose function after completing playback.</para>
+ * </remarks>
  */
-	public class Player : System.IDisposable
+	public class Player : CriDisposable
 	{
 		#region Data Types
 		/**
-		 * <summary>プレーヤの状態を示す値です。</summary>
-		 * \sa Player::status
+		 * <summary>A value indicating the player status.</summary>
+		 * <seealso cref='Player::status'/>
 		 */
 		public enum Status
 		{
-			Stop,			/**< 停止中		*/
-			Dechead,		/**< ヘッダ解析中	*/
-			WaitPrep,		/**< バッファリング開始停止中 */
-			Prep,			/**< 再生準備中	*/
-			Ready,			/**< 再生準備完了	*/
-			Playing,		/**< 再生中		*/
-			PlayEnd,		/**< 再生終了		*/
-			Error,			/**< エラー		*/
-			StopProcessing,	/**< 停止処理中	*/
+			Stop,           /**< Stopped */
+			Dechead,        /**< The header is under analysis */
+			WaitPrep,       /**< Buffering start stopped */
+			Prep,           /**< Preparing for playback */
+			Ready,          /**< Playback preparation completed */
+			Playing,        /**< Playing */
+			PlayEnd,        /**< Playback completed */
+			Error,          /**< Error */
+			StopProcessing, /**< Being stopped */
+
+			ReadyForRendering,  /**< Rendering preparation completed */
 		}
 
 
 		/**
-		 * <summary>ファイルをセットする際のモードです。</summary>
-		 * \sa Player::SetFile, Player::SetContentId, Player::SetFileRange
+		 * <summary>A mode for setting files.</summary>
+		 * <seealso cref='Player::SetFile'/>
+		 * <seealso cref='Player::SetContentId'/>
+		 * <seealso cref='Player::SetFileRange'/>
 		 */
 		public enum SetMode
 		{
-			New,				/**< 次回の再生で利用するムービを指定	*/
-			Append,				/**< 連結再生キューに追加する	*/
-			AppendRepeatedly	/**< 連結再生キューに次のムービが登録されるまで繰り返し追加する	*/
+			New,                /**< Specifies the movie to use in the next playback */
+			Append,             /**< Adds to the concatenated playback Cue */
+			AppendRepeatedly    /**< Adds repeatedly until the next movie is enCued in the concatenated playback Cue */
 		}
 
+		/**
+		 * <summary>Synchronization mode for movie events (Cue points, subtitles).</summary>
+		 * <seealso cref='Player::SetMovieEventSyncMode'/>
+		 */
+		public enum MovieEventSyncMode
+		{
+			FrameTime,          /**< Synchronizes to the frame time */
+			PlayBackTime        /**< Synchronizes to the playback time based on the timer type */
+		}
 
 		/**
-		 * <summary>オーディオトラックを設定する際のモードです。</summary>
-		 * \sa Player::SetAudioTrack, Player::SetSubAudioTrack
+		 * <summary>A mode when setting the audio track.</summary>
+		 * <seealso cref='Player::SetAudioTrack'/>
+		 * <seealso cref='Player::SetSubAudioTrack'/>
 		 */
 		public enum AudioTrack
 		{
-			Off,	/**< オーディオ再生OFFの指定値	*/
-			Auto,	/**< オーディオトラックのデフォルト値	*/
+			Off,    /**< A value specifying the audio playback OFF */
+			Auto,   /**< Default value for audio track */
 		}
 
+		/**
+		 * <summary>Timer type.</summary>
+		 * <seealso cref='Player::SetMasterTimerType'/>
+		 */
+		public enum TimerType : int {
+			None    = 0,    /**< No time synchronization */
+			System  = 1,    /**< System time */
+			Audio   = 2,    /**< Audio time of the Main Audio Track */
+			User    = 3,    /**< User-specific timer */
+			Manual  = 4,    /**< Manual timer */
+		}
 
 		/**
-		 * <summary>キューポイントコールバックデリゲート型です。</summary>
-		 * <param name="eventPoint">イベントポイント情報</param>
-		 * \par 説明:
-		 * キューポイントコールバックデリゲート型です。<br/>
-		 * \par 注意:
-		 * キューポイントコールバック内では、ムービ再生をコントロールする関数を呼び出してはいけません。
-		 * \sa Player::cuePointCallback
+		 * <summary>A Cue point callback delegate type.</summary>
+		 * <param name='eventPoint'>Event point information</param>
+		 * <remarks>
+		 * <para header='Description'>A Cue point callback delegate type.<br/></para>
+		 * <para header='Note'>Do not call functions that control movie playback in the Cue point callback.</para>
+		 * </remarks>
+		 * <seealso cref='Player::cuePointCallback'/>
 		 */
 		public delegate void CuePointCallback(ref EventPoint eventPoint);
 
+		/**
+		 * <summary>A delegate type for the callback when the player status changes.</summary>
+		 * <param name='status'>Player state after change</param>
+		 * <remarks>
+		 * <para header='Description'>A delegate type for the callback when the player status changes.<br/></para>
+		 * </remarks>
+		 * <seealso cref='Player::statusChangeCallback'/>
+		 */
+		public delegate void StatusChangeCallback(Status status);
 
 		/**
-		 * <summary>シェーダ選択デリゲート型です。</summary>
-		 * <param name="movieInfo">ムービ情報</param>	
-		 * <param name="additiveMode">加算合成するかどうか</param>	 
-		 * \par 説明:
-		 * シェーダ選択デリゲート型です。<br/>
-		 * \sa Player::SetShaderDispatchCallback
+		 * <summary>Delegate type of subtitle information update callback</summary>
+		 * <param name='subtitleBuffer'>Pointer to the subtitle string</param>
+		 * <remarks>
+		 * <para header='Description'>This is the delegate type for the subtitle information update callback.</para>
+		 * </remarks>
+		 * <seealso cref='Player::OnSubtitleChanged'/>
+		 */
+		public delegate void SubtitleChangeCallback(IntPtr subtitleBuffer);
+
+		/**
+		 * <summary>A shader selection delegate type.</summary>
+		 * <param name='movieInfo'>Movie information</param>
+		 * <param name='additiveMode'>Whether to do additive composition</param>
+		 * <remarks>
+		 * <para header='Description'>A shader selection delegate type.<br/></para>
+		 * </remarks>
+		 * <seealso cref='Player::SetShaderDispatchCallback'/>
 		 */
 		public delegate UnityEngine.Shader ShaderDispatchCallback(MovieInfo movieInfo, bool additiveMode);
 		#endregion
@@ -123,57 +171,135 @@ namespace CriMana
 
 
 		#region Internal Variables
-		static private Player		updatingPlayer			= null;
+		static private Player       updatingPlayer          = null;
 
-		private bool				disposed				= false;
+		private int                 playerId                = InvalidPlayerId;
+		private bool                isDisposed              = false;
+		private Status              internalrequiredStatus  = Status.Stop;
+		private Status              nativeStatus            = Status.Stop;
+		private Status?             lastNativeStatus        = null;
+		private Status?             lastPlayerStatus        = null;
+		private bool                wasStopping             = false;
+		private bool                isPreparingForRendering = false;
+		private bool                isNativeStartInvoked    = false;
+		private bool                isNativeInitialized     = false;
+		private Detail.RendererResource rendererResource;
+		private MovieInfo           _movieInfo              = new MovieInfo();
+		private FrameInfo           _frameInfo              = new FrameInfo();
+		private bool                isMovieInfoAvailable    = false;
+		private bool                isFrameInfoAvailable    = false;
+		private ShaderDispatchCallback  _shaderDispatchCallback = null;
+		private bool                enableSubtitle          = false;
+		private int                 subtitleBufferSize      = 0;
+		private uint                droppedFrameCount       = 0;
+		private CriAtomExPlayer     _atomExPlayer           = null;
+		private CriAtomEx3dSource   _atomEx3Dsource         = null;
+		private TimerType           _timerType               = TimerType.Audio;
+		private bool                isStoppingForSeek       = false;
 
-		private int					playerId				= InvalidPlayerId;
-		private Status				requiredStatus			= Status.Stop;
-		private Status				nativeStatus			= Status.Stop;
-		private bool				isNativeStartInvoked	= false;
-		private bool				isNativeInitialized	    = false;
-		private Detail.RendererResource	rendererResource;
-		private MovieInfo			_movieInfo				= new MovieInfo();
-		private FrameInfo			_frameInfo				= new FrameInfo();
-		private bool				isMovieInfoAvailable	= false;
-		private bool				isFrameInfoAvailable	= false;
-		private ShaderDispatchCallback	_shaderDispatchCallback	= null;
-		private bool				enableSubtitle			= false;
-		private int					subtitleBufferSize		= 0;
-        private CriAtomExPlayer     _atomExPlayer            = null;
-        private CriAtomEx3dSource   _atomEx3Dsource          = null;
-        #endregion
+		private Status requiredStatus {
+			get { return internalrequiredStatus; }
+			set {
+				internalrequiredStatus = value;
+				/* set temporary flags when requiredStatus changes */
+				switch (value) {
+					case Status.Stop:
+						this.wasStopping = true;
+						break;
+					case Status.ReadyForRendering:
+						this.isPreparingForRendering = true;
+						break;
+					default:
+						break;
+				}
+				this.InvokePlayerStatusCheck();
+			}
+		}
+		#endregion
 
 
-        #region Properties
-        /**
-		 * <summary>キューポイントコールバックデリゲートです。</summary>
-		 * \par 説明:
-		 * キューポイントコールバックデリゲートです。<br/>
-		 * \par 注意:
-		 * Player::Prepare 関数および Player::Start 関数より前に設定する必要があります。
-		 * \sa Player::CuePointCallback
+		#region Properties
+		/**
+		 * <summary>A Cue point callback delegate.</summary>
+		 * <remarks>
+		 * <para header='Description'>A Cue point callback delegate.<br/></para>
+		 * <para header='Note'>This must be set before the Player::Prepare and Player::Start functions.</para>
+		 * </remarks>
+		 * <seealso cref='Player::CuePointCallback'/>
 		 */
-        public CuePointCallback	cuePointCallback;
+		public CuePointCallback cuePointCallback;
 
 
 		/**
-		 * <summary>ブレンドモードを加算合成モードにします。</summary>
-		 * \par 説明:
-		 * 再生時のシェーダ選択コールバックに渡される引数になります。<br/>
-		 * \par 注意:
-		 * Player::Prepare 関数および Player::Start 関数より前に設定する必要があります。
-		 * \sa Player::ShaderDispatchCallback
+		 * <summary>A delegate for the callback when the player status changes.</summary>
+		 * <remarks>
+		 * <para header='Description'>A delegate for the callback when the player status changes.<br/></para>
+		 * </remarks>
+		 * <seealso cref='Player::StatusChangeCallback'/>
+		 */
+		public StatusChangeCallback statusChangeCallback;
+
+		/**
+		 * <summary>Callback function for subtitle information update</summary>
+		 * <remarks>
+		 * <para header='Description'>This is the subtitle information callback event.</para>
+		 * </remarks>
+		 * <seealso cref='Player::SubtitleChangeCallback'/>
+		 */
+		public event SubtitleChangeCallback OnSubtitleChanged;
+
+
+		/**
+		 * <summary>Sets the blend mode to additive composition mode.</summary>
+		 * <remarks>
+		 * <para header='Description'>This is an argument passed to the shader selection callback during playback.<br/></para>
+		 * <para header='Note'>This must be set before the Player::Prepare and Player::Start functions.</para>
+		 * </remarks>
+		 * <seealso cref='Player::ShaderDispatchCallback'/>
 		 */
 		public bool additiveMode { get; set; }
 
 
 		/**
-		 * <summary>有効なフレームを所持しているかどうか</summary>
-		 * \par 説明:
-		 * 有効なフレームを所持しているかどうかを返します。<br/>
-		 * \par 備考:
-		 * 独自で描画を行う場合、本フラグで描画の切り替え制御を行ってください。<br/>
+		 * <summary>Sets the maximum number of frame drops.</summary>
+		 * <remarks>
+		 * <para header='Description'>Sets the maximum number of frames to be dropped in one update
+		 * if the update of rendered frames is not keeping up with the playback.<br/>
+		 * This allows  intended playback if the frame rate of the application is low
+		 * or when the playback speed of the video is raised higher than the frame rate.</para>
+		 * </remarks>
+		 */
+		public int maxFrameDrop { get; set; }
+
+
+		/**
+		 * <summary>Sets whether to apply the object transparency.</summary>
+		 * <remarks>
+		 * <para header='Description'>Sets whether to make the movie transparent depending on the transparency of the attached object.<br/></para>
+		 * <para header='Note'>This must be set before the Player::Prepare and Player::Start functions.</para>
+		 * </remarks>
+		 */
+		public bool applyTargetAlpha { get; set; }
+
+
+		/**
+		 * <summary>Specifies whether shader settings for UI components are applied.</summary>
+		 * <remarks>
+		 * <para header='Description'>Sets whether to apply the rendering settings for UI components to the shader
+		 * that renders the movie. <br/>
+		 * The default value is false.</para>
+		 * <para header='Note'>This must be set before the Player::Prepare and Player::Start functions.</para>
+		 * </remarks>
+		 */
+		public bool uiRenderMode { get; set; }
+
+
+		/**
+		 * <summary>Whether a valid frame is held</summary>
+		 * <remarks>
+		 * <para header='Description'>Returns whether a valid frame is maintained.<br/></para>
+		 * <para header='Note'>When you render by yourself, switch the rendering using this flag.<br/></para>
+		 * </remarks>
 		 */
 		public bool isFrameAvailable
 		{
@@ -182,14 +308,15 @@ namespace CriMana
 
 
 		/**
-		 * <summary>再生中のムービ情報を取得します。</summary>
-		 * <param name="movieInfo">ムービ情報</param>
-		 * \par 説明:
-		 * 再生を開始したムービのヘッダ解析結果の情報です。<br/>
-		 * ムービの解像度、フレームレートなどの情報が参照できます。<br/>
-		 * \par 注意:
-		 * プレーヤのステータスが \link Player::Status WaitPrep〜Playing \endlink 状態の間のみ情報が取得できます。<br/>
-		 * それ以外の状態は null が返ります。
+		 * <summary>Gets the information on the movie being played.</summary>
+		 * <param name='movieInfo'>Movie information</param>
+		 * <remarks>
+		 * <para header='Description'>The information on the header analysis result of the movie that was started.<br/>
+		 * You can get information such as movie resolution and frame rate.<br/></para>
+		 * <para header='Note'>Information can be acquired only when the player status is between Player.Status.WaitPrep and Player.Status.Playing.<br/>
+		 * In other states, null is returned.</para>
+		 * </remarks>
+		 * <seealso cref='Player::Status'/>
 		 */
 		public MovieInfo movieInfo
 		{
@@ -198,12 +325,12 @@ namespace CriMana
 
 
 		/**
-		 * <summary>再生中のムービのフレーム情報を取得します。</summary>
-		 * <param name="frameInfo">フレーム情報</param>
-		 * \par 説明:
-		 * 現在描画中のフレーム情報を取得できます。<br/>
-		 * \par 備考:
-		 * 再生状態のみ情報が取得できます。それ以外の状態では null が返ります。<br/>
+		 * <summary>Gets the frame information of the movie being played.</summary>
+		 * <param name='frameInfo'>Frame information</param>
+		 * <remarks>
+		 * <para header='Description'>You can get information about the frame currently being rendered.<br/></para>
+		 * <para header='Note'>Information can be acquired only when the sound is being played. In other states, null is returned.<br/></para>
+		 * </remarks>
 		 */
 		public FrameInfo frameInfo
 		{
@@ -212,20 +339,28 @@ namespace CriMana
 
 
 		/**
-		 * <summary>プレーヤのステータスを取得します。</summary>
-		 * <returns>ステータス</returns>
-		 * \par 説明：
-		 * プレーヤのステータスを取得します。<br/>
+		 * <summary>Gets the player status.</summary>
+		 * <returns>Status</returns>
+		 * <remarks>
+		 * <para header='Description'>Gets the player status.<br/></para>
+		 * </remarks>
 		 */
 		public Status status
 		{
 			get {
-				if ((requiredStatus == Status.Stop) && (nativeStatus != Status.Stop)) {
+				if (wasStopping && nativeStatus != Status.Stop) {
 					return Status.StopProcessing;
 				}
+				if (requiredStatus == Status.ReadyForRendering) {
+					if (nativeStatus == Status.Playing) {
+						return ((rendererResource != null) && (rendererResource.IsPrepared()))
+							? Status.ReadyForRendering : Status.Prep;
+					} else {
+						return Status.Prep;
+					}
+				}
 				if (nativeStatus == Status.Ready) {
-					return ((rendererResource != null) && (rendererResource.IsPrepared()))
-						? Status.Ready : Status.Prep;
+					return (rendererResource != null) ? Status.Ready : Status.Prep;
 				} else {
 					return nativeStatus;
 				}
@@ -234,104 +369,138 @@ namespace CriMana
 
 
 		/**
-		 * <summary>連結再生エントリー数を取得します。</summary>
-		 * \par 説明：
-		 * 連結再生エントリー数を取得します。<br/>
-		 * このプロパティで得られる値は、読み込みが開始されていないエントリー数です。<br/>
-		 * 連結する数フレーム前に、エントリーに登録されているムービの読み込みが開始されます。<br/>
+		 * <summary>Gets the number of seamless playback entries.</summary>
+		 * <remarks>
+		 * <para header='Description'>Gets the number of seamless playback entries.<br/>
+		 * The value obtained from this property is the number of entries that are not started loading.<br/>
+		 * Loading the movie registered in the entry starts few frames before it is linked.<br/></para>
+		 * </remarks>
 		 */
 		public System.Int32 numberOfEntries
 		{
 			get {
-				return criManaUnityPlayer_GetNumberOfEntry(playerId);
+				return CRIWARE3B5030D0(playerId);
 			}
 		}
 
 
 		/**
-		 * <summary>字幕データバッファへのポインタを取得します。</summary>
-		 * \par 説明：
-		 * 字幕データバッファへのポインタを取得します。<br/>
-		 * 表示時刻になっている字幕データが格納されています。<br/>
-		 * System.Runtime.InteropServices.Marshal.PtrToStringAuto などで変換して使用してください。<br/>
-		 * \sa Player::SetSubtitleChannel, Player::subtitleSize
+		 * <summary>Gets the pointer to the subtitle data buffer.</summary>
+		 * <remarks>
+		 * <para header='Description'>Gets a pointer to the subtitle data buffer.<br/>
+		 * The subtitle data at the display time is stored.<br/></para>
+		 * <para header='Note'>The character code of the subtitle data follows the subtitle file specified when encoding the video file. <br/>
+		 * Please convert to a string with the character code corresponding to the subtitle file. <br/></para>
+		 * </remarks>
+		 * <seealso cref='Player::SetSubtitleChannel'/>
+		 * <seealso cref='Player::subtitleSize'/>
 		 */
 		public System.IntPtr subtitleBuffer { get; private set; }
 
 
 		/**
-		 * <summary>字幕データバッファのサイズを取得します。</summary>
-		 * \par 説明：
-		 * 字幕データバッファのサイズを取得します<br/>
-		 * System.Runtime.InteropServices.Marshal.PtrToStringAuto などで変換して使用してください。<br/>
-		 * \sa Player::SetSubtitleChannel, Player::subtitleBuffer
+		 * <summary>Gets the size of the subtitle data buffer.</summary>
+		 * <remarks>
+		 * <para header='Description'>Get the size of the subtitle data buffer <br />
+		 * Please use it when you get the subtitle data from Player::subtitleBuffer . <br/></para>
+		 * </remarks>
+		 * <seealso cref='Player::SetSubtitleChannel'/>
+		 * <seealso cref='Player::subtitleBuffer'/>
 		 */
 		public int subtitleSize { get; private set; }
 
 
-        public CriAtomExPlayer atomExPlayer
-        {
-            get
-            {
-                return _atomExPlayer;
-            }
-        }
-
-
-        public CriAtomEx3dSource atomEx3DsourceForAmbisonics
-        {
-            get
-            {
-                return _atomEx3Dsource;
-            }
-        }
-
-
-        #endregion
-
-
-        public Player()
+		public CriAtomExPlayer atomExPlayer
 		{
-			CriManaPlugin.InitializeLibrary();
-            playerId = criManaUnityPlayer_Create();
-            additiveMode	= false;
+			get
+			{
+				return _atomExPlayer;
+			}
 		}
 
 
-        public Player(bool advanced_audio_mode, bool ambisonics_mode) {
-            CriManaPlugin.InitializeLibrary();
-            if (advanced_audio_mode) {
-                /* AtomExPlayer 付きで作成 */
-                playerId = criManaUnityPlayer_CreateWithAtomExPlayer();
-                _atomExPlayer = new CriAtomExPlayer(criManaUnityPlayer_GetAtomExPlayerHn(playerId));
-            }
-            if (ambisonics_mode) {
-                _atomEx3Dsource = new CriAtomEx3dSource();
-                _atomExPlayer.Set3dSource(_atomEx3Dsource);
-                _atomExPlayer.Set3dListener(CriAtomListener.sharedNativeListener);
-                _atomExPlayer.SetPanType(CriAtomEx.PanType.Pos3d);
-                _atomExPlayer.UpdateAll();
-            }
-            else {
-                playerId = criManaUnityPlayer_Create();
-            }
-            additiveMode = false;
-        }
+		public CriAtomEx3dSource atomEx3DsourceForAmbisonics
+		{
+			get
+			{
+				return _atomEx3Dsource;
+			}
+		}
 
-        ~Player()
+
+		public TimerType timerType
+		{
+			get { return _timerType; }
+		}
+
+
+		/**
+		 * <summary>Object to hold the player.</summary>
+		 * <remarks>
+		 * <para header='Description'>MonoBehaviour object that holds a valid ::CriMana::Player until it is destroyed.
+		 * It is used inside the plugin to perform coroutine by which
+		 * unmanaged resources handled by GPU and rendering thread will be deleted.</para>
+		 * </remarks>
+		 */
+		public CriManaMoviePlayerHolder playerHolder { get; set; }
+		#endregion
+
+
+		public Player()
+		{
+			if (!CriManaPlugin.IsLibraryInitialized()) {
+				throw new Exception("CriManaPlugin is not initialized.");
+			}
+			playerId = CRIWAREE87B241D();
+			additiveMode = false;
+			maxFrameDrop = 0;
+			CriDisposableObjectManager.Register(this, CriDisposableObjectManager.ModuleType.Mana);
+		}
+
+
+		public Player(bool advanced_audio_mode, bool ambisonics_mode, uint max_path_length) {
+			if (!CriManaPlugin.IsLibraryInitialized()) {
+				throw new Exception("CriManaPlugin is not initialized.");
+			}
+			#if !(UNITY_WEBGL && !UNITY_EDITOR)
+			if (advanced_audio_mode || max_path_length > 0) {
+				playerId = CRIWAREC5CB2C05(advanced_audio_mode, max_path_length);
+				if (advanced_audio_mode) {
+					/* AtomExPlayer 作成 */
+					_atomExPlayer = new CriAtomExPlayer(CRIWARE9B209A14(playerId));
+					if (ambisonics_mode) {
+						_atomEx3Dsource = new CriAtomEx3dSource();
+						_atomExPlayer.Set3dSource(_atomEx3Dsource);
+						_atomExPlayer.SetPanType(CriAtomEx.PanType.Pos3d);
+						_atomExPlayer.UpdateAll();
+					}
+				}
+			} else {
+				playerId = CRIWAREE87B241D();
+			}
+			#else
+			playerId = CRIWAREE87B241D();
+			#endif
+			additiveMode = false;
+			maxFrameDrop = 0;
+			CriDisposableObjectManager.Register(this, CriDisposableObjectManager.ModuleType.Mana);
+		}
+
+		~Player()
 		{
 			Dispose(false);
 		}
 
 
 		/**
-		 * <summary>プレーヤオブジェクトの破棄</summary>
-		 * \par 説明:
-		 * プレーヤオブジェクトを破棄します。<br/>
-		 * 独自に CriMana::Player オブジェクトを生成した場合、必ず Dispose 関数を呼び出してください。
-		 * 本関数を実行した時点で、プレーヤ作成時に確保されたリソースが全て解放されます。<br/>
+		 * <summary>Discards the player object</summary>
+		 * <remarks>
+		 * <para header='Description'>Discards a player object.<br/>
+		 * If you create your own CriMana::Player object, be sure to call the Dispose function.
+		 * When this function is called, all the resources allocated when creating the player are released.<br/></para>
+		 * </remarks>
 		 */
-		public void Dispose()
+		public override void Dispose()
 		{
 			this.Dispose(true);
 			System.GC.SuppressFinalize(this);
@@ -339,30 +508,31 @@ namespace CriMana
 
 
 		/**
-		 * <summary>ムービ描画に必要なリソースを生成します。</summary>
-		 * <param name="width">ムービの幅</param>
-		 * <param name="height">ムービの高さ</param>
-		 * <param name="alpha">アルファムービか否か</param>
-		 * \par 説明:
-		 * ムービ描画に必要なリソースを生成します。<br/>
-		 * 通常はムービ描画に必要なリソースの生成はプレーヤ内部で自動的に行いますが、 Player::Prepare および
-		 * Player::Start を呼び出す前に本関数を呼び出すことでリソースの生成を事前に行うことができます。<br/>
-		 * ただし、この関数で事前に生成したリソースの幅、高さが不十分などの理由で<br/>
-		 * 実際に再生するムービの描画に利用できない場合はリソースは破棄されて再生成されます。
-		 * \sa Player::DisposeRendererResource
+		 * <summary>Generates the resources required for movie rendering.</summary>
+		 * <param name='width'>Movie width</param>
+		 * <param name='height'>Movie height</param>
+		 * <param name='alpha'>Whether it is an alpha movie</param>
+		 * <remarks>
+		 * <para header='Description'>Generates the resources required for movie rendering.<br/>
+		 * Normally, the resources required for movie rendering are automatically generated inside the player,
+		 * but you can generate them in advance by calling this function before calling Player::Prepare and Player::Start.<br/>
+		 * However, if the resource created in advance using this function cannot be used for rendering movie to be played<br/>
+		 * due to insufficient width or height, the resource is discarded and regenerated.</para>
+		 * </remarks>
+		 * <seealso cref='Player::DisposeRendererResource'/>
 		 */
 		public void CreateRendererResource(int width, int height, bool alpha)
 		{
 			MovieInfo dummyMovieInfo = new MovieInfo();
-			dummyMovieInfo.hasAlpha			= alpha;
-			dummyMovieInfo.width			= (System.UInt32)width;
-			dummyMovieInfo.height			= (System.UInt32)height;
-			dummyMovieInfo.dispWidth		= (System.UInt32)width;
-			dummyMovieInfo.dispHeight		= (System.UInt32)height;
-			dummyMovieInfo.codecType		= CodecType.SofdecPrime;
-			dummyMovieInfo.alphaCodecType	= CodecType.SofdecPrime;
+			dummyMovieInfo.hasAlpha         = alpha;
+			dummyMovieInfo.width            = (System.UInt32)width;
+			dummyMovieInfo.height           = (System.UInt32)height;
+			dummyMovieInfo.dispWidth        = (System.UInt32)width;
+			dummyMovieInfo.dispHeight       = (System.UInt32)height;
+			dummyMovieInfo.codecType        = CodecType.SofdecPrime;
+			dummyMovieInfo.alphaCodecType   = CodecType.SofdecPrime;
 
-			UnityEngine.Shader userShader		= (_shaderDispatchCallback == null) ? null : _shaderDispatchCallback(movieInfo, additiveMode);
+			UnityEngine.Shader userShader       = (_shaderDispatchCallback == null) ? null : _shaderDispatchCallback(movieInfo, additiveMode);
 			if (rendererResource != null) {
 				if (!rendererResource.IsSuitable(playerId, dummyMovieInfo, additiveMode, userShader)) {
 					rendererResource.Dispose();
@@ -376,12 +546,13 @@ namespace CriMana
 
 
 		/**
-		 * <summary>ムービ描画に必要なリソースを破棄します。</summary>
-		 * \par 説明:
-		 * ムービ描画に必要なリソースを破棄します。<br/>
-		 * リソースの破棄は Player::Dispose 時に行われますが、
-		 * 本関数で明示的に行うことができます。<br/>
-		 * \sa Player::CreateRendererResource
+		 * <summary>Discards the resources required for rendering movie.</summary>
+		 * <remarks>
+		 * <para header='Description'>Discards the resources required for rendering movie.<br/>
+		 * Although the resource is discarded in Player::Dispose,
+		 * it can be done explicitly using this function.<br/></para>
+		 * </remarks>
+		 * <seealso cref='Player::CreateRendererResource'/>
 		 */
 		public void DisposeRendererResource()
 		{
@@ -393,126 +564,211 @@ namespace CriMana
 
 
 		/**
-		 * <summary>再生準備処理を行います。</summary>
-		 * \par 説明:
-		 * ムービ再生は開始せず、ヘッダ解析と再生準備(バッファリング)のみを行って待機する関数です。<br/>
-		 * ムービ再生開始の頭出しをそろえたい場合に本関数を使用します。<br/>
+		 * <summary>Prepares for playback.</summary>
+		 * <remarks>
+		 * <para header='Description'>This function does not start movie playback but only analyzes the header and prepares for playback (buffering).<br/>
 		 * <br/>
-		 * 再生対象のムービを指定した後、本関数を呼び出してください。
-		 * 再生準備が完了すると、プレーヤの状態は \link CriMana::Player::Status Ready \endlink 状態になり、 CriMana::Player::Play 関数ですぐに描画開始されます。<br/>
+		 * Call this function after specifying the movie to be played.
+		 * When the playback is ready, the player's status changes to Player.Status.Ready.<br/>
 		 * <br/>
-		 * 本関数は \link CriMana::Player::Status Stop \endlink 状態、また \link CriMana::Player::Status PlayEnd \endlink 状態でのみ呼び出してください。
+		 * Call this function only when the status of the player is Player.Status.Stop or Player.Status.PlayEnd.</para>
+		 * </remarks>
+		 * <seealso cref='Player::Status'/>
 		 */
 		public void Prepare()
 		{
-			PrepareNativePlayer();
-			UpdateNativePlayer();
-			DisableInfos();
-			requiredStatus = Status.Ready;
+			this.wasStopping = false;
+			if ((nativeStatus == Status.Stop) || (nativeStatus == Status.PlayEnd)) {
+				requiredStatus = Status.Ready;
+				PrepareNativePlayer();
+				UpdateNativePlayer();
+			}
 		}
 
+		/**
+		 * <summary>Prepares for playback.</summary>
+		 * <remarks>
+		 * <para header='Description'>This function does not start movie playback but only analyzes the header and prepares for playback (buffering and preparation of the first frame).<br/>
+		 * Use this function when you want to align the beginning of movie playback.<br/>
+		 * <br/>
+		 * Call this function after specifying the movie to be played.
+		 * When the playback is ready, the player's status becomes Player.Status.ReadyForRendering,
+		 * and rendering starts immediately by CriMana.Player.Play.<br/>
+		 * <br/>
+		 * Call this function only when the status of the player is Player.Status.Stop,
+		 * Player.Status.PlayEnd or Player.Status.Prepare.</para>
+		 * </remarks>
+		 * <seealso cref='Player::Status'/>
+		 */
+		public void PrepareForRendering()
+		{
+			if (requiredStatus == Status.Ready) {
+				Pause(true);
+				requiredStatus = Status.ReadyForRendering;
+			} else if ((nativeStatus == Status.Stop) || (nativeStatus == Status.PlayEnd)) {
+				Start();
+				Pause(true);
+				requiredStatus = Status.ReadyForRendering;
+			}
+		}
 
 		/**
-		 * <summary>再生を開始します。</summary>
-		 * \par 説明:
-		 * ムービ再生を開始します。<br/>
-		 * 再生が開始されると、状態は \link Player::Status Playing \endlink になります。
-		 * \par 注意:
-		 * 本関数を呼び出し後、実際にムービの描画が開始されるまで数フレームかかります。<br>
-		 * ムービ再生の頭出しを行いたい場合は、 Player::Prepare 関数で事前に再生準備を行ってください。
-		 * \sa Player::Stop, Player::Status
+		 * <summary>Start playback.</summary>
+		 * <remarks>
+		 * <para header='Description'>Starts movie playback.<br/>
+		 * When playback starts, the status changes to Player.Status.Playing.</para>
+		 * <para header='Note'>After calling this function, it takes several frames before the rendering of movie actually starts.<br/>
+		 * If you want to synchronize the movie playback, prepare for playback in advance using the Player.Prepare function.</para>
+		 * </remarks>
+		 * <seealso cref='Player::Stop'/>
+		 * <seealso cref='Player::Status'/>
 		 */
 		public void Start()
 		{
-			if ((nativeStatus == Status.Stop) || (nativeStatus == Status.PlayEnd)) {
-				PrepareNativePlayer();
-				DisableInfos();
+			this.wasStopping = false;
+			if (requiredStatus == Status.ReadyForRendering) {
+				requiredStatus = Status.Playing;
+				Pause(false);
 				UpdateNativePlayer();
+			} else {
+				requiredStatus = Status.Playing;
+				if ((nativeStatus == Status.Stop) || (nativeStatus == Status.PlayEnd)) {
+					PrepareNativePlayer();
+					UpdateNativePlayer();
+				}
 			}
-			requiredStatus = Status.Playing;
+			if (rendererResource != null) {
+				rendererResource.OnPlayerStart();
+			}
+			isStoppingForSeek = false;
 		}
 
 
 		/**
-		 * <summary>ムービ再生の停止要求を行います。</summary>
-		 * \par 説明:
-		 * ムービ再生の停止要求を出します。本関数は即時復帰関数です。<br/>
-		 * 本関数を呼び出しても、再生はすぐには止まりません。<br/>
-		 * \sa Player::Status
+		 * <summary>Requests to stop movie playback.</summary>
+		 * <remarks>
+		 * <para header='Description'>Issues a request to stop movie playback. This function returns immediately.<br/>
+		 * Playback does not stop immediately when this function is called.<br/></para>
+		 * </remarks>
+		 * <seealso cref='Player::Status'/>
 		 */
 		public void Stop()
 		{
-			criManaUnityPlayer_Stop(playerId);
-			UpdateNativePlayer();
-			DisableInfos();
+			isStoppingForSeek = false;
 			requiredStatus = Status.Stop;
+			if (playerId != InvalidPlayerId) {
+				CRIWARE8E3E3566(playerId);
+				UpdateNativePlayer();
+			}
+			DisableInfos();
 		}
 
 
 		/**
-		 * <summary>ムービ再生のポーズ切り替えを行います。</summary>
-		 * <param name="sw">ポーズスイッチ(true: ポーズ, false: ポーズ解除)</param>
-		 * \par 説明:
-		 * ポーズのON/OFFを切り替えます。<br/>
-		 * 引数にtrueを指定する一時停止、falseを指定すると再生再開です。<br/>
-		 * Player::Stop 関数を呼び出すと、ポーズ状態は解除されます <br/>
-		 * \sa Player::IsPaused
+		 * <summary>Requests to stop movie playback.</summary>
+		 * <remarks>
+		 * <para header='Description'>Issues a request to stop movie playback. This function returns immediately.<br/>
+		 * Playback does not stop immediately when this function is called.<br/>
+		 * Playback is stopped internally, but the rendering status is kept.<br/>
+		 * Use this when you need to stop the movie while keeping it be rendered, such as when performing a seek during playback.</para>
+		 * </remarks>
+		 * <seealso cref='Player::Start'/>
+		 * <seealso cref='Player::Status'/>
+		 */
+		public void StopForSeek() {
+			if (rendererResource != null) {
+				if (!rendererResource.OnPlayerStopForSeek()) {
+					UnityEngine.Debug.LogWarning("[CRIWARE] StopForSeek is not supported on this platform/codec.");
+					Stop();
+					return;
+				}
+			}
+			requiredStatus = Status.Stop;
+			if (playerId != InvalidPlayerId) {
+				isStoppingForSeek = true;
+				CRIWARE8E3E3566(playerId);
+				UpdateNativePlayer();
+			}
+			DisableInfos(true);
+		}
+
+
+		/**
+		 * <summary>Pauses/unpauses the movie playback.</summary>
+		 * <param name='sw'>Switches the pause (True: pause, False: unpause)</param>
+		 * <remarks>
+		 * <para header='Description'>Switches pause ON/OFF.<br/>
+		 * Set True to the argument to pause, or False to resume.<br/>
+		 * Calling the Player::Stop function unpauses the playback<br/></para>
+		 * </remarks>
+		 * <seealso cref='Player::IsPaused'/>
 		 */
 		public void Pause(bool sw)
 		{
-			criManaUnityPlayer_Pause(playerId, (sw) ? 1 : 0);
+			CRIWARE0AECB3DB(playerId, (sw) ? 1 : 0);
+
+			if (rendererResource != null) {
+				rendererResource.OnPlayerPause(sw);
+			}
 		}
 
 
 		/**
-		 * <summary>ムービ再生のポーズ状態の取得を行います。</summary>
-		 * <returns>ポーズ状態</returns>
-		 * \par 説明:
-		 * ポーズのON/OFFを取得します。<br/>
-		 * \sa Player::Pause
+		 * <summary>Gets the pausing status of the movie playback.</summary>
+		 * <returns>Pausing status</returns>
+		 * <remarks>
+		 * <para header='Description'>Gets the ON/OFF status of the pause.<br/></para>
+		 * </remarks>
+		 * <seealso cref='Player::Pause'/>
 		 */
 		public bool IsPaused()
 		{
-			return criManaUnityPlayer_IsPaused(playerId);
+			return CRIWARE750622E5(playerId);
 		}
 
 
 		/**
-		 * <summary>ストリーミング再生用のファイルパスの設定を行います。</summary>
-		 * <param name="binder">CPKファイルをバインド済みのバインダ</param>
-		 * <param name="moviePath">CPKファイル内のコンテンツパス</param>
-		 * <param name="setMode">ムービの追加モード</param>
-		 * <returns>セットに成功したか</returns>
-		 * \par 説明:
-		 * ストリーミング再生用のファイルパスを設定します。<br/>
-		 * 第一引数の binder にCPKファイルをバインドしたバインダハンドルを指定することにより、CPKファイルからのムービ再生が行えます。<br/>
-		 * CPKからではなく直接ファイルからストリーミングする場合は、binder に null を指定ください。<br/>
-		 * 第三引数の setMode に Player::SetMode::Append を与えると、連結再生を行います。この場合、関数は false を返す可能性があります。<br/>
-		 * 連結再生できるムービファイルには以下の条件があります。<br>
-		 * - ビデオの解像度、フレームレート、コーデックが全て同じ
-		 * - アルファ情報の有無が一致
-		 * - 音声トラックの構成（トラック番号および各チャンネル数）、コーデックが全て同じ
-		 * 
-		 * \par バインダを指定しない場合(nullを指定した場合):
-		 * - moviePath プロパティを設定した場合と等価です。<br/>
-		 * - 相対パスを指定した場合は StreamingAssets フォルダからの相対でファイルをロードします。
-		 * - 絶対パス、あるいはURLを指定した場合には指定したパスでファイルをロードします。<br/>
-		 * 
-		 * \par バインダを指定した場合:
-		 * バインダ設定後に moviePath プロパティを設定した場合は、バインダにバインドされているCPKファイルからムービ再生が行われます。<br/>
-		 * \sa Player::SetContentId, Player::SetFileRange, Player::moviePath
+		 * <summary>Sets the file path of the streaming playback.</summary>
+		 * <param name='binder'>Binder with CPK file bound</param>
+		 * <param name='moviePath'>Content path in a CPK file</param>
+		 * <param name='setMode'>Movie addition mode</param>
+		 * <returns>Whether the set was successful</returns>
+		 * <remarks>
+		 * <para header='Description'>Sets the file path for streaming playback.<br/>
+		 * By specifying the binder handle which binds the CPK file to the first argument binder,
+		 * you can play the movie from the CPK file.<br/>
+		 * If you stream directly from a file instead of CPK, specify null for binder.<br/>
+		 * If you specify Player::SetMode::Append to the third argument setMode, linked playback is performed.
+		 * In this case, the function may return False.<br/>
+		 * Movie files that can be linked and played must meet the following conditions.<br/>
+		 * - Video resolution, frame rate, codec are all the same
+		 * - All must have or must not have alpha information
+		 * - The configuration of the sound track (track number and number of channels) and codec are all the same</para>
+		 * <para header='When no binder is specified (null is specified)'>- Equivalent to setting the moviePath property.<br/>
+		 * - If a relative path is specified, the file is loaded relative to StreamingAssets folder.
+		 * - If an absolute path is specified, the file is loaded from the specified path.<br/></para>
+		 * <para header='When a binder is specified'>If the moviePath property is set after setting the binder,
+		 * the movie is played from the CPK file bound to the binder.<br/></para>
+		 * <para header='Note'>You can also specify moviePath as URL.
+		 * For example, by specifying a string such as "http://hoge-server/fuga-movie.usm",
+		 * it is possible to stream playback the movie file on the HTTP server. However, this feature is not recommended.
+		 * Also, only HTTP is supported as a communication protocol. HTTPS is not supported.</para>
+		 * </remarks>
+		 * <seealso cref='Player::SetContentId'/>
+		 * <seealso cref='Player::SetFileRange'/>
+		 * <seealso cref='Player::moviePath'/>
 		 */
 		public bool SetFile(CriFsBinder binder, string moviePath, SetMode setMode = SetMode.New)
 		{
 			System.IntPtr binderPtr = (binder == null) ? System.IntPtr.Zero : binder.nativeHandle;
-			if ((binder == null) && CriWare.IsStreamingAssetsPath(moviePath) ) {
-				moviePath = System.IO.Path.Combine(CriWare.streamingAssetsPath, moviePath);
+			if ((binder == null) && CriWare.Common.IsStreamingAssetsPath(moviePath) ) {
+				moviePath = System.IO.Path.Combine(CriWare.Common.streamingAssetsPath, moviePath);
 			}
 			if (setMode == SetMode.New) {
-				criManaUnityPlayer_SetFile(playerId, binderPtr, moviePath);
+				CRIWAREFA3D3598(playerId, binderPtr, moviePath);
 				return true;
 			} else {
-				return criManaUnityPlayer_EntryFile(
+				return CRIWARE1AFA74BE(
 					playerId, binderPtr, moviePath,
 					(setMode == SetMode.AppendRepeatedly)
 					);
@@ -521,20 +777,72 @@ namespace CriMana
 
 
 		/**
-		 * <summary>CPKファイル内のムービファイルの指定を行います。 (コンテンツID指定)</summary>
-		 * <param name="binder">CPKファイルをバインド済みのバインダ</param>
-		 * <param name="contentId">CPKファイル内のコンテンツID</param>
-		 * <param name="setMode">ムービの追加モード</param>
-		 * <returns>セットに成功したか</returns>
-		 * \par 説明:
-		 * ストリーミング再生用のコンテンツIDを設定します。<br/>
-		 * 引数にバインダとコンテンツIDを指定することで、CPKファイル内の任意のムービデータを読み込み元にすることが出来ます。
-		 * 第三引数の setMode に Append を与えると、連結再生を行います。この場合、関数は false を返す可能性があります。<br/>
-		 * 連結再生できるムービファイルには以下の条件があります。<br>
-		 * - ビデオの解像度、フレームレート、コーデックが全て同じ
-		 * - アルファ情報の有無が一致
-		 * - 音声トラックの構成（トラック番号および各チャンネル数）、コーデックが全て同じ
-		 * \sa Player::SetFile, Player::SetFileRange
+		 * <summary>Sets the data for memory playback.</summary>
+		 * <param name='data'>Movie data on the memory</param>
+		 * <param name='dataSize'>Data size</param>
+		 * <param name='setMode'>Movie addition mode</param>
+		 * <returns>Whether the set was successful</returns>
+		 * <remarks>
+		 * <para header='Description'>Sets the data for memory playback.<br/>
+		 * The first and second arguments specify the address and size of the data.
+		 * If you specify Player::SetMode::Append to the third argument setMode, linked playback is performed.
+		 * In this case, the function may return False.<br/>
+		 * The conditions for movie files that can be linked are the same as for the Player::SetFile function.<br/></para>
+		 * <para header='Note'>The buffer address passed to SetData should be fixed beforehand by the application
+		 * so that it is not moved by the garbage collector.<br/>
+		 * In addition, release the memory lock after the playback is finished, the playback is stopped, or after the player object is discarded.<br/></para>
+		 * </remarks>
+		 * <seealso cref='Player::SetFile'/>
+		 * <seealso cref='Player::SetContentId'/>
+		 * <seealso cref='Player::SetFileRange'/>
+		 * <seealso cref='Player::moviePath'/>
+		 */
+		public bool SetData(IntPtr data, System.Int64 dataSize, SetMode setMode = SetMode.New)
+		{
+			if (setMode == SetMode.New) {
+				CRIWARE097811FC(playerId, data, dataSize);
+				return true;
+			} else {
+				return CRIWAREF2C6F5B2(
+					playerId, data, dataSize,
+					(setMode == SetMode.AppendRepeatedly)
+					);
+			}
+		}
+
+
+		[Obsolete("Use SetData(IntPtr, Int64, SetMode) instead")]
+		public bool SetData(byte[] data, System.Int64 datasize, SetMode setMode = SetMode.New) {
+			if (setMode == SetMode.New) {
+				CRIWARE097811FC(playerId, data, datasize);
+				return true;
+			} else {
+				return CRIWAREF2C6F5B2(
+					playerId, data, datasize,
+					(setMode == SetMode.AppendRepeatedly)
+					);
+			}
+		}
+
+
+		/**
+		 * <summary>Specifies the movie file in the CPK file. (Specify content ID)</summary>
+		 * <param name='binder'>Binder with CPK file bound</param>
+		 * <param name='contentId'>Content ID in the CPK file</param>
+		 * <param name='setMode'>Movie addition mode</param>
+		 * <returns>Whether the set was successful</returns>
+		 * <remarks>
+		 * <para header='Description'>Sets the content ID for streaming playback.<br/>
+		 * By specifying the binder and content ID in the arguments, it is possible to use any movie data in the CPK file as the read source.
+		 * If you specify Append to the third argument setMode, linked playback is performed. In this case, the function may return False.<br/>
+		 * Movie files that can be linked and played must meet the following conditions.<br/>
+		 * - Video resolution, frame rate, codec are all the same
+		 * - All must have or must not have alpha information
+		 * - The configuration of the sound track (track number and number of channels) and codec are all the same</para>
+		 * </remarks>
+		 * <seealso cref='Player::SetFile'/>
+		 * <seealso cref='Player::SetFileRange'/>
+		 * <seealso cref='Player::SetData'/>
 		 */
 		public bool SetContentId(CriFsBinder binder, int contentId, SetMode setMode = SetMode.New)
 		{
@@ -543,11 +851,11 @@ namespace CriMana
 				return false;
 			}
 			if (setMode == SetMode.New) {
-				criManaUnityPlayer_SetContentId(playerId, binder.nativeHandle, contentId);
+				CRIWARE6C0CDCDD(playerId, binder.nativeHandle, contentId);
 				return true;
 			}
 			else {
-				return criManaUnityPlayer_EntryContentId(
+				return CRIWARE101AA908(
 					playerId, binder.nativeHandle, contentId,
 					(setMode == SetMode.AppendRepeatedly)
 					);
@@ -556,31 +864,37 @@ namespace CriMana
 
 
 		/**
-		 * <summary>パックファイル内のムービファイルの指定を行います。 (ファイル範囲指定)</summary>
-		 * <param name="filePath">パックファイルへのパス</param>
-		 * <param name="offset">パックファイル内のムービファイルのデータ開始位置</param>
-		 * <param name="range">パックファイル内のムービファイルのデータ範囲</param>
-		 * <param name="setMode">ムービの追加モード</param>
-		 * <returns>セットに成功したか</returns>
-		 * \par 説明:
-		 * ストリーミング再生を行いたいムービファイルをパッキングしたファイルを指定します。<br/>
-		 * 引数にオフセット位置とデータ範囲を指定することで、パックファイル内の任意のムービデータを読み込み元にすることが出来ます。
-		 * 第二引数の range に -1 を指定した場合はパックファイルの終端までをデータ範囲とします。
-		 * 第四引数の setMode に Player::SetMode.Append を与えると、連結再生を行います。この場合、関数は false を返す可能性があります。<br/>
-		 * 連結再生できるムービファイルには以下の条件があります。<br>
-		 * - ビデオの解像度、フレームレート、コーデックが全て同じ
-		 * - アルファ情報の有無が一致
-		 * - 音声トラックの構成（トラック番号および各チャンネル数）、コーデックが全て同じ
-		 * \sa Player::SetFile, Player::SetContentId, Player::moviePath
+		 * <summary>Specifies the movie file in the pack file. (File range specified)</summary>
+		 * <param name='filePath'>Path to the pack file</param>
+		 * <param name='offset'>Data start position of movie file in the pack file</param>
+		 * <param name='range'>Data range of the movie file in pack file</param>
+		 * <param name='setMode'>Movie addition mode</param>
+		 * <returns>Whether the set was successful</returns>
+		 * <remarks>
+		 * <para header='Description'>Specifies the file in which the movie files you want to stream is packed.<br/>
+		 * By specifying the offset position and data range in the arguments,
+		 * it is possible to use any movie data in the pack file as the read source.
+		 * If you specify -1 for the second argument range, the data range extends to the end of the pack file.
+		 * If you specify Player::SetMode.Append to the fourth argument setMode, linked playback is performed.
+		 * In this case, the function may return False.<br/>
+		 * Movie files that can be linked and played must meet the following conditions.<br/>
+		 * - Video resolution, frame rate, codec are all the same
+		 * - All must have or must not have alpha information
+		 * - The configuration of the sound track (track number and number of channels) and codec are all the same</para>
+		 * </remarks>
+		 * <seealso cref='Player::SetFile'/>
+		 * <seealso cref='Player::SetContentId'/>
+		 * <seealso cref='Player::SetData'/>
+		 * <seealso cref='Player::moviePath'/>
 		 */
 		public bool SetFileRange(string filePath, System.UInt64 offset, System.Int64 range, SetMode setMode = SetMode.New)
 		{
 			if (setMode == SetMode.New) {
-				criManaUnityPlayer_SetFileRange(playerId, filePath, offset, range);
+				CRIWAREF03B7E5D(playerId, filePath, offset, range);
 				return true;
 			}
 			else {
-				return criManaUnityPlayer_EntryFileRange(
+				return CRIWARE3BF8F4C0(
 					playerId, filePath, offset, range,
 					(setMode == SetMode.AppendRepeatedly)
 					);
@@ -589,305 +903,348 @@ namespace CriMana
 
 
 		/**
-		 * <summary>ムービ再生のループ切り替えを行います。</summary>
-		 * \par 値の意味:
-		 * <param name="sw">ループスイッチ(true: ループモード, false: ループモード解除)</param>
-		 * \par 説明:
-		 * ループ再生のON/OFFを切り替えます。デフォルトはループOFFです。<br/>
-		 * ループ再生をONにした場合は、ムービ終端まで再生しても再生は終了せず先頭に戻って再生を
-		 * 繰り返します。<br/>
+		 * <summary>Switching on/off the movie playback loop.</summary>
+		 * <param name='sw'>Loop switch (True: loop mode, False: non-loop mode)</param>
+		 * <remarks>
+		 * <para header='Description'>Switches loop playback ON/OFF. By default, loop is OFF.<br/>
+		 * When loop playback is turned ON, the playback does not end at the end of the movie,
+		 * and the playback is repeated from the beginning.<br/></para>
+		 * </remarks>
 		 */
 		public void Loop(bool sw)
 		{
-			criManaUnityPlayer_Loop(playerId, sw ? 1 : 0);
+			CRIWARE622615F7(playerId, sw ? 1 : 0);
 		}
 
 
 		/**
-		 * <summary>シーク位置の設定を行います。</summary>
-		 * <param name="frameNumber">シーク先のフレーム番号</param>
-		 * \par 説明:
-		 * シーク再生を開始するフレーム番号を指定します。<br>
-		 * 本関数を実行しなかった場合、またはフレーム番号0を指定した場合はムービの先頭から再生を開始します。
-		 * 指定したフレーム番号が、ムービデータの総フレーム数より大きかったり負の値だった場合もムービの先頭から再生します。
+		 * <summary>Sets the master timer type.</summary>
+		 * <param name='timerType'>Master timer type</param>
+		 * <remarks>
+		 * <para header='Description'>Sets the timer mode for video playback.<br/>
+		 * The default is the system timer specified when creating the handle.<br/>
+		 * If you want to synchronize the display timing of video frames with an arbitrary timer,
+		 * specify the user timer.<br/>
+		 * In that case, call ::CriMana::Player::UpdateWithUserTime regularly.</para>
+		 * </remarks>
+		 * <seealso cref='Player::UpdateWithUserTime'/>
+		 * <seealso cref='Player::SetManualTimerUnit'/>
+		 * <seealso cref='Player::UpdateWithManualTimeAdvanced'/>
+		 */
+		public void SetMasterTimerType(TimerType timerType)
+		{
+			this._timerType = timerType;
+			CRIWARE944389C0(playerId, timerType);
+		}
+
+
+		/**
+		 * <summary>Sets the seek position.</summary>
+		 * <param name='frameNumber'>Seek frame number</param>
+		 * <remarks>
+		 * <para header='Description'>Specifies the frame number to start seek playback.<br/>
+		 * If this function is not called, or if frame number 0 is specified, playback starts from the beginning of the movie.
+		 * If the specified frame number is greater than the total number of frames in the movie data or is a negative value, the movie is also played from the beginning.</para>
+		 * </remarks>
 		 */
 		public void SetSeekPosition(int frameNumber)
 		{
-			criManaUnityPlayer_SetSeekPosition(playerId, frameNumber);
+			CRIWARE0042EEBC(playerId, frameNumber);
 		}
 
+		/**
+		 * <summary>Sets the sync mode for movie events (Cue points, subtitles).</summary>
+		 * <param name='mode'>Movie event synchronization mode</param>
+		 * <remarks>
+		 * <para header='Description'>Sets the sync mode for movie events (Cue points, subtitles).<br/>
+		 * By default, the event is triggered in sync with the frame time.<br/>
+		 * If you want to synchronize with the movie playback time, specify MovieEventSyncMode::PlayBackTime.<br/></para>
+		 * <para header='Note'>Call this function before starting playback.</para>
+		 * </remarks>
+		 */
+		public void SetMovieEventSyncMode(MovieEventSyncMode mode)
+		{
+			CRIWARE61280D15(playerId, mode);
+		}
 
 		/**
-		 * <summary>ムービ再生の速度調整を行います。</summary>
-		 * <param name="speed">再生速度</param>
-		 * \par 説明:
-		 * ムービの再生速度を指定します。<br/>
-		 * 再生速度は、0.0f〜3.0fの範囲で実数値を指定します。<br/>
-		 * 1.0fが指定された場合はデータ本来の速度で再生を行います。<br/>
-		 * 例えば、2.0fを指定した場合、ムービはムービデータのフレームレートの２倍の速度で再生されます。<br/>
-		 * 再生速度のデフォルト値は1.0fです。<br/>
-		 * \par 注意:
-		 * 再生中のムービに対する再生速度の変更は、音声がないムービを再生した場合のみ対応しています。<br/>
-		 * 音声つきムービに対して再生中の速度変更を行うと正常動作しません。音声つきのムービの場合は、一度再生停止
-		 * してから、再生速度を変更し、目的のフレーム番号からシーク再生をしてください。<br>
-		 * <br/>
+		 * <summary>Adjusts the movie playback speed.</summary>
+		 * <param name='speed'>Playback speed</param>
+		 * <remarks>
+		 * <para header='Description'>Specifies the playback speed of the movie.<br/>
+		 * For the playback speed, specify a real value in the range of 0.0f to 3.0f.<br/>
+		 * If 1.0f is specified, the data is played back at its original speed.<br/>
+		 * For example, if 2.0f is specified, the movie is played back at twice the frame rate of movie data.<br/>
+		 * The default playback speed is 1.0f.<br/></para>
+		 * <para header='Note'>Changing the playback speed for movies that are being played is only supported when the movie has no sound.<br/>
+		 * Changing the playback speed for the movie with sound during playback does not work correctly. For movies with sound,
+		 * stop the playback, change the playback speed, and then perform seek playback from the target frame number.<br/>
+		 * <br/></para>
+		 * </remarks>
 		 */
 		public void SetSpeed(float speed)
 		{
-			criManaUnityPlayer_SetSpeed(playerId, speed);
+			CRIWARE307DECC9(playerId, speed);
 		}
 
 
 		/**
-		 * <summary>最大ピクチャデータサイズの指定</summary>
-		 * <param name="maxDataSize">最大ピクチャデータサイズ</param>
-		 * \par 説明:
-		 * 最大ピクチャデータサイズの設定をします。<br/>
-		 * 通常再生では、本関数を使用する必要はありません。<br/>
+		 * <summary>Specifies the maximum picture data size</summary>
+		 * <param name='maxDataSize'>Maximum picture data size</param>
+		 * <remarks>
+		 * <para header='Description'>Sets the maximum picture data size. <br/>
+		 * It is not required to use this function in normal playback. <br/>
 		 * <br/>
-		 * H.264ムービを連結再生する場合、本関数で最大ピクチャデータサイズを設定してから再生を開始してください。<br/>
-		 * 設定すべきデータサイズは、USMファイルをWizzに入力した際、「Maximum chunk size」と表示される数値の、全USMの最大値です。
-		 * <br/>
+		 * When doing linked playback on videos with codec other than Sofdec.Prime, 
+		 * set the maximum picture data size with this function before starting playback. <br/>
+		 * The data size to be set is the maximum "Maximum chunk size" of all USM files shown in the Wizz tool; <br/>
+		 * or the maximum value of MovieInfo.maxChunkSize of all USM files scheduled for concatenated playback. <br/></para>
+		 * </remarks>
 		 */
 		public void SetMaxPictureDataSize(System.UInt32 maxDataSize)
 		{
-			criManaUnityPlayer_SetMaxPictureDataSize(playerId, maxDataSize);
-		}
-
-
-		/*JP
-		 * <summary>入力データのバッファリング時間を指定します。</summary>
-		 * <param name="sec">バッファリング時間 [秒]</param>
-		 * \par 説明:
-		 * ストリーミング再生でバッファリングする入力データの量を秒単位の時間で指定します。<br>
-		 * Manaプレーヤは、バッファリング時間とムービのビットレート等から読み込みバッファのサイズを決定します。<br>
-		 * デフォルトのバッファリング時間は、1秒分です。<br>
-		 * バッファリング時間に 0.0f を指定した場合、バッファリング時間はライブラリのデフォルト値となります。<br>
-		 */
-		public void SetBufferingTime(float sec)
-		{
-			criManaUnityPlayer_SetBufferingTime(playerId, sec);
-		}
-
-
-		/*JP
-		 * <summary>最小バッファサイズを指定します。</summary>
-		 * <param name="min_buffer_size">最小バッファサイズ [byte]</param>
-		 * \par 説明:
-		 * ムービデータの最小バッファサイズを指定します。<br>
-		 * 最小バッファサイズを指定した場合、指定サイズ分以上の入力バッファがManaプレーヤ内部で確保することが保証されます。<br>
-		 * 単純再生においては本関数を使用する必要はありません。極端にビットレートが異なるようなムービを連結再生する場合に使用します。<br>
-		 * 最小バッファサイズに 0を指定した場合、最小バッファサイズはムービデータの持つ値となります。(デフォルト)<br>
-		 */
-		public void SetMinBufferSize(int min_buffer_size)
-		{
-			criManaUnityPlayer_SetMinBufferSize(playerId, min_buffer_size);
+			CRIWARE4347FC03(playerId, maxDataSize);
 		}
 
 
 		/**
-		 * <summary>メインオーディオトラック番号の設定を行います。</summary>
-		 * <param name="track">トラック番号</param>
-		 * \par 説明:
-		 * ムービが複数のオーディオトラックを持っている場合に、再生するオーディオを指定します。<br>
-		 * 本関数を実行しなかった場合は、もっとも若い番号のオーディオトラックを再生します。<br>
-		 * データが存在しないトラック番号を指定した場合は、オーディオは再生されません。<br>
-		 * <br>
-		 * トラック番号としてAudioTrack.Offを指定すると、例えムービにオーディオが
-		 * 含まれていたとしてもオーディオは再生しません。<br>
-		 * <br>
-		 * また、デフォルト設定（もっとも若いチャネルのオーディオを再生する）にしたい場合は、
-		 * チャネルとしてAudioTrack.Autoを指定してください。<br>
-		 *
-		 * \par 備考:
-		 * 再生中のトラック変更は未対応です。変更前のフレーム番号を記録しておいてシーク再生
-		 * してください。
+		 * <summary>Specify the buffering time for the input data.</summary>
+		 * <param name='sec'>Buffering time [sec]</param>
+		 * <remarks>
+		 * <para header='Description'>Specify the amount of input data to buffer for streaming playback, in seconds. <br/>
+		 * The Mana player determines the size of the read buffer according to the buffering time and movie bitrate. <br/>
+		 * The default buffering time is 1 second. <br/>
+		 * If the buffering time is set to 0.0f, the default value of the library will be used. <br/></para>
+		 * </remarks>
+		 */
+		public void SetBufferingTime(float sec)
+		{
+			CRIWARED0197067(playerId, sec);
+		}
+
+
+		/**
+		 * <summary>Specify the minimum buffer size.</summary>
+		 * <param name='min_buffer_size'>Minimum buffer size [byte]</param>
+		 * <remarks>
+		 * <para header='Description'>Specify the minimum buffer size for movie data. <br/>
+		 * When a minimum buffer size is specified, the Mana player has an input buffer larger than the specified value. <br/>
+		 * This function is not neccessary for simple playback.
+		 * However, for seamless concatenated playback of videos with great bitrate differences, calling the function may be requisite.<br/>
+		 * If it is set to 0, the attributive value of the movie data will be used. (Default)<br/></para>
+		 * </remarks>
+		 */
+		public void SetMinBufferSize(int min_buffer_size)
+		{
+			CRIWARE0B2034B9(playerId, min_buffer_size);
+		}
+
+
+		/**
+		 * <summary>Sets the Main Audio Track number.</summary>
+		 * <param name='track'>Track number</param>
+		 * <remarks>
+		 * <para header='Description'>Specifies the sound to be played if the movie has multiple sound tracks.<br/>
+		 * If this function is not called, the audio track with the smallest number is played.<br/>
+		 * If you specify a Track number that has no data, no audio is played.<br/>
+		 * <br/>
+		 * If you specify AudioTrack.Off as the Track number, no audio is played
+		 * even if the movie contains audio.<br/>
+		 * <br/>
+		 * If you want to use the default settings (playing the sound of the smallest channel number),
+		 * specify AudioTrack.Auto as the channel.<br/></para>
+		 * <para header='Note'>Changing tracks during playback is not supported. Record the frame number before change and
+		 * use the seek playback.</para>
+		 * </remarks>
 		 */
 		public void SetAudioTrack(int track)
 		{
-			criManaUnityPlayer_SetAudioTrack(playerId, track);
+			CRIWARE2C5AEDDB(playerId, track);
 		}
 
 
 		public void SetAudioTrack(AudioTrack track)
 		{
 			if (track == AudioTrack.Off) {
-				criManaUnityPlayer_SetAudioTrack(playerId, -1);
+				CRIWARE2C5AEDDB(playerId, -1);
 			} else if (track == AudioTrack.Auto) {
-				criManaUnityPlayer_SetAudioTrack(playerId, 100);
+				CRIWARE2C5AEDDB(playerId, 100);
 			}
 		}
 
 
 		/**
-		 * <summary>サブオーディオトラック番号の設定を行います。</summary>
-		 * <param name="track">トラック番号</param>
-		 * \par 説明:
-		 * ムービが複数のオーディオトラックを持っている場合に、再生するオーディオを指定します。<br>
-		 * 本関数を実行しなかった場合（デフォルト設定）はサブオーディオからは何も再生されません。
-		 * また、データが存在しないトラック番号を指定した場合、サブオーディオトラックとして
-		 * メインオーディオと同じトラックを指定した場合もサブオーディオからは何も再生されません。<br>
-		 *
-		 * \par 備考:
-		 * 再生中のトラック変更は未対応です。変更前のフレーム番号を記録しておいてシーク再生
-		 * してください。
+		 * <summary>Sets the sub audio track number.</summary>
+		 * <param name='track'>Track number</param>
+		 * <remarks>
+		 * <para header='Description'>Specifies the sound to be played if the movie has multiple sound tracks.<br/>
+		 * If you don't call this function (default setting), nothing is played from the sub-audio.
+		 * If you specify a track number that has no data, nothing is played from the sub-audio,
+		 * even if you specify the same track for the main audio as the sub-audio track.<br/></para>
+		 * <para header='Note'>Changing tracks during playback is not supported. Record the frame number before change and
+		 * use the seek playback.</para>
+		 * </remarks>
 		 */
 		public void SetSubAudioTrack(int track)
 		{
-			criManaUnityPlayer_SetSubAudioTrack(playerId, track);
+			CRIWARE3AD4DAE4(playerId, track);
 		}
 
 
 		public void SetSubAudioTrack(AudioTrack track)
 		{
 			if (track == AudioTrack.Off) {
-				criManaUnityPlayer_SetSubAudioTrack(playerId, -1);
+				CRIWARE3AD4DAE4(playerId, -1);
 			} else if (track == AudioTrack.Auto) {
-				criManaUnityPlayer_SetSubAudioTrack(playerId, 100);
+				CRIWARE3AD4DAE4(playerId, 100);
 			}
 		}
 
 
 		/**
-		 * <summary>エクストラオーディオトラック番号の設定を行います。</summary>
-		 * <param name="track">トラック番号</param>
-		 * \par 説明:
-		 * ムービが複数のオーディオトラックを持っている場合に、再生するオーディオを指定します。<br>
-		 * 本関数を実行しなかった場合（デフォルト設定）はエクストラオーディオからは何も再生されません。
-		 * また、データが存在しないトラック番号を指定した場合、エクストラオーディオトラックとして
-		 * メインオーディオと同じトラックを指定した場合もエクストラオーディオからは何も再生されません。<br>
-		 *
-		 * \par 備考:
-		 * 再生中のトラック変更は未対応です。変更前のフレーム番号を記録しておいてシーク再生
-		 * してください。
+		 * <summary>Sets the extra audio track number.</summary>
+		 * <param name='track'>Track number</param>
+		 * <remarks>
+		 * <para header='Description'>Specifies the sound to be played if the movie has multiple sound tracks.<br/>
+		 * If you don't call this function (default setting), nothing is played from the extra audio.
+		 * If you specify a track number that has no data, nothing is played from the extra audio
+		 * even if you specify the same track as the main audio as the extra audio track.<br/></para>
+		 * <para header='Note'>Changing tracks during playback is not supported. Record the frame number before change and
+		 * use the seek playback.</para>
+		 * </remarks>
 		 */
 		public void SetExtraAudioTrack(int track)
 		{
-			criManaUnityPlayer_SetExtraAudioTrack(playerId, track);
+			CRIWAREBDC09776(playerId, track);
 		}
 
 
 		public void SetExtraAudioTrack(AudioTrack track)
 		{
 			if (track == AudioTrack.Off) {
-				criManaUnityPlayer_SetExtraAudioTrack(playerId, -1);
+				CRIWAREBDC09776(playerId, -1);
 			} else if (track == AudioTrack.Auto) {
-				criManaUnityPlayer_SetExtraAudioTrack(playerId, 100);
+				CRIWAREBDC09776(playerId, 100);
 			}
 		}
 
 
 		/**
-		 * <summary>ムービ再生の音声ボリューム調整を行います。(メインオーディオトラック) </summary>
-		 * <param name="volume">ボリューム</param>
-		 * \par 説明:
-		 * ムービのメインオーディオトラックの出力音声ボリュームを指定します。<br/>
-		 * ボリューム値には、0.0f〜1.0fの範囲で実数値を指定します。<br/>
-		 * ボリューム値は音声データの振幅に対する倍率です（単位はデシベルではありません）。<br/>
-		 * 例えば、1.0fを指定した場合、原音はそのままのボリュームで出力されます。<br/>
-		 * 0.0fを指定した場合、音声はミュートされます（無音になります）。<br/>
-		 * ボリュームのデフォルト値は1.0fです。<br>
-		 * \par 備考:
-		 * 0.0f〜1.0fの範囲外を指定した場合は、それぞれの最小・最大値にクリップされます。<br/>
+		 * <summary>Adjusts the sound volume for movie playback. (Main Audio Track)</summary>
+		 * <param name='volume'>Volume</param>
+		 * <remarks>
+		 * <para header='Description'>Specifies the output sound volume of the movie's Main Audio Track.<br/>
+		 * Specify a real value in the range of 0.0f to 1.0f for the volume value.<br/>
+		 * The volume value is a scale factor for the amplitude of the sound data (the unit is not decibel).<br/>
+		 * For example, if you specify 1.0f, the original sound is played at its unmodified volume.<br/>
+		 * If you specify 0.0f, the sound is muted (silent).<br/>
+		 * The default value for volume is 1.0f.<br/></para>
+		 * <para header='Note'>If you specify a value outside the range of 0.0f to 1.0f, it is clipped to its minimum and maximum values.<br/></para>
+		 * </remarks>
 		 */
 		public void SetVolume(float volume)
 		{
-			criManaUnityPlayer_SetVolume(playerId, volume);
+			CRIWARE680FF3BF(playerId, volume);
 		}
 
 
 		/**
-		 * <summary>ムービ再生の音声ボリューム調整を行います。（サブオーディオ）</summary>
-		 * <param name="volume">ボリューム</param>
-		 * \par 説明:
-		 * ムービのサブオーディオトラックの出力音量ボリュームを指定します。<br/>
-		 * ボリューム値には、0.0f〜1.0fの範囲で実数値を指定します。<br/>
-		 * ボリューム値は音声データの振幅に対する倍率です（単位はデシベルではありません）。<br/>
-		 * 例えば、1.0fを指定した場合、原音はそのままのボリュームで出力されます。<br/>
-		 * 0.0fを指定した場合、音声はミュートされます（無音になります）。<br/>
-		 * ボリュームのデフォルト値は1.0fです。<br>
-		 * \par 備考:
-		 * 0.0f〜1.0fの範囲外を指定した場合は、それぞれの最小・最大値にクリップされます。<br/>
+		 * <summary>Adjusts the sound volume for movie playback. (sub audio)</summary>
+		 * <param name='volume'>Volume</param>
+		 * <remarks>
+		 * <para header='Description'>Specifies the output volume of the movie's sub-audio track.<br/>
+		 * Specify a real value in the range of 0.0f to 1.0f for the volume value.<br/>
+		 * The volume value is a scale factor for the amplitude of the sound data (the unit is not decibel).<br/>
+		 * For example, if you specify 1.0f, the original sound is played at its unmodified volume.<br/>
+		 * If you specify 0.0f, the sound is muted (silent).<br/>
+		 * The default value for volume is 1.0f.<br/></para>
+		 * <para header='Note'>If you specify a value outside the range of 0.0f to 1.0f, it is clipped to its minimum and maximum values.<br/></para>
+		 * </remarks>
 		 */
 		public void SetSubAudioVolume(float volume)
 		{
-			criManaUnityPlayer_SetSubAudioVolume(playerId, volume);
+			CRIWARE460F9E59(playerId, volume);
 		}
 
 
 		/**
-		 * <summary>ムービ再生の音声ボリューム調整を行います。（エクストラオーディオ）</summary>
-		 * <param name="volume">ボリューム</param>
-		 * \par 説明:
-		 * ムービのエクストラオーディオトラックの出力音量ボリュームを指定します。<br/>
-		 * ボリューム値には、0.0f〜1.0fの範囲で実数値を指定します。<br/>
-		 * ボリューム値は音声データの振幅に対する倍率です（単位はデシベルではありません）。<br/>
-		 * 例えば、1.0fを指定した場合、原音はそのままのボリュームで出力されます。<br/>
-		 * 0.0fを指定した場合、音声はミュートされます（無音になります）。<br/>
-		 * ボリュームのデフォルト値は1.0fです。<br>
-		 * \par 備考:
-		 * 0.0f〜1.0fの範囲外を指定した場合は、それぞれの最小・最大値にクリップされます。<br/>
+		 * <summary>Adjusts the sound volume for movie playback. (extra audio)</summary>
+		 * <param name='volume'>Volume</param>
+		 * <remarks>
+		 * <para header='Description'>Specifies the output volume of the movie's extra audio track.<br/>
+		 * Specify a real value in the range of 0.0f to 1.0f for the volume value.<br/>
+		 * The volume value is a scale factor for the amplitude of the sound data (the unit is not decibel).<br/>
+		 * For example, if you specify 1.0f, the original sound is played at its unmodified volume.<br/>
+		 * If you specify 0.0f, the sound is muted (silent).<br/>
+		 * The default value for volume is 1.0f.<br/></para>
+		 * <para header='Note'>If you specify a value outside the range of 0.0f to 1.0f, it is clipped to its minimum and maximum values.<br/></para>
+		 * </remarks>
 		 */
 		public void SetExtraAudioVolume(float volume)
 		{
-			criManaUnityPlayer_SetExtraAudioVolume(playerId, volume);
+			CRIWAREAA45197A(playerId, volume);
 		}
 
 
 		/**
-		 * <summary>メインオーディオトラックのバスセンドレベル調整を行います。</summary>
-		 * <param name="bus_name">バス名</param>
-		 * <param name="level">バスセンドレベル</param>
-		 * \par 説明:
-		 * ムービのメインオーディオトラックのバスセンドレベル（振幅レベル）と、センド先のバス名を指定します。<br>
-		 * バスセンドレベル値には、0.0f〜1.0fの範囲で実数値を指定します。<br>
-		 * バスセンドレベル値は音声データの振幅に対する倍率です（単位はデシベルではありません）。<br>
-		 * 例えば、1.0fを指定した場合、原音はそのままのボリュームでバスに出力されます。<br>
-		 * 0.0fを指定した場合、バスには無音が出力されます。<br>
+		 * <summary>Adjusts the Bus Send Level of the Main Audio Track.</summary>
+		 * <param name='bus_name'>Bus name</param>
+		 * <param name='level'>Bus Send Level</param>
+		 * <remarks>
+		 * <para header='Description'>Specifies the Bus Send Level (amplitude level) of the movie Main Audio Track and the name of the send destination bus.<br/>
+		 * Specify a real value in the range of 0.0f to 1.0f for the Bus Send Level value.<br/>
+		 * The Bus Send Level value is a scale factor for the amplitude of sound data (in decibels).<br/>
+		 * For example, if you specify 1.0f, the original sound is sent to the bus at its unmodified volume.<br/>
+		 * If you specify 0.0f, silence is output to the bus.<br/></para>
+		 * </remarks>
 		 */
 		public void SetBusSendLevel(string bus_name, float level)
 		{
-			criManaUnityPlayer_SetBusSendLevelByName(playerId, bus_name, level);
+			CRIWARE36DAF52C(playerId, bus_name, level);
 		}
 
 
 		/**
-		 * <summary>サブオーディオトラックのバスセンドレベル調整を行います。</summary>
-		 * <param name="bus_name">バス名</param>
-		 * <param name="volume">バスセンドレベル</param>
-		 * \par 説明:
-		 * ムービのサブオーディオトラックのバスセンドレベル（振幅レベル）と、センド先のバス名を指定します。<br>
-		 * 本関数の動作仕様は SetBusSendLevel と同様です。
+		 * <summary>Adjusts the Bus Send Level of the sub audio track.</summary>
+		 * <param name='bus_name'>Bus name</param>
+		 * <param name='volume'>Bus Send Level</param>
+		 * <remarks>
+		 * <para header='Description'>Specifies the Bus Send Level (amplitude level) of the movie sub-audio track and the name of the send destination bus.<br/>
+		 * The operation specification of this function is the same as SetBusSendLevel.</para>
+		 * </remarks>
 		 */
 		public void SetSubAudioBusSendLevel(string bus_name, float volume)
 		{
-			criManaUnityPlayer_SetSubAudioBusSendLevelByName(playerId, bus_name, volume);
+			CRIWARE0C1D58F8(playerId, bus_name, volume);
 		}
 
 
 		/**
-		 * <summary>エクストラオーディオトラックのバスセンドレベル調整を行います。</summary>
-		 * <param name="bus_name">バス名</param>
-		 * <param name="volume">バスセンドレベル</param>
-		 * \par 説明:
-		 * ムービのエクストラオーディオトラックのバスセンドレベル（振幅レベル）と、センド先のバス名を指定します。<br>
-		 * 本関数の動作仕様は SetBusSendLevel と同様です。
+		 * <summary>Adjusts the Bus Send Level of the extra audio track.</summary>
+		 * <param name='bus_name'>Bus name</param>
+		 * <param name='volume'>Bus Send Level</param>
+		 * <remarks>
+		 * <para header='Description'>Specifies the Bus Send Level (amplitude level) of the movie extra audio track and the name of the send destination bus.<br/>
+		 * The operation specification of this function is the same as SetBusSendLevel.</para>
+		 * </remarks>
 		 */
 		public void SetExtraAudioBusSendLevel(string bus_name, float volume)
 		{
-			criManaUnityPlayer_SetExtraAudioBusSendLevelByName(playerId, bus_name, volume);
+			CRIWAREB5DF052A(playerId, bus_name, volume);
 		}
 
 
 		/**
-		 * <summary>字幕チャネルの設定を行ないます。</summary>
-		 * <param name="channel">字幕チャネル番号</param>
-		 * \par 説明:
-		 * 取得する字幕チャネルを設定します。デフォルトは字幕取得無しです。<br/>
-		 * デフォルト設定（字幕取得無し）にしたい場合は、チャネルとして -1 を指定してください。<br/>
-		 * ムービ再生中に字幕チャンネルを切り替えることも可能です。ただし、実際のチャネルが切り替わるのは
-		 * 設定した直後の次の字幕からとなります。<br/>
-		 * \sa Player::subtitleBuffer, Player::subtitleBuffer
+		 * <summary>Sets the subtitle channel.</summary>
+		 * <param name='channel'>Subtitle channel number</param>
+		 * <remarks>
+		 * <para header='Description'>Sets the subtitle channel to get. The default is no subtitle acquisition.<br/>
+		 * If you want to use the default setting (no subtitle acquisition), specify -1 as the channel.<br/>
+		 * It is also possible to switch the subtitle channel during movie playback. However, the is channel actually switched from the next subtitle
+		 * immediately after the setting.<br/></para>
+		 * </remarks>
+		 * <seealso cref='Player::subtitleBuffer'/>
+		 * <seealso cref='Player::subtitleBuffer'/>
 		 */
 		public void SetSubtitleChannel(int channel)
 		{
@@ -899,18 +1256,18 @@ namespace CriMana
 			} else {
 				DeallocateSubtitleBuffer();
 			}
-			criManaUnityPlayer_SetSubtitleChannel(playerId, channel);
+			CRIWARE37D35422(playerId, channel);
 		}
 
 
 		/**
-		 * <summary>シェーダ選択デリゲートの設定を行ないます。</summary>
-		 * <param name="shaderDispatchCallback">シェーダ選択デリゲート</param>
-		 * \par 説明:
-		 * ユーザ定義シェーダを決定するデリゲートの設定を行ないます<br>
-		 * \par 注意:
-		 * Player::Prepare 関数および Player::Start 関数より前に設定する必要があります。
-		 * \sa Player::ShaderDispatchCallback
+		 * <summary>Sets the shader selection delegate.</summary>
+		 * <param name='shaderDispatchCallback'>Shader selection delegate</param>
+		 * <remarks>
+		 * <para header='Description'>Sets the delegate that determines the user-defined shader<br/></para>
+		 * <para header='Note'>This must be set before the Player::Prepare and Player::Start functions.</para>
+		 * </remarks>
+		 * <seealso cref='Player::ShaderDispatchCallback'/>
 		 */
 		public void SetShaderDispatchCallback(ShaderDispatchCallback shaderDispatchCallback)
 		{
@@ -919,32 +1276,65 @@ namespace CriMana
 
 
 		/**
-		 * <summary>再生時刻の取得を行います。</summary>
-		 * <returns>再生時刻 (単位:マイクロ秒)</returns>
-		 * \par 説明:
-		 * 現在再生中のムービの再生時刻を取得します。<br/>
-		 * 再生開始前および再生停止後は、0 を返します。<br/>
-		 * 単位はマイクロ秒です。<br/>
+		 * <summary>Gets the playback time.</summary>
+		 * <returns>Playback time (in microseconds)</returns>
+		 * <remarks>
+		 * <para header='Description'>Gets the playback time of the movie that is currently being played.<br/>
+		 * Returns 0 before starting playback or after stopping playback.<br/>
+		 * The unit is microseconds.</para>
+		 * </remarks>
 		 */
 		public long GetTime()
 		{
-			return criManaUnityPlayer_GetTime(this.playerId);
+			return CRIWARED4E48AB0(this.playerId);
 		}
 
 
 		/**
-		 * <summary>ASRラックの設定を行います。</summary>
-		 * <param name="asrRackId">ASRラックID</param>
-		 * \par 説明:
-		 * 再生する音声の出力ASRラックIDを指定します。<br/>
-		 * 出力ASRラックIDの設定はメインオーディオトラックとサブオーディオトラックの両方に反映されます。<br/>
-		 * \par 注意:
-		 * 再生中の変更はできません。再生中に本APIを呼び出した場合、次のムービ再生から設定が反映されます。<br/>
-		 * \sa CriAtomExAsrRack::rackId
+		 * <summary>Gets the frame number being displayed.</summary>
+		 * <returns>Frame number</returns>
+		 * <remarks>
+		 * <para header='Description'>Gets the frame number currently being displayed.<br/>
+		 * Returns -1 before starting rendering or after stopping playback.<br/>
+		 * Depending on the platform and codec, a number that is smaller than
+		 * the frame information that can be obtained may be returned.<br/></para>
+		 * </remarks>
+		 */
+		public int GetDisplayedFrameNo()
+		{
+			return CRIWARE8A2E320E(this.playerId);
+		}
+
+
+		/**
+		 * <summary>Checks whether a new frame was rendered.</summary>
+		 * <returns>A flag whether the frame was rendered</returns>
+		 * <remarks>
+		 * <para header='Description'>Returns whether a new frame was rendered on the screen after the current call of the playback control.</para>
+		 * </remarks>
+		 */
+		public bool HasRenderedNewFrame()
+		{
+			if (rendererResource == null) {
+				return false;
+			}
+			return rendererResource.HasRenderedNewFrame();
+		}
+
+
+		/**
+		 * <summary>Configures the ASR Rack.</summary>
+		 * <param name='asrRackId'>ASR Rack ID</param>
+		 * <remarks>
+		 * <para header='Description'>Specifies the output ASR Rack ID of the sound to be played.<br/>
+		 * The output ASR Rack ID setting is reflected on both the Main Audio Track and the sub audio track.<br/></para>
+		 * <para header='Note'>It cannot be changed during playback. If this API is called during playback, the settings is reflected from the next movie playback.<br/></para>
+		 * </remarks>
+		 * <seealso cref='CriAtomExAsrRack::rackId'/>
 		 */
 		public void SetAsrRackId(int asrRackId)
 		{
-			criManaUnityPlayer_SetAsrRackId(this.playerId, asrRackId);
+			CRIWARE80A15B5F(this.playerId, asrRackId);
 		}
 
 
@@ -955,197 +1345,382 @@ namespace CriMana
 		float stat_PrevUpdateFrameTime = 0.0f;
 		float stat_DeltaRenderFrameTime = 0.0f;
 		float stat_PrevRenderFrameTime = 0.0f;
-        float stat_StartTime = 0.0f;
-        float stat_ElapsedTimeToFirstFrame = 0.0f;
-        uint stat_SkippedFrames = 0;
+		float stat_StartTime = 0.0f;
+		float stat_ElapsedTimeToFirstFrame = 0.0f;
+		uint stat_SkippedFrames = 0;
+		uint stat_DroppedFrames = 0;
 
-        UnityEngine.UI.Text stat_UI_PlayerUpdate;
-        UnityEngine.UI.Text stat_UI_FrameUpdate;
-        UnityEngine.UI.Text stat_UI_RenderUpdate;
-        UnityEngine.UI.Text stat_UI_Status;
-        UnityEngine.UI.Text stat_UI_Elapased;
-        UnityEngine.UI.Text stat_UI_Skipped;
+		UnityEngine.UI.Text stat_UI_PlayerUpdate;
+		UnityEngine.UI.Text stat_UI_FrameUpdate;
+		UnityEngine.UI.Text stat_UI_RenderUpdate;
+		UnityEngine.UI.Text stat_UI_Status;
+		UnityEngine.UI.Text stat_UI_Elapased;
+		UnityEngine.UI.Text stat_UI_Skipped;
+		UnityEngine.UI.Text stat_UI_Dropped;
 
-        bool stat_Init = false;
-        GameObject UIStats;
+		bool stat_Init = false;
+		GameObject UIStats;
 
-        public void UIInit()
-        {
-            stat_Init = true;
-            int layer = 30;
+		public void UIInit()
+		{
+			stat_Init = true;
+			int layer = 30;
 
-            var g = new GameObject("CriStat");
-            g.layer = layer;
-            var c = g.AddComponent<Canvas>();
+			var g = new GameObject("CriStat");
+			g.layer = layer;
+			var c = g.AddComponent<Canvas>();
 
-            var UICam = new GameObject("StatCamera");
-            UICam.layer = layer;
-            UICam.transform.position = new Vector3(0, 0, -615);
-            UICam.transform.parent = g.transform;
-            var cam = UICam.AddComponent<Camera>();
-            cam.orthographic = true;
-            cam.cullingMask = 1 << layer;
-            cam.clearFlags = CameraClearFlags.Depth;
-           
+			var UICam = new GameObject("StatCamera");
+			UICam.layer = layer;
+			UICam.transform.position = new Vector3(0, 0, -615);
+			UICam.transform.parent = g.transform;
+			var cam = UICam.AddComponent<Camera>();
+			cam.orthographic = true;
+			cam.cullingMask = 1 << layer;
+			cam.clearFlags = CameraClearFlags.Depth;
 
-            c.worldCamera = cam;
-            c.renderMode = RenderMode.ScreenSpaceCamera;
-            var cs = g.AddComponent<CanvasScaler>();
-            cs.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
 
-            g.AddComponent<GraphicRaycaster>();
+			c.worldCamera = cam;
+			c.renderMode = RenderMode.ScreenSpaceCamera;
+			var cs = g.AddComponent<CanvasScaler>();
+			cs.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
 
-            int w = 600, h = 400;
-            int d = 15;
-            var font = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf");
-            var color = Color.green;
+			g.AddComponent<GraphicRaycaster>();
+
+			int w = 600, h = 400;
+			int d = 15;
+			var font = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf");
+			var color = Color.green;
 			var size = new Vector2(w, d*2);
-            var pivot = new Vector2(0, 0);
-            var scale = new Vector3(1, 1, 1);
+			var pivot = new Vector2(0, 0);
+			var scale = new Vector3(1, 1, 1);
 
-            UIStats = new GameObject("stat_UI_PlayerUpdate");
-            UIStats.transform.parent = g.transform;
-            UIStats.layer = layer;
-            stat_UI_PlayerUpdate = UIStats.AddComponent<Text>();
-            stat_UI_PlayerUpdate.fontSize = d;
-            stat_UI_PlayerUpdate.font = font;
-            stat_UI_PlayerUpdate.alignment = TextAnchor.UpperLeft;
-            stat_UI_PlayerUpdate.color = color;
-            stat_UI_PlayerUpdate.rectTransform.sizeDelta = size;
-            stat_UI_PlayerUpdate.rectTransform.pivot = pivot;
-            stat_UI_PlayerUpdate.rectTransform.localScale = scale;
-            stat_UI_PlayerUpdate.rectTransform.localPosition = new Vector3(-w/2, h/2, 0);
+			UIStats = new GameObject("stat_UI_PlayerUpdate");
+			UIStats.transform.parent = g.transform;
+			UIStats.layer = layer;
+			stat_UI_PlayerUpdate = UIStats.AddComponent<Text>();
+			stat_UI_PlayerUpdate.fontSize = d;
+			stat_UI_PlayerUpdate.font = font;
+			stat_UI_PlayerUpdate.alignment = TextAnchor.UpperLeft;
+			stat_UI_PlayerUpdate.color = color;
+			stat_UI_PlayerUpdate.rectTransform.sizeDelta = size;
+			stat_UI_PlayerUpdate.rectTransform.pivot = pivot;
+			stat_UI_PlayerUpdate.rectTransform.localScale = scale;
+			stat_UI_PlayerUpdate.rectTransform.localPosition = new Vector3(-w/2, h/2, 0);
 
-            UIStats = new GameObject("stat_UI_FrameUpdate");
-            UIStats.transform.parent = g.transform;
-            UIStats.layer = layer;
-            stat_UI_FrameUpdate = UIStats.AddComponent<Text>();
-            stat_UI_FrameUpdate.fontSize = d;
-            stat_UI_FrameUpdate.font = font;
-            stat_UI_FrameUpdate.alignment = TextAnchor.UpperLeft;
-            stat_UI_FrameUpdate.color = color;
-            stat_UI_FrameUpdate.rectTransform.sizeDelta = size;
-            stat_UI_FrameUpdate.rectTransform.pivot = pivot;
-            stat_UI_FrameUpdate.rectTransform.localScale = scale;
-            stat_UI_FrameUpdate.rectTransform.localPosition = new Vector3(-w/2, h/2 - d, 0);
+			UIStats = new GameObject("stat_UI_FrameUpdate");
+			UIStats.transform.parent = g.transform;
+			UIStats.layer = layer;
+			stat_UI_FrameUpdate = UIStats.AddComponent<Text>();
+			stat_UI_FrameUpdate.fontSize = d;
+			stat_UI_FrameUpdate.font = font;
+			stat_UI_FrameUpdate.alignment = TextAnchor.UpperLeft;
+			stat_UI_FrameUpdate.color = color;
+			stat_UI_FrameUpdate.rectTransform.sizeDelta = size;
+			stat_UI_FrameUpdate.rectTransform.pivot = pivot;
+			stat_UI_FrameUpdate.rectTransform.localScale = scale;
+			stat_UI_FrameUpdate.rectTransform.localPosition = new Vector3(-w/2, h/2 - d, 0);
 
-            UIStats = new GameObject("stat_UI_RenderUpdate");
-            UIStats.transform.parent = g.transform;
-            UIStats.layer = layer;
-            stat_UI_RenderUpdate = UIStats.AddComponent<Text>();
-            stat_UI_RenderUpdate.fontSize = d;
-            stat_UI_RenderUpdate.font = font;
-            stat_UI_RenderUpdate.alignment = TextAnchor.UpperLeft;
-            stat_UI_RenderUpdate.color = color;
-            stat_UI_RenderUpdate.rectTransform.sizeDelta = size;
-            stat_UI_RenderUpdate.rectTransform.pivot = pivot;
-            stat_UI_RenderUpdate.rectTransform.localScale = scale;
-            stat_UI_RenderUpdate.rectTransform.localPosition = new Vector3(-w/2, h/2 - d*2, 0);
+			UIStats = new GameObject("stat_UI_RenderUpdate");
+			UIStats.transform.parent = g.transform;
+			UIStats.layer = layer;
+			stat_UI_RenderUpdate = UIStats.AddComponent<Text>();
+			stat_UI_RenderUpdate.fontSize = d;
+			stat_UI_RenderUpdate.font = font;
+			stat_UI_RenderUpdate.alignment = TextAnchor.UpperLeft;
+			stat_UI_RenderUpdate.color = color;
+			stat_UI_RenderUpdate.rectTransform.sizeDelta = size;
+			stat_UI_RenderUpdate.rectTransform.pivot = pivot;
+			stat_UI_RenderUpdate.rectTransform.localScale = scale;
+			stat_UI_RenderUpdate.rectTransform.localPosition = new Vector3(-w/2, h/2 - d*2, 0);
 
-            UIStats = new GameObject("stat_UI_Status");
-            UIStats.transform.parent = g.transform;
-            UIStats.layer = layer;
-            stat_UI_Status = UIStats.AddComponent<Text>();
-            stat_UI_Status.fontSize = d;
-            stat_UI_Status.font = font;
-            stat_UI_Status.alignment = TextAnchor.UpperLeft;
-            stat_UI_Status.color = color;
-            stat_UI_Status.rectTransform.sizeDelta = size;
-            stat_UI_Status.rectTransform.pivot = pivot;
-            stat_UI_Status.rectTransform.localScale = scale;
-            stat_UI_Status.rectTransform.localPosition = new Vector3(-w/2, h/2 - d*3, 0);
+			UIStats = new GameObject("stat_UI_Status");
+			UIStats.transform.parent = g.transform;
+			UIStats.layer = layer;
+			stat_UI_Status = UIStats.AddComponent<Text>();
+			stat_UI_Status.fontSize = d;
+			stat_UI_Status.font = font;
+			stat_UI_Status.alignment = TextAnchor.UpperLeft;
+			stat_UI_Status.color = color;
+			stat_UI_Status.rectTransform.sizeDelta = size;
+			stat_UI_Status.rectTransform.pivot = pivot;
+			stat_UI_Status.rectTransform.localScale = scale;
+			stat_UI_Status.rectTransform.localPosition = new Vector3(-w/2, h/2 - d*3, 0);
 
-            UIStats = new GameObject("stat_UI_Elapased");
-            UIStats.transform.parent = g.transform;
-            UIStats.layer = layer;
-            stat_UI_Elapased = UIStats.AddComponent<Text>();
-            stat_UI_Elapased.fontSize = d;
-            stat_UI_Elapased.font = font;
-            stat_UI_Elapased.alignment = TextAnchor.UpperLeft;
-            stat_UI_Elapased.color = color;
-            stat_UI_Elapased.rectTransform.sizeDelta = size;
-            stat_UI_Elapased.rectTransform.pivot = pivot;
-            stat_UI_Elapased.rectTransform.localScale = scale;
-            stat_UI_Elapased.rectTransform.localPosition = new Vector3(-w/2, h/2 - d*4, 0);
+			UIStats = new GameObject("stat_UI_Elapased");
+			UIStats.transform.parent = g.transform;
+			UIStats.layer = layer;
+			stat_UI_Elapased = UIStats.AddComponent<Text>();
+			stat_UI_Elapased.fontSize = d;
+			stat_UI_Elapased.font = font;
+			stat_UI_Elapased.alignment = TextAnchor.UpperLeft;
+			stat_UI_Elapased.color = color;
+			stat_UI_Elapased.rectTransform.sizeDelta = size;
+			stat_UI_Elapased.rectTransform.pivot = pivot;
+			stat_UI_Elapased.rectTransform.localScale = scale;
+			stat_UI_Elapased.rectTransform.localPosition = new Vector3(-w/2, h/2 - d*4, 0);
 
 			UIStats = new GameObject("stat_UI_Skipped");
-            UIStats.transform.parent = g.transform;
-            UIStats.layer = layer;
-            stat_UI_Skipped = UIStats.AddComponent<Text>();
-            stat_UI_Skipped.fontSize = d;
-            stat_UI_Skipped.font = font;
-            stat_UI_Skipped.alignment = TextAnchor.UpperLeft;
-            stat_UI_Skipped.color = color;
-            stat_UI_Skipped.rectTransform.sizeDelta = size;
-            stat_UI_Skipped.rectTransform.pivot = pivot;
-            stat_UI_Skipped.rectTransform.localScale = scale;
-            stat_UI_Skipped.rectTransform.localPosition = new Vector3(-w/2, h/2 - d*5, 0);
-        }
+			UIStats.transform.parent = g.transform;
+			UIStats.layer = layer;
+			stat_UI_Skipped = UIStats.AddComponent<Text>();
+			stat_UI_Skipped.fontSize = d;
+			stat_UI_Skipped.font = font;
+			stat_UI_Skipped.alignment = TextAnchor.UpperLeft;
+			stat_UI_Skipped.color = color;
+			stat_UI_Skipped.rectTransform.sizeDelta = size;
+			stat_UI_Skipped.rectTransform.pivot = pivot;
+			stat_UI_Skipped.rectTransform.localScale = scale;
+			stat_UI_Skipped.rectTransform.localPosition = new Vector3(-w/2, h/2 - d*5, 0);
+		}
 
-        public void UIUpdate()
+		public void UIUpdate()
 		{
 			float msec = stat_DeltaPlayerUpdateTime * 1000.0f;
 			float fps = 1.0f / stat_DeltaPlayerUpdateTime;
 			string text = string.Format("Mana Player Update: {0:0.0} ms ({1:0.} fps)", msec, fps);
-            stat_UI_PlayerUpdate.text = text;
-            
+			stat_UI_PlayerUpdate.text = text;
+
 			msec = stat_DeltaUpdateFrameTime * 1000.0f;
 			fps = 1.0f / stat_DeltaUpdateFrameTime;
 			text = string.Format("Mana Update Frame: {0:0.0} ms ({1:0.} fps)", msec, fps);
-            stat_UI_FrameUpdate.text = text;
+			stat_UI_FrameUpdate.text = text;
 
 			msec = stat_DeltaRenderFrameTime * 1000.0f;
 			fps = 1.0f / stat_DeltaRenderFrameTime;
 			text = string.Format("Mana Render Frame: {0:0.0} ms ({1:0.} fps)", msec, fps);
-            stat_UI_RenderUpdate.text = text;
+			stat_UI_RenderUpdate.text = text;
 
 			text = string.Format("Mana Player Status: {0}", nativeStatus.ToString());
-            stat_UI_Status.text = text;
+			stat_UI_Status.text = text;
 
-            float elapsed = 0.0f;
-            if (stat_StartTime > float.Epsilon) {
-                elapsed = Time.time - stat_StartTime;
-            }
-            float frames = 0.0f;
-            if (movieInfo != null) {
-                frames = elapsed * (movieInfo.framerateN / movieInfo.framerateD);
-            }
-            msec = stat_ElapsedTimeToFirstFrame * 1000.0f;
-            text = string.Format("Mana Elapsed Time: {0:0.0} sec ({1:0.} frames) [Start Gap {2:0.0}ms]", elapsed, frames, msec);
-            stat_UI_Elapased.text = text;
+			float elapsed = 0.0f;
+			if (stat_StartTime > float.Epsilon) {
+				elapsed = Time.time - stat_StartTime;
+			}
+			float frames = 0.0f;
+			if (movieInfo != null) {
+				frames = elapsed * (movieInfo.framerateN / movieInfo.framerateD);
+			}
+			msec = stat_ElapsedTimeToFirstFrame * 1000.0f;
+			text = string.Format("Mana Elapsed Time: {0:0.0} sec ({1:0.} frames) [Start Gap {2:0.0}ms]", elapsed, frames, msec);
+			stat_UI_Elapased.text = text;
 
 			uint skipped = stat_SkippedFrames;
-			text = string.Format("Mana Skipped Frames: {0} frames", skipped);
-            stat_UI_Skipped.text = text;
+			uint dropped = stat_DroppedFrames;
+			text = string.Format("Mana Skipped Frames: {0} frames, Dropped Frames: {1} frames", skipped, dropped);
+			stat_UI_Skipped.text = text;
 
-            stat_DeltaPlayerUpdateTime = Time.time - stat_PrevPlayerUpdateTime;
-            stat_PrevPlayerUpdateTime = Time.time;
-            stat_DeltaUpdateFrameTime = 0.0f;
-        }
+			stat_DeltaPlayerUpdateTime = Time.time - stat_PrevPlayerUpdateTime;
+			stat_PrevPlayerUpdateTime = Time.time;
+			stat_DeltaUpdateFrameTime = 0.0f;
+		}
 #endif
 
 
 		/**
-		 * <summary>状態を更新します。</summary>
-		 * \par 説明:
-		 * プレーヤの状態を更新します。<br>
-		 * アプリケーションは、この関数を定期的に実行する必要があります。<br>
-		 * \par 注意:
-		 * 本関数の呼び出しが滞るとムービ再生ががたつく場合があります。
+		 * <summary>Updates the status by specifying the user time.</summary>
+		 * <remarks>
+		 * <para header='Description'>Updates the player status.<br/>
+		 * If you have enabled the user timer using ::CriMana::Player::SetMasterTimerType ,
+		 * call this function periodically.</para>
+		 * <para header='Note'>If the call to this function is delayed, the movie playback may hitch.<br/>
+		 * If the user timer is advanced fast or slow, the accuracy of the master timer decreases,
+		 * and it will be difficult to acquire the frame at the correct time.
+		 * So, normally, use this function in normal speed playback.</para>
+		 * </remarks>
+		 * <seealso cref='Player::SetMasterTimerType'/>
+		 */
+		public void UpdateWithUserTime(ulong timeCount, ulong timeUnit)
+		{
+			if (_timerType != TimerType.User) {
+				Debug.LogError("[CRIWARE] Timer type is invalid.");
+			}
+
+			CRIWARE0AAFBE33(this.playerId, timeCount, timeUnit);
+			InternalUpdate();
+		}
+
+
+		/**
+		 * <summary>Sets the unit by which the time of the manual timer advances.</summary>
+		 * <param name='timeUnitN'>Numerator of the unit in which time progresses</param>
+		 * <param name='timeUnitD'>Denominator of the unit in which time progresses</param>
+		 * <remarks>
+		 * <para header='Description'>Set the unit by which the time of the manual timer advances in rational number format.<br/>
+		 * If you enabled the manual timer using ::CriMana::Player::SetMasterTimerType ,
+		 * set the unit by which the time advances using this function.<br/>
+		 * "Numerator (timer_manual_unit_n) / denominator (timer_manual_unit_d) = unit of time advancement (seconds)."<br/>
+		 * For example, if you want to set to 29.97fps, specify 1001 and 30000.</para>
+		 * </remarks>
+		 * <seealso cref='Player::SetMasterTimerType'/>
+		 * <seealso cref='Player::UpdateWithManualTimeAdvanced'/>
+		 */
+		public void SetManualTimerUnit(ulong timeUnitN, ulong timeUnitD)
+		{
+			if (_timerType != TimerType.Manual) {
+				Debug.LogError("[CRIWARE] Timer type is invalid.");
+			}
+
+			CRIWARE4D02B432(this.playerId, timeUnitN, timeUnitD);
+		}
+
+
+		/**
+		 * <summary>Updates while advancing the time of the manual timer.</summary>
+		 * <remarks>
+		 * <para header='Description'>Advance the handle time using the manual timer to update the rendering.<br/>
+		 * If you enabled the manual timer using ::CriMana::Player::SetMasterTimerType ,
+		 * it is necessary to call this function regularly.<br/>
+		 * The time advances when the player status is PLAYING.<br/>
+		 * Even if this function is called while the player is paused, and the time is reset to 0 when playback starts or stops.</para>
+		 * </remarks>
+		 * <seealso cref='Player::SetMasterTimerType'/>
+		 * <seealso cref='Player::SetManualTimerUnit'/>
+		 */
+		public void UpdateWithManualTimeAdvanced()
+		{
+			if (_timerType != TimerType.Manual) {
+				Debug.LogError("[CRIWARE] Timer type is invalid.");
+			}
+
+			CRIWAREF7C0025B(this.playerId);
+			InternalUpdate();
+		}
+
+
+		/**
+		 * <summary>Updates the status.</summary>
+		 * <remarks>
+		 * <para header='Description'>Updates the player status.<br/>
+		 * The application has to call this function regularly.<br/></para>
+		 * <para header='Note'>If the call to this function is delayed, the movie playback may hitch.</para>
+		 * </remarks>
 		 */
 		public void Update()
 		{
+			if (_timerType == TimerType.User || _timerType == TimerType.Manual) {
+				return;
+			}
+
+			InternalUpdate();
+		}
+
+
+		public void OnWillRenderObject(CriManaMovieMaterial sender)
+		{
+			if (rendererResource != null &&
+				nativeStatus == Status.Playing) {
+				// on main thread
+				// unfortunatly this is called on main thread before native render event occur on render thread!
+				rendererResource.UpdateTextures();
+				// Native update - on render thread
+				IssuePluginEvent(CriManaUnityPlayer_RenderEventAction.RENDER);
 #if CRIMANA_STAT
-            if (!stat_Init) {
-                UIInit();
-            }
-            UIUpdate();
+				stat_DeltaRenderFrameTime = Time.time - stat_PrevRenderFrameTime;
+				stat_PrevRenderFrameTime = Time.time;
+				if (stat_ElapsedTimeToFirstFrame == 0.0f && status == Status.Playing) {
+					stat_ElapsedTimeToFirstFrame = Time.time - stat_StartTime;
+				}
 #endif
+			}
+		}
+
+		/**
+		 * <summary>Sets up the Material to display the current frame.</summary>
+		 * <param name='material'>Material to be set</param>
+		 * <returns>Whether the setting succeeded</returns>
+		 * <remarks>
+		 * <para header='Description'>Sets the shader and various parameters to display the current frame in the Material.<br/></para>
+		 * </remarks>
+		 */
+		public bool UpdateMaterial(UnityEngine.Material material)
+		{
+			if ((rendererResource != null) && isFrameInfoAvailable) {
+				bool result = rendererResource.UpdateMaterial(material);
+				return result && (requiredStatus != Status.ReadyForRendering);
+			}
+			return false;
+		}
+
+		public bool isAlive { get { return this.playerId != InvalidPlayerId; } }
+
+		public void IssuePluginEvent(CriManaUnityPlayer_RenderEventAction renderEventAction)
+		{
+#if !CRIWARE_ENABLE_HEADLESS_MODE
+			int eventID = CriManaPlugin.renderingEventOffset | (int)renderEventAction | this.playerId;
+	#if CRIPLUGIN_USE_OLD_LOWLEVEL_INTERFACE
+			UnityEngine.GL.IssuePluginEvent(eventID);
+	#else
+			UnityEngine.GL.IssuePluginEvent(criWareUnity_GetRenderEventFunc(), eventID);
+	#endif
+#endif
+		}
+
+		#region Private Methods
+		private void Dispose(bool disposing)
+		{
+			if (isDisposed) { return; }
+			isDisposed = true;
+
+			CriDisposableObjectManager.Unregister(this);
+
+			int numFrames = 0;
+
+			if (rendererResource != null && playerId != InvalidPlayerId) {
+				// signal to native plugin that it will be destroyed and begin to clean unmanaged resources.
+				IssuePluginEvent(CriManaUnityPlayer_RenderEventAction.DESTROY);
+				// get the number of frame to continue to send update events before unmamaged resoures destruction.
+				numFrames = rendererResource.GetNumberOfFrameBeforeDestroy(playerId);
+			}
+
+			DisposeRendererResource();
+			DeallocateSubtitleBuffer();
+
+			if (playerId != InvalidPlayerId) {
+				if (atomExPlayer != null) {
+					_atomExPlayer.Dispose();
+					_atomExPlayer = null;
+				}
+				if (atomEx3DsourceForAmbisonics != null) {
+					_atomEx3Dsource.Dispose();
+					_atomEx3Dsource = null;
+				}
+				CRIWAREF4A1A36D(playerId);
+			}
+
+			// if unmamaged resource need some frames before be destroyed,
+			// we signal here Unity frame update events to native plugin.
+			if (playerHolder != null) {
+				if (numFrames > 0) {
+					playerHolder.StartCoroutine(IssuePluginUpdatesForFrames(numFrames, playerHolder, true, playerId));
+				} else {
+					// destroy holder
+					UnityEngine.Object.Destroy(playerHolder.gameObject);
+				}
+			}
+
+			playerId = InvalidPlayerId;
+
+			cuePointCallback = null;
+		}
+
+		private void InternalUpdate()
+		{
+#if CRIMANA_STAT
+			if (!stat_Init) {
+				UIInit();
+			}
+			UIUpdate();
+#endif
+			// signal unity frame update to plugin - always called once by unity update
+			CRIWAREF1D66BBD(playerId);
+
 			if (requiredStatus == Status.Stop) {
 				if (nativeStatus != Status.Stop) {
 					UpdateNativePlayer();
 				}
-                return;
+				return;
 			}
 
 			switch (nativeStatus) {
@@ -1153,10 +1728,10 @@ namespace CriMana
 				break;
 			case Status.Dechead:
 #if CRIMANA_STAT
-                stat_StartTime = Time.time;
-                stat_ElapsedTimeToFirstFrame = 0.0f;
+				stat_StartTime = Time.time;
+				stat_ElapsedTimeToFirstFrame = 0.0f;
 #endif
-                UpdateNativePlayer();
+				UpdateNativePlayer();
 				if (nativeStatus == Status.WaitPrep) {
 					goto case Status.WaitPrep;
 				}
@@ -1165,12 +1740,12 @@ namespace CriMana
 			{
 				bool needRendererResourceDispatch = !isMovieInfoAvailable;
 				if (needRendererResourceDispatch) {
-					criManaUnityPlayer_GetMovieInfo(playerId, _movieInfo);
+					CRIWARE026539B7(playerId, _movieInfo);
 					isMovieInfoAvailable = true;
 					if (enableSubtitle) {
 						AllocateSubtitleBuffer((int)movieInfo.maxSubtitleSize);
 					}
-					UnityEngine.Shader userShader	= (_shaderDispatchCallback == null) ? null : _shaderDispatchCallback(movieInfo, additiveMode);
+					UnityEngine.Shader userShader   = (_shaderDispatchCallback == null) ? null : _shaderDispatchCallback(movieInfo, additiveMode);
 					if (rendererResource != null) {
 						if (!rendererResource.IsSuitable(playerId, _movieInfo, additiveMode, userShader)) {
 							rendererResource.Dispose();
@@ -1183,21 +1758,19 @@ namespace CriMana
 							Stop();
 							return;
 						}
-					} 
-				}
-				if (!rendererResource.IsPrepared()) {
-					rendererResource.ContinuePreparing();
-					if (!rendererResource.IsPrepared()) {
-						break;
 					}
+					rendererResource.SetApplyTargetAlpha(applyTargetAlpha);
+					rendererResource.SetUiRenderMode(uiRenderMode);
 				}
 				rendererResource.AttachToPlayer(playerId);
 
 				if (requiredStatus == Status.Ready) {
 					goto case Status.Prep;
 				}
-				if (requiredStatus == Status.Playing) {
-					criManaUnityPlayer_Start(playerId);
+
+				if (requiredStatus == Status.Playing ||
+					requiredStatus == Status.ReadyForRendering) {
+					CRIWAREBFC0B70E(playerId);
 					isNativeStartInvoked = true;
 					if (isNativeInitialized) {
 						// Native destroy - on render thread
@@ -1218,15 +1791,15 @@ namespace CriMana
 					goto case Status.Playing;
 				}
 				break;
-
 			case Status.Ready:
-				if (requiredStatus == Status.Playing) {
+				if (requiredStatus == Status.Playing ||
+					requiredStatus == Status.ReadyForRendering) {
 					if (!isNativeStartInvoked) {
 #if CRIMANA_STAT
-                        stat_StartTime = Time.time;
-                        stat_ElapsedTimeToFirstFrame = 0.0f;
+						stat_StartTime = Time.time;
+						stat_ElapsedTimeToFirstFrame = 0.0f;
 #endif
-                        criManaUnityPlayer_Start(playerId);
+						CRIWAREBFC0B70E(playerId);
 						isNativeStartInvoked = true;
 						if (isNativeInitialized) {
 							// Native destroy - on render thread
@@ -1242,7 +1815,38 @@ namespace CriMana
 			case Status.Playing:
 				UpdateNativePlayer();
 				if (nativeStatus == Status.Playing) {
-					isFrameInfoAvailable |= rendererResource.UpdateFrame(playerId, _frameInfo);
+					bool frameDrop = (maxFrameDrop < 0 || droppedFrameCount < maxFrameDrop); // enable frame dropping if requested
+					bool updateNextFrame = true;
+					bool isFrameInfoUpdated = false;
+
+					while (updateNextFrame) {
+						// FrameDrop refrence -> in (can drop frame?), out (is frame has been droped?)
+						isFrameInfoUpdated = rendererResource.UpdateFrame(playerId, _frameInfo, ref frameDrop);
+
+						if (isFrameInfoUpdated && frameDrop && (maxFrameDrop < 0 || droppedFrameCount < maxFrameDrop)) {
+							// Frame was updated but not in-sync and dropped, try to get next decoded frame: continue
+							droppedFrameCount++;
+
+							if (maxFrameDrop > 0 && droppedFrameCount == maxFrameDrop) {
+								frameDrop = false; // do not drop next frame.
+							}
+						} else {
+							// Frame has not been updated or is in-sync: break.
+							updateNextFrame = false;
+
+							// Frame is drawable: reset the dropped frame counter.
+							if (isFrameInfoUpdated) {
+#if CRIMANA_STAT
+								stat_DroppedFrames += droppedFrameCount;
+#endif
+								droppedFrameCount = 0;
+							}
+						}
+					}
+
+					// FrameInfo was updated?
+					isFrameInfoAvailable |= isFrameInfoUpdated;
+
 					// Native update - on render thread
 					IssuePluginEvent(CriManaUnityPlayer_RenderEventAction.UPDATE);
 #if CRIMANA_STAT
@@ -1266,83 +1870,29 @@ namespace CriMana
 			}
 		}
 
-		public void OnWillRenderObject(CriManaMovieMaterial sender)
+		private System.Collections.IEnumerator IssuePluginUpdatesForFrames(int frameCount, MonoBehaviour playerHolder, bool destroy, int playerId)
 		{
-			if (status == Status.Ready || status == Status.Playing) {
-				// on main thread
-				// unfortunatly this is called on main thread before native render event occur on render thread!
-				rendererResource.UpdateTextures();
-				// Native update - on render thread
-				IssuePluginEvent(CriManaUnityPlayer_RenderEventAction.RENDER);
-#if CRIMANA_STAT
-				stat_DeltaRenderFrameTime = Time.time - stat_PrevRenderFrameTime;
-				stat_PrevRenderFrameTime = Time.time;
-                if (stat_ElapsedTimeToFirstFrame == 0.0f && status == Status.Playing) {
-                    stat_ElapsedTimeToFirstFrame = Time.time - stat_StartTime;
-                }
-#endif
+			while (frameCount > 0) {
+				// issue plugin event
+				IssuePluginEvent(CriManaUnityPlayer_RenderEventAction.UPDATE);
+				// continue update synchronizatons
+				CRIWAREF1D66BBD(playerId);
+				frameCount--;
+				yield return null;
+			}
+
+			if (destroy) {
+				// destroy holder
+				UnityEngine.Object.Destroy(playerHolder.gameObject);
 			}
 		}
 
-		// THIS WORK (set shader and texture to material MUST be done on ctronllerl or on depending controller current settings
-		// the player job is only to maintain shader any texture ready to be bond
-
-		/**
-		 * <summary>マテリアルに現在のフレームを表示するための設定を行います。</summary>
-		 * <param name="material">設定対象のマテリアル</param>
-		 * <returns>設定を行なえたか</returns>
-		 * \par 説明:
-		 * マテリアルに現在のフレームを表示するためにシェーダや各種パラメータを設定します。<br>
-		 */
-		public bool UpdateMaterial(UnityEngine.Material material)
+		private void DisableInfos(bool keepFrameInfo = false)
 		{
-			if ((rendererResource != null) && isFrameInfoAvailable) {
-				return rendererResource.UpdateMaterial(material);
+			if (keepFrameInfo == false) {
+				isFrameInfoAvailable = false;
+				isMovieInfoAvailable = false;
 			}
-			return false;
-		}
-
-		public void IssuePluginEvent(CriManaUnityPlayer_RenderEventAction renderEventAction)
-		{
-			int eventID = CriManaPlugin.renderingEventOffset | (int)renderEventAction | this.playerId;
-#if CRIPLUGIN_USE_OLD_LOWLEVEL_INTERFACE
-			UnityEngine.GL.IssuePluginEvent(eventID);
-#else
-			UnityEngine.GL.IssuePluginEvent(criWareUnity_GetRenderEventFunc(), eventID);
-#endif
-		}
-
-		#region Private Methods
-		private void Dispose(bool disposing)
-		{
-			if (disposed) {
-				return;
-			}
-			if (playerId != InvalidPlayerId) {
-                if (atomExPlayer != null)
-                {
-                    _atomExPlayer.Dispose();
-                    _atomExPlayer = null;
-                }
-                if (atomEx3DsourceForAmbisonics != null)
-                {
-                    _atomEx3Dsource.Dispose();
-                    _atomEx3Dsource = null;
-                }
-				criManaUnityPlayer_Destroy(playerId);
-				playerId = InvalidPlayerId;
-			}
-			DisposeRendererResource();
-			DeallocateSubtitleBuffer();
-			CriManaPlugin.FinalizeLibrary();
-			cuePointCallback = null;
-			disposed = true;
-		}
-
-		private void DisableInfos()
-		{
-			isMovieInfoAvailable = false;
-			isFrameInfoAvailable = false;
 			isNativeStartInvoked = false;
 			subtitleSize = 0;
 		}
@@ -1351,33 +1901,97 @@ namespace CriMana
 		{
 			if (cuePointCallback != null) {
 				#if CRIMANA_PLAYER_SUPPORT_CUEPOINT_CALLBACK
-				criManaUnityPlayer_SetCuePointCallback(playerId, CuePointCallbackFromNative);
+				CRIWARE7DC649B9(playerId, CuePointCallbackFromNative);
 				#else
 				UnityEngine.Debug.LogError("This platform does not support event callback feature.");
 				#endif
 			}
-			criManaUnityPlayer_Prepare(playerId);
+			CRIWARE7DA749B5(playerId);
 		}
 
 
 		private void UpdateNativePlayer()
 		{
+#if !CRIWARE_ENABLE_HEADLESS_MODE
 			updatingPlayer = this;
 			uint subtitleSizeTmp = (uint)subtitleBufferSize;
-			nativeStatus = (Status)criManaUnityPlayer_Update(playerId, subtitleBuffer, ref subtitleSizeTmp);
+			nativeStatus = (Status)CRIWAREC7CB372C(playerId, subtitleBuffer, ref subtitleSizeTmp);
+			if (this.lastNativeStatus.HasValue == false || this.lastNativeStatus != nativeStatus || this.isPreparingForRendering) {
+				this.lastNativeStatus = nativeStatus;
+				InvokePlayerStatusCheck();
+			}
 			subtitleSize = (int)subtitleSizeTmp;
 			updatingPlayer = null;
 
-            // check when status goes from any to stop
-            if (isNativeInitialized && (
-                    nativeStatus == Status.StopProcessing ||
-                    nativeStatus == Status.Stop))
-            {
-                isNativeInitialized = false;
-                // Native destroy - on render thread
-                IssuePluginEvent(CriManaUnityPlayer_RenderEventAction.DESTROY);
-            }
-        }
+			if (enableSubtitle) {
+				var changed = CRIWARE5097690C(playerId);
+				if (changed) {
+					if (OnSubtitleChanged != null){
+						OnSubtitleChanged(subtitleBuffer);
+					}
+					CRIWAREA7B26B9F(playerId);
+				}
+			}
+
+			// check when status goes from any to stop
+			if (isNativeInitialized && (
+					nativeStatus == Status.StopProcessing ||
+					nativeStatus == Status.Stop))
+			{
+				isNativeInitialized = false;
+				// Native destroy - on render thread
+				if (!isStoppingForSeek ||
+					!(rendererResource != null && rendererResource.ShouldSkipDestroyOnStopForSeek())) {
+					IssuePluginEvent(CriManaUnityPlayer_RenderEventAction.DESTROY);
+				}
+			}
+#else
+			if ((requiredStatus != Status.Stop) ||
+				(nativeStatus != requiredStatus)) {
+				DummyProceedNativeState();
+			}
+#endif
+		}
+
+		private void InvokePlayerStatusCheck()
+		{
+			var playerStatus = this.status;
+			if (this.lastPlayerStatus.HasValue == false || this.lastPlayerStatus != playerStatus) {
+				this.lastPlayerStatus = playerStatus;
+				if (statusChangeCallback != null) {
+					statusChangeCallback.Invoke(playerStatus);
+				}
+				if (this.isPreparingForRendering && this.status != Status.Prep) { /* Finished preparing or unknown status */
+					this.isPreparingForRendering = false;
+				}
+			}
+		}
+
+#if CRIWARE_ENABLE_HEADLESS_MODE
+		private void DummyProceedNativeState()
+		{
+			if (nativeStatus == requiredStatus) {
+				if (nativeStatus == Status.Playing &&
+	                nativeStatus == requiredStatus &&
+					!_dummyLoop && !_dummyPaused) {
+					nativeStatus = Status.PlayEnd;
+				}
+			} else if (requiredStatus == Status.Playing ||
+				requiredStatus == Status.Ready) {
+				if (_dummyNativeStatus == nativeStatus + 1 &&
+					!(_dummyPaused && _dummyNativeStatus == Status.Playing)) {
+					nativeStatus = _dummyNativeStatus;
+				} else {
+					_dummyNativeStatus = nativeStatus + 1;
+				}
+			} else if (requiredStatus == _dummyNativeStatus) {
+				nativeStatus = requiredStatus;
+			} else {
+				_dummyNativeStatus = requiredStatus;
+			}
+		}
+
+#endif
 
 
 		private void AllocateSubtitleBuffer(int size)
@@ -1388,6 +2002,10 @@ namespace CriMana
 				subtitleBufferSize = size;
 				subtitleSize = 0;
 			}
+			for (int i = 0; i < subtitleBufferSize; i++) {
+				Marshal.WriteByte(subtitleBuffer, i, 0x00);
+			}
+			CRIWARE086CEF17(playerId, size);
 		}
 
 		private void DeallocateSubtitleBuffer()
@@ -1398,9 +2016,11 @@ namespace CriMana
 				subtitleBufferSize = 0;
 				subtitleSize = 0;
 			}
+			CRIWARE7F4598EA(playerId);
 		}
 
 
+		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 		private delegate void CuePointCallbackFromNativeDelegate(System.IntPtr ptr1, System.IntPtr ptr2, [In] ref EventPoint eventPoint);
 
 
@@ -1413,97 +2033,189 @@ namespace CriMana
 		}
 		#endregion
 
-		#region Native API Definitions
-		[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-        private static extern int criManaUnityPlayer_Create();
-        [DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-        private static extern int criManaUnityPlayer_CreateWithAtomExPlayer();
-        [DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-        private static extern void criManaUnityPlayer_Destroy(int player_id);
-		[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-		private static extern void criManaUnityPlayer_SetFile(int player_id, System.IntPtr binder, string path);
-		[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-		private static extern void criManaUnityPlayer_SetContentId(int player_id, System.IntPtr binder, int content_id);
-		[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-		private static extern void criManaUnityPlayer_SetFileRange(int player_id, string path, System.UInt64 offset, System.Int64 range);
-		[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-		private static extern bool criManaUnityPlayer_EntryFile(int player_id, System.IntPtr binder, string path, bool repeat);
-		[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-		private static extern bool criManaUnityPlayer_EntryContentId(int player_id, System.IntPtr binder, int content_id, bool repeat);
-		[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-		private static extern bool criManaUnityPlayer_EntryFileRange(int player_id, string path, System.UInt64 offset, System.Int64 range, bool repeat);
-		[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-		private static extern void criManaUnityPlayer_ClearEntry(int player_id);
-		[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-		private static extern System.Int32 criManaUnityPlayer_GetNumberOfEntry(int player_id);
-		[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-		private static extern void criManaUnityPlayer_SetCuePointCallback(
+		#region DLL Import
+		#if !CRIWARE_ENABLE_HEADLESS_MODE
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern int CRIWAREE87B241D();
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern int CRIWAREF8EDC953();
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern int CRIWAREC5CB2C05(bool useAtomExPlayer, uint maxPathLength);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern void CRIWAREF4A1A36D(int player_id);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern void CRIWAREFA3D3598(int player_id, System.IntPtr binder, string path);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern void CRIWARE6C0CDCDD(int player_id, System.IntPtr binder, int content_id);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern void CRIWAREF03B7E5D(int player_id, string path, System.UInt64 offset, System.Int64 range);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern void CRIWARE097811FC(int player_id, IntPtr data, System.Int64 datasize);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern void CRIWARE097811FC(int player_id, byte[] data, System.Int64 datasize);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern bool CRIWARE1AFA74BE(int player_id, System.IntPtr binder, string path, bool repeat);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern bool CRIWARE101AA908(int player_id, System.IntPtr binder, int content_id, bool repeat);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern bool CRIWARE3BF8F4C0(int player_id, string path, System.UInt64 offset, System.Int64 range, bool repeat);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern bool CRIWAREF2C6F5B2(int player_id, IntPtr data, System.Int64 datasize, bool repeat);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern bool CRIWAREF2C6F5B2(int player_id, byte[] data, System.Int64 datasize, bool repeat);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern void CRIWAREFEC78C5B(int player_id);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern System.Int32 CRIWARE3B5030D0(int player_id);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern void CRIWARE7DC649B9(
 			int player_id,
 			CuePointCallbackFromNativeDelegate cbfunc
 			);
-		[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-		private static extern void criManaUnityPlayer_GetMovieInfo(int player_id, [Out] MovieInfo movie_info);
-		[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-		private static extern int criManaUnityPlayer_Update(
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern void CRIWARE026539B7(int player_id, [Out] MovieInfo movie_info);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern int CRIWAREC7CB372C(
 			int player_id,
 			System.IntPtr subtitle_buffer,
 			ref uint subtitle_size
 			);
-		[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-		private static extern void criManaUnityPlayer_Prepare(int player_id);
-		[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-		private static extern void criManaUnityPlayer_Start(int player_id);
-		[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-		private static extern void criManaUnityPlayer_Stop(int player_id);
-		[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-		private static extern void criManaUnityPlayer_SetSeekPosition(int player_id, int seek_frame_no);
-		[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-		private static extern void criManaUnityPlayer_Pause(int player_id, int sw);
-		[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-		private static extern bool criManaUnityPlayer_IsPaused(int player_id);
-		[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-		private static extern void criManaUnityPlayer_Loop(int player_id, int sw);
-		[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-		private static extern long criManaUnityPlayer_GetTime(int player_id);
-		[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-		private static extern int criManaUnityPlayer_GetStatus(int player_id);
-        [DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-        private static extern IntPtr criManaUnityPlayer_GetAtomExPlayerHn(int player_id);
-        [DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-        private static extern void criManaUnityPlayer_SetAudioTrack(int player_id, int track);
-		[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-		private static extern void criManaUnityPlayer_SetVolume(int player_id, float vol);
-		[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-		private static extern void criManaUnityPlayer_SetSubAudioTrack(int player_id, int track);
-		[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-		private static extern void criManaUnityPlayer_SetSubAudioVolume(int player_id, float vol);
-		[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-		private static extern void criManaUnityPlayer_SetExtraAudioTrack(int player_id, int track);
-		[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-		private static extern void criManaUnityPlayer_SetExtraAudioVolume(int player_id, float vol);
-		[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-		private static extern void criManaUnityPlayer_SetBusSendLevelByName(int player_id, string bus_name, float level);
-		[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-		private static extern void criManaUnityPlayer_SetSubAudioBusSendLevelByName(int player_id, string bus_name, float level);
-		[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-		private static extern void criManaUnityPlayer_SetExtraAudioBusSendLevelByName(int player_id, string bus_name, float level);
-		[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-		private static extern void criManaUnityPlayer_SetSubtitleChannel(int player_id, int channel);
-		[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-		private static extern void criManaUnityPlayer_SetSpeed(int player_id, float speed);
-		[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-		private static extern void criManaUnityPlayer_SetMaxPictureDataSize(int player_id, System.UInt32 max_data_size);
-		[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-		public static extern void criManaUnityPlayer_SetBufferingTime(int player_id, float sec);
-		[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-		public static extern void criManaUnityPlayer_SetMinBufferSize(int player_id, int min_buffer_size);
-		[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-		public static extern void criManaUnityPlayer_SetAsrRackId(int player_id, int asr_rack_id);
-
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern void CRIWARE7DA749B5(int player_id);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern void CRIWAREBFC0B70E(int player_id);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern void CRIWARE8E3E3566(int player_id);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern void CRIWARE0042EEBC(int player_id, int seek_frame_no);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern void CRIWARE61280D15(int player_id, MovieEventSyncMode mode);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern void CRIWARE0AECB3DB(int player_id, int sw);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern bool CRIWARE750622E5(int player_id);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern void CRIWARE622615F7(int player_id, int sw);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern long CRIWARED4E48AB0(int player_id);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern int CRIWARE6EC0ADF6(int player_id);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern IntPtr CRIWARE9B209A14(int player_id);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern int CRIWARE8A2E320E(int player_id);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern void CRIWARE2C5AEDDB(int player_id, int track);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern void CRIWARE680FF3BF(int player_id, float vol);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern void CRIWARE3AD4DAE4(int player_id, int track);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern void CRIWARE460F9E59(int player_id, float vol);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern void CRIWAREBDC09776(int player_id, int track);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern void CRIWAREAA45197A(int player_id, float vol);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern void CRIWARE36DAF52C(int player_id, string bus_name, float level);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern void CRIWARE0C1D58F8(int player_id, string bus_name, float level);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern void CRIWAREB5DF052A(int player_id, string bus_name, float level);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern void CRIWARE37D35422(int player_id, int channel);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern void CRIWARE307DECC9(int player_id, float speed);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern void CRIWARE4347FC03(int player_id, System.UInt32 max_data_size);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		public static extern void CRIWARED0197067(int player_id, float sec);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		public static extern void CRIWARE0B2034B9(int player_id, int min_buffer_size);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		public static extern void CRIWARE80A15B5F(int player_id, int asr_rack_id);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern void CRIWAREF1D66BBD(int player_id);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern void CRIWARE944389C0(int player_id, TimerType timer_type);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern void CRIWARE0AAFBE33(int player_id, ulong user_count, ulong user_unit);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern void CRIWARE4D02B432(int player_id, ulong timer_unit_n, ulong timer_unit_d);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern void CRIWAREF7C0025B(int player_id);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern void CRIWARE7F4598EA(int player_id);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern IntPtr CRIWARE086CEF17(int player_id, int bufferSize);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern bool CRIWARE5097690C(int player_id);
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern void CRIWAREA7B26B9F(int player_id);
 #if !CRIPLUGIN_USE_OLD_LOWLEVEL_INTERFACE
-		[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 		private static extern IntPtr criWareUnity_GetRenderEventFunc();
 #endif
+		#else
+		private Status _dummyNativeStatus = Status.Error;
+		private bool _dummyPaused = false;
+		private bool _dummyLoop = false;
+		private static int CRIWAREE87B241D() { return 0; }
+		private static int CRIWAREF8EDC953() { return 0; }
+		private static int CRIWAREC5CB2C05(bool useAtomExPlayer, uint maxPathLength) { return 0; }
+		private static void CRIWAREF4A1A36D(int player_id) { }
+		private static void CRIWAREFA3D3598(int player_id, System.IntPtr binder, string path) { }
+		private static void CRIWARE6C0CDCDD(int player_id, System.IntPtr binder, int content_id) { }
+		private static void CRIWAREF03B7E5D(int player_id, string path, System.UInt64 offset, System.Int64 range) { }
+		private static void CRIWARE097811FC(int player_id, IntPtr data, System.Int64 datasize) { }
+		private static void CRIWARE097811FC(int player_id, byte[] data, System.Int64 datasize) { }
+		private static bool CRIWARE1AFA74BE(int player_id, System.IntPtr binder, string path, bool repeat) { return true; }
+		private static bool CRIWARE101AA908(int player_id, System.IntPtr binder, int content_id, bool repeat) { return true; }
+		private static bool CRIWARE3BF8F4C0(int player_id, string path, System.UInt64 offset, System.Int64 range, bool repeat) { return true; }
+		private static bool CRIWAREF2C6F5B2(int player_id, IntPtr data, System.Int64 datasize, bool repeat) { return true; }
+		private static bool CRIWAREF2C6F5B2(int player_id, byte[] data, System.Int64 datasize, bool repeat) { return true; }
+		private static void CRIWAREFEC78C5B(int player_id) { }
+		private static System.Int32 CRIWARE3B5030D0(int player_id) { return 0; }
+		private static void CRIWARE7DC649B9(int player_id, CuePointCallbackFromNativeDelegate cbfunc) { }
+		private static void CRIWARE026539B7(int player_id, [Out] MovieInfo movie_info) { movie_info = new MovieInfo(); }
+		private static int CRIWAREC7CB372C(int player_id, System.IntPtr subtitle_buffer, ref uint subtitle_size ) { return 0; }
+		private void CRIWARE7DA749B5(int player_id) { _dummyPaused = false; nativeStatus = Status.WaitPrep; }
+		private void CRIWAREBFC0B70E(int player_id) { _dummyPaused = false; nativeStatus = Status.WaitPrep; }
+		private void CRIWARE8E3E3566(int player_id) { nativeStatus = Status.Stop;  }
+		private static void CRIWARE0042EEBC(int player_id, int seek_frame_no) { }
+		private static void CRIWARE61280D15(int player_id, MovieEventSyncMode mode){}
+		private void CRIWARE0AECB3DB(int player_id, int sw) { _dummyPaused = (sw == 1); }
+		private static bool CRIWARE750622E5(int player_id) { return false; }
+		private void CRIWARE622615F7(int player_id, int sw) { _dummyLoop = (sw == 1); }
+		private static long CRIWARED4E48AB0(int player_id) { return 0; }
+		private static int CRIWARE6EC0ADF6(int player_id) { return 0; }
+		private static IntPtr CRIWARE9B209A14(int player_id) { return new IntPtr(1); }
+		private static int CRIWARE8A2E320E(int player_id) { return -1; }
+		private static void CRIWARE2C5AEDDB(int player_id, int track) { }
+		private static void CRIWARE680FF3BF(int player_id, float vol) { }
+		private static void CRIWARE3AD4DAE4(int player_id, int track) { }
+		private static void CRIWARE460F9E59(int player_id, float vol) { }
+		private static void CRIWAREBDC09776(int player_id, int track) { }
+		private static void CRIWAREAA45197A(int player_id, float vol) { }
+		private static void CRIWARE36DAF52C(int player_id, string bus_name, float level) { }
+		private static void CRIWARE0C1D58F8(int player_id, string bus_name, float level) { }
+		private static void CRIWAREB5DF052A(int player_id, string bus_name, float level) { }
+		private static void CRIWARE37D35422(int player_id, int channel) { }
+		private static void CRIWARE307DECC9(int player_id, float speed) { }
+		private static void CRIWARE4347FC03(int player_id, System.UInt32 max_data_size) { }
+		public static void CRIWARED0197067(int player_id, float sec) { }
+		public static void CRIWARE0B2034B9(int player_id, int min_buffer_size) { }
+		public static void CRIWARE80A15B5F(int player_id, int asr_rack_id) { }
+		private static void CRIWAREF1D66BBD(int player_id) { }
+		private static void CRIWARE944389C0(int player_id, TimerType timer_type) { }
+		private static void CRIWARE0AAFBE33(int player_id, ulong user_count, ulong user_unit) { }
+		private static void CRIWARE4D02B432(int player_id, ulong timer_unit_n, ulong timer_unit_d) { }
+		private static void CRIWAREF7C0025B(int player_id) { }
+		private static void CRIWARE7F4598EA(int player_id) {}
+		private static IntPtr CRIWARE086CEF17(int player_id, int bufferSize){return IntPtr.Zero;}
+		private static bool CRIWARE5097690C(int player_id){return false;}
+		private static void CRIWAREA7B26B9F(int player_id){}
+		#endif
 
 		public enum CriManaUnityPlayer_RenderEventAction {
 			UPDATE = 0, // default action - always called at each loop

@@ -17,73 +17,98 @@ using System.Text;
  * @{
  */
 
+
 /**
- * <summary>再生音オブジェクト</summary>
- * \par 説明:
- * ::CriAtomExPlayer::Start 関数実行時に返されるオブジェクトです。<br/>
- * プレーヤ単位ではなく、 ::CriAtomExPlayer::Start 関数で再生した個々の音声に対して
- * パラメータ変更や状態取得を行いたい場合、本オブジェクトを使用して制御を行う必要があります。<br/>
- * \sa CriAtomExPlayer::Start
+ * <summary>Playback sound object</summary>
+ * <remarks>
+ * <para header='Description'>On object returned when the function ::CriAtomExPlayer::Start is called.<br/>
+ * If you want to change parameters or get the status for each sound played back using the function ::CriAtomExPlayer::Start ,
+ * not for each player, you need to use this object for controlling playback.<br/></para>
+ * </remarks>
+ * <seealso cref='CriAtomExPlayer::Start'/>
  */
 public struct CriAtomExPlayback
 {
 	/**
-	 * <summary>再生ステータス</summary>
-	 * \par 説明:
-	 * AtomExプレーヤで再生済みの音声のステータスです。<br/>
-	 * ::CriAtomExPlayback::GetStatus 関数で取得可能です。<br/>
+	 * <summary>Playback status</summary>
+	 * <remarks>
+	 * <para header='Description'>Status of the sound that has been played on the AtomExPlayer.<br/>
+	 * It can be obtained by using the ::CriAtomExPlayback::GetStatus function.<br/>
 	 * <br/>
-	 * 再生状態は、通常以下の順序で遷移します。<br/>
+	 * The playback status usually changes in the following order.<br/>
 	 * -# Prep
 	 * -# Playing
 	 * -# Removed
-	 * .
-	 * \par 備考
-	 * StatusはAtomExプレーヤのステータスではなく、
-	 * プレーヤで再生を行った（ ::CriAtomExPlayer::Start 関数を実行した）
-	 * 音声のステータスです。<br/>
+	 * .</para>
+	 * <para header='Note'>Status indicates the status of the sound that was played
+	 * ( ::CriAtomExPlayer::Start function was called) by the AtomExPlayer
+	 * instead of the status of the player.<br/>
 	 * <br/>
-	 * 再生中の音声リソースは、発音が停止された時点で破棄されます。<br/>
-	 * そのため、以下のケースで再生音のステータスが Removed に遷移します。<br/>
-	 * - 再生が完了した場合。
-	 * - Stop 関数で再生中の音声を停止した場合。
-	 * - 高プライオリティの発音リクエストにより再生中のボイスが奪い取られた場合。
-	 * - 再生中にエラーが発生した場合。
-	 * .
-	 * \sa CriAtomExPlayer::Start, CriAtomExPlayback::GetStatus, CriAtomExPlayback::Stop
+	 * The sound resource being played is discarded when the playback is stopped.<br/>
+	 * Therefore, the status of the playback sound changes to Removed in the following cases.<br/>
+	 * - When playback is complete.
+	 * - When the sound being played is stopped using the Stop function.
+	 * - When a Voice being played is stolen by a high priority playback request.
+	 * - When an error occurred during playback.
+	 * .</para>
+	 * </remarks>
+	 * <seealso cref='CriAtomExPlayer::Start'/>
+	 * <seealso cref='CriAtomExPlayback::GetStatus'/>
+	 * <seealso cref='CriAtomExPlayback::Stop'/>
 	 */
 	public enum Status {
-		Prep = 1,	/**< 再生準備中	*/
-		Playing,	/**< 再生中		*/
-		Removed		/**< 削除された	*/
+		Prep = 1,   /**< Preparing for playback */
+		Playing,    /**< Playing */
+		Removed     /**< Removed */
+	}
+
+	/**
+	 * <summary>Playback Track information</summary>
+	 * <remarks>
+	 * <para header='Description'>A structure to get the Track information of the Cue being played.<br/></para>
+	 * </remarks>
+	 * <seealso cref='CriAtomExPlayback::GetTrackInfo'/>
+	 */
+	[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+	public struct TrackInfo {
+		public uint id;                         /**< Playback ID */
+		public CriAtomEx.CueType sequenceType;  /**< Parent Sequence type */
+		public IntPtr playerHn;                 /**< Player handle */
+		public ushort trackNo;                  /**< Track number */
+		public ushort reserved;                 /**< Reserved area */
 	}
 
 	public CriAtomExPlayback(uint id)
 		: this()
 	{
 		this.id = id;
+	#if CRIWARE_ENABLE_HEADLESS_MODE
+		this._dummyStatus = Status.Prep;
+	#endif
 	}
 
 	/**
-	 * <summary>再生音の停止</summary>
-	 * <param name="ignoresReleaseTime">リリース時間を無視するかどうか
-	 * （false = リリース処理を行う、ture = リリース時間を無視して即座に停止する）</param>
-	 * \par 説明:
-	 * 再生音単位で停止処理を行います。<br/>
-	 * 本関数を使用することで、プレーヤによって再生された音声を、プレーヤ単位ではなく、
-	 * 個別に停止させることが可能です。<br/>
-	 * \par 備考:
-	 * AtomEx プレーヤによって再生された全ての音声を停止したい場合、
-	 * 本関数ではなく ::CriAtomExPlayer::Stop 関数をご利用ください。<br/>
-	 * （ ::CriAtomExPlayer::Stop 関数は、そのプレーヤで再生中の全ての音声を停止します。）<br/>
-	 * \attention
-	 * 本関数で再生音の停止を行うと、再生中の音声のステータスは Removed に遷移します。<br/>
-	 * 停止時にボイスリソースも破棄されるため、一旦 Removed 状態に遷移した再生オブジェクトからは、
-	 * 以降情報を取得できなくなります。<br/>
-	 * \sa CriAtomExPlayer::Stop, CriAtomExPlayback::GetStatus
+	 * <summary>Stops the playback sound</summary>
+	 * <param name='ignoresReleaseTime'>Whether to ignore release time
+	 * (False = perform release process, True = ignore release time and stop immediately)</param>
+	 * <remarks>
+	 * <para header='Description'>Stops for each played sound. <br/>
+	 * By using this function, it is possible to pause the sound played
+	 * for each individual sound on the player.<br/></para>
+	 * <para header='Note'>If you want to stop all the sounds played back by the AtomExPlayer,
+	 * use the ::CriAtomExPlayer::Stop function instead of this function.<br/>
+	 * (The ::CriAtomExPlayer::Stop function stops all the sounds being played by the player.)<br/></para>
+	 * <para header='Note'>When the playback sound is stopped using this function, the status of the sound being played changes to Removed.<br/>
+	 * Since the Voice resource is also discarded when stopped, it will not be possible to acquire information
+	 * from the playback object that changed to Removed state.<br/></para>
+	 * </remarks>
+	 * <seealso cref='CriAtomExPlayer::Stop'/>
+	 * <seealso cref='CriAtomExPlayback::GetStatus'/>
 	 */
 	public void Stop(bool ignoresReleaseTime)
 	{
+		if (CriAtomPlugin.IsLibraryInitialized() == false) { return; }
+
 		if (ignoresReleaseTime == false) {
 			criAtomExPlayback_Stop(this.id);
 		} else {
@@ -92,16 +117,18 @@ public struct CriAtomExPlayback
 	}
 
 	/**
-	 * <summary>再生音のポーズ</summary>
-	 * \par 説明:
-	 * 再生音単位でポーズを行います。<br/>
+	 * <summary>Pauses playback sound</summary>
+	 * <remarks>
+	 * <para header='Description'>Pauses for each played sound. <br/>
 	 * <br/>
-	 * 本関数を使用することで、プレーヤによって再生された音声を、プレーヤ単位ではなく、
-	 * 個別にポーズさせることが可能です。<br/>
-	 * \par 備考:
-	 * プレーヤによって再生された全ての音声をポーズしたい場合、
-	 * 本関数ではなく ::CriAtomExPlayer::Pause 関数をご利用ください。<br/>
-	 * \sa CriAtomExPlayback::IsPaused, CriAtomExPlayer::Pause, CriAtomExPlayback::Resume
+	 * By using this function, it is possible to pause the sound played
+	 * for each individual sound on the player.<br/></para>
+	 * <para header='Note'>If you want to pause all the sounds played back by the player,
+	 * use the ::CriAtomExPlayer::Pause function instead of this function.<br/></para>
+	 * </remarks>
+	 * <seealso cref='CriAtomExPlayback::IsPaused'/>
+	 * <seealso cref='CriAtomExPlayer::Pause'/>
+	 * <seealso cref='CriAtomExPlayback::Resume'/>
 	 */
 	public void Pause()
 	{
@@ -109,23 +136,25 @@ public struct CriAtomExPlayback
 	}
 
 	/**
-	 * <summary>再生音のポーズ解除</summary>
-	 * <param name="mode">ポーズ解除対象</param>
-	 * \par 説明:
-	 * 再生音単位で一時停止状態の解除を行います。<br/>
-	 * 引数（mode）に PausedPlayback を指定して本関数を実行すると、
-	 * ユーザが ::CriAtomExPlayer::Pause 関数（または ::CriAtomExPlayback::Pause 
-	 * 関数）で一時停止状態になった音声の再生が再開されます。<br/>
-	 * 引数（mode）に PreparedPlayback を指定して本関数を実行すると、
-	 * ユーザが ::CriAtomExPlayer::Prepare 関数で再生準備を指示した音声の再生が開始されます。<br/>
-	 * \par 備考:
-	 * ::CriAtomExPlayer::Pause 関数でポーズ状態のプレーヤに対して ::CriAtomExPlayer::Prepare
-	 * 関数で再生準備を行った場合、その音声は PausedPlayback 指定のポーズ解除処理と、
-	 * PreparedPlayback 指定のポーズ解除処理の両方が行われるまで、再生が開始されません。<br/>
+	 * <summary>Unpauses the playback sound</summary>
+	 * <param name='mode'>Unpausing target</param>
+	 * <remarks>
+	 * <para header='Description'>Unpauses for each played sound. <br/>
+	 * When this function is called by specifying PausedPlayback in the argument (mode),
+	 * the playback of the sound paused by the user using
+	 * the ::CriAtomExPlayer::Pause function (or the ::CriAtomExPlayback::Pause function) is resumed.<br/>
+	 * When this function is called by specifying PreparedPlayback in the argument (mode),
+	 * the playback of the sound prepared by the user using the::CriAtomExPlayer::Prepare starts.<br/></para>
+	 * <para header='Note'>If you prepare a playback using the ::CriAtomExPlayer::Prepare function for the player paused using the ::CriAtomExPlayer::Pause function,
+	 * the sound is not played back until it is unpaused using PausedPlayback
+	 * as well as unpaused with PreparedPlayback.<br/>
 	 * <br/>
-	 * ::CriAtomExPlayer::Pause 関数か ::CriAtomExPlayer::Prepare 関数かに関係なく、
-	 * 常に再生を開始したい場合には、引数（mode）に AllPlayback を指定して本関数を実行してください。<br/>
-	 * \sa CriAtomExPlayback::IsPaused, CriAtomExPlayer::Resume, CriAtomExPlayer::Pause
+	 * If you want to always start playback regardless of whether
+	 * the sound is paused using the ::CriAtomExPlayer::Pause or ::CriAtomExPlayer::Prepare function, call this function by specifying AllPlayback in the argument (mode).<br/></para>
+	 * </remarks>
+	 * <seealso cref='CriAtomExPlayback::IsPaused'/>
+	 * <seealso cref='CriAtomExPlayer::Resume'/>
+	 * <seealso cref='CriAtomExPlayer::Pause'/>
 	 */
 	public void Resume(CriAtomEx.ResumeMode mode)
 	{
@@ -133,11 +162,12 @@ public struct CriAtomExPlayback
 	}
 
 	/**
-	 * <summary>再生音のポーズ状態の取得</summary>
-	 * <returns>ポーズ中かどうか（false = ポーズされていない、true = ポーズ中）</returns>
-	 * \par 説明:
-	 * 再生中の音声がポーズ中かどうかを返します。<br/>
-	 * \sa CriAtomExPlayback::Pause
+	 * <summary>Gets pausing status of the playback sound</summary>
+	 * <returns>Whether the playback is paused (False = not paused, True = paused)</returns>
+	 * <remarks>
+	 * <para header='Description'>Returns whether or not the sound being played is paused.<br/></para>
+	 * </remarks>
+	 * <seealso cref='CriAtomExPlayback::Pause'/>
 	 */
 	public bool IsPaused()
 	{
@@ -145,22 +175,22 @@ public struct CriAtomExPlayback
 	}
 
 	/**
-	 * <summary>再生音のフォーマット情報の取得</summary>
-	 * <param name="info">フォーマット情報</param>
-	 * <returns>情報が取得できたかどうか（ true = 取得できた、 false = 取得できなかった）</returns>
-	 * \par 説明:
-	 * ::CriAtomExPlayer::Start 関数で再生された音声のフォーマット情報を取得します。<br/>
+	 * <summary>Gets the playback sound format information</summary>
+	 * <param name='info'>Format information</param>
+	 * <returns>Whether the information can be acquired (True = could be acquired, False = could not be acquired)</returns>
+	 * <remarks>
+	 * <para header='Description'>Gets the format information of the sound played back using the ::CriAtomExPlayer::Start function.<br/>
 	 * <br/>
-	 * フォーマット情報が取得できた場合、本関数は true を返します。<br/>
-	 * 指定したボイスが既に消去されている場合等には、本関数は false を返します。<br/>
-	 * \par 備考:
-	 * 複数の音声データを含むキューを再生した場合、最初に見つかった音声
-	 * データの情報が返されます。<br/>
-	 * \attention
-	 * 本関数は、音声再生中のみフォーマット情報を取得可能です。<br/>
-	 * 再生準備中や再生終了後、発音数制御によりボイスが消去された場合には、
-	 * フォーマット情報の取得に失敗します。<br/>
-	 * \sa CriAtomExPlayer::Start, CriAtomExPlayer::GetStatus
+	 * This function returns True if the format information can be obtained.<br/>
+	 * This function returns False if the specified Voice was already deleted.<br/></para>
+	 * <para header='Note'>When playing a Cue that contains multiple sound data, the information on
+	 * the first sound data found is returned.<br/></para>
+	 * <para header='Note'>This function can get the format information only during sound playback.<br/>
+	 * If the Voice is deleted by Voice control during playback preparation or after the playback,
+	 * acquisition of format information fails.<br/></para>
+	 * </remarks>
+	 * <seealso cref='CriAtomExPlayer::Start'/>
+	 * <seealso cref='CriAtomExPlayer::GetStatus'/>
 	 */
 	public bool GetFormatInfo(out CriAtomEx.FormatInfo info)
 	{
@@ -168,26 +198,28 @@ public struct CriAtomExPlayback
 	}
 
 	/**
-	 * <summary>再生ステータスの取得</summary>
-	 * <returns>再生ステータス</returns>
-	 * \par 説明:
-	 * ::CriAtomExPlayer::Start 関数で再生された音声のステータスを取得します。<br/>
-	 * \par 備考:
-	 * ::CriAtomExPlayer::GetStatus 関数がAtomExプレーヤのステータスを返すのに対し、
-	 * 本関数は再生済みの個々の音声のステータスを取得します。<br/>
+	 * <summary>Gets the playback status</summary>
+	 * <returns>Playback status</returns>
+	 * <remarks>
+	 * <para header='Description'>Gets the status of the sound played back using the ::CriAtomExPlayer::Start function.<br/></para>
+	 * <para header='Note'>This function gets the status of each sound already played while the
+	 * ::CriAtomExPlayer::GetStatus function returns the status of the AtomExPlayer.<br/>
 	 * <br/>
-	 * 再生中の音声のボイスリソースは、以下の場合に削除されます。<br/>
-	 * - 再生が完了した場合。
-	 * - Stop 関数で再生中の音声を停止した場合。
-	 * - 高プライオリティの発音リクエストにより再生中のボイスが奪い取られた場合。
-	 * - 再生中にエラーが発生した場合。
+	 * The Voice resource of the sound being played is released in the following cases.<br/>
+	 * - When playback is complete.
+	 * - When the sound being played is stopped using the Stop function.
+	 * - When a Voice being played is stolen by a high priority playback request.
+	 * - When an error occurred during playback.
 	 * .
-	 * そのため、 ::CriAtomExPlayback::Stop 関数を使用して明示的に再生を停止したか、
-	 * その他の要因によって再生が停止されたかの違いに関係なく、
-	 * 再生音のステータスはいずれの場合も Removed に遷移します。<br/>
-	 * （エラーの発生を検知する必要がある場合には、本関数ではなく、 ::CriAtomExPlayer::GetStatus
-	 * 関数で AtomEx プレーヤのステータスをチェックする必要があります。）<br/>
-	 * \sa CriAtomExPlayer::Start, CriAtomExPlayer::GetStatus, CriAtomExPlayback::Stop
+	 * Therefore, regardless of whether you explicitly stopped playback using the ::CriAtomExPlayback::Stop function
+	 * or the playback is stopped due to some other factor,
+	 * the status of the sound changes to Removed in all cases.<br/>
+	 * (If you need to detect the occurrence of an error, it is necessary to check the status of the AtomExPlayer
+	 * using the ::CriAtomExPlayer::GetStatus function instead of this function.)<br/></para>
+	 * </remarks>
+	 * <seealso cref='CriAtomExPlayer::Start'/>
+	 * <seealso cref='CriAtomExPlayer::GetStatus'/>
+	 * <seealso cref='CriAtomExPlayback::Stop'/>
 	 */
 	public Status GetStatus()
 	{
@@ -195,102 +227,104 @@ public struct CriAtomExPlayback
 	}
 
 	/**
-	 * <summary>再生時刻の取得</summary>
-	 * <returns>再生時刻（ミリ秒単位）</returns>
-	 * \par 説明:
-	 * ::CriAtomExPlayer::Start 関数で再生された音声の再生時刻を取得します。<br/>
+	 * <summary>Gets the playback time</summary>
+	 * <returns>Playback time (in milliseconds)</returns>
+	 * <remarks>
+	 * <para header='Description'>Gets the playback time of the sound played back using the ::CriAtomExPlayer::Start function.<br/>
 	 * <br/>
-	 * 再生時刻が取得できた場合、本関数は 0 以上の値を返します。<br/>
-	 * 指定したボイスが既に消去されている場合等には、本関数は負値を返します。<br/>
-	 * \par 備考:
-	 * 本関数が返す再生時刻は「再生開始後からの経過時間」です。<br/>
-	 * ループ再生時や、シームレス連結再生時を行った場合でも、
-	 * 再生位置に応じて時刻が巻き戻ることはありません。<br/>
+	 * This function returns a value of 0 or greater if the playback time can be obtained.<br/>
+	 * This function returns a negative value if the specified Voice was already deleted.<br/></para>
+	 * <para header='Note'>The playback time returned by this function is "the elapsed time from the start of playback".<br/>
+	 * The time does not rewind depending on the playback position,
+	 * even during loop playback or seamless linked playback.<br/>
 	 * <br/>
-	 * ::CriAtomExPlayer::Pause 関数でポーズをかけた場合、
-	 * 再生時刻のカウントアップも停止します。<br/>
-	 * （ポーズを解除すれば再度カウントアップが再開されます。）
+	 * When the playback is paused using the ::CriAtomExPlayer::Pause function,
+	 * the playback time count-up also stops.<br/>
+	 * (If you unpause the playback, the count-up resumes.)
 	 * <br/>
-	 * 本関数で取得可能な時刻の精度は、サーバ処理の周波数に依存します。<br/>
-	 * （時刻の更新はサーバ処理単位で行われます。）<br/>
-	 * より精度の高い時刻を取得する必要がある場合には、本関数の代わりに
-	 * ::CriAtomExPlayback::GetNumPlayedSamples 関数を使用し、
-	 * 再生済みサンプル数を取得してください。<br/>
-	 * \attention
-	 * 戻り値の型は long ですが、現状、32bit以上の精度はありません。<br/>
-	 * 再生時刻を元に制御を行う場合、約24日で再生時刻が異常になる点に注意が必要です。<br/>
-	 * （ 2147483647 ミリ秒を超えた時点で、再生時刻がオーバーフローし、負値になります。）<br/>
+	 * The accuracy of the time that can be obtained by this function depends on the frequency of the server processing.<br/>
+	 * (The time is updated for each server process.)<br/>
+	 * If you need to get more accurate time, use the
+	 * ::CriAtomExPlayback::GetNumPlayedSamples function instead of this function
+	 * to get the number of samples played.<br/></para>
+	 * <para header='Note'>The return type is long, but currently there is no precision over 32bit.<br/>
+	 * When performing control based on the playback time, it should be noted that the playback time becomes incorrect in about 24 days.<br/>
+	 * (The playback time overflows and becomes a negative value when it exceeds 2147483647 milliseconds.)<br/>
 	 * <br/>
-	 * 本関数は、音声再生中のみ時刻を取得可能です。<br/>
-	 * （ ::CriAtomExPlayer::GetTime 関数と異なり、本関数は再生中の音声ごとに時刻を
-	 * 取得可能ですが、再生終了時刻を取ることができません。）<br/>
-	 * 再生終了後や、発音数制御によりボイスが消去された場合には、
-	 * 再生時刻の取得に失敗します。<br/>
-	 * （負値が返ります。）<br/>
+	 * This function can get the time only during sound playback.<br/>
+	 * (Unlike the ::CriAtomExPlayer::GetTime function, this function can get the time
+	 * for each sound being played, but it cannot get the playback end time.)<br/>
+	 * Getting the playback time fails after the playback ends
+	 * or when the Voice is erased by the Voice control.<br/>
+	 * (Negative value is returned.)<br/>
 	 * <br/>
-	 * デバイスのリードリトライ処理等により、音声データの供給が一時的に途切れた場合でも、
-	 * 再生時刻のカウントアップが途切れることはありません。<br/>
-	 * （データ供給停止により再生が停止した場合でも、時刻は進み続けます。）<br/>
-	 * そのため、本関数で取得した時刻を元に映像との同期を行った場合、
-	 * リードリトライ発生毎に同期が大きくズレる可能性があります。<br/>
-	 * 波形データと映像の同期を厳密に取る必要がある場合は、本関数の代わりに
-	 * ::CriAtomExPlayback::GetNumPlayedSamples 関数を使用し、
-	 * 再生済みサンプル数との同期を取ってください。<br/>
-	 * \sa CriAtomExPlayer::Start, CriAtomExPlayer::GetTime, CriAtomExPlayback::GetNumPlayedSamples
+	 * If the sound data supply is temporarily interrupted due to device read retry processing, etc.,
+	 * the count-up of the playback time is not interrupted.<br/>
+	 * (The time progresses even if the playback is stopped due to the stop of data supply.)<br/>
+	 * Therefore, when synchronizing sound with the source video based on the time acquired by this function,
+	 * the synchronization may be greatly deviated each time a read retry occurs.<br/>
+	 * If it is necessary to strictly synchronize the waveform data and video,
+	 * use the ::CriAtomExPlayback::GetNumPlayedSamples function instead of this function
+	 * to synchronize with the number of played samples.<br/></para>
+	 * </remarks>
+	 * <seealso cref='CriAtomExPlayer::Start'/>
+	 * <seealso cref='CriAtomExPlayer::GetTime'/>
+	 * <seealso cref='CriAtomExPlayback::GetNumPlayedSamples'/>
 	 */
 	public long GetTime()
 	{
 		return criAtomExPlayback_GetTime(this.id);
 	}
-	
+
 	/**
-	 * <summary>音声に同期した再生時刻の取得</summary>
-	 * <returns>再生時刻（ミリ秒単位）</returns>
-	 * \par 説明:
-	 * ::CriAtomExPlayer::Start 関数で再生された音声の再生時刻を取得します。<br/>
+	 * <summary>Gets the playback time synchronized with sound</summary>
+	 * <returns>Playback time (in milliseconds)</returns>
+	 * <remarks>
+	 * <para header='Description'>Gets the playback time of the sound played back using the ::CriAtomExPlayer::Start function.<br/>
 	 * <br/>
-	 * 再生時刻が取得できた場合、本関数は 0 以上の値を返します。<br/>
-	 * 指定したボイスが既に消去されている場合等には、本関数は負値を返します。<br/>
-	 * \par 備考:
-	 * ::CriAtomExPlayback::GetTime 関数が返す「再生開始後からの経過時間」とは
-	 * 異なり、本関数からは再生中の音声に同期した再生時刻を取得することが
-	 * 可能です。<br/>
-	 * デバイスのリードリトライ処理等により、音声データの供給が途切れて
-	 * 再生が停止した場合、再生時刻のカウントアップが一時的に停止します。<br/>
-	 * 再生された音声に厳密に同期した処理を行いたい場合は、本関数で
-	 * 取得した再生時刻を用いてください。<br/>
-	 * ただし、ループ再生時や、シームレス連結再生時を行った場合でも、
-	 * 再生位置に応じて時刻が巻き戻ることはありません。<br/>
-	 * また、波形の詰まっていないシーケンスキューに対しては、正常に再生時刻を
-	 * 取得することができません。<br/>
+	 * This function returns a value of 0 or greater if the playback time can be obtained.<br/>
+	 * This function returns a negative value if the specified Voice was already deleted.<br/></para>
+	 * <para header='Note'>Unlike the "elapsed time from the start of playback" returned by the ::CriAtomExPlayback::GetTime function,
+	 * it is possible to obtain the playback time synchronized with the sound being played
+	 * using this function.<br/>
+	 * If the sound data supply is interrupted due to device read retry, etc.,
+	 * and the playback is stopped, the count-up of the playback time is temporarily stopped.<br/>
+	 * If you want to strictly synchronize with the sound played,
+	 * use the playback time acquired using this function.<br/>
+	 * However, the time does not rewind depending on the playback position,
+	 * even during loop playback or seamless linked playback.<br/>
+	 * In addition, the playback time cannot be acquired successfully
+	 * for the Sequence Cue not filled with waveforms.<br/>
 	 * <br/>
-	 * ::CriAtomExPlayer::Pause 関数でポーズをかけた場合、
-	 * 再生時刻のカウントアップも停止します。<br/>
-	 * （ポーズを解除すれば再度カウントアップが再開されます。）<br/>
+	 * When the playback is paused using the ::CriAtomExPlayer::Pause function,
+	 * the playback time count-up also stops.<br/>
+	 * (If you unpause the playback, the count-up resumes.)<br/>
 	 * <br/>
-	 * 本関数を用いて再生時刻を取得するには、 ::CriAtomExPlayer::CriAtomExPlayer(bool) 関数を
-	 * 用いて、音声同期タイマを有効にするフラグを指定してプレーヤの作成を行ってください。
+	 * To get the playback time using this function, use the ::CriAtomExPlayer::CriAtomExPlayer(bool) function
+	 * to create a player specifying a flag that enables the sound synchronization timer.
+	 * <br/></para>
+	 * <para header='Note'>The return type is long, but currently there is no precision over 32bit.<br/>
+	 * When performing control based on the playback time, it should be noted that the playback time becomes incorrect in about 24 days.<br/>
+	 * (The playback time overflows and becomes a negative value when it exceeds 2147483647 milliseconds.)<br/>
 	 * <br/>
-	 * \attention
-	 * 戻り値の型は long ですが、現状、32bit以上の精度はありません。<br/>
-	 * 再生時刻を元に制御を行う場合、約24日で再生時刻が異常になる点に注意が必要です。<br/>
-	 * （ 2147483647 ミリ秒を超えた時点で、再生時刻がオーバーフローし、負値になります。）<br/>
+	 * This function can get the time only during sound playback.<br/>
+	 * (Unlike the ::CriAtomExPlayer::GetTime function, this function can get the time
+	 * for each sound being played, but it cannot get the playback end time.)<br/>
+	 * Getting the playback time fails after the playback ends
+	 * or when the Voice is erased by the Voice control.<br/>
+	 * (Negative value is returned.)<br/>
 	 * <br/>
-	 * 本関数は、音声再生中のみ時刻を取得可能です。<br/>
-	 * （ ::CriAtomExPlayer::GetTime 関数と異なり、本関数は再生中の音声ごとに時刻を
-	 * 取得可能ですが、再生終了時刻を取ることができません。）<br/>
-	 * 再生終了後や、発音数制御によりボイスが消去された場合には、
-	 * 再生時刻の取得に失敗します。<br/>
-	 * （負値が返ります。）<br/>
-	 * <br/>
-	 * 本関数は内部で時刻計算を行っており、プラットフォームによっては処理負荷が
-	 * 問題になる可能性があります。また、アプリケーションの同じフレーム内であっても、
-	 * 呼び出し毎に更新された時刻を返します。<br/>
-	 * アプリケーションによる再生時刻の利用方法にもよりますが、基本的に本関数を用いた
-	 * 時刻取得は1フレームにつき一度のみ行うようにしてください。<br/>
-	 * <br/>
-	 * \sa CriAtomExPlayer::Start, CriAtomExPlayback::GetTime, CriAtomExPlayback::GetNumPlayedSamples, 
-	 * CriAtomExPlayer::CriAtomExPlayer(bool)
+	 * This function calculates the time internally, so the processing load
+	 * may be a problem depending on the platform. In addition, it returns the updated time with each call,
+	 * even within the same frame of the application.<br/>
+	 * Although it depends on how the playback time is used by the application,
+	 * basically use this function to get the time only once per frame.<br/>
+	 * <br/></para>
+	 * </remarks>
+	 * <seealso cref='CriAtomExPlayer::Start'/>
+	 * <seealso cref='CriAtomExPlayback::GetTime'/>
+	 * <seealso cref='CriAtomExPlayback::GetNumPlayedSamples'/>
+	 * <seealso cref='CriAtomExPlayer::CriAtomExPlayer(bool)'/>
 	 */
 	public long GetTimeSyncedWithAudio()
 	{
@@ -298,33 +332,32 @@ public struct CriAtomExPlayback
 	}
 
 	/**
-	 * <summary>再生サンプル数の取得</summary>
-	 * <param name="numSamples">再生済みサンプル数</param>
-	 * <param name="samplingRate">サンプリングレート</param>
-	 * <returns>サンプル数が取得できたかどうか（ true = 取得できた、 false = 取得できなかった）</returns>
-	 * \par 説明:
-	 * ::CriAtomExPlayer::Start 関数で再生された音声の再生サンプル数、
-	 * およびサンプリングレートを返します。<br/>
+	 * <summary>Gets the number of playback samples</summary>
+	 * <param name='numSamples'>The number of played samples</param>
+	 * <param name='samplingRate'>Sampling rate</param>
+	 * <returns>Whether the sample count can be acquired (True = could be acquired, False = could not be acquired)</returns>
+	 * <remarks>
+	 * <para header='Description'>Returns the number of playback samples and the sampling rate of the
+	 * sound played back using the ::CriAtomExPlayer::Start function.<br/>
 	 * <br/>
-	 * 再生サンプル数が取得できた場合、本関数は true を返します。<br/>
-	 * 指定したボイスが既に消去されている場合等には、本関数は false を返します。<br/>
-	 * （エラー発生時は numSamples や samplingRate の値も負値になります。）<br/>
-	 * \par 備考:
-	 * 再生済みサンプル数の値の精度は、プラットフォーム SDK 
-	 * のサウンドライブラリに依存します。<br/>
-	 * （プラットフォームによって、再生済みサンプル数の正確さは異なります。）<br/>
+	 * This function returns True if the number of playback samples can be obtained.<br/>
+	 * This function returns False if the specified Voice was already deleted.<br/>
+	 * (When an error occurs, the values of numSamples and samplingRate are also negative.)<br/></para>
+	 * <para header='Note'>The accuracy of the number of samples played depends on the
+	 * sound library in the platform SDK.<br/>
+	 * (The accuracy of the number of samples played depends on the platform.)<br/>
 	 * <br/>
-	 * 複数の音声データを含むキューを再生した場合、最初に見つかった音声
-	 * データの情報が返されます。<br/>
-	 * \attention
-	 * デバイスのリードリトライ処理等により、音声データの供給が途切れた場合、
-	 * 再生サンプル数のカウントアップが停止します。<br/>
-	 * （データ供給が再開されれば、カウントアップが再開されます。）<br/>
+	 * When playing a Cue that contains multiple sound data, the information
+	 * on the first sound data found is returned.<br/></para>
+	 * <para header='Note'>If the sound data supply is interrupted due to device read retry processing, etc.,
+	 * the count-up of the number of playback samples stops.<br/>
+	 * (The count-up restarts when the data supply is resumed.)<br/>
 	 * <br/>
-	 * 本関数は、音声再生中のみ再生サンプル数を取得可能です。<br/>
-	 * 再生終了後や、発音数制御によりボイスが消去された場合には、
-	 * 再生サンプル数の取得に失敗します。<br/>
-	 * \sa CriAtomExPlayer::Start
+	 * This function can get the number of playback samples only while the sound is being played.<br/>
+	 * Getting the number of playback samples fails after the playback ends
+	 * or when the Voice is erased by the Voice control.<br/></para>
+	 * </remarks>
+	 * <seealso cref='CriAtomExPlayer::Start'/>
 	 */
 	public bool GetNumPlayedSamples(out long numSamples, out int samplingRate)
 	{
@@ -332,35 +365,35 @@ public struct CriAtomExPlayback
 	}
 
 	/**
-	 * <summary>シーケンス再生位置の取得</summary>
-	 * <returns>シーケンス再生位置（ミリ秒単位）</returns>
-	 * \par 説明:
-	 * ::CriAtomExPlayer::Start 関数で再生された音声のシーケンス再生位置を取得します。<br/>
+	 * <summary>Gets the Sequence playback position</summary>
+	 * <returns>Sequence playback position (in milliseconds)</returns>
+	 * <remarks>
+	 * <para header='Description'>Gets the Sequence playback position of the sound played back using the ::CriAtomExPlayer::Start function.<br/>
 	 * <br/>
-	 * 再生位置が取得できた場合、本関数は 0 以上の値を返します。<br/>
-	 * 指定したシーケンスが既に消去されている場合等には、本関数は負値を返します。<br/>
-	 * \par 備考:
-	 * 本関数が返す再生時刻は「シーケンスデータ上の再生位置」です。<br/>
-	 * シーケンスループや、ブロック遷移を行った場合は、巻き戻った値が返ります。<br/>
+	 * This function returns a value of 0 or greater if the playback position can be obtained.<br/>
+	 * This function returns a negative value if, for example, the specified Sequence was already deleted.<br/></para>
+	 * <para header='Note'>The playback time returned by this function is the "playback position on the Sequence data".<br/>
+	 * When a Sequence loop or Block transition was performed, the rewound value is returned.<br/>
 	 * <br/>
-	 * キュー指定以外での再生ではシーケンサーが動作しません。キュー再生以外の再生に対して
-	 * 本関数は負値を返します。<br/>
+	 * The Sequencer does not run if you performed non-Cue-specified playback. For playback other than Cue playback,
+	 * this function returns a negative value.<br/>
 	 * <br/>
-	 * ::CriAtomExPlayer::Pause 関数でポーズをかけた場合、再生位置の更新も停止します。<br/>
-	 * （ポーズを解除すれば再度更新が再開されます。）
+	 * When the playback is paused using the ::CriAtomExPlayer::Pause function, the playback position also stops being updated.<br/>
+	 * (If you unpause, the update resumes.)
 	 * <br/>
-	 * 本関数で取得可能な時刻の精度は、サーバ処理の周波数に依存します。<br/>
-	 * （時刻の更新はサーバ処理単位で行われます。）<br/>
-	 * \attention
-	 * 戻り値の型は long ですが、現状、32bit以上の精度はありません。<br>
-	 * 再生位置を元に制御を行う場合、シーケンスループ等の設定がないデータでは約24日で再生位置が異常になる点に注意が必要です。<br>
-	 * （ 2147483647 ミリ秒を超えた時点で、再生位置がオーバーフローし、負値になります。）<br>
-	 * <br>
-	 * 本関数は、音声再生中のみ位置を取得可能です。<br>
-	 * 再生終了後や、発音数制御によりシーケンスが消去された場合には、
-	 * 再生位置の取得に失敗します。<br>
-	 * （負値が返ります。）<br>
-	 * 
+	 * The accuracy of the time that can be obtained by this function depends on the frequency of the server processing.<br/>
+	 * (The time is updated for each server process.)<br/></para>
+	 * <para header='Note'>The return type is long, but currently there is no precision over 32bit.<br/>
+	 * When performing control based on the playback position, it should be noted that
+	 * the playback position becomes incorrect in about 24 days for the data that has no settings such as Sequence loops.<br/>
+	 * (The playback position overflows and becomes a negative value when it exceeds 2147483647 milliseconds.)<br/>
+	 * <br/>
+	 * This function can get the position only during sound playback.<br/>
+	 * After the end of playback, or when the Sequence was erased by Voice control,
+	 * acquisition of the playback position fails.<br/>
+	 * (Negative value is returned.)<br/></para>
+	 * </remarks>
+	 *
 	 */
 	public long GetSequencePosition()
 	{
@@ -368,14 +401,16 @@ public struct CriAtomExPlayback
 	}
 
 	/**
-	 * <summary>再生音のカレントブロックインデックスの取得</summary>
-	 * <returns>カレントブロックインデックス</returns>
-	 * \par 説明:
-	 * ::CriAtomExPlayer::Start 関数で再生されたブロックシーケンスの、
-	 * カレントブロックインデックスを取得します。<br/>
-	 * \par 備考:
-	 * 再生IDにより再生しているデータがブロックシーケンスではない場合は、 0xFFFFFFFF が返ります。<br/>
-	 * \sa CriAtomExPlayer::Start, CriAtomExPlayer::SetFirstBlockIndex, CriAtomExPlayback::SetNextBlockIndex
+	 * <summary>Gets the current Block index of the playback sound</summary>
+	 * <returns>Current Block index</returns>
+	 * <remarks>
+	 * <para header='Description'>Gets the current Block index of the Block sequence
+	 * played back using the ::CriAtomExPlayer::Start function.<br/></para>
+	 * <para header='Note'>Returns 0xFFFFFFFF if the data being played by the playback ID is not a Block Sequence.<br/></para>
+	 * </remarks>
+	 * <seealso cref='CriAtomExPlayer::Start'/>
+	 * <seealso cref='CriAtomExPlayer::SetFirstBlockIndex'/>
+	 * <seealso cref='CriAtomExPlayback::SetNextBlockIndex'/>
 	 */
 	public int GetCurrentBlockIndex()
 	{
@@ -383,16 +418,59 @@ public struct CriAtomExPlayback
 	}
 
 	/**
-	 * <summary>再生音のブロック遷移</summary>
-	 * <param name="index">ブロックインデックス</param>
-	 * \par 説明:
-	 * 再生音単位でブロック遷移を行います。<br/>
-	 * 本関数を実行すると、指定したIDの音声がブロックシーケンスの場合はデータの
-	 * 設定に従った任意の遷移タイミングで指定ブロックに遷移します。<br/>
-	 * \par 備考:
-	 * 再生開始ブロックの指定は ::CriAtomExPlayer::SetFirstBlockIndex 関数を使用して行い、
-	 * 再生中のブロックインデックス取得は ::CriAtomExPlayback::GetCurrentBlockIndex 関数を使用します。
-	 * \sa CriAtomExPlayer::SetFirstBlockIndex, CriAtomExPlayback::GetCurrentBlockIndex
+	 * <summary>Gets the playback Track information</summary>
+	 * <param name='info'>Playback Track information</param>
+	 * <returns>Whether the acquisition succeeded</returns>
+	 * <remarks>
+	 * <para header='Description'>Gets the Track information of the Cue played back using the ::CriAtomExPlayer::Start function.<br/>
+	 * The Track information that can be obtained is only the information directly under the Cue; the information for sub-Sequence or Cue link cannot be obtained.<br/></para>
+	 * <para header='Note'>An attempt to get the Track information fails if the following data is being played.<br/>
+	 * - Data other than Cue is being played. (Since there is no Track information)<br/>
+	 * - The Cue being played is a Polyphonic type or a selector-referenced switch type.
+	 *   (Since there may be multiple Track information)<br/>
+	 * - The Cue being played is a Track Transition type. (Since the playback Track changes by transition)<br/></para>
+	 * </remarks>
+	 * <seealso cref='CriAtomExPlayer::Start'/>
+	 */
+	public bool GetTrackInfo(out TrackInfo info)
+	{
+		return criAtomExPlayback_GetPlaybackTrackInfo(this.id, out info);
+	}
+
+	/**
+	 * <summary>Gets beat synchronization information</summary>
+	 * <param name='info'>Beat synchronization information</param>
+	 * <returns>Whether the acquisition succeeded</returns>
+	 * <remarks>
+	 * <para header='Description'>Gets the beat synchronization information of the Cue played back using the ::CriAtomExPlayer::Start function.<br/>
+	 * You can get the current BPM, bar count, beat count, and beat progress rate (0.0 to 1.0).<br/>
+	 * Beat synchronization information must be set for the Cue.<br/>
+	 * Information for the Cues that are being played using Cue links or start actions cannot be acquired.<br/></para>
+	 * <para header='Note'>An attempt to get the beat synchronization information fails if the following data is being played.<br/>
+	 * - Data other than Cue is being played. (Since there is not beat synchronization information)<br/>
+	 * - A Cue without beat synchronization information is being played.<br/>
+	 * - A Cue with beat synchronization information is being played "indirectly".
+	 *   (Being played with Cue link or start action)<br/></para>
+	 * </remarks>
+	 * <seealso cref='CriAtomExPlayer::Start'/>
+	 */
+	public bool GetBeatSyncInfo(out CriAtomExBeatSync.Info info)
+	{
+		return criAtomExPlayback_GetBeatSyncInfo(this.id, out info);
+	}
+
+	/**
+	 * <summary>Block transition of playback sound</summary>
+	 * <param name='index'>Block index</param>
+	 * <remarks>
+	 * <para header='Description'>Block transition is performed for each played sound. <br/>
+	 * When this function is executed, if the Voice with the specified ID is a block sequence,
+	 * It transitions the block according to the specified block sequence setting. <br/></para>
+	 * <para header='Note'>Use the ::CriAtomExPlayer::SetFirstBlockIndex function to specify the playback start Block,
+	 * and use the ::CriAtomExPlayback::GetCurrentBlockIndex function to get the Block index during playback.</para>
+	 * </remarks>
+	 * <seealso cref='CriAtomExPlayer::SetFirstBlockIndex'/>
+	 * <seealso cref='CriAtomExPlayback::GetCurrentBlockIndex'/>
 	 */
 	public void SetNextBlockIndex(int index)
 	{
@@ -418,7 +496,7 @@ public struct CriAtomExPlayback
 			return this.GetTime();
 		}
 	}
-	
+
 	public long timeSyncedWithAudio
 	{
 		get {
@@ -426,51 +504,96 @@ public struct CriAtomExPlayback
 		}
 	}
 
+	public const uint invalidId = 0xFFFFFFFF;
+
 	/* Old APIs */
-	public void Stop() { criAtomExPlayback_Stop(this.id); }
-	public void StopWithoutReleaseTime() { criAtomExPlayback_StopWithoutReleaseTime(this.id); }
+	public void Stop() {
+		if (CriAtomPlugin.IsLibraryInitialized() == false) { return; }
+		criAtomExPlayback_Stop(this.id);
+	}
+	public void StopWithoutReleaseTime() {
+		if (CriAtomPlugin.IsLibraryInitialized() == false) { return; }
+		criAtomExPlayback_StopWithoutReleaseTime(this.id);
+	}
 	public void Pause(bool sw) { criAtomExPlayback_Pause(this.id, sw); }
-	
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+
+
+	#region DLL Import
+	#if !CRIWARE_ENABLE_HEADLESS_MODE
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern void criAtomExPlayback_Stop(uint id);
-	
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern void criAtomExPlayback_StopWithoutReleaseTime(uint id);
-	
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern void criAtomExPlayback_Pause(uint id, bool sw);
-	
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern void criAtomExPlayback_Resume(uint id, CriAtomEx.ResumeMode mode);
-	
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern bool criAtomExPlayback_IsPaused(uint id);
-	
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern Status criAtomExPlayback_GetStatus(uint id);
-	
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern bool criAtomExPlayback_GetFormatInfo(
 		uint id, out CriAtomEx.FormatInfo info);
-	
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern long criAtomExPlayback_GetTime(uint id);
-	
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern long criAtomExPlayback_GetTimeSyncedWithAudio(uint id);
-	
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern bool criAtomExPlayback_GetNumPlayedSamples(
 		uint id, out long num_samples, out int sampling_rate);
 
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern long criAtomExPlayback_GetSequencePosition(uint id);
-	
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern void criAtomExPlayback_SetNextBlockIndex(uint id, int index);
-	
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern int criAtomExPlayback_GetCurrentBlockIndex(uint id);
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern bool criAtomExPlayback_GetPlaybackTrackInfo(uint id, out TrackInfo info);
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern bool criAtomExPlayback_GetBeatSyncInfo(uint id, out CriAtomExBeatSync.Info info);
+	#else
+	private Status _dummyStatus;
+	private bool _dummyPaused;
+	private void criAtomExPlayback_Stop(uint id) { _dummyStatus = Status.Removed; }
+	private void criAtomExPlayback_StopWithoutReleaseTime(uint id) { _dummyStatus = Status.Removed; }
+	private void criAtomExPlayback_Pause(uint id, bool sw) { _dummyPaused = sw; }
+	private static void criAtomExPlayback_Resume(uint id, CriAtomEx.ResumeMode mode) { }
+	private bool criAtomExPlayback_IsPaused(uint id) { return _dummyPaused; }
+	private Status criAtomExPlayback_GetStatus(uint id)
+	{
+		if (_dummyStatus != Status.Removed) {
+			_dummyStatus = _dummyStatus + 1;
+		}
+		return _dummyStatus;
+	}
+	private static bool criAtomExPlayback_GetFormatInfo(
+		uint id, out CriAtomEx.FormatInfo info) { info = new CriAtomEx.FormatInfo(); return false; }
+	private static long criAtomExPlayback_GetTime(uint id) { return 0; }
+	private static long criAtomExPlayback_GetTimeSyncedWithAudio(uint id) { return 0; }
+	private static bool criAtomExPlayback_GetNumPlayedSamples(
+		uint id, out long num_samples, out int sampling_rate) { num_samples = sampling_rate = 0; return false; }
+	private static long criAtomExPlayback_GetSequencePosition(uint id) { return 0; }
+	private static void criAtomExPlayback_SetNextBlockIndex(uint id, int index) { }
+	private static int criAtomExPlayback_GetCurrentBlockIndex(uint id) { return -1; }
+	private static bool criAtomExPlayback_GetPlaybackTrackInfo(uint id, out TrackInfo info) { info = new TrackInfo(); return false; }
+	private static bool criAtomExPlayback_GetBeatSyncInfo(uint id, out CriAtomExBeatSync.Info info) { info = new CriAtomExBeatSync.Info(); return false; }
+	#endif
+	#endregion
 }
 
 /**

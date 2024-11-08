@@ -244,9 +244,15 @@ public class UIDrawCall : MonoBehaviour
 	void UpdateMaterials ()
 	{
 		bool useClipping = (mClipping != Clipping.None);
-
+		int prevRenderQueue;
+		// Get previous Render Queue
+		if (mMat != null) {
+			prevRenderQueue = mMat.renderQueue;
+		} else {
+			RebuildMaterial();
+			prevRenderQueue = mMat.renderQueue;
+		}
 		// Create a temporary material
-		if (mMat == null) RebuildMaterial();
 
 		// If clipping should be used, we need to find a replacement shader
 		if (useClipping && mClipping != Clipping.None)
@@ -268,11 +274,12 @@ public class UIDrawCall : MonoBehaviour
 			if (shader != null)
 			{
 				mMat.shader = shader;
+				mMat.renderQueue = prevRenderQueue;
 			}
 			else
 			{
-				mClipping = Clipping.None;
 				Debug.LogError(shaderName + " doesn't have a clipped shader version for " + mClipping);
+				mClipping = Clipping.None;
 			}
 		}
 

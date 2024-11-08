@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
  *
  * Copyright (c) 2016 CRI Middleware Co., Ltd.
  *
@@ -14,217 +14,469 @@ using System.Runtime.InteropServices;
 
 
 /**
- * <summary>CriAtomEx のアプリケーションデバッグ向けの API をまとめたクラスクラスです。</summary>
+ * <summary>A class that contains the APIs for debugging the CriAtomEx application.</summary>
  */
 public static class CriAtomExDebug
 {
 	/**
-	 * <summary>CriAtomEx 内部の各種リソースの状況</summary>
+	 * <summary>Status of various resources inside CriAtomEx</summary>
 	 */
 	[StructLayout (LayoutKind.Sequential, CharSet = CharSet.Ansi)]
 	public struct ResourcesInfo
 	{
-		/** バーチャルボイスの使用状況 */
+		/** Virtual Voice usage status */
 		public CriAtomEx.ResourceUsage virtualVoiceUsage;
 
-		/** シーケンスの使用状況 */
+		/** Sequence usage status */
 		public CriAtomEx.ResourceUsage sequenceUsage;
 
-		/** シーケンストラックの使用状況 */
+		/** Sequence track usage status */
 		public CriAtomEx.ResourceUsage sequenceTrackUsage;
 
-		/** シーケンストラックアイテムの使用状況 */
+		/** Sequence track item usage status */
 		public CriAtomEx.ResourceUsage sequenceTrackItemUsage;
 	}
 
 	/**
-	 * <summary>CriAtomEx 内部の各種リソースの状況の取得</summary>
-	 * <param name="resourcesInfo">CriAtomEx 内部の各種リソースの状況</param>
-	 * \par 説明:
-	 * CriAtomEx 内部の各種リソースの状況取得します。<br>
+	 * <summary>Gets the status of various resources inside CriAtomEx</summary>
+	 * <param name='resourcesInfo'>Status of various resources inside CriAtomEx</param>
+	 * <remarks>
+	 * <para header='Description'>Gets the status of various resources inside CriAtomEx.<br/></para>
+	 * </remarks>
 	 */
 	public static void GetResourcesInfo (out ResourcesInfo resourcesInfo)
 	{
 		criAtomExDebug_GetResourcesInfo (out resourcesInfo);
 	}
 
-	#region Private
-
-	[DllImport (CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-	private static extern int criAtomExDebug_GetResourcesInfo (out ResourcesInfo resourcesInfo);
-
+	#region DLL Import
+	#if !CRIWARE_ENABLE_HEADLESS_MODE
+	[DllImport (CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern void criAtomExDebug_GetResourcesInfo (out ResourcesInfo resourcesInfo);
+	#else
+	private static void criAtomExDebug_GetResourcesInfo (out ResourcesInfo resourcesInfo) { resourcesInfo = new ResourcesInfo(); }
+	#endif
 	#endregion
 }
 
 
 /**
- * <summary>CriAtomExAcf のアプリケーションデバッグ向けの API をまとめたクラスクラスです。</summary>
+ * <summary>A class that contains the APIs for debugging the CriAtomExAcf application.</summary>
  */
 public static class CriAtomExAcfDebug
 {
 	/**
-	 * <summary>カテゴリ情報</summary>
+	 * <summary>Category information</summary>
 	 */
 	public struct CategoryInfo
 	{
-		/** グループ番号 */
+		/** Group number */
 		public uint groupNo;
 
-		/** カテゴリID */
+		/** Category ID */
 		public uint id;
 
-		/** カテゴリ名 */
+		/** Category name */
 		public string name;
 
-		/** キューリミット数 */
+		/** Cue limit count */
 		public uint numCueLimits;
 
-		/** ボリューム */
+		/** Volume */
 		public float volume;
-	};
+	}
 
 	/**
-	 * <summary>DSPバス設定情報</summary>
+	 * <summary>DSP bus setting information</summary>
 	 */
 	public struct DspBusInfo
 	{
-		/** 名前 */
+		/** Name */
 		public string name;
 
-		/** 音量 */
+		/** Volume */
 		public float volume;
 
-		/** Pan3D 音量 */
+		/** Pan3D volume */
 		public float pan3dVolume;
 
-		/** Pan3D 角度 */
+		/** Pan3D Angle */
 		public float pan3dAngle;
 
-		/** Pan3D インテリア距離 */
+		/** Pan3D interior distance */
 		public float pan3dDistance;
 
 		[MarshalAs (UnmanagedType.ByValArray, SizeConst = 8)]
-		/** DSP FXインデックス配列 */
+		/** DSP FX index array */
 		public ushort[] fxIndexes;
 
 		[MarshalAs (UnmanagedType.ByValArray, SizeConst = 64)]
-		/** DSPバスリンクインデックス配列 */
+		/** DSP bus link index array */
 		public ushort[] busLinkIndexes;
 
-		/** セッティング内DSPバス番号 */
+		/** DSP bus number in setting */
 		public ushort busNo;
 
-		/** DSP FX数 */
+		/** The number of DSP FXs */
 		public byte numFxes;
 
-		/** DSPバスリンク数 */
+		/** Number of DSP bus links */
 		public byte numBusLinks;
-	};
-	
+	}
+
 	/**
-	 * <summary>カテゴリ数の取得</summary>
-	 * <returns>カテゴリ数</returns>
-	 * \par 説明:
-	 * 登録されたACFに含まれるカテゴリの数を取得します。
+	 * <summary>AISAC control information</summary>
+	 */
+	public struct AisacControlInfo
+	{
+		/** Name */
+		public string name;
+
+		/** ID */
+		public uint id;
+	}
+
+	/**
+	 * <summary>AISAC type</summary>
+	 */
+	public enum AisacType
+	{
+		/** Normal type */
+		Normal,
+
+		/** Auto modulation type */
+		AutoModulation,
+	}
+
+	/**
+	 * <summary>Global AISAC information</summary>
+	 */
+	public struct GlobalAisacInfo
+	{
+		/** Global AISAC name */
+		public string name;
+
+		/** Data index */
+		public ushort index;
+
+		/** Number of graphs */
+		public ushort numGraphs;
+
+		/** AISAC type */
+		public AisacType type;
+
+		/** Random range */
+		public float randomRange;
+
+		/** Control ID */
+		public ushort controlId;
+	}
+
+	/**
+	 * <summary>Selector information</summary>
+	 */
+	public struct SelectorInfo
+	{
+		/** Selector name */
+		public string name;
+
+		/** Selector index */
+		public ushort index;
+
+		/** The number of Selector Labels */
+		public ushort numLabels;
+
+		/** Global reference label index */
+		public ushort globalLabelIndex;
+	}
+
+	/**
+	 * <summary>Selector Label information</summary>
+	 */
+	public struct SelectorLabelInfo
+	{
+		/** Selector name */
+		public string selectorName;
+
+		/** Selector Label name */
+		public string labelName;
+	}
+
+	/**
+	 * <summary>Gets the number of Categories</summary>
+	 * <returns>The number of Categories</returns>
+	 * <remarks>
+	 * <para header='Description'>Gets the number of Categories contained in the registered ACF.</para>
+	 * </remarks>
 	 */
 	public static int GetNumCategories ()
 	{
 		return criAtomExAcf_GetNumCategories ();
 	}
-	
+
 	/**
-	 * <summary>カテゴリ情報の取得（インデックス指定）<summary>
-	 * <param name="index">カテゴリインデックス</param>
-	 * <param name="categoryInfo">カテゴリ情報</param>
-	 * <returns>情報が取得出来たかどうか</returns>
-	 * \par 説明:
-	 * カテゴリインデックスからカテゴリ情報を取得します。<br>
-	 * 指定したインデックスのカテゴリが存在しない場合、 false が返ります。
+	 * <summary>Gets the Category information (index specified)</summary>
+	 * <param name='index'>Category index</param>
+	 * <param name='categoryInfo'>Category information</param>
+	 * <returns>Whether the information could be obtained</returns>
+	 * <remarks>
+	 * <para header='Description'>Gets the Category information from the Category index.<br/>
+	 * Returns False if there is no Category with the specified index.</para>
+	 * </remarks>
 	 */
 	public static bool GetCategoryInfoByIndex (ushort index, out CategoryInfo categoryInfo)
 	{
 		CategoryInfoForMarshaling x;
-		bool result = criAtomExAcf_GetCategoryInfo (index, out x) == 1;
+		bool result = criAtomExAcf_GetCategoryInfo (index, out x) != 0;
 		x.Convert (out categoryInfo);
 		return result;
 	}
 
 	/**
-	 * <summary>カテゴリ情報の取得（名前指定）<summary>
-	 * <param name="name">カテゴリ名</param>
-	 * <param name="categoryInfo">カテゴリ情報</param>
-	 * <returns>情報が取得出来たかどうか</returns>
-	 * \par 説明:
-	 * カテゴリインデックスからカテゴリ情報を取得します。<br>
-	 * 指定したインデックスのカテゴリが存在しない場合、 false が返ります。
+	 * <summary>Gets the Category information (name specified)</summary>
+	 * <param name='name'>Category name</param>
+	 * <param name='categoryInfo'>Category information</param>
+	 * <returns>Whether the information could be obtained</returns>
+	 * <remarks>
+	 * <para header='Description'>Gets the Category information from the Category index.<br/>
+	 * Returns False if there is no Category with the specified index.</para>
+	 * </remarks>
 	 */
 	public static bool GetCategoryInfoByName (string name, out CategoryInfo categoryInfo)
 	{
 		CategoryInfoForMarshaling x;
-		bool result = criAtomExAcf_GetCategoryInfoByName (name, out x) == 1;
+		bool result = criAtomExAcf_GetCategoryInfoByName (name, out x) != 0;
 		x.Convert (out categoryInfo);
 		return result;
 	}
-	
+
 	/**
-	 * <summary>カテゴリ情報の取得（ID指定）<summary>
-	 * <param name="id">カテゴリID</param>
-	 * <param name="categoryInfo">カテゴリ情報</param>
-	 * <returns>情報が取得出来たかどうか</returns>
-	 * \par 説明:
-	 * カテゴリインデックスからカテゴリ情報を取得します。<br>
-	 * 指定したインデックスのカテゴリが存在しない場合、 false が返ります。
+	 * <summary>Gets the Category information (ID specified)</summary>
+	 * <param name='id'>Category ID</param>
+	 * <param name='categoryInfo'>Category information</param>
+	 * <returns>Whether the information could be obtained</returns>
+	 * <remarks>
+	 * <para header='Description'>Gets the Category information from the Category index.<br/>
+	 * Returns False if there is no Category with the specified index.</para>
+	 * </remarks>
 	 */
 	public static bool GetCategoryInfoById (uint id, out CategoryInfo categoryInfo)
 	{
 		CategoryInfoForMarshaling x;
-		bool result = criAtomExAcf_GetCategoryInfoById (id, out x) == 1;
+		bool result = criAtomExAcf_GetCategoryInfoById (id, out x) != 0;
 		x.Convert (out categoryInfo);
 		return result;
 	}
-	
+
 	/**
-	 * <summary>DSPバスの取得</summary>
-	 * <param name="index">バスインデックス</param>
-	 * <param name="dspBusInfo">バス情報</param>
-	 * <returns>カテゴリ情報が取得出来たかどうか</returns>
-	 * \par 説明:
-	 * インデックスを指定してDSPバス情報を取得します。<br>
-	 * 指定したインデックス名のDSPバスが存在しない場合、 false が返ります。
+	 * <summary>Gets the number of DSP buses</summary>
+	 * <returns>Number of DSP buses</returns>
+	 * <remarks>
+	 * <para header='Description'>Gets the number of buses contained in the registered ACF.</para>
+	 * </remarks>
+	 */
+	public static int GetNumBuses()
+	{
+		return criAtomExAcf_GetNumBuses();
+	}
+
+	/**
+	 * <summary>Gets the DSP bus</summary>
+	 * <param name='index'>Bus index</param>
+	 * <param name='dspBusInfo'>Bus information</param>
+	 * <returns>Whether the bus information could be acquired</returns>
+	 * <remarks>
+	 * <para header='Description'>Gets the DSP bus information by specifying the index.<br/>
+	 * Returns False if there is no DSP bus with the specified index name.</para>
+	 * </remarks>
 	 */
 	public static bool GetDspBusInformation (ushort index, out DspBusInfo dspBusInfo)
 	{
 		DspBusInfoForMarshaling x;
-		bool result = criAtomExAcf_GetDspBusInformation (index, out x) == 1;
+		bool result = criAtomExAcf_GetDspBusInformation (index, out x) != 0;
 		x.Convert (out dspBusInfo);
 		return result;
 	}
 
 	/**
-	 * <summary>AISACコントロールIDの取得（AISACコントロール名指定）</summary>
-	 * <param name="name">AISACコントロール名</param>
-	 * <returns>AISACコントロールID</returns>
-	 * \par 説明:
-	 * AISACコントロール名からAISACコントロールIDを取得します。<br>
-	 * ACFが登録されていない、または指定したAISACコントロール名のAISACコントロールが存在しない場合、CriAtomEx.InvalidAisacControlId が返ります。
+	 * <summary>Gets the number of AISAC controls</summary>
+	 * <returns>The number of AISAC controls</returns>
+	 * <remarks>
+	 * <para header='Description'>Gets the number of AISAC controls contained in the registered ACF.<br/>
+	 * Returns -1 if no ACF file is registered.</para>
+	 * </remarks>
+	 */
+	public static int GetNumAisacControls ()
+	{
+		return criAtomExAcf_GetNumAisacControls ();
+	}
+
+	/**
+	 * <summary>Gets the AISAC control information</summary>
+	 * <param name='index'>AISAC control index</param>
+	 * <param name='info'>AISAC control information</param>
+	 * <returns>Whether the information could be obtained</returns>
+	 * <remarks>
+	 * <para header='Description'>Gets the AISAC control information from the AISAC control index.<br/>
+	 * Returns False if there is no AISAC control with the specified index.</para>
+	 * </remarks>
+	 */
+	public static bool GetAisacControlInfo (ushort index, out AisacControlInfo info)
+	{
+		AisacControlInfoForMarshaling x;
+		bool result = criAtomExAcf_GetAisacControlInfo (index, out x) != 0;
+		x.Convert (out info);
+		return result;
+	}
+
+	/**
+	 * <summary>Getting the AISAC control ID (specifying the AISAC control name)</summary>
+	 * <param name='name'>AISAC control name</param>
+	 * <returns>AISAC control ID</returns>
+	 * <remarks>
+	 * <para header='Description'>Gets the AISAC control ID from the AISAC control name.<br/>
+	 * Returns CriAtomEx.InvalidAisacControlId
+	 * if ACF is not registered or the AISAC control with the specified AISAC control name does not exist.</para>
+	 * </remarks>
 	 */
 	public static uint GetAisacControlIdByName (string name)
 	{
 		return criAtomExAcf_GetAisacControlIdByName (name);
 	}
-	
+
 	/**
-	 * <summary>AISACコントロール名の取得（AISACコントロールID指定）</summary>
-	 * <param name="id">AISACコントロールID</param>
-	 * <returns>AISACコントロールID</returns>
-	 * \par 説明:
-	 * AISACコントロールIDからAISACコントロール名を取得します。<br>
-	 * ACFが登録されていない、または指定したAISACコントロールIDのAISACコントロールが存在しない場合、null が返ります。
+	 * <summary>Gets the AISAC control name (specifying the AISAC control ID)</summary>
+	 * <param name='id'>AISAC control ID</param>
+	 * <returns>AISAC control ID</returns>
+	 * <remarks>
+	 * <para header='Description'>Gets the AISAC control name from the AISAC control ID.<br/>
+	 * Returns null if ACF is not registered or the AISAC control with the specified AISAC control ID does not exist.</para>
+	 * </remarks>
 	 */
 	public static string GetAisacControlNameById (uint id)
 	{
 		IntPtr namePtr = criAtomExAcf_GetAisacControlNameById (id);
 		return CriAtomDebugDetail.Utility.PtrToStringAutoOrNull (namePtr);
+	}
+
+	/**
+	 * <summary>Gets the number of global AISACs</summary>
+	 * <returns>The number of global AISACs</returns>
+	 * <remarks>
+	 * <para header='Description'>Gets the number of global AISAC contained in the registered ACF.<br/>
+	 * Returns -1 if no ACF file is registered.</para>
+	 * </remarks>
+	 */
+	public static int GetNumGlobalAisacs ()
+	{
+		return criAtomExAcf_GetNumGlobalAisacs ();
+	}
+
+	/**
+	 * <summary>Gets the global AISAC information</summary>
+	 * <param name='index'>Global AISAC index</param>
+	 * <param name='info'>Global AISAC information</param>
+	 * <returns>Whether the information could be obtained</returns>
+	 * <remarks>
+	 * <para header='Description'>Gets the global AISAC information from the global AISAC index.<br/>
+	 * Returns False if there is no global AISAC with the specified index.</para>
+	 * </remarks>
+	 */
+	public static bool GetGlobalAisacInfo (ushort index, out GlobalAisacInfo info)
+	{
+		GlobalAisacInfoForMarshaling x;
+		bool result = criAtomExAcf_GetGlobalAisacInfo (index, out x) != 0;
+		x.Convert (out info);
+		return result;
+	}
+
+	/**
+	 * <summary>Gets the global AISAC information</summary>
+	 * <param name='name'>Global AISAC name</param>
+	 * <param name='info'>Global AISAC information</param>
+	 * <returns>Whether the information could be obtained</returns>
+	 * <remarks>
+	 * <para header='Description'>Gets the global AISAC information from the name of the global AISAC.<br/>
+	 * Returns False if there is no global AISAC with the specified name.</para>
+	 * </remarks>
+	 */
+	public static bool GetGlobalAisacInfoByName(string name, out GlobalAisacInfo info)
+	{
+		GlobalAisacInfoForMarshaling x;
+		bool result = criAtomExAcf_GetGlobalAisacInfoByName (name, out x) != 0;
+		x.Convert(out info);
+		return result;
+	}
+
+	/**
+	 * <summary>Gets the number of selectors</summary>
+	 * <returns>The number of selectors</returns>
+	 * <remarks>
+	 * <para header='Description'>Gets the number of selectors contained in the registered ACF.<br/>
+	 * Returns -1 if no ACF file is registered.</para>
+	 * </remarks>
+	 */
+	public static int GetNumSelectors()
+	{
+		return criAtomExAcf_GetNumSelectors();
+	}
+
+	/**
+	 * <summary>Gets the selector information</summary>
+	 * <param name='index'>Selector index</param>
+	 * <param name='info'>Selector information</param>
+	 * <returns>Whether the information could be obtained</returns>
+	 * <remarks>
+	 * <para header='Description'>Gets the selector information from the selector index.<br/>
+	 * Returns False if there is no selector with the specified index.</para>
+	 * </remarks>
+	 */
+	public static bool GetSelectorInfoByIndex(ushort index, out SelectorInfo info)
+	{
+		SelectorInfoForMarshaling x;
+		bool result = criAtomExAcf_GetSelectorInfoByIndex(index, out x) != 0;
+		x.Convert(out info);
+		return result;
+	}
+
+	/**
+	 * <summary>Gets the selector information</summary>
+	 * <param name='name'>Selector name</param>
+	 * <param name='info'>Selector information</param>
+	 * <returns>Whether the information could be obtained</returns>
+	 * <remarks>
+	 * <para header='Description'>Get the selector information from the selector name.<br/>
+	 * Returns False if there is no selector with the specified name.</para>
+	 * </remarks>
+	 */
+	public static bool GetSelectorInfoByName(string name, out SelectorInfo info)
+	{
+		SelectorInfoForMarshaling x;
+		bool result = criAtomExAcf_GetSelectorInfoByName(name, out x) != 0;
+		x.Convert(out info);
+		return result;
+	}
+
+	/**
+	 * <summary>Gets the Selector Label information</summary>
+	 * <param name='selectorInfo'>Selector information</param>
+	 * <param name='index'>Label index</param>
+	 * <param name='labelInfo'>Selector Label information</param>
+	 * <returns>Whether the information could be obtained</returns>
+	 * <remarks>
+	 * <para header='Description'>Gets the Selector Label information from the selector information and Selector Label index.<br/>
+	 * Returns False if there is no Selector Label with the specified index.</para>
+	 * </remarks>
+	 */
+	public static bool GetSelectorLabelInfo(ref SelectorInfo selectorInfo, ushort index, out SelectorLabelInfo labelInfo)
+	{
+		var selectorInfoInput = new SelectorInfoForMarshaling();
+		selectorInfoInput.index = selectorInfo.index;
+		selectorInfoInput.numLabels = selectorInfo.numLabels;
+		SelectorLabelInfoForMarshaling x;
+		bool result = criAtomExAcf_GetSelectorLabelInfo(ref selectorInfoInput, index, out x) != 0;
+		x.Convert(out labelInfo);
+		return result;
 	}
 
 	#region Private
@@ -248,6 +500,7 @@ public static class CriAtomExAcfDebug
 		}
 	};
 
+	[StructLayout (LayoutKind.Sequential, CharSet = CharSet.Ansi)]
 	private struct DspBusInfoForMarshaling
 	{
 		public IntPtr namePtr;
@@ -278,69 +531,194 @@ public static class CriAtomExAcfDebug
 		}
 	};
 
-	[DllImport (CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+	[StructLayout (LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+	private struct AisacControlInfoForMarshaling {
+		public IntPtr namePtr;
+		public uint id;
+
+		public void Convert (out AisacControlInfo x)
+		{
+			x.name = CriAtomDebugDetail.Utility.PtrToStringAutoOrNull (namePtr);
+			x.id = id;
+		}
+	}
+
+	[StructLayout (LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+	private struct GlobalAisacInfoForMarshaling {
+		public IntPtr namePtr;
+		public ushort index;
+		public ushort numGraphs;
+		public uint type;
+		public float randomRange;
+		public ushort controlId;
+		public ushort dummy;
+
+		public void Convert(out GlobalAisacInfo x)
+		{
+			x.name = CriAtomDebugDetail.Utility.PtrToStringAutoOrNull(namePtr);
+			x.index = index;
+			x.numGraphs = numGraphs;
+			x.type = (AisacType)type;
+			x.randomRange = randomRange;
+			x.controlId = controlId;
+		}
+	};
+
+	[StructLayout (LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+	private struct SelectorInfoForMarshaling {
+		public IntPtr namePtr;
+		public ushort index;
+		public ushort numLabels;
+		public ushort globalLabelIndex;
+
+		public void Convert(out SelectorInfo x)
+		{
+			x.name = CriAtomDebugDetail.Utility.PtrToStringAutoOrNull(namePtr);
+			x.index = index;
+			x.numLabels = numLabels;
+			x.globalLabelIndex = globalLabelIndex;
+		}
+	};
+
+	[StructLayout (LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+	private struct SelectorLabelInfoForMarshaling {
+		public IntPtr selectorNamePtr;
+		public IntPtr labelNamePtr;
+
+		public void Convert(out SelectorLabelInfo x)
+		{
+			x.selectorName = CriAtomDebugDetail.Utility.PtrToStringAutoOrNull(selectorNamePtr);
+			x.labelName = CriAtomDebugDetail.Utility.PtrToStringAutoOrNull(labelNamePtr);
+		}
+	};
+
+	#endregion
+
+	#region DLL Import
+	#if !CRIWARE_ENABLE_HEADLESS_MODE
+	[DllImport (CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern int criAtomExAcf_GetNumCategories ();
 
-	[DllImport (CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+	[DllImport (CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern int criAtomExAcf_GetCategoryInfo (ushort index, out CategoryInfoForMarshaling categoryInfo);
 
-	[DllImport (CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+	[DllImport (CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern int criAtomExAcf_GetCategoryInfoByName (string name, out CategoryInfoForMarshaling categoryInfo);
 
-	[DllImport (CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+	[DllImport (CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern int criAtomExAcf_GetCategoryInfoById (uint id, out CategoryInfoForMarshaling categoryInfo);
 
-	[DllImport (CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+	[DllImport (CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern int criAtomExAcf_GetNumBuses();
+
+	[DllImport (CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern int criAtomExAcf_GetDspBusInformation (ushort index, out DspBusInfoForMarshaling dspBusInfo);
 
-	[DllImport (CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+	[DllImport (CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern int criAtomExAcf_GetNumAisacControls ();
+
+	[DllImport (CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern int criAtomExAcf_GetAisacControlInfo (ushort index, out AisacControlInfoForMarshaling info);
+
+	[DllImport (CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern uint criAtomExAcf_GetAisacControlIdByName (string name);
 
-	[DllImport (CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+	[DllImport (CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern IntPtr criAtomExAcf_GetAisacControlNameById (uint id);
 
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern int criAtomExAcf_GetNumGlobalAisacs ();
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern int criAtomExAcf_GetGlobalAisacInfo (ushort index, out GlobalAisacInfoForMarshaling info);
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern int criAtomExAcf_GetGlobalAisacInfoByName (string name, out GlobalAisacInfoForMarshaling info);
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern int criAtomExAcf_GetNumSelectors();
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern int criAtomExAcf_GetSelectorInfoByIndex(ushort index, out SelectorInfoForMarshaling info);
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern int criAtomExAcf_GetSelectorInfoByName(string name, out SelectorInfoForMarshaling info);
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern int criAtomExAcf_GetSelectorLabelInfo(ref SelectorInfoForMarshaling info, ushort labelIndex, out SelectorLabelInfoForMarshaling label_info);
+	#else
+	private static int criAtomExAcf_GetNumCategories () { return 0; }
+	private static int criAtomExAcf_GetCategoryInfo (ushort index, out CategoryInfoForMarshaling categoryInfo)
+		{ categoryInfo = new CategoryInfoForMarshaling(); return -1; }
+	private static int criAtomExAcf_GetCategoryInfoByName (string name, out CategoryInfoForMarshaling categoryInfo)
+		{ categoryInfo = new CategoryInfoForMarshaling(); return -1; }
+	private static int criAtomExAcf_GetCategoryInfoById (uint id, out CategoryInfoForMarshaling categoryInfo)
+		{ categoryInfo = new CategoryInfoForMarshaling(); return -1; }
+	private static int criAtomExAcf_GetNumBuses() { return 0; }
+	private static int criAtomExAcf_GetDspBusInformation (ushort index, out DspBusInfoForMarshaling dspBusInfo)
+		{ dspBusInfo = new DspBusInfoForMarshaling(); return -1; }
+	private static int criAtomExAcf_GetNumAisacControls () { return 0; }
+	private static int criAtomExAcf_GetAisacControlInfo (ushort index, out AisacControlInfoForMarshaling info)
+		{ info = new AisacControlInfoForMarshaling(); return -1; }
+	private static uint criAtomExAcf_GetAisacControlIdByName (string name) { return 0u; }
+	private static IntPtr criAtomExAcf_GetAisacControlNameById (uint id) { return IntPtr.Zero; }
+	private static int criAtomExAcf_GetNumGlobalAisacs () { return 0; }
+	private static int criAtomExAcf_GetGlobalAisacInfo (ushort index, out GlobalAisacInfoForMarshaling info)
+		{ info = new GlobalAisacInfoForMarshaling(); return -1; }
+	private static int criAtomExAcf_GetGlobalAisacInfoByName (string name, out GlobalAisacInfoForMarshaling info)
+		{ info = new GlobalAisacInfoForMarshaling(); return -1; }
+	private static int criAtomExAcf_GetNumSelectors() { return 0; }
+	private static int criAtomExAcf_GetSelectorInfoByIndex(ushort index, out SelectorInfoForMarshaling info)
+		{ info = new SelectorInfoForMarshaling(); return -1; }
+	private static int criAtomExAcf_GetSelectorInfoByName(string name, out SelectorInfoForMarshaling info)
+		{ info = new SelectorInfoForMarshaling(); return -1; }
+	private static int criAtomExAcf_GetSelectorLabelInfo(ref SelectorInfoForMarshaling info, ushort labelIndex, out SelectorLabelInfoForMarshaling label_info)
+		{ label_info = new SelectorLabelInfoForMarshaling(); return -1; }
+	#endif
 	#endregion
 }
 
 
 /**
- * <summary>CriAtomExAcb のアプリケーションデバッグ向けの API をまとめたクラスクラスです。</summary>
+ * <summary>A class that contains the APIs for debugging the CriAtomExAcb application.</summary>
  */
 public static class CriAtomExAcbDebug
 {
 	/**
-	 * <summary>ACB情報</summary>
-	 * \par 説明:
-	 * ACBデータの各種情報です。
+	 * <summary>ACB information</summary>
+	 * <remarks>
+	 * <para header='Description'>Various information of the ACB data.</para>
+	 * </remarks>
 	 */
 	public struct AcbInfo
 	{
-		/** 名前 */
+		/** Name */
 		public string name;
 
-		/** サイズ */
+		/** Size */
 		public uint size;
 
-		/** ACBバージョン */
+		/** ACB version */
 		public uint version;
 
-		/** 文字コード */
+		/** Character code */
 		public CriAtomEx.CharacterEncoding characterEncoding;
 
-		/** キューシートボリューム */
+		/** Cue Sheet volume */
 		public float volume;
 
-		/** キュー数 */
+		/** Number of Cues */
 		public int numCues;
 	};
-	
+
 	/**
-	 * <summary>ACB情報の取得</summary>
-	 * <param name="acb">ACB</param>
-	 * <param name="acbInfo">ACB情報</param>
-	 * <returns>情報が取得できたか</returns>
-	 * \par 説明:
-	 * ACBデータの各種情報を取得します。
+	 * <summary>Obtains the ACB information</summary>
+	 * <param name='acb'>ACB</param>
+	 * <param name='acbInfo'>ACB information</param>
+	 * <returns>Whether the information could be obtained</returns>
+	 * <remarks>
+	 * <para header='Description'>Gets various information of the ACB data.</para>
+	 * </remarks>
 	 */
 	public static bool GetAcbInfo (CriAtomExAcb acb, out AcbInfo acbInfo)
 	{
@@ -373,7 +751,7 @@ public static class CriAtomExAcbDebug
 		}
 	};
 
-	[DllImport (CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+	[DllImport (CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern int criAtomExAcb_GetAcbInfo (IntPtr acbHn, out AcbInfoForMarshaling acbInfo);
 
 	#endregion
@@ -381,20 +759,21 @@ public static class CriAtomExAcbDebug
 
 
 /**
- * <summary>CriAtomExPlayback のアプリケーションデバッグ向けの API をまとめたクラスクラスです。</summary>
+ * <summary>A class that contains the APIs for debugging the CriAtomExPlayback application.</summary>
  */
 public static class CriAtomExPlaybackDebug
 {
 	/**
-	 * <summary>パラメータの取得</summary>
-	 * <param name="playback">CriAtomExPlayback</param>
-	 * <param name="parameterId">パラメータID</param>
-	 * <param name="value">パラメータの値(出力)</param>
-	 * <returns>パラメータの取得に成功したか</returns>
-	 * \par 説明:
-	 * CriAtomExPlayback の各種パラメータの値を取得します。<br>
-	 * パラメータが取得できた場合、本関数は true を返します。<br>
-	 * 指定したボイスが既に消去されている場合等には、本関数は false を返します。<br>
+	 * <summary>Gets parameters</summary>
+	 * <param name='playback'>CriAtomExPlayback</param>
+	 * <param name='parameterId'>Parameter ID</param>
+	 * <param name='value'>Parameter value (output)</param>
+	 * <returns>Whether the parameter could be get successfully</returns>
+	 * <remarks>
+	 * <para header='Description'>Gets the values of various parameters of CriAtomExPlayback.<br/>
+	 * This function returns True if parameters can be acquired.<br/>
+	 * This function returns False if the specified Voice was already deleted.<br/></para>
+	 * </remarks>
 	 */
 	public static bool GetParameter (CriAtomExPlayback playback, CriAtomEx.Parameter parameterId, out float value)
 	{
@@ -402,15 +781,16 @@ public static class CriAtomExPlaybackDebug
 	}
 
 	/**
-	 * <summary>パラメータの取得</summary>
-	 * <param name="playback">CriAtomExPlayback</param>
-	 * <param name="parameterId">パラメータID</param>
-	 * <param name="value">パラメータの値(出力)</param>
-	 * <returns>パラメータの取得に成功したか</returns>
-	 * \par 説明:
-	 * CriAtomExPlayback の各種パラメータの値を取得します。<br>
-	 * パラメータが取得できた場合、本関数は true を返します。<br>
-	 * 指定したボイスが既に消去されている場合等には、本関数は false を返します。<br>
+	 * <summary>Gets parameters</summary>
+	 * <param name='playback'>CriAtomExPlayback</param>
+	 * <param name='parameterId'>Parameter ID</param>
+	 * <param name='value'>Parameter value (output)</param>
+	 * <returns>Whether the parameter could be get successfully</returns>
+	 * <remarks>
+	 * <para header='Description'>Gets the values of various parameters of CriAtomExPlayback.<br/>
+	 * This function returns True if parameters can be acquired.<br/>
+	 * This function returns False if the specified Voice was already deleted.<br/></para>
+	 * </remarks>
 	 */
 	public static bool GetParameter (CriAtomExPlayback playback, CriAtomEx.Parameter parameterId, out uint value)
 	{
@@ -418,15 +798,16 @@ public static class CriAtomExPlaybackDebug
 	}
 
 	/**
-	 * <summary>パラメータの取得</summary>
-	 * <param name="playback">CriAtomExPlayback</param>
-	 * <param name="parameterId">パラメータID</param>
-	 * <param name="value">パラメータの値(出力)</param>
-	 * <returns>パラメータの取得に成功したか</returns>
-	 * \par 説明:
-	 * CriAtomExPlayback の各種パラメータの値を取得します。<br>
-	 * パラメータが取得できた場合、本関数は true を返します。<br>
-	 * 指定したボイスが既に消去されている場合等には、本関数は false を返します。<br>
+	 * <summary>Gets parameters</summary>
+	 * <param name='playback'>CriAtomExPlayback</param>
+	 * <param name='parameterId'>Parameter ID</param>
+	 * <param name='value'>Parameter value (output)</param>
+	 * <returns>Whether the parameter could be get successfully</returns>
+	 * <remarks>
+	 * <para header='Description'>Gets the values of various parameters of CriAtomExPlayback.<br/>
+	 * This function returns True if parameters can be acquired.<br/>
+	 * This function returns False if the specified Voice was already deleted.<br/></para>
+	 * </remarks>
 	 */
 	public static bool GetParameter (CriAtomExPlayback playback, CriAtomEx.Parameter parameterId, out int value)
 	{
@@ -434,18 +815,18 @@ public static class CriAtomExPlaybackDebug
 	}
 
 	/**
-	 * <summary>AISACコントロール値の取得（コントロールID指定）</summary>
-	 * <param name="playback">Playback</param>
-	 * <param name="controlId">コントロールID</param>
-	 * <param name="value">コントロール値（0.0f～1.0f）、未設定時は-1.0f</param>
-	 * <returns>AISACコントロール値が取得できたか</returns>
-	 * \par 説明:
-	 * ::CriAtomExPlayer::Start で再生された音声に設定されているAISACコントロール値を、コントロールID指定で取得します。<br>
-	 * AISACコントロール値が取得できた場合（未設定時も「-1.0fが取得できた」と扱われます）、本関数は true を返します。<br>
-	 * 指定したボイスが既に消去されている場合等には、本関数は false を返します。<br>
-	 * \attention
-	 * 本関数は、音声再生中のみAISACコントロール値を取得可能です。<br>
-	 * 再生終了後や、発音数制御によりボイスが消去された場合には、AISACコントロール値の取得に失敗します。
+	 * <summary>Gets the AISAC control value (specifying the control ID)</summary>
+	 * <param name='playback'>Playback</param>
+	 * <param name='controlId'>Control ID</param>
+	 * <param name='value'>Control value (0.0f to 1.0f), -1.0f when not set</param>
+	 * <returns>Whether the AISAC control value was obtained</returns>
+	 * <remarks>
+	 * <para header='Description'>Gets the AISAC control value set for the sound played back using ::CriAtomExPlayer::Start by specifying the control ID.<br/>
+	 * This function returns True if the AISAC control value can be obtained (even if it is not set, it is treated as "-1.0f could be obtained").<br/>
+	 * This function returns False if the specified Voice was already deleted.<br/></para>
+	 * <para header='Note'>This function can get the AISAC control value only during sound playback.<br/>
+	 * Getting the AISAC control value fails after the playback ends or when the Voice is erased by the Voice control.</para>
+	 * </remarks>
 	 */
 	public static bool GetAisacControl (CriAtomExPlayback playback, uint controlId, out float value)
 	{
@@ -453,41 +834,47 @@ public static class CriAtomExPlaybackDebug
 	}
 
 	/**
-	 * <summary>AISACコントロール値の取得（コントロール名指定）</summary>
-	 * <param name="playback">Playback</param>
-	 * <param name="controlName">コントロール名</param>
-	 * <param name="value">コントロール値（0.0f～1.0f）、未設定時は-1.0f</param>
-	 * <returns>AISACコントロール値が取得できたか</returns>
-	 * \par 説明:
-	 * ::CriAtomExPlayer::Start で再生された音声に設定されているAISACコントロール値を、コントロールID指定で取得します。<br>
-	 * AISACコントロール値が取得できた場合（未設定時も「-1.0fが取得できた」と扱われます）、本関数は true を返します。<br>
-	 * 指定したボイスが既に消去されている場合等には、本関数は false を返します。<br>
-	 * \attention
-	 * 本関数は、音声再生中のみAISACコントロール値を取得可能です。<br>
-	 * 再生終了後や、発音数制御によりボイスが消去された場合には、AISACコントロール値の取得に失敗します。
+	 * <summary>Gets the AISAC control value (specifying the control name)</summary>
+	 * <param name='playback'>Playback</param>
+	 * <param name='controlName'>Control name</param>
+	 * <param name='value'>Control value (0.0f to 1.0f), -1.0f when not set</param>
+	 * <returns>Whether the AISAC control value was obtained</returns>
+	 * <remarks>
+	 * <para header='Description'>Gets the AISAC control value set for the sound played back using ::CriAtomExPlayer::Start by specifying the control ID.<br/>
+	 * This function returns True if the AISAC control value can be obtained (even if it is not set, it is treated as "-1.0f could be obtained").<br/>
+	 * This function returns False if the specified Voice was already deleted.<br/></para>
+	 * <para header='Note'>This function can get the AISAC control value only during sound playback.<br/>
+	 * Getting the AISAC control value fails after the playback ends or when the Voice is erased by the Voice control.</para>
+	 * </remarks>
 	 */
 	public static bool GetAisacControl (CriAtomExPlayback playback, string controlName, out float value)
 	{
 		return criAtomExPlayback_GetAisacControlByName (playback.id, controlName, out value) == 1;
 	}
 
-	#region Private
-
-	[DllImport (CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+	#region DLL Import
+	#if !CRIWARE_ENABLE_HEADLESS_MODE
+	[DllImport (CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern int criAtomExPlayback_GetParameterFloat32 (uint id, int parameterId, out float value);
 
-	[DllImport (CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+	[DllImport (CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern int criAtomExPlayback_GetParameterUint32 (uint id, int parameterId, out uint value);
 
-	[DllImport (CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+	[DllImport (CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern int criAtomExPlayback_GetParameterSint32 (uint id, int parameterId, out int value);
 
-	[DllImport (CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+	[DllImport (CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern int criAtomExPlayback_GetAisacControlById (uint id, uint controlId, out float value);
 
-	[DllImport (CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+	[DllImport (CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern int criAtomExPlayback_GetAisacControlByName (uint id, string controlName, out float value);
-
+	#else
+	private static int criAtomExPlayback_GetParameterFloat32 (uint id, int parameterId, out float value) { value = 0.0f; return 0; }
+	private static int criAtomExPlayback_GetParameterUint32 (uint id, int parameterId, out uint value) { value = 0u; return 0; }
+	private static int criAtomExPlayback_GetParameterSint32 (uint id, int parameterId, out int value) { value = 0;return 0; }
+	private static int criAtomExPlayback_GetAisacControlById (uint id, uint controlId, out float value) { value = 0.0f; return 0; }
+	private static int criAtomExPlayback_GetAisacControlByName (uint id, string controlName, out float value) { value = 0.0f; return 0; }
+	#endif
 	#endregion
 }
 
@@ -508,7 +895,6 @@ namespace CriAtomDebugDetail
 		}
 	}
 }
-
 
 /**
  * @}

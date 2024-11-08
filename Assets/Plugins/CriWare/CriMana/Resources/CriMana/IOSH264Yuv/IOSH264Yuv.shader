@@ -1,6 +1,4 @@
-﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
-
-Shader "CriMana/IOSH264Yuv"
+﻿Shader "CriMana/IOSH264Yuv"
 {
 	Properties
 	{
@@ -8,6 +6,11 @@ Shader "CriMana/IOSH264Yuv"
 		[HideInInspector] _MovieTexture_ST ("MovieTexture_ST", Vector) = (1.0, 1.0, 0, 0)
 		[HideInInspector] _TextureY ("TextureY", 2D) = "white" {}
 		[HideInInspector] _TextureUV ("TextureUV", 2D) = "white" {}
+		[HideInInspector] _TextureA("TextureA", 2D) = "white" {}
+		[HideInInspector] _SrcBlendMode("SrcBlendMode", Int) = 0
+		[HideInInspector] _DstBlendMode("DstBlendMode", Int) = 0
+		[HideInInspector] _CullMode("CullMode", Int) = 2
+		[HideInInspector] _ZWriteMode("ZWriteMode", Int) = 1
 	}
 
 	SubShader
@@ -20,7 +23,11 @@ Shader "CriMana/IOSH264Yuv"
 
 		Pass
 		{
-			Blend Off
+			Blend [_SrcBlendMode] [_DstBlendMode]
+			Cull [_CullMode]
+			ZWrite [_ZWriteMode]
+			ZTest [unity_GUIZTestMode]
+
 			CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
@@ -28,16 +35,26 @@ Shader "CriMana/IOSH264Yuv"
 
 			#include "UnityCG.cginc"
 
-			struct appdata
+			#pragma multi_compile _ CRI_ALPHA_MOVIE
+			#pragma multi_compile _ CRI_APPLY_TARGET_ALPHA
+			#pragma multi_compile _ CRI_LINEAR_COLORSPACE
+
+            struct appdata
 			{
 				float4 vertex   : POSITION;
 				half2  texcoord : TEXCOORD0;
+#ifdef CRI_APPLY_TARGET_ALPHA
+				float4 color    : COLOR;
+#endif
 			};
 
 			struct v2f
 			{
 				float4   pos : SV_POSITION;
 				half2     uv : TEXCOORD0;
+#ifdef CRI_APPLY_TARGET_ALPHA
+				float4 color : COLOR;
+#endif
 			};
 
 			float4 _MainTex_ST;
@@ -48,6 +65,9 @@ Shader "CriMana/IOSH264Yuv"
 				v2f o;
 				o.pos = UnityObjectToClipPos(v.vertex);
 				o.uv  = (TRANSFORM_TEX(v.texcoord, _MainTex) * _MovieTexture_ST.xy) + _MovieTexture_ST.zw;
+#ifdef CRI_APPLY_TARGET_ALPHA
+				o.color = v.color;
+#endif
 				return o;
 			}
 
@@ -59,7 +79,9 @@ Shader "CriMana/IOSH264Yuv"
 
 			sampler2D _TextureY;
 			sampler2D _TextureUV;
-			int _IsLinearColorSpace;
+#ifdef CRI_ALPHA_MOVIE
+			sampler2D _TextureA;
+#endif
 
 			fixed4 frag(v2f i) : COLOR
 			{
@@ -69,8 +91,17 @@ Shader "CriMana/IOSH264Yuv"
 					};
 				fixed4 color;
 				color.rgb = mul(yuv_to_rgb, yuv);
-				color.rgb = (_IsLinearColorSpace == 1) ? pow(color.rgb, 2.2) : color.rgb;
-				color.a   = 1.0;
+#ifdef CRI_LINEAR_COLORSPACE
+				color.rgb = pow(max(color.rgb, 0), 2.2);
+#endif
+#ifdef CRI_ALPHA_MOVIE
+				color.a = tex2D(_TextureA, i.uv).r; 
+#else
+				color.a = 1.0;
+#endif
+#ifdef CRI_APPLY_TARGET_ALPHA
+				color.a = color.a * i.color.a;
+#endif
 				return color;
 			}
 			ENDCG

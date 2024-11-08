@@ -16,14 +16,16 @@ using System.Runtime.InteropServices;
  * @{
  */
 
+
 /**
- * <summary>AtomExサウンドオブジェクト</summary>
- * \par 説明:
- * サウンドオブジェクトクラスです。<br/>
- * アプリケーション内の「物体」や「空間」、「状況」等に関連付けて、登録された
- * プレーヤに対して一括での音声コントロールを行うことができます。<br/>
+ * <summary>AtomEx sound object</summary>
+ * <remarks>
+ * <para header='Description'>A sound object class.<br/>
+ * You can control sounds in a batch for the registered players by associating with
+ * "object", "space", "situation" etc. in the application.<br/></para>
+ * </remarks>
  */
-public class CriAtomExSoundObject : IDisposable
+public class CriAtomExSoundObject : CriDisposable
 {
 	public IntPtr nativeHandle {get {return this.handle;} }
 
@@ -32,67 +34,76 @@ public class CriAtomExSoundObject : IDisposable
 		public bool enableVoiceLimitScope;
 		public bool enableCategoryCueLimitScope;
 	}
-	
+
 	/**
-	 * <summary>サウンドオブジェクトの作成</summary>
-	 * <param name="enableVoiceLimitScope">ボイスリミットスコープを有効化するか</param>
-	 * <param name="enableCategoryCueLimitScope">カテゴリキューリミットスコープを有効化するか</param>
-	 * <returns>サウンドオブジェクト</returns>
-	 * \par 説明:
-	 * サウンドオブジェクトを作成します。<br/>
-	 * enableVoiceLimitScope に true を指定すると、このサウンドオブジェクトに
-	 * 関連付けられたExプレーヤから再生した音声の発音数について、このサウンド
-	 * オブジェクト内でのみカウントし、ボイスリミットグループによる発音数制御を
-	 * 行います。<br/>
-	 * enableCategoryCueLimit に true を指定すると、このサウンドオブジェクトに
-	 * 関連付けられたExプレーヤから再生したキューのカテゴリ再生数について、この
-	 * サウンドオブジェクト内でのみカウントし、再生数制御を行います。<br/>
-	 * \sa CriAtomExSoundObject::Dispose
+	 * <summary>Creates a sound object</summary>
+	 * <param name='enableVoiceLimitScope'>Whether to activate the Voice limit scope</param>
+	 * <param name='enableCategoryCueLimitScope'>Whether to enable the Category Cue limit scope</param>
+	 * <returns>Sound object</returns>
+	 * <remarks>
+	 * <para header='Description'>Creates a sound object.<br/>
+	 * If enableVoiceLimitScope is set to True, the Voice count is controlled by
+	 * the Voice limit group by counting the number of Voices for the sound played back
+	 * from the Ex player associated with this sound object only inside this
+	 * sound object.<br/>
+	 * If enableCategoryCueLimit is set to True, the playback count is controlled
+	 * by counting the number of Category playbacks for the Cue played back from the
+	 * Ex player associated with this sound object only inside this sound object.<br/></para>
+	 * </remarks>
+	 * <seealso cref='CriAtomExSoundObject::Dispose'/>
 	 */
 	public CriAtomExSoundObject(bool enableVoiceLimitScope, bool enableCategoryCueLimitScope)
 	{
-		CriAtomPlugin.InitializeLibrary();
+		if (!CriAtomPlugin.IsLibraryInitialized()) {
+			throw new Exception("CriAtomPlugin is not initialized.");
+		}
 
 		Config config;
 		config.enableVoiceLimitScope = enableVoiceLimitScope;
 		config. enableCategoryCueLimitScope = enableCategoryCueLimitScope;
 
 		this.handle = criAtomExSoundObject_Create(ref config, IntPtr.Zero, 0);
+
+		CriDisposableObjectManager.Register(this, CriDisposableObjectManager.ModuleType.Atom);
 	}
 
 	/**
-	 * <summary>サウンドオブジェクトの破棄</summary>
-	 * \par 説明:
-	 * サウンドオブジェクトを破棄します。<br/>
-	 * 本関数を実行した時点で、サウンドオブジェクト作成時にDLL内で確保された
-	 * リソースが全て解放されます。<br/>
-	 * \sa CriAtomExSoundObject::CriAtomExSoundObject
+	 * <summary>Discards a sound object</summary>
+	 * <remarks>
+	 * <para header='Description'>Discards a sound object.<br/>
+	 * When this function is called, all the resources allocated in the DLL
+	 * when creating the sound object are released.<br/></para>
+	 * </remarks>
+	 * <seealso cref='CriAtomExSoundObject::CriAtomExSoundObject'/>
 	 */
-	public void Dispose()
+	public override void Dispose()
 	{
-		criAtomExSoundObject_Destroy(this.handle);
-		this.handle = IntPtr.Zero;
-		
-		CriAtomPlugin.FinalizeLibrary();
+		CriDisposableObjectManager.Unregister(this);
+		if (this.handle != IntPtr.Zero) {
+			criAtomExSoundObject_Destroy(this.handle);
+			this.handle = IntPtr.Zero;
+		}
 		GC.SuppressFinalize(this);
 	}
 
 	/**
-	 * <summary>AtomExプレーヤの追加</summary>
-	 * <param name="player">AtomExプレーヤ</param>
-	 * \par 説明:
-	 * サウンドオブジェクトにAtomExプレーヤを追加します。<br/>
-	 * 追加したAtomExプレーヤはサウンドオブジェクトと関連付けられ、 サウンドオブジェクト
-	 * による以下の影響を受けるようになります。<br/>
-	 * - 発音数制限やイベント機能が影響する範囲（スコープ）の限定<br/>
-	 * - 再生コントロール（停止、ポーズ等）<br/>
-	 * - パラメータコントロール<br/>
-	 * 追加したAtomExプレーヤをサウンドオブジェクトから削除する場合は、
-	 * CriAtomExSoundObject::DeletePlayer 関数を呼び出してください。<br/>
-	 * \attention
-	 * 本関数の呼び出しは、追加しようとしているAtomExプレーヤで音声を再生していない状態で行ってください。<br/>
-	 * 再生中のAtomExプレーヤが指定された場合、 追加時に再生停止が行われます。<br/>
-	 * \sa CriAtomExSoundObject::DeletePlayer, CriAtomExSoundObject::DeleteAllPlayers, CriAtomExPlayer::nativeHandle
+	 * <summary>Adds an AtomExPlayer</summary>
+	 * <param name='player'>AtomExPlayer</param>
+	 * <remarks>
+	 * <para header='Description'>Adds an AtomExPlayer to the sound object.<br/>
+	 * The added AtomExPlayer is associated with the sound object and will be
+	 * affected by the sound object as follows:<br/>
+	 * - Limitation on the number of Voices and the range affected by the event function (scope)<br/>
+	 * - Playback control (Stop, Pause etc.)<br/>
+	 * - Parameter control<br/>
+	 * If you want to delete the added AtomExPlayer from the sound object,
+	 * call the CriAtomExSoundObject::DeletePlayer function.<br/></para>
+	 * <para header='Note'>Call this function when the AtomExPlayer you are trying to add is not playing sound.<br/>
+	 * If an AtomExPlayer that is playing sound is specified, playback is stopped when adding.<br/></para>
+	 * </remarks>
+	 * <seealso cref='CriAtomExSoundObject::DeletePlayer'/>
+	 * <seealso cref='CriAtomExSoundObject::DeleteAllPlayers'/>
+	 * <seealso cref='CriAtomExPlayer::nativeHandle'/>
 	 */
 	public void AddPlayer(CriAtomExPlayer player)
 	{
@@ -100,16 +111,18 @@ public class CriAtomExSoundObject : IDisposable
 	}
 
 	/**
-	 * <summary>AtomExプレーヤの削除</summary>
-	 * <param name="player">AtomExプレーヤのネイティブハンドル</param>
-	 * \par 説明:
-	 * サウンドオブジェクトからAtomExプレーヤを削除します。<br/>
-	 * 削除したAtomExプレーヤはサウンドオブジェクトとの関連付けが切られ、 サウンドオブジェクト
-	 * による影響を受けなくなります。<br/>
-	 * \attention
-	 * 本関数の呼び出しは、削除しようとしているAtomExプレーヤで音声を再生していない状態で行ってください。<br/>
-	 * 再生中のAtomExプレーヤが指定された場合、 削除時に再生停止が行われます。<br/>
-	 * \sa CriAtomExSoundObject::AddPlayer, CriAtomExSoundObject::DeleteAllPlayers, CriAtomExPlayer::nativeHandle
+	 * <summary>Removes an AtomExPlayer</summary>
+	 * <param name='player'>Native handle of the AtomExPlayer</param>
+	 * <remarks>
+	 * <para header='Description'>Removes the AtomExPlayer from the sound object.<br/>
+	 * The removed AtomExPlayer is no longer associated with the sound object
+	 * and is no longer affected by the sound object.<br/></para>
+	 * <para header='Note'>Call this function when the AtomExPlayer you are trying to delete is not playing sound.<br/>
+	 * If an AtomExPlayer that is playing sound is specified, playback is stopped when deleting.<br/></para>
+	 * </remarks>
+	 * <seealso cref='CriAtomExSoundObject::AddPlayer'/>
+	 * <seealso cref='CriAtomExSoundObject::DeleteAllPlayers'/>
+	 * <seealso cref='CriAtomExPlayer::nativeHandle'/>
 	 */
 	public void DeletePlayer(CriAtomExPlayer player)
 	{
@@ -117,15 +130,16 @@ public class CriAtomExSoundObject : IDisposable
 	}
 
 	/**
-	 * <summary>すべてのAtomExプレーヤの削除</summary>
-	 * \par 説明:
-	 * サウンドオブジェクトに関連付けられているすべてのAtomExプレーヤを削除します。<br/>
-	 * 削除したAtomExプレーヤはサウンドオブジェクトとの関連付けが切られ、 サウンドオブジェクト
-	 * による影響を受けなくなります。<br/>
-	 * \attention
-	 * 本関数の呼び出しは、削除しようとしているAtomExプレーヤで音声を再生していない状態で行ってください。<br/>
-	 * 再生中のAtomExプレーヤが指定された場合、 削除時に再生停止が行われます。<br/>
-	 * \sa CriAtomExSoundObject::AddPlayer, CriAtomExSoundObject::DeletePlayer
+	 * <summary>Removes all AtomExPlayers</summary>
+	 * <remarks>
+	 * <para header='Description'>Removes all the AtomExPlayers associated with the sound object.<br/>
+	 * The removed AtomExPlayer is no longer associated with the sound object and is no longer
+	 * affected by the sound object.<br/></para>
+	 * <para header='Note'>Call this function when the AtomExPlayer you are trying to delete is not playing sound.<br/>
+	 * If an AtomExPlayer that is playing sound is specified, playback is stopped when deleting.<br/></para>
+	 * </remarks>
+	 * <seealso cref='CriAtomExSoundObject::AddPlayer'/>
+	 * <seealso cref='CriAtomExSoundObject::DeletePlayer'/>
 	 */
 	public void DeleteAllPlayers()
 	{
@@ -133,33 +147,39 @@ public class CriAtomExSoundObject : IDisposable
 	}
 
 	#region Internal Members
-	
+
 	~CriAtomExSoundObject()
 	{
 		this.Dispose();
 	}
 
 	private IntPtr handle = IntPtr.Zero;
-	
+
 	#endregion
 
 	#region DLL Import
-	
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+	#if !CRIWARE_ENABLE_HEADLESS_MODE
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern IntPtr criAtomExSoundObject_Create(ref Config config, IntPtr work, int work_size);
-	
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern void criAtomExSoundObject_Destroy(IntPtr soundObject);
 
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern void criAtomExSoundObject_AddPlayer(IntPtr soundObject, IntPtr player);
 
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern void criAtomExSoundObject_DeletePlayer(IntPtr soundObject, IntPtr player);
 
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern void criAtomExSoundObject_DeleteAllPlayers(IntPtr soundObject);
-
+	#else
+	private static IntPtr criAtomExSoundObject_Create(ref Config config, IntPtr work, int work_size) { return IntPtr.Zero; }
+	private static void criAtomExSoundObject_Destroy(IntPtr soundObject) { }
+	private static void criAtomExSoundObject_AddPlayer(IntPtr soundObject, IntPtr player) { }
+	private static void criAtomExSoundObject_DeletePlayer(IntPtr soundObject, IntPtr player) { }
+	private static void criAtomExSoundObject_DeleteAllPlayers(IntPtr soundObject) { }
+	#endif
 	#endregion
 }
 

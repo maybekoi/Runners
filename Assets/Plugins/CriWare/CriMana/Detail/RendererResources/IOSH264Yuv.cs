@@ -4,10 +4,15 @@
  *
  ****************************************************************************/
 
-#if !UNITY_EDITOR && UNITY_IOS
+#if UNITY_5_6_OR_NEWER && !UNITY_5_6_0 && !UNITY_5_6_1 && !UNITY_TVOS
+#define CRIMANAUNITY_ENABLE_PAUSE_TEXTURE
+#endif
+
+#if !UNITY_EDITOR && (UNITY_IOS || UNITY_TVOS)
 
 using UnityEngine;
 using System.Runtime.InteropServices;
+
 
 namespace CriMana.Detail
 {
@@ -19,8 +24,7 @@ namespace CriMana.Detail
 			public override RendererResource CreateRendererResource(int playerId, MovieInfo movieInfo, bool additive, Shader userShader)
 			{
 				bool isCodecSuitable = movieInfo.codecType == CodecType.H264;
-				bool isAlphaSuitable = !movieInfo.hasAlpha;	/* アルファムービは非対応 */
-				bool isSuitable      = isCodecSuitable && isAlphaSuitable;
+				bool isSuitable      = isCodecSuitable;
 				return isSuitable
 					? new RendererResourceIOSH264Yuv(playerId, movieInfo, additive, userShader)
 					: null;
@@ -39,54 +43,50 @@ namespace CriMana.Detail
 
 	public class RendererResourceIOSH264Yuv : RendererResource
 	{
-		private int		width;
-		private int		height;
-		private int 	playerId;
-		private bool	hasAlpha;
-		private bool	additive;
-		private bool	useUserShader;
-		private bool	isOpenGLES;
+		private int     width;
+		private int     height;
+		private int     playerId;
+		private bool    useUserShader;
+		private bool    useOGLTempTextures;
+		private bool    isPaused;
 
-		private Shader			shader;
+		private Vector4         movieTextureST = Vector4.zero;
 
-		private Vector4			movieTextureST = Vector4.zero;
-
-		private Texture2D		textureY;
-		private Texture2D		textureUV;
-		private System.IntPtr	nativeTextureY;
-		private System.IntPtr	nativeTextureUV;
+		private Texture2D[]     textures;
+		private RenderTexture[] pauseTextures;
+		private Texture[]       currentTextures;
+		private System.IntPtr[] nativePtrs;
+		private bool            isStoppingForSeek = false;
+		private bool            isStartTriggered = true;
 
 		public RendererResourceIOSH264Yuv(int playerId, MovieInfo movieInfo, bool additive, Shader userShader)
 		{
-			if (movieInfo.hasAlpha) {
-				UnityEngine.Debug.LogError("[CRIWARE] H.264 with Alpha is unsupported");
-			}
-			this.width		= (int)movieInfo.width;
-			this.height		= (int)movieInfo.height;
-			this.playerId	= playerId;
-			hasAlpha		= movieInfo.hasAlpha;
-			this.additive	= additive;
-			useUserShader	= userShader != null;
+			this.width      = (int)movieInfo.width;
+			this.height     = (int)movieInfo.height;
+			this.playerId   = playerId;
+			hasAlpha        = movieInfo.hasAlpha;
+			this.additive   = additive;
+			useUserShader   = userShader != null;
 
 			if (userShader != null) {
 				shader = userShader;
 			} else {
-				string shaderName = 
-					hasAlpha	? additive	? "Diffuse"
-											: "Diffuse"
-								: additive	? "CriMana/IOSH264YuvAdditive"
-											: "CriMana/IOSH264Yuv";
+				string shaderName = "CriMana/IOSH264Yuv";
 				shader = Shader.Find(shaderName);
 			}
+
+			int numTextures = hasAlpha ? 3 : 2;
+			textures = new Texture2D[numTextures];
+			nativePtrs = new System.IntPtr[numTextures];
 
 			UpdateMovieTextureST(movieInfo.dispWidth, movieInfo.dispHeight);
 
 #if (UNITY_4_0 || UNITY_4_0_1 || UNITY_4_1 || UNITY_4_2 || UNITY_4_3 || UNITY_4_5 || UNITY_4_6 || UNITY_4_7 || UNITY_5_0)
-			isOpenGLES = SystemInfo.graphicsDeviceVersion.StartsWith("OpenGL");
+			useOGLTempTextures = SystemInfo.graphicsDeviceVersion.StartsWith("OpenGL");
 #else
-			isOpenGLES = (SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.OpenGLES2 ||
-							SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.OpenGLES3);
+			useOGLTempTextures = (SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.OpenGLES2);
 #endif
+			currentTextures = textures;
 		}
 
 
@@ -97,14 +97,11 @@ namespace CriMana.Detail
 
 		protected override void OnDisposeUnmanaged()
 		{
-			if (textureY != null) {
-				Texture2D.Destroy(textureY);
-				textureY = null;
-			}
-			if (textureUV != null) {
-				Texture2D.Destroy(textureUV);
-				textureUV = null;
-			}
+			DisposeTextures(textures);
+			DisposeTextures(pauseTextures);
+			textures = null;
+			pauseTextures = null;
+			currentMaterial = null;
 		}
 
 
@@ -113,8 +110,7 @@ namespace CriMana.Detail
 
 
 		public override bool ContinuePreparing()
-
-		{ return true; }		
+		{ return true; }
 
 		public override bool IsSuitable(int playerId, MovieInfo movieInfo, bool additive, Shader userShader)
 		{
@@ -125,18 +121,94 @@ namespace CriMana.Detail
 			return isCodecSuitable && isAlphaSuitable && isAdditiveSuitable && isShaderSuitable;
 		}
 
-
 		public override void AttachToPlayer(int playerId)
 		{
-			// reset texture if exist
-			OnDisposeUnmanaged();
+            DisposeTextures(textures);
+            if (!isStoppingForSeek) {
+                DisposeTextures(pauseTextures);
+                pauseTextures = null;
+                currentTextures = textures;
+            }
+			isPaused = false;
 		}
 
-
-		public override bool UpdateFrame(int playerId, FrameInfo frameInfo)
+		// app did goes background / will goes foreground or player is paused
+		public override void OnPlayerPause(bool pauseStatus)
 		{
-			bool isFrameUpdated = criManaUnityPlayer_UpdateFrame(playerId, 0, null, frameInfo);
-			if (isFrameUpdated) {
+#if CRIMANAUNITY_ENABLE_PAUSE_TEXTURE
+			if (pauseStatus == true) {
+				if (isPaused == false && !isStoppingForSeek) {
+					isPaused = true;
+					applyCurrentTexturesToPausedTextures();
+				}
+			} else {
+				isPaused = false;
+			}
+#endif
+		}
+
+		public override bool OnPlayerStopForSeek() {
+#if CRIMANAUNITY_ENABLE_PAUSE_TEXTURE
+			isStoppingForSeek = true;
+			isStartTriggered = false;
+			if (pauseTextures != null || textures[0] == null) {
+				return true;
+			}
+			applyCurrentTexturesToPausedTextures();
+            DisposeTextures(textures);
+			return true;
+#else
+			return false;
+#endif
+		}
+
+		public override void OnPlayerStart() {
+			isStartTriggered = true;
+		}
+
+		private void restorePausedTextures()
+		{
+#if CRIMANAUNITY_ENABLE_PAUSE_TEXTURE
+			forceUpdateMaterialTextures(textures);
+			DisposeTextures(pauseTextures);
+			pauseTextures = null;
+#endif
+		}
+
+		private void applyCurrentTexturesToPausedTextures() {
+#if CRIMANAUNITY_ENABLE_PAUSE_TEXTURE
+			if (textures[0] == null) {
+				return;
+			}
+			pauseTextures = new RenderTexture[hasAlpha ? 3 : 2];
+			for (int i = 0; i < pauseTextures.Length; i++) {
+				Texture2D baseTexture = textures[i];
+				RenderTexture texture = new RenderTexture(baseTexture.width, baseTexture.height, 0,
+															i == 1 ? RenderTextureFormat.RG16 : RenderTextureFormat.R8);
+				texture.Create();
+				Graphics.Blit(baseTexture, texture);
+				pauseTextures[i] = texture;
+			}
+			forceUpdateMaterialTextures(pauseTextures);
+#endif
+		}
+
+		private void forceUpdateMaterialTextures(Texture[] newTextures)
+		{
+			currentTextures = newTextures;
+			if (currentMaterial != null) {
+				currentMaterial.SetTexture("_TextureY", currentTextures[0]);
+				currentMaterial.SetTexture("_TextureUV", currentTextures[1]);
+				if (hasAlpha) {
+					currentMaterial.SetTexture("_TextureA", currentTextures[2]);
+				}
+			}
+		}
+
+		public override bool UpdateFrame(int playerId, FrameInfo frameInfo, ref bool frameDrop)
+		{
+			bool isFrameUpdated = CRIWAREF463354B(playerId, 0, null, frameInfo, ref frameDrop);
+			if (isFrameUpdated && !frameDrop) {
 				UpdateMovieTextureST(frameInfo.dispWidth, frameInfo.dispHeight);
 			}
 			return isFrameUpdated;
@@ -144,12 +216,25 @@ namespace CriMana.Detail
 
 		public override bool UpdateMaterial(Material material)
 		{
-			if (textureY != null) {
-				material.shader = shader;
-				material.SetTexture("_TextureY", textureY);
-				material.SetTexture("_TextureUV", textureUV);
-				material.SetInt("_IsLinearColorSpace", (QualitySettings.activeColorSpace == ColorSpace.Linear) ? 1 : 0);
+			if (currentTextures[0] != null) {
+				if (currentMaterial != material) {
+					currentMaterial = material;
+					SetupStaticMaterialProperties();
+				}
+
+				if (!(isPaused || isStoppingForSeek) && pauseTextures != null &&
+					!CRIWARE750622E5(playerId)) {
+					restorePausedTextures();
+					isStoppingForSeek = false;
+				} else {
+					material.SetTexture("_TextureY", currentTextures[0]);
+					material.SetTexture("_TextureUV", currentTextures[1]);
+					if (hasAlpha) {
+						material.SetTexture("_TextureA", currentTextures[2]);
+					}
+                }
 				material.SetVector("_MovieTexture_ST", movieTextureST);
+
 				return true;
 			}
 			return false;
@@ -169,37 +254,57 @@ namespace CriMana.Detail
 
 		public override void UpdateTextures()
 		{
-			System.IntPtr[] nativePtrs = new System.IntPtr[2];
-			bool isTextureUpdated = criManaUnityPlayer_UpdateTextures(playerId, 2, nativePtrs); // out textures
-			if (isTextureUpdated && nativePtrs[0] != System.IntPtr.Zero) {
-				if (isOpenGLES) {
-					if (textureY == null) {
-						textureY = Texture2D.CreateExternalTexture(width, height, TextureFormat.Alpha8, false, false, System.IntPtr.Zero);
-						textureUV = Texture2D.CreateExternalTexture(width / 2, height / 2, TextureFormat.Alpha8, false, false, System.IntPtr.Zero);
+			int numTextures = hasAlpha ? 3 : 2;
+			for (int i = 0; i < numTextures; i++) {
+				nativePtrs[i] = System.IntPtr.Zero;
+			}
+			bool isTextureUpdated = CRIWARE9B186887(playerId, numTextures, nativePtrs); // out textures
+			if (isTextureUpdated && nativePtrs[0] != System.IntPtr.Zero && isStartTriggered) {
+				if (useOGLTempTextures) {
+					for (int i = 0; i < numTextures; i++) {
+						if (textures[i] == null) {
+							textures[i] = Texture2D.CreateExternalTexture((i == 1) ? width / 2 : width,
+																			(i == 1) ? height / 2 : height,
+																			TextureFormat.Alpha8, false, false, nativePtrs[i]);
+						}
+						Texture2D tmptexture = Texture2D.CreateExternalTexture(textures[i].width, textures[i].height,
+																				 textures[i].format, false, false, nativePtrs[i]);
+						tmptexture.wrapMode = TextureWrapMode.Clamp;
+						textures[i].UpdateExternalTexture(tmptexture.GetNativeTexturePtr());
+						Texture2D.Destroy(tmptexture);
 					}
-					Texture2D tmptextureY = Texture2D.CreateExternalTexture(textureY.width, textureY.height, TextureFormat.Alpha8, false, false, nativePtrs[0]);
-					tmptextureY.wrapMode = TextureWrapMode.Clamp;
-					textureY.UpdateExternalTexture(tmptextureY.GetNativeTexturePtr());
-					Texture2D.Destroy(tmptextureY);
-					Texture2D tmptextureUV = Texture2D.CreateExternalTexture(textureUV.width, textureUV.height, TextureFormat.Alpha8, false, false, nativePtrs[1]);
-					tmptextureUV.wrapMode = TextureWrapMode.Clamp;
-					textureUV.UpdateExternalTexture(tmptextureUV.GetNativeTexturePtr());
-					Texture2D.Destroy(tmptextureUV);
 				} else {
-					if (textureY == null) {
-						textureY = Texture2D.CreateExternalTexture(width, height, TextureFormat.Alpha8, false, false, nativePtrs[0]);
-						textureUV = Texture2D.CreateExternalTexture(width / 2, height / 2, TextureFormat.Alpha8, false, false, nativePtrs[1]);
-						textureY.wrapMode = TextureWrapMode.Clamp;
-						textureUV.wrapMode = TextureWrapMode.Clamp;
+					if (textures[0] == null) {
+						for (int i = 0; i < numTextures; i++) {
+							textures[i] = Texture2D.CreateExternalTexture((i == 1) ? width / 2 : width,
+																		  (i == 1) ? height / 2 : height,
+																		  TextureFormat.Alpha8, false, false, nativePtrs[i]);
+							textures[i].wrapMode = TextureWrapMode.Clamp;
+						}
 					} else {
-						textureY.UpdateExternalTexture(nativePtrs[0]);
-						textureUV.UpdateExternalTexture(nativePtrs[1]);
+						for (int i = 0; i < numTextures; i++) {
+							textures[i].UpdateExternalTexture(nativePtrs[i]);
+						}
 					}
 				}
+#if CRIMANAUNITY_ENABLE_PAUSE_TEXTURE
+				if (CRIWARE750622E5(playerId)) {
+					OnPlayerPause(true);
+				}
+#endif
+                isStoppingForSeek = false;
 			}
 		}
+#region DLL Import
+#if !CRIWARE_ENABLE_HEADLESS_MODE
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern bool CRIWARE750622E5(int player_id);
+#else
+		private static bool CRIWARE750622E5(int player_id) { return false; }
+#endif
+#endregion
 	}
-
 }
+
 
 #endif

@@ -8,31 +8,34 @@ using UnityEngine;
 using System.Collections.Generic;
 
 
-public class CriFsServer : MonoBehaviour
+public class CriFsServer : CriMonoBehaviour
 {
 	#region Internal Fields
 	private static CriFsServer _instance        = null;
 	private List<CriFsRequest> requestList      = null;
 
-	static public CriFsServer instance {
+	static public CriFsServer instance
+	{
 		get {
 			CreateInstance();
 			return _instance;
 		}
 	}
 	#endregion
-	
+
 	public int installBufferSize { get; private set; }
-	
+
 	#region Internal Methods
-	public static void CreateInstance() {
+	public static void CreateInstance()
+	{
 		if (_instance == null) {
-			CriWare.managerObject.AddComponent<CriFsServer>();
+			CriWare.Common.managerObject.AddComponent<CriFsServer>();
 			_instance.installBufferSize = CriFsPlugin.installBufferSize;
-		}		
+		}
 	}
-	
-	public static void DestroyInstance() {
+
+	public static void DestroyInstance()
+	{
 		if (_instance != null) {
 			UnityEngine.GameObject.Destroy(_instance);
 		}
@@ -44,7 +47,7 @@ public class CriFsServer : MonoBehaviour
 			_instance = this;
 			this.requestList = new List<CriFsRequest>();
 			/* 高速化のため、ダミーを追加してListの内部配列の自動確保を促す
-	    	 * 追加による自動確保が目的なのでダミーはすぐに削除する */  
+			 * 追加による自動確保が目的なのでダミーはすぐに削除する */
 			CriFsRequest dummy = new CriFsRequest();
 			this.requestList.Add(dummy);
 			this.requestList.RemoveAt(0);
@@ -52,7 +55,7 @@ public class CriFsServer : MonoBehaviour
 			GameObject.Destroy(this);
 		}
 	}
-	
+
 	void OnDestroy()
 	{
 		if (_instance == this) {
@@ -63,10 +66,10 @@ public class CriFsServer : MonoBehaviour
 		}
 	}
 
-	void Update()
+	public override void CriInternalUpdate()
 	{
 		#pragma warning disable 162
-		if (CriWare.supportsCriFsInstaller == true) {
+		if (CriWare.Common.supportsCriFsInstaller == true) {
 			CriFsInstaller.ExecuteMain();
 			if (CriFsWebInstaller.isInitialized) {
 				CriFsWebInstaller.ExecuteMain();
@@ -81,11 +84,13 @@ public class CriFsServer : MonoBehaviour
 		this.requestList.RemoveAll((CriFsRequest request)=>{ return request.isDone || request.isDisposed; });
 	}
 
+	public override void CriInternalLateUpdate() { }
+
 	public void AddRequest(CriFsRequest request)
 	{
 		this.requestList.Add(request);
 	}
-	
+
 	public CriFsLoadFileRequest LoadFile(CriFsBinder binder, string path, CriFsRequest.DoneDelegate doneDelegate, int readUnitSize)
 	{
 		var request = new CriFsLoadFileRequest(binder, path, doneDelegate, readUnitSize);
@@ -121,7 +126,7 @@ public class CriFsServer : MonoBehaviour
 		this.AddRequest(request);
 		return request;
 	}
-	
+
 	public CriFsBindRequest BindDirectory(CriFsBinder targetBinder, CriFsBinder srcBinder, string path)
 	{
 		var request = new CriFsBindRequest(
@@ -129,7 +134,7 @@ public class CriFsServer : MonoBehaviour
 		this.AddRequest(request);
 		return request;
 	}
-	
+
 	public CriFsBindRequest BindFile(CriFsBinder targetBinder, CriFsBinder srcBinder, string path)
 	{
 		var request = new CriFsBindRequest(
@@ -140,3 +145,4 @@ public class CriFsServer : MonoBehaviour
 
 	#endregion
 }
+

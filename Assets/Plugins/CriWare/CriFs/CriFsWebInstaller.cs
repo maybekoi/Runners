@@ -4,7 +4,7 @@
  *
  ****************************************************************************/
 
-#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || UNITY_IOS || UNITY_ANDROID
+#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || UNITY_IOS || UNITY_ANDROID || UNITY_WEBGL
 	#define CRIFSWEBINSTALLER_SUPPORTED
 #endif
 
@@ -20,173 +20,193 @@ using System.Runtime.InteropServices;
 
 
 /**
- * <summary>HTTP によるローカルストレージへのインストールを行うモジュールです。</summary>
- * \par 説明:
- * Web サーバ上のコンテンツをローカルストレージにインストールするために使用します。
- * \attention 
- * iOSでの本機能の動作要件は iOS7 以降になります。
- * \attention
- * ::CriFsWebInstaller のインスタンスを生成する前に、 ::CriFsWebInstaller::InitializeModule メソッド
- * でモジュールを初期化する必要があります。
+ * <summary>A module which performs installation to the local storage by HTTP.</summary>
+ * <remarks>
+ * <para header='Description'>Used to install content on the Web server to the local storage.</para>
+ * <para header='Note'>On iOS, this function works on iOS7 or later.</para>
+ * <para header='Note'>Before creating an instance of ::CriFsWebInstaller , you need to initialize the module
+ * using the ::CriFsWebInstaller::InitializeModule method.</para>
+ * </remarks>
  */
-public class CriFsWebInstaller : IDisposable
+public class CriFsWebInstaller : CriDisposable
 {
 	#region Data Types
 	/**
-	 * <summary>ステータス</summary>
-	 * \sa CriFsWebInstaller::GetStatusInfo
+	 * <summary>Status</summary>
+	 * <seealso cref='CriFsWebInstaller::GetStatusInfo'/>
 	 */
 	public enum Status : int
 	{
-		Stop,		/**< 停止中	*/
-		Busy,		/**< 処理中	*/
-		Complete,	/**< 完了	*/
-		Error,		/**< エラー	*/
+		Stop,       /**< Stopped */
+		Busy,       /**< Processing in progress */
+		Complete,   /**< Completed */
+		Error,      /**< Error */
 	}
 
 	/**
-	 * <summary>エラー種別</summary>
-	 * \par 説明：
-	 * インストーラハンドルのエラー種別を表します。<br>
-	 * ::CriFsWebInstaller::GetStatusInfo 関数により取得できます。
-	 * \sa CriFsWebInstaller::GetStatusInfo
+	 * <summary>Error type</summary>
+	 * <remarks>
+	 * <para header='Description'>Indicates the error type of the installer handle.<br/>
+	 * Information can be obtained using the ::CriFsWebInstaller::GetStatusInfo function.</para>
+	 * </remarks>
+	 * <seealso cref='CriFsWebInstaller::GetStatusInfo'/>
 	 */
 	public enum Error : int
 	{
-		None,		/**< エラーなし	*/
-		Timeout,	/**< タイムアウトエラー	*/
-		Memory,		/**< メモリ確保失敗	*/
-		LocalFs,	/**< ローカルファイルシステムエラー	*/
-		DNS,		/**< DNSエラー	*/
-		Connection,	/**< 接続エラー	*/
-		SSL,		/**< SSLエラー	*/
-		HTTP,		/**< HTTPエラー	*/
-		Internal,	/**< 内部エラー	*/
+		None,       /**< No error */
+		Timeout,    /**< Timeout error */
+		Memory,     /**< Memory allocation failed */
+		LocalFs,    /**< Local file system error */
+		DNS,        /**< DNS error */
+		Connection, /**< Connection error */
+		SSL,        /**< SSL error */
+		HTTP,       /**< HTTP error */
+		Internal,   /**< Internal error */
 	}
 
 	/**
-	 * <summary>ステータス情報</summary>
-	 * \par 説明：
-	 * ::CriFsWebInstaller::Status を含む詳細な状態を表します。<br>
-	 * ::CriFsWebInstaller::GetStatusInfo 関数により取得できます。
-	 * \sa CriFsWebInstaller::StatusInfo, CriFsWebInstaller::GetStatusInfo
+	 * <summary>Status information</summary>
+	 * <remarks>
+	 * <para header='Description'>Represents the detailed status including ::CriFsWebInstaller::Status .<br/>
+	 * Information can be obtained using the ::CriFsWebInstaller::GetStatusInfo function.</para>
+	 * </remarks>
+	 * <seealso cref='CriFsWebInstaller::StatusInfo'/>
+	 * <seealso cref='CriFsWebInstaller::GetStatusInfo'/>
 	 */
 	[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
 	public struct StatusInfo
 	{
-		/*JP
-		 * <summary>インストーラハンドルの状態</summary>
-		 * \sa CriFsWebInstaller::Status
+		/**
+		 * <summary>Installer handle status</summary>
+		 * <seealso cref='CriFsWebInstaller::Status'/>
 		 */
 		public Status status;
 
 		/**
-		 * <summary>インストーラハンドルのエラー状態</summary>
-		 * \par 説明：
-		 * CriFsWebInstaller::StatusInfo.status != CriFsWebInstaller::Status.Error の際に、
-		 * CriFsWebInstaller::Error.None 以外の値が格納されます。<br>
-		 * エラー発生時には、エラー種別によって適切にエラーハンドリングを行なってください。
-		 * \sa CriFsWebInstaller::Error
+		 * <summary>Error state of the installer handle</summary>
+		 * <remarks>
+		 * <para header='Description'>A value other than CriFsWebInstaller::Error.None is stored
+		 * when CriFsWebInstaller::StatusInfo.status != CriFsWebInstaller::Status.Error.<br/>
+		 * When an error occurs, handle appropriately according to the error type.</para>
+		 * </remarks>
+		 * <seealso cref='CriFsWebInstaller::Error'/>
 		 */
 		public Error error;
 
 		/**
-		 * <summary>HTTPステータスコード</summary>
-		 * \par 説明：
-		 * 以下のどちらかの場合に HTTPステータスコードが格納されます。<br>
-		 *   - CriFsWebInstaller::StatusInfo.status == CriFsWebInstaller::Status.Complete <br>
-		 *   - CriFsWebInstaller::StatusInfo.status == CriFsWebInstaller::Status.Error かつ CriFsWebInstaller::StatusInfo.error == CriFsWebInstaller::Error.HTTP <br>
-		 *
-		 * その他の場合は、負値( CriFsWebInstaller.InvalidHttpStatusCode )が格納されます。
-		 * \sa CriFsWebInstaller.InvalidHttpStatusCode
+		 * <summary>HTTP status code</summary>
+		 * <remarks>
+		 * <para header='Description'>HTTP status code is stored in either of the following cases.<br/>
+		 *   - CriFsWebInstaller::StatusInfo.status == CriFsWebInstaller::Status.Complete<br/>
+		 *   - CriFsWebInstaller::StatusInfo.status == CriFsWebInstaller::Status.Error and
+		 *     CriFsWebInstaller::StatusInfo.error == CriFsWebInstaller::Error.HTTP<br/>
+		 * 
+		 * In other cases, a negative value ( CriFsWebInstaller.InvalidHttpStatusCode ) is stored.</para>
+		 * </remarks>
+		 * <seealso cref='CriFsWebInstaller.InvalidHttpStatusCode'/>
 		 */
 		public int httpStatusCode;
 
 		/**
-		 * <summary>インストール対象のサイズ(byte)</summary>
-		 * \par 説明：
-		 * インストール対象のサイズ(byte)が格納されます。<br>
-		 * インストール対象のサイズが不明な場合は負値( CriFsWebInstaller.InvalidContentsSize ) が格納されます。<br>
-		 * HTTP による転送が開始すると有効な値が格納されます。
-		 * \sa CriFsWebInstaller.InvalidContentsSize, CriFsWebInstaller::StatusInfo.receivedSize
+		 * <summary>The size of the installation target (byte)</summary>
+		 * <remarks>
+		 * <para header='Description'>The size of the installation target (byte) is stored.<br/>
+		 * A negative value ( CriFsWebInstaller.InvalidContentsSize ) is stored if the size of the installation target is unknown.<br/>
+		 * A valid value is stored when the transfer via HTTP starts.</para>
+		 * </remarks>
+		 * <seealso cref='CriFsWebInstaller.InvalidContentsSize'/>
+		 * <seealso cref='CriFsWebInstaller::StatusInfo.receivedSize'/>
 		 */
 		public long contentsSize;
 
 		/**
-		 * \brief 受信済みのサイズ(byte)
-		 * \sa CriFsWebInstaller::StatusInfo.contentsSize
+		 * <summary>Received size (byte)</summary>
+		 * <seealso cref='CriFsWebInstaller::StatusInfo.contentsSize'/>
 		 */
 		public long receivedSize;
 	}
 
 	/**
-	 * <summary>モジュールコンフィギュレーション</summary>
-	 * \par 説明:
-	 * CriFsWebInstaller 動作仕様を指定するための構造体です。<br>
-	 * モジュール初期化時（::CriFsWebInstaller::InitializeModule 関数）に引数として本構造体を指定します。<br>
-	 * \par 備考:
-	 * ::CriFsWebInstaller::defaultModuleConfig で取得したデフォルトコンフィギュレーションを必要に応じて変更して
-	 * ::CriFsWebInstaller::InitializeModule 関数に指定してください。<br>
-	 * \sa CriFsWebInstaller::InitializeModule, CriFsWebInstaller::defaultModuleConfig
+	 * <summary>Module configuration</summary>
+	 * <remarks>
+	 * <para header='Description'>A structure for specifying the behavior of CriFsWebInstaller.<br/>
+	 * You pass this structure as an argument when initializing a module (the ::CriFsWebInstaller::InitializeModule function).<br/></para>
+	 * <para header='Note'>Change the default configuration obtained using ::CriFsWebInstaller::defaultModuleConfig
+	 * and specify it in the ::CriFsWebInstaller::InitializeModule function.<br/></para>
+	 * </remarks>
+	 * <seealso cref='CriFsWebInstaller::InitializeModule'/>
+	 * <seealso cref='CriFsWebInstaller::defaultModuleConfig'/>
 	 */
 	[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
 	public struct ModuleConfig
 	{
 		/**
-		 * <summary>同時に使用するインストーラの最大数設定</summary>
-		 * \par 説明：
-		 * この数を越えて CriFsWebInstaller を同時に生成することは出来ません。
+		 * <summary>Sets the maximum number of installers used at the same time</summary>
+		 * <remarks>
+		 * <para header='Description'>CriFsWebInstallers cannot be generated at the same time exceeding this number.</para>
+		 * </remarks>
 		 */
 		public uint numInstallers;
 
 		[MarshalAs(UnmanagedType.LPStr)]
 		/**
-		 * <summary>HTTP プロキシサーバホスト名設定</summary>
-		 * \par 説明：
-		 * CriFsWebInstaller で使用するプロキシサーバのホスト名を設定してください。<br>
-		 * null が設定された場合は、プロキシサーバは使用されません。
+		 * <summary>Sets the HTTP proxy server host name</summary>
+		 * <remarks>
+		 * <para header='Description'>Set the host name of the proxy server used by CriFsWebInstaller.<br/>
+		 * If set to null, proxy server will not be used.</para>
+		 * </remarks>
 		 */
 		public string proxyHost;
 
 		/**
-		 * <summary>HTTP プロキシサーバポート設定</summary>
-		 * \par 説明：
-		 * CriFsWebInstaller で使用するプロキシサーバのポートを設定してください。<br>
-		 * この値は、 CriFsWebInstaller::ModuleConfig.proxyHost != null の場合のみ効果があります。
+		 * <summary>Sets the HTTP proxy server port</summary>
+		 * <remarks>
+		 * <para header='Description'>Set the port of the proxy server used by CriFsWebInstaller.<br/>
+		 * This value has an effect only if CriFsWebInstaller::ModuleConfig.proxyHost != null.</para>
+		 * </remarks>
 		 */
 		public ushort proxyPort;
 
 		/**
-		 * <summary>User-Agent 設定</summary>
-		 * \par 説明：
-		 * デフォルトの User-Agent を上書きする際に設定してください。
-		 * null が設定された場合は、デフォルトの User-Agent が使用されます。
+		 * <summary>User-Agent setting</summary>
+		 * <remarks>
+		 * <para header='Description'>Set when overwriting the default User-Agent.
+		 * If set to null, the default User-Agent is used.</para>
+		 * </remarks>
 		 */
 		[MarshalAs(UnmanagedType.LPStr)]
 		public string userAgent;
 
 		/**
-		 * <summary>タイムアウト時間設定(秒単位)</summary>
-		 * \par 説明：
-		 * この時間の間、受信済みのサイズが変化しない場合にタイムアウトエラー( CriFsWebinstaller::Error.Timeout )が発生します。
-		 * \sa CriFsWebInstaller::StatusInfo.error, CriFsWebinstaller::Error.Timeout
+		 * <summary>Sets the timeout time (in seconds)</summary>
+		 * <remarks>
+		 * <para header='Description'>A timeout error ( CriFsWebinstaller::Error.Timeout ) occurs if the received size does not change over this time.</para>
+		 * </remarks>
+		 * <seealso cref='CriFsWebInstaller::StatusInfo.error'/>
+		 * <seealso cref='CriFsWebinstaller::Error.Timeout'/>
 		 */
 		public uint inactiveTimeoutSec;
 
 		/**
-		 * <summary>安全でない HTTPS 通信の許可設定</summary>
-		 * \par 説明：
-		 * true の場合、安全でない HTTPS 通信を許可します。<br>
-		 * アプリケーション開発時に、有効なサーバ証明書を用意出来ない場合のみ true を設定してください。
-		 * \attention
-		 *   - Apple のプラットフォームにおいて安全でない HTTPS 通信を許可するためには、
-		 *     このフラグを true にすることに加えて、 ATS(App Transport Security) を無効にするか、
-		 *     例外設定を行なう必要があります。
+		 * <summary>Enables the insecure HTTPS communication</summary>
+		 * <remarks>
+		 * <para header='Description'>If True, allows insecure HTTPS communication.<br/>
+		 * Set to True only when you cannot prepare a valid server certificate during application development.</para>
+		 * <para header='Note'>  - In order to allow insecure HTTPS communication on Apple's platform,
+		 *     in addition to setting this flag to True, it is necessary to disable ATS(App Transport Security) or
+		 *     set an exception.</para>
+		 * </remarks>
 		 */
 		public bool allowInsecureSSL;
 
+		/* <summary>CRCの有効化</summary>
+		 * \par 説明：
+		 * CRI_TRUE の場合のみ、CRCの計算をします。
+		 */
+		public bool crcEnabled;
+
 		/**
-		 * <summary>プラットフォーム固有の設定</summary>
+		 * <summary>Platform-specific settings</summary>
 		 */
 		public ModulePlatformConfig platformConfig;
 	}
@@ -194,7 +214,7 @@ public class CriFsWebInstaller : IDisposable
 	#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
 	public struct ModulePlatformConfig
 	{
-		public byte	reserved;
+		public byte reserved;
 
 		public static ModulePlatformConfig defaultConfig {
 			get {
@@ -207,7 +227,7 @@ public class CriFsWebInstaller : IDisposable
 	#elif UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
 	public struct ModulePlatformConfig
 	{
-		public byte	reserved;
+		public byte reserved;
 
 		public static ModulePlatformConfig defaultConfig {
 			get {
@@ -221,7 +241,7 @@ public class CriFsWebInstaller : IDisposable
 	[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
 	public struct ModulePlatformConfig
 	{
-		public byte	reserved;
+		public byte reserved;
 
 		public static ModulePlatformConfig defaultConfig {
 			get {
@@ -235,7 +255,7 @@ public class CriFsWebInstaller : IDisposable
 	[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
 	public struct ModulePlatformConfig
 	{
-		public byte	reserved;
+		public byte reserved;
 
 		public static ModulePlatformConfig defaultConfig {
 			get {
@@ -261,26 +281,28 @@ public class CriFsWebInstaller : IDisposable
 
 	#region Static Properties
 	public static bool isInitialized { get; private set; }
+	public static bool isCrcEnabled { get; private set; }
 
 	/**
-	 * <summary>デフォルトモジュールコンフィギュレーション</summary>
-	 * \par 説明:
-	 * デフォルトモジュールコンフィグです。
-	 * \par 備考:
-	 * 本プロパティで取得したデフォルトコンフィギュレーションを必要に応じて変更して
-	 * ::CriFsWebInstaller::InitializeModule 関数に指定してください。<br>
-	 * \sa CriFsWebInstaller::InitializeModule
+	 * <summary>Default module configuration</summary>
+	 * <remarks>
+	 * <para header='Description'>Default module config.</para>
+	 * <para header='Note'>Change the default configuration obtained using this property
+	 * and specify it in the ::CriFsWebInstaller::InitializeModule function.<br/></para>
+	 * </remarks>
+	 * <seealso cref='CriFsWebInstaller::InitializeModule'/>
 	 */
 	public static ModuleConfig defaultModuleConfig {
 		get {
 			ModuleConfig config;
-			config.numInstallers		= 2;
-			config.proxyHost			= null;
-			config.proxyPort			= 0;
-			config.userAgent			= null;
-			config.inactiveTimeoutSec	= 300;
-			config.allowInsecureSSL		= false;
-			config.platformConfig		= ModulePlatformConfig.defaultConfig;
+			config.numInstallers        = 2;
+			config.proxyHost            = null;
+			config.proxyPort            = 0;
+			config.userAgent            = null;
+			config.inactiveTimeoutSec   = 300;
+			config.allowInsecureSSL     = false;
+			config.crcEnabled           = false;
+			config.platformConfig       = ModulePlatformConfig.defaultConfig;
 			return config;
 		}
 	}
@@ -288,39 +310,41 @@ public class CriFsWebInstaller : IDisposable
 
 	#region Constant Variables
 	/**
-	 * <summary>無効なHTTPステータスコード</summary>
-	 * \par 説明:
-	 * 無効なHTTPステータスコードを表わす定数です。<br>
-	 * HTTP以外の原因でインストールに失敗した場合にセットされます。<br>
-	 * この値は負値であることが保証されます。
-	 * \sa CriFsWebInstaller::StatusInfo.httpStatusCode
+	 * <summary>Invalid HTTP status code</summary>
+	 * <remarks>
+	 * <para header='Description'>A constant that represents an invalid HTTP status code.<br/>
+	 * It is set when the installation fails due to a reason other than HTTP.<br/>
+	 * This value is guaranteed to be negative.</para>
+	 * </remarks>
+	 * <seealso cref='CriFsWebInstaller::StatusInfo.httpStatusCode'/>
 	 */
-	public const int	InvalidHttpStatusCode	= -1;
+	public const int    InvalidHttpStatusCode   = -1;
 
 	/**
-	 * <summary>無効なコンテンツサイズ</summary>
-	 * \par 説明:
-	 * インストール対象のサイズが取得出来ていない場合にセットされます。<br>
-	 * この値は負値であることが保証されます。
-	 * \sa CriFsWebInstaller::StatusInfo.contentsSize
+	 * <summary>Invalid content size</summary>
+	 * <remarks>
+	 * <para header='Description'>It is set when the size of the installation target cannot be acquired.<br/>
+	 * This value is guaranteed to be negative.</para>
+	 * </remarks>
+	 * <seealso cref='CriFsWebInstaller::StatusInfo.contentsSize'/>
 	 */
-	public const long	InvalidContentsSize		= -1;
+	public const long   InvalidContentsSize     = -1;
 	#endregion
 
 
 	#if CRIFSWEBINSTALLER_SUPPORTED
 	#region Private Variables
-	private bool	disposed	= false;
-	private IntPtr	handle		= IntPtr.Zero;
+	private IntPtr  handle      = IntPtr.Zero;
 	#endregion
 
 	public CriFsWebInstaller()
 	{
-		criFsWebInstaller_Create(out this.handle, IntPtr.Zero);
+		criFsWebInstaller_Create(out this.handle);
 		if (this.handle == IntPtr.Zero)
 		{
 			throw new Exception("criFsWebInstaller_Create() failed.");
 		}
+		CriDisposableObjectManager.Register(this, CriDisposableObjectManager.ModuleType.FsWeb);
 	}
 
 	~CriFsWebInstaller()
@@ -329,12 +353,13 @@ public class CriFsWebInstaller : IDisposable
 	}
 
 	/**
-	 * <summary>インストーラを破棄します。</summary>
-	 * \attention
-	 * インストール処理中にインストーラを破棄した場合、
-	 * 本関数内で処理が長時間ブロックされる可能性があります。<br>
+	 * <summary>Discards the installer.</summary>
+	 * <remarks>
+	 * <para header='Note'>If you discard the installer during the installation process,
+	 * the process may be blocked in this function for a long time.<br/></para>
+	 * </remarks>
 	 */
-	public void Dispose()
+	public override void Dispose()
 	{
 		this.Dispose(true);
 		System.GC.SuppressFinalize(this);
@@ -342,17 +367,17 @@ public class CriFsWebInstaller : IDisposable
 
 
 	/**
-	 * <summary>ファイルをインストールします。</summary>
-	 * <param name="url">インストール元URL</param>
-	 * <param name="dstPath">インストール先ファイルパス名</param>
-	 * \par 説明:
-	 * ファイルのインストールを開始します。<br>
-	 * 本関数は即時復帰関数です。<br>
-	 * コピーの完了状態を取得するには ::CriFsWebInstaller::GetStatusInfo 関数を使用してください。
-	 * \attention
-	 *   - インストール先のファイルが存在する場合はエラー CriFsWebInstaller.Error.LocalFs が発生します。
-	 *   - インストール先のフォルダが存在しない場合はエラー  CriFsWebInstaller.Error.LocalFs が発生します。
-	 * \sa CriFsWebInstaller::GetStatusInfo
+	 * <summary>Installs the file.</summary>
+	 * <param name='url'>Installation source URL</param>
+	 * <param name='dstPath'>Installation destination file path name</param>
+	 * <remarks>
+	 * <para header='Description'>Starts installing files.<br/>
+	 * This function returns immediately.<br/>
+	 * To get the copy completion status, use the ::CriFsWebInstaller::GetStatusInfo function.</para>
+	 * <para header='Note'>  - If the installation destination file exists, error CriFsWebInstaller.Error.LocalFs occurs.
+	 *   - If the installation destination folder does not exist, the error CriFsWebInstaller.Error.LocalFs will occur.</para>
+	 * </remarks>
+	 * <seealso cref='CriFsWebInstaller::GetStatusInfo'/>
 	 */
 	public void Copy(string url, string dstPath)
 	{
@@ -360,43 +385,71 @@ public class CriFsWebInstaller : IDisposable
 	}
 
 	/**
-	 * <summary>インストール処理を停止します。</summary>
-	 * \par 説明:
-	 * 処理を停止します。<br>
-	 * 本関数は即時復帰関数です。<br>
-	 * 停止の完了状態を取得するには ::CriFsWebInstaller::GetStatusInfo 関数を使用してください。
-	 * \sa
-	 * CriFsInstaller::GetStatusInfo
+	 * <summary>Stops the installation process.</summary>
+	 * <remarks>
+	 * <para header='Description'>Stops the processing.<br/>
+	 * This function returns immediately.<br/>
+	 * Use the ::CriFsWebInstaller::GetStatusInfo function to get the stop completion status.</para>
+	 * </remarks>
+	 * <seealso cref='CriFsInstaller::GetStatusInfo'/>
 	 */
 	public void Stop()
 	{
-		criFsWebInstaller_Stop(this.handle);
+		if (this.handle != IntPtr.Zero) {
+			criFsWebInstaller_Stop(this.handle);
+		}
 	}
 
 	/**
-	 * <summary>ステータス情報を取得します。</summary>
-	 * <returns>ステータス情報</returns>
-	 * \sa CriFsWebInstaller::StatusInfo
+	 * <summary>Gets the status information.</summary>
+	 * <returns>Status information</returns>
+	 * <seealso cref='CriFsWebInstaller::StatusInfo'/>
 	 */
 	public StatusInfo GetStatusInfo()
 	{
 		StatusInfo statusInfo;
-		criFsWebInstaller_GetStatusInfo(this.handle, out statusInfo);
+		if (this.handle != IntPtr.Zero) {
+			criFsWebInstaller_GetStatusInfo(this.handle, out statusInfo);
+		} else {
+			statusInfo.status   = Status.Stop;
+			statusInfo.error    = Error.Internal;
+			statusInfo.httpStatusCode   = InvalidHttpStatusCode;
+			statusInfo.contentsSize     = InvalidContentsSize;
+			statusInfo.receivedSize     = 0;
+		}
 		return statusInfo;
+	}
+
+	/**
+	 * <summary>Acquire the CRC32 calculation result</summary>
+	 * <param name='ret_val'>For CRC result storage</param>
+	 * <remarks>
+	 * <para header='Description'>Returns a checksum that is valid only in the Status.Complete state. <br/>
+	 * If it is acquired in a state other than Status.Complete, the CRC result will be 0. <br/>
+	 * This function can be used only when ModuleConfig.crcEnabled=true . <br/></para>
+	 * </remarks>
+	 * <seealso cref='CriFsWebInstaller::StatusInfo'/>
+	 */
+	public bool GetCRC32(out uint ret_val){
+		int criErr = criFsWebInstaller_GetCRC32(this.handle, out ret_val);
+		// '0' means "OK".
+		return (criErr == 0);
 	}
 
 	#region Static Methods
 	/**
-	 * <summary>CriFsWebInstaller モジュールの初期化</summary>
-	 * <param name="config">コンフィギュレーション</param>
-	 * \par 説明:
-	 * CriFsWebInstaller モジュールを初期化します。<br>
-	 * モジュールの機能を利用するには、必ずこの関数を実行する必要があります。<br>
-	 * （モジュールの機能は、本関数を実行後、 ::CriFsWebInstaller::FinalizeModule 関数を実行するまでの間、利用可能です。）<br>
-	 * \attention
-	 * 本関数を実行後、必ず対になる ::CriFsWebInstaller::FinalizeModule 関数を実行してください。<br>
-	 * また、 ::CriFsWebInstaller::FinalizeModule 関数を実行するまでは、本関数を再度実行することはできません。<br>
-	 * \sa CriFsWebInstaller::ModuleConfig, CriFsWebInstaller::FinalizeModule
+	 * <summary>Initializes the CriFsWebInstaller module</summary>
+	 * <param name='config'>Configuration</param>
+	 * <remarks>
+	 * <para header='Description'>Initializes the CriFsWebInstaller module.<br/>
+	 * In order to use the function of the module, you must call this function.<br/>
+	 * (You can use the features of the module after calling this function
+	 *  and before calling the ::CriFsWebInstaller::FinalizeModule function.)<br/></para>
+	 * <para header='Note'>After calling this function, be sure to call the corresponding ::CriFsWebInstaller::FinalizeModule function.<br/>
+	 * In addition, this function cannot be called again until the ::CriFsWebInstaller::FinalizeModule function is called.<br/></para>
+	 * </remarks>
+	 * <seealso cref='CriFsWebInstaller::ModuleConfig'/>
+	 * <seealso cref='CriFsWebInstaller::FinalizeModule'/>
 	 */
 	public static void InitializeModule(ModuleConfig config)
 	{
@@ -406,17 +459,18 @@ public class CriFsWebInstaller : IDisposable
 		}
 		CriFsPlugin.InitializeLibrary();
 		criFsWebInstaller_Initialize(ref config);
+		isCrcEnabled = config.crcEnabled;
 		isInitialized = true;
 	}
 
 	/**
-	 * <summary>CriFsWebInstaller モジュールの終了</summary>
-	 * \par 説明:
-	 * CriFsWebInstaller モジュールを終了します。<br>
-	 * \attention
-	 *   - ::CriFsWebInstaller::InitializeModule 関数実行前に本関数を実行することはできません。<br>
-	 *   - 全ての ::CriFsWebInstaller が破棄されている必要があります。
-	 * \sa CriFsWebInstaller::InitializeModule
+	 * <summary>Terminates the CriFsWebInstaller module</summary>
+	 * <remarks>
+	 * <para header='Description'>Terminates the CriFsWebInstaller module.<br/></para>
+	 * <para header='Note'>  - This function cannot be called before calling the ::CriFsWebInstaller::InitializeModule function.<br/>
+	 *   - All ::CriFsWebInstaller must be discarded.</para>
+	 * </remarks>
+	 * <seealso cref='CriFsWebInstaller::InitializeModule'/>
 	 */
 	public static void FinalizeModule()
 	{
@@ -424,28 +478,45 @@ public class CriFsWebInstaller : IDisposable
 			UnityEngine.Debug.LogError("[CRIWARE] CriFsWebInstaller module is not initialized.");
 			return;
 		}
+		CriDisposableObjectManager.CallOnModuleFinalization(CriDisposableObjectManager.ModuleType.FsWeb);
 		criFsWebInstaller_Finalize();
 		CriFsPlugin.FinalizeLibrary();
 		isInitialized = false;
 	}
 
 	/**
-	 * <summary>サーバ処理の実行</summary>
-	 * \par 説明:
-	 * サーバ処理を実行します。定期的に実行する必要があります。<br>
+	 * <summary>Runs the server process</summary>
+	 * <remarks>
+	 * <para header='Description'>Executes the server processing. It should be run regularly.<br/></para>
+	 * </remarks>
 	 */
 	public static void ExecuteMain()
 	{
 		criFsWebInstaller_ExecuteMain();
+	}
+
+	/**
+	 * <summary>Changes the information in the HTTP request header.</summary>
+	 * <param name='field'>Field name</param>
+	 * <param name='value'>Field value</param>
+	 * <remarks>
+	 * <para header='Description'>Changes the information in the HTTP request header.<br/>
+	 * This function must be called after calling the ::CriFsWebInstaller::InitializeModule function.<br/>
+	 * Call this function before invoking the installation.<br/>
+	 * If the field name is already registered, the field value will be overwritten.<br/>
+	 * If null is passed as the field value, the field is removed.<br/></para>
+	 * </remarks>
+	 */
+	public static bool SetRequestHeader(string field, string value){
+		int ret = criFsWebInstaller_SetRequestHeader(field, value);
+		return (ret == 0);
 	}
 	#endregion
 
 	#region Private Methods
 	private void Dispose(bool disposing)
 	{
-		if (disposed) {
-			return;
-		}
+		CriDisposableObjectManager.Unregister(this);
 
 		if (this.handle != IntPtr.Zero) {
 			var statusInfo = this.GetStatusInfo();
@@ -466,40 +537,60 @@ public class CriFsWebInstaller : IDisposable
 	}
 	#endregion
 
-	#region Native API Definitions
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-	private static extern void criFsWebInstaller_Initialize([In] ref ModuleConfig config);
+	#region DLL Import
+	#if !CRIWARE_ENABLE_HEADLESS_MODE
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern int criFsWebInstaller_Initialize([In] ref ModuleConfig config);
 
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-	private static extern void criFsWebInstaller_Finalize();
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern int criFsWebInstaller_Finalize();
 
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-	private static extern void criFsWebInstaller_ExecuteMain();
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern int criFsWebInstaller_ExecuteMain();
 
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-	private static extern int criFsWebInstaller_Create(out IntPtr installer, IntPtr option);
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern int criFsWebInstaller_Create(out IntPtr installer);
 
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern int criFsWebInstaller_Destroy(IntPtr installer);
 
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern int criFsWebInstaller_Copy(IntPtr installer, string url, string dstPath);
 
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern int criFsWebInstaller_Stop(IntPtr installer);
 
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern int criFsWebInstaller_GetStatusInfo(IntPtr installer, out StatusInfo status);
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern int criFsWebInstaller_GetCRC32(IntPtr installer, out uint crc32);
+
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern int criFsWebInstaller_SetRequestHeader (string field, string value);
+
+	#else
+	private static int criFsWebInstaller_Initialize([In] ref ModuleConfig config) { return 0; }
+	private static int criFsWebInstaller_Finalize() { return 0; }
+	private static int criFsWebInstaller_ExecuteMain() { return 0; }
+	private static int criFsWebInstaller_Create(out IntPtr installer) { installer = new IntPtr(1); return 0; }
+	private static int criFsWebInstaller_Destroy(IntPtr installer) { return 0; }
+	private static int criFsWebInstaller_Copy(IntPtr installer, string url, string dstPath) { return 0; }
+	private static int criFsWebInstaller_Stop(IntPtr installer) { return 0; }
+	private static int criFsWebInstaller_GetStatusInfo(IntPtr installer, out StatusInfo status) { status = new StatusInfo(); return 0; }
+	private static int criFsWebInstaller_GetCRC32(IntPtr installer, out uint crc32) { crc32 = 0u; return 0; }
+	private static int criFsWebInstaller_SetRequestHeader (string field, string value){ return 0; }
+	#endif
 	#endregion
 
 	#else
 	#region Internal Variables
-	private bool disposed = false;
 	private bool errorOccured = false;
 	#endregion
 
 	public CriFsWebInstaller()
 	{
+		CriDisposableObjectManager.Register(this, CriDisposableObjectManager.ModuleType.Fs);
 	}
 
 	~CriFsWebInstaller()
@@ -507,8 +598,9 @@ public class CriFsWebInstaller : IDisposable
 		this.Dispose(false);
 	}
 
-	public void Dispose()
+	public override void Dispose()
 	{
+		CriDisposableObjectManager.Unregister(this);
 		this.Dispose(true);
 		System.GC.SuppressFinalize(this);
 	}
@@ -528,16 +620,21 @@ public class CriFsWebInstaller : IDisposable
 	{
 		StatusInfo statusInfo;
 		if (errorOccured) {
-			statusInfo.status	= Status.Error;
-			statusInfo.error	= Error.None;
+			statusInfo.status   = Status.Error;
+			statusInfo.error    = Error.None;
 		} else {
-			statusInfo.status	= Status.Stop;
-			statusInfo.error	= Error.Internal;
+			statusInfo.status   = Status.Stop;
+			statusInfo.error    = Error.Internal;
 		}
-		statusInfo.httpStatusCode	= InvalidHttpStatusCode;
-		statusInfo.contentsSize		= InvalidContentsSize;
-		statusInfo.receivedSize		= 0;
+		statusInfo.httpStatusCode   = InvalidHttpStatusCode;
+		statusInfo.contentsSize     = InvalidContentsSize;
+		statusInfo.receivedSize     = 0;
 		return statusInfo;
+	}
+
+	public bool GetCRC32(out uint ret_val){
+		ret_val = 0;
+		return false;
 	}
 
 	#region Static Methods
@@ -569,9 +666,6 @@ public class CriFsWebInstaller : IDisposable
 	#region Private Methods
 	private void Dispose(bool disposing)
 	{
-		if (disposed) {
-			return;
-		}
 	}
 
 	private void UnsupportedError()
@@ -580,7 +674,6 @@ public class CriFsWebInstaller : IDisposable
 	#endregion
 	#endif
 }
-
 
 /**
  * @}

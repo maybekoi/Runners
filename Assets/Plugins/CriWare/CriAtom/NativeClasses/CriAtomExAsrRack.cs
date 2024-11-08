@@ -22,94 +22,102 @@ using System.Runtime.InteropServices;
  * @{
  */
 
+
 /**
- * <summary>ASRラック</summary>
+ * <summary>ASR Rack</summary>
  */
-public partial class CriAtomExAsrRack : IDisposable
+public partial class CriAtomExAsrRack : CriDisposable
 {
 	#region Data Types
 	/**
-	 * <summary>ASRラック作成用コンフィグ構造体</summary>
-	 * \par 説明:
-	 * CriAtomExAsrRack の動作仕様を指定するための構造体です。<br>
-	 * モジュール作成時（::CriAtomExAsrRack::CriAtomExAsrRack 関数）に引数として本構造体を指定します。<br>
-	 * \par 備考:
-	 * ::CriAtomExAsrRack::defaultConfig で取得したデフォルトコンフィギュレーションを必要に応じて変更して
-	 * ください。<br>
-	 * \sa CriAtomExAsrRack::CriAtomExAsrRack, CriAtomExAsrRack::defaultConfig
+	 * <summary>A config structure for creating an ASR Rack</summary>
+	 * <remarks>
+	 * <para header='Description'>A structure for specifying the behavior of CriAtomExAsrRack.<br/>
+	 * You pass this structure as an argument when creating a module (the ::CriAtomExAsrRack::CriAtomExAsrRack function).<br/></para>
+	 * <para header='Note'>Change the default configuration obtained using ::CriAtomExAsrRack::defaultConfig
+	 * if required.<br/></para>
+	 * </remarks>
+	 * <seealso cref='CriAtomExAsrRack::CriAtomExAsrRack'/>
+	 * <seealso cref='CriAtomExAsrRack::defaultConfig'/>
 	 */
 	[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
 	public struct Config
 	{
 		/**
-		 * <summary>サーバ処理の実行頻度</summary>
-		 * \par 説明：
-		 * サーバ処理を実行する頻度を指定します。
-		 * \attention
-		 * CriWareInitializer に指定した CriAtomConfig::serverFrequency と同じ値を指定してください。
+		 * <summary>Frequency of server process</summary>
+		 * <remarks>
+		 * <para header='Description'>Specifies the frequency of running the server process</para>
+		 * <para header='Note'>Set the same value as the one set to CriAtomConfig::serverFrequency for CriWareInitializer.</para>
+		 * </remarks>
 		 */
 		public float serverFrequency;
 
 		/**
-		 * <summary>バス数</summary>
-		 * \par 説明：
-		 * ASRが作成するバスの数を指定します。<br>
-		 * バスはサウンドのミックスや、DSPエフェクトの管理等を行います。
+		 * <summary>The number of buses</summary>
+		 * <remarks>
+		 * <para header='Description'>Specifies the number of buses that ASR creates.<br/>
+		 * The bus is responsible for mixing sounds and managing the DSPeffects.</para>
+		 * </remarks>
 		 */
 		public int numBuses;
 
 		/**
-		 * <summary>出力チャンネル数</summary>
-		 * \par 説明：
-		 * ASRラックの出力チャンネル数を指定します。<br>
-		 * パン3Dもしくは3Dポジショニング機能を使用する場合は6ch以上を指定します。
+		 * <summary>The number of output channels</summary>
+		 * <remarks>
+		 * <para header='Description'>Specifies the number of output channels of the ASR Rack.<br/>
+		 * Specify 6ch or more channels when using pan 3D or 3D Positioning features.</para>
+		 * </remarks>
 		 */
 		public int outputChannels;
 
 		/**
-		 * <summary>出力サンプリングレート</summary>
-		 * \par 説明：
-		 * ASRラックの出力および処理過程のサンプリングレートを指定します。<br>
-		 * 通常、ターゲット機のサウンドデバイスのサンプリングレートを指定します。
-		 * \par 備考：
-		 * 低くすると処理負荷を下げることができますが音質が落ちます。
+		 * <summary>Output sampling rate</summary>
+		 * <remarks>
+		 * <para header='Description'>Specifies the output and processing sampling rate of the ASR Rack.<br/>
+		 * Normally, specify the sampling rate of the sound device on the target machine.</para>
+		 * <para header='Note'>Lowering it lowers the processing load but lowers the sound quality.</para>
+		 * </remarks>
 		 */
 		public int outputSamplingRate;
 
 		/**
-		 * <summary>サウンドレンダラタイプ</summary>
-		 * \par 説明：
-		 * ASRラックの出力先サウンドレンダラの種別を指定します。<br>
-		 * soundRendererType に CriAtomEx.SoundRendererType.Native を指定した場合、
-		 * 音声データはデフォルト設定の各プラットフォームのサウンド出力に転送されます。
+		 * <summary>Sound renderer type</summary>
+		 * <remarks>
+		 * <para header='Description'>Specifies the type of the output destination sound renderer of the ASR Rack.<br/>
+		 * If you specify CriAtomEx.SoundRendererType.Native for soundRendererType,
+		 * the sound data is transferred to each platform's default output.</para>
+		 * </remarks>
 		 */
 		public CriAtomEx.SoundRendererType soundRendererType;
 
 		/**
-		 * <summary>出力先ASRラックID</summary>
-		 * \par 説明：
-		 * ASRラックの出力先ASRラックIDを指定します。<br>
-		 * soundRendererType に CriAtomEx.SoundRendererType.Asr を指定した場合のみ有効です。
+		 * <summary>Destination ASR Rack ID</summary>
+		 * <remarks>
+		 * <para header='Description'>Specifies the ASR Rack ID of the ASR Rack's output destination.<br/>
+		 * Valid only when you specify CriAtomEx.SoundRendererType.Asr for soundRendererType.</para>
+		 * </remarks>
 		 */
 		public int outputRackId;
 
 		/**
-		 * <summary>プラットフォーム固有のパラメータへのポインタ</summary>
-		 * \par 説明：
-		 * プラットフォーム固有のパラメータへのポインタを指定します。<br>
-		 * CriAtomExAsrRack::CriAtomExAsrRack 関数の引数に用いる場合は、第二引数の 
-		 * PlatformContext で上書きされるため、 IntPtr.Zero を指定してください。
+		 * <summary>Pointer to platform-specific parameters</summary>
+		 * <remarks>
+		 * <para header='Description'>Specifies a pointer to platform-specific parameters.<br/>
+		 * When using it as the argument to the CriAtomExAsrRack::CriAtomExAsrRack function,
+		 * specify IntPtr.Zero because it is overwritten by the second argument PlatformContext.</para>
+		 * </remarks>
 		 */
 		public IntPtr context;
 	}
 
 	/**
-	 * <summary>ASRラック作成用プラットフォーム固有コンフィグ構造体</summary>
-	 * \par 説明:
-	 * CriAtomExAsrRack の動作仕様を指定するための構造体です。<br>
-	 * モジュール作成時（::CriAtomExAsrRack::CriAtomExAsrRack 関数）に引数として本構造体を指定します。<br>
-	 * 詳細についてはプラットフォーム毎のマニュアルを参照してください。
-	 * \sa CriAtomExAsrRack::CriAtomExAsrRack
+	 * <summary>A platform-specific config structure for creating an ASR Rack</summary>
+	 * <remarks>
+	 * <para header='Description'>A structure for specifying the behavior of CriAtomExAsrRack.<br/>
+	 * You pass this structure as an argument when creating a module (the ::CriAtomExAsrRack::CriAtomExAsrRack function).<br/>
+	 * For details, refer to the platform-specific manual.</para>
+	 * </remarks>
+	 * <seealso cref='CriAtomExAsrRack::CriAtomExAsrRack'/>
 	 */
 	[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
 	public struct PlatformConfig
@@ -125,48 +133,47 @@ public partial class CriAtomExAsrRack : IDisposable
 	#endregion
 
 	/**
-	 * <summary>ASRラックの作成</summary>
-	 * <param name="config">コンフィグ構造体</param>
-	 * <param name="platformConfig">プラットフォーム固有パラメータ構造体</param>
-	 * <returns>ASRラック</returns>
-	 * \par 説明:
-	 * ASRラックを作成します。<br>
-	 * 本関数で作成したASRラックは、必ず Dispose 関数で破棄してください。
-	 * */
+	 * <summary>Creating an ASR Rack</summary>
+	 * <param name='config'>Config structure</param>
+	 * <param name='platformConfig'>Platform-specific parameter structure</param>
+	 * <returns>ASR Rack</returns>
+	 * <remarks>
+	 * <para header='Description'>Creates an ASR Rack.<br/>
+	 * Be sure to discard the ASR Rack created by this function using the Dispose function.</para>
+	 * </remarks>
+	 */
 	public CriAtomExAsrRack(Config config, PlatformConfig platformConfig)
 	{
 	#if CRIWARE_SUPPORT_ASR
-		CriAtomPlugin.InitializeLibrary();
-
-		this._rackId = criAtomUnityAsrRack_Create(ref config, ref platformConfig);
+		this._rackId = CRIWAREFB1E1E0A(ref config, ref platformConfig);
 		if (config.context != IntPtr.Zero) {
 			Marshal.FreeHGlobal(config.context);
 		}
 		if (this._rackId == -1) {
 			throw new Exception("CriAtomExAsrRack() failed.");
 		}
+
+		CriDisposableObjectManager.Register(this, CriDisposableObjectManager.ModuleType.Atom);
 	#else
 		this._rackId = -1;
 	#endif
 	}
 
 	/**
-	 * <summary>ASRラックの破棄</summary>
-	 * \par 説明:
-	 * ASRラックを破棄します。
-	 * */
-	public void Dispose()
+	 * <summary>Discards an ASR Rack</summary>
+	 * <remarks>
+	 * <para header='Description'>Discards an ASR Rack.</para>
+	 * </remarks>
+	 */
+	public override void Dispose()
 	{
 	#if CRIWARE_SUPPORT_ASR
-		if (this._rackId == -1)
-		{
-			return;
+		CriDisposableObjectManager.Unregister(this);
+
+		if (this._rackId != -1) {
+			criAtomExAsrRack_Destroy(this._rackId);
+			this._rackId = -1;
 		}
-
-		criAtomExAsrRack_Destroy(this._rackId);
-		this._rackId = -1;
-
-        CriAtomPlugin.FinalizeLibrary();
 	#endif
 		GC.SuppressFinalize(this);
 	}
@@ -177,13 +184,13 @@ public partial class CriAtomExAsrRack : IDisposable
 
 	#region Static Properties
 	/**
-	 * <summary>デフォルトコンフィギュレーション</summary>
-	 * \par 説明:
-	 * デフォルトコンフィグです。
-	 * \par 備考:
-	 * 本プロパティで取得したデフォルトコンフィギュレーションを必要に応じて変更して
-	 * ::CriAtomExAsrRack::CriAtomExAsrRack 関数に指定してください。<br>
-	 * \sa CriAtomExAsrRack::CriAtomExAsrRack
+	 * <summary>Default configuration</summary>
+	 * <remarks>
+	 * <para header='Description'>Default config.</para>
+	 * <para header='Note'>Change the default configuration obtained using this property
+	 * and specify it in the ::CriAtomExAsrRack::CriAtomExAsrRack function.<br/></para>
+	 * </remarks>
+	 * <seealso cref='CriAtomExAsrRack::CriAtomExAsrRack'/>
 	 */
 	public static Config defaultConfig {
 		get {
@@ -199,7 +206,7 @@ public partial class CriAtomExAsrRack : IDisposable
 	#elif !UNITY_EDITOR && UNITY_IOS || UNITY_ANDROID
 			config.outputChannels = 2;
 			config.outputSamplingRate = 44100;
-	#elif !UNITY_EDITOR && UNITY_VITA
+	#elif !UNITY_EDITOR && UNITY_PSP2
 			config.outputChannels = 2;
 			config.outputSamplingRate = 48000;
 	#else
@@ -211,12 +218,14 @@ public partial class CriAtomExAsrRack : IDisposable
 	}
 
 	/**
-	 * <summary>デフォルトASRラックID</summary>
-	 * \par 説明:
-	 * デフォルトのASRラックIDです。
-	 * 通常出力に戻す場合や生成したASRラックを破棄する場合には、各種プレーヤに対して
-	 * この定数を利用してASRラックIDの指定を行ってください。
-	 * \sa CriAtomExPlayer::SetAsrRackId, CriMana::Player::SetAsrRackId
+	 * <summary>Default ASR Rack ID</summary>
+	 * <remarks>
+	 * <para header='Description'>Default ASR Rack ID.
+	 * When returning to normal output or discarding the generated ASR Rack, use this constant
+	 * for each player to specify the ASR Rack ID.</para>
+	 * </remarks>
+	 * <seealso cref='CriAtomExPlayer::SetAsrRackId'/>
+	 * <seealso cref='CriMana::Player::SetAsrRackId'/>
 	 */
 	public static int defaultRackId = 0;
 
@@ -234,16 +243,24 @@ public partial class CriAtomExAsrRack : IDisposable
 
 	#region DLL Import
 	#if CRIWARE_SUPPORT_ASR
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-	private static extern int criAtomUnityAsrRack_Create([In] ref Config config, [In] ref PlatformConfig platformConfig);
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+	#if !CRIWARE_ENABLE_HEADLESS_MODE
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+	private static extern int CRIWAREFB1E1E0A([In] ref Config config, [In] ref PlatformConfig platformConfig);
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern void criAtomExAsrRack_Destroy(Int32 rackId);
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern void criAtomExAsrRack_AttachDspBusSetting(Int32 rackId, string setting, IntPtr work, Int32 workSize);
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern void criAtomExAsrRack_DetachDspBusSetting(Int32 rackId);
-	[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
+	[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
 	private static extern void criAtomExAsrRack_ApplyDspBusSnapshot(Int32 rackId, string snapshotName, Int32 timeMs);
+	#else
+	private static int CRIWAREFB1E1E0A([In] ref Config config, [In] ref PlatformConfig platformConfig) { return 0; }
+	private static void criAtomExAsrRack_Destroy(Int32 rackId) { }
+	private static void criAtomExAsrRack_AttachDspBusSetting(Int32 rackId, string setting, IntPtr work, Int32 workSize) { }
+	private static void criAtomExAsrRack_DetachDspBusSetting(Int32 rackId) { }
+	private static void criAtomExAsrRack_ApplyDspBusSnapshot(Int32 rackId, string snapshotName, Int32 timeMs) { }
+	#endif
 	#endif
 	#endregion
 }

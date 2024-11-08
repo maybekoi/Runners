@@ -4,7 +4,7 @@
  *
  ****************************************************************************/
 
-#if !UNITY_EDITOR && (UNITY_PS3 || UNITY_WINRT || UNITY_SWITCH)
+#if !UNITY_EDITOR && (UNITY_PS3 || UNITY_WINRT)
 
 using UnityEngine;
 using System.Runtime.InteropServices;
@@ -41,24 +41,21 @@ namespace CriMana.Detail
 
 	public class RendererResourceSofdecPrimeRgb : RendererResource
 	{
-		private int		width;
-		private int		height;
-		private bool	hasAlpha;
-		private bool	additive;
-		private bool	useUserShader;
-		
-		private Shader		shader;
+		private int     width;
+		private int     height;
+		private bool    useUserShader;
 
-		private Vector4		movieTextureST = Vector4.zero;
+		private Vector4     movieTextureST = Vector4.zero;
 
-		private Texture2D	texture;
-		private Color32[]	pixels;
-		private GCHandle	pixelsHandle;
+		private Texture2D   texture;
+		private Color32[]   pixels;
+		private GCHandle    pixelsHandle;
+		private bool        isTextureReady;
 
 
 		public RendererResourceSofdecPrimeRgb(int playerId, MovieInfo movieInfo, bool additive, Shader userShader)
 		{
-#if UNITY_EDITOR || UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX || UNITY_PSP2 || UNITY_PS4 || UNITY_PS3 || UNITY_WINRT || UNITY_SWITCH
+#if UNITY_EDITOR || UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX || UNITY_PSP2 || UNITY_PS5 || UNITY_PS4 || UNITY_PS3 || UNITY_WINRT || UNITY_SWITCH
 			width  = Ceiling64((int)movieInfo.width);
 			height = Ceiling64((int)movieInfo.height);
 #elif UNITY_ANDROID || UNITY_IOS || UNITY_TVOS
@@ -67,29 +64,24 @@ namespace CriMana.Detail
 #else
 	#error unsupported platform
 #endif
-			hasAlpha		= movieInfo.hasAlpha;
-			this.additive	= additive;
-			useUserShader	= userShader != null;
+			hasAlpha        = movieInfo.hasAlpha;
+			this.additive   = additive;
+			useUserShader   = userShader != null;
 
 			if (userShader != null) {
 				shader = userShader;
 			} else {
-				string shaderName = 
-					hasAlpha	? additive	? "CriMana/SofdecPrimeRgbaAdditive"
-											: "CriMana/SofdecPrimeRgba"
-								: additive	? "CriMana/SofdecPrimeRgbAdditive"
-											: "CriMana/SofdecPrimeRgb";
+				string shaderName = "CriMana/SofdecPrimeRgb";
 				shader = Shader.Find(shaderName);
 			}
-			
+
 			UpdateMovieTextureST(movieInfo.dispWidth, movieInfo.dispHeight);
 
-			texture				= new Texture2D(width, height, TextureFormat.ARGB32, false);
-			texture.wrapMode	= TextureWrapMode.Clamp;
-			pixels				= texture.GetPixels32(0);
-			pixelsHandle		= GCHandle.Alloc(pixels, GCHandleType.Pinned);
+			texture             = new Texture2D(width, height, TextureFormat.RGBA32, false);
+			texture.wrapMode    = TextureWrapMode.Clamp;
+			pixels              = texture.GetPixels32(0);
+			pixelsHandle        = GCHandle.Alloc(pixels, GCHandleType.Pinned);
 		}
-		
 
 
 		protected override void OnDisposeManaged()
@@ -107,19 +99,20 @@ namespace CriMana.Detail
 			if (texture != null) {
 				Texture2D.Destroy(texture);
 			}
-			texture	= null;
-			pixels	= null;
+			texture = null;
+			pixels  = null;
+			currentMaterial = null;
 		}
-		
-		
+
+
 		public override bool IsPrepared()
-		{ return true; }
-		
-		
+		{ return isTextureReady; }
+
+
 		public override bool ContinuePreparing()
 		{ return true; }
-		
-		
+
+
 		public override bool IsSuitable(int playerId, MovieInfo movieInfo, bool additive, Shader userShader)
 		{
 			bool isCodecSuitable    = movieInfo.codecType == CodecType.SofdecPrime;
@@ -130,42 +123,52 @@ namespace CriMana.Detail
 			return isCodecSuitable && isSizeSuitable && isAlphaSuitable && isAdditiveSuitable && isShaderSuitable;
 		}
 
-		
+
 		public override void AttachToPlayer(int playerId)
-		{}
-		
-		
-		public override bool UpdateFrame(int playerId, FrameInfo frameInfo)
 		{
-			bool isFrameUpdated = criManaUnityPlayer_UpdateTexture(
+			isTextureReady = false;
+		}
+
+
+		public override bool UpdateFrame(int playerId, FrameInfo frameInfo, ref bool frameDrop)
+		{
+			// Note: This renderer use a deprecated API: CRIWAREE48093C3.
+			// Todo: use CRIWARE9B186887 with a c++ rendereDecoder class if needed.
+			bool isFrameUpdated = CRIWAREE48093C3(
 				playerId,
 				pixelsHandle.AddrOfPinnedObject(),
-				frameInfo
+				frameInfo,
+				width
 				);
 			if (isFrameUpdated) {
 				texture.SetPixels32(pixels, 0);
 				texture.Apply();
 				UpdateMovieTextureST(frameInfo.dispWidth, frameInfo.dispHeight);
+				isTextureReady = true;
 			}
+			// Frame dropping cannot be supported with deprecated API.
+			frameDrop = false;
 			return isFrameUpdated;
 		}
-		
-		
+
+
 		public override bool UpdateMaterial(Material material)
 		{
-			material.shader = shader;
-			material.mainTexture = texture;
-			material.SetTexture("_TextureRGBA", texture);
-            material.SetInt("_IsLinearColorSpace", (QualitySettings.activeColorSpace == ColorSpace.Linear) ? 1 : 0);
+			if (currentMaterial != material) {
+				currentMaterial = material;
+				SetupStaticMaterialProperties();
+				//Temporary fix for Switch
+#if !UNITY_EDITOR && UNITY_SWITCH
+				material.EnableKeyword("CRI_SWITCH");
+#endif
+				material.mainTexture = texture;
+				material.SetTexture("_TextureRGBA", texture);
+			}
 			material.SetVector("_MovieTexture_ST", movieTextureST);
-			//Temporary fix for Switch
-			#if !UNITY_EDITOR && UNITY_SWITCH
-        	material.SetInt("_IsSwitch", 1);
-			#endif
 			return true;
 		}
-		
-		
+
+
 		private void UpdateMovieTextureST(System.UInt32 dispWidth, System.UInt32 dispHeight)
 		{
 			float uScale = (float)(dispWidth) / width;
@@ -176,17 +179,19 @@ namespace CriMana.Detail
 			movieTextureST.w = vScale;
 		}
 
+
 		public override void UpdateTextures()
 		{
 		}
 
 
 		#region Native API Definitions
-		[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-		private static extern bool criManaUnityPlayer_UpdateTexture(
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		private static extern bool CRIWAREE48093C3(
 			int player_id,
 			System.IntPtr texbuf,
-			[In, Out] FrameInfo frame_info
+			[In, Out] FrameInfo frame_info,
+			int texbuf_width
 			);
 		#endregion
 	}

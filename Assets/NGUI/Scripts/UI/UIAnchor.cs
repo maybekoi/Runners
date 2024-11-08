@@ -53,6 +53,8 @@ public class UIAnchor : MonoBehaviour
 
 	public bool halfPixelOffset = true;
 
+	public bool isUIButton;
+
 	/// <summary>
 	/// If set to 'true', UIAnchor will execute once, then will be removed. Useful if your screen resolution never changes.
 	/// </summary>
@@ -194,6 +196,23 @@ public class UIAnchor : MonoBehaviour
 		float width = mRect.width;
 		float height = mRect.height;
 
+		float aspectRatio = (float) Screen.width / (float) Screen.height;
+		if (aspectRatio >= 1.87 && side != Side.Center && isUIButton) // Greater than 16:9
+		{
+			if (side == Side.Right || side == Side.TopRight || side == Side.BottomRight)
+				relativeOffset.x = -0.033f;
+			if (side == Side.Left || side == Side.TopLeft || side == Side.BottomLeft)
+				relativeOffset.x = 0.033f;
+		}
+		else
+		{
+			if (side == Side.Right || side == Side.TopRight || side == Side.BottomRight)
+				if (relativeOffset.x == -0.033f)
+					relativeOffset.x = 0f;
+			if (side == Side.Left || side == Side.TopLeft || side == Side.BottomLeft)
+				if (relativeOffset.x == 0.033f)
+					relativeOffset.x = 0f;
+		}
 		v.x += pixelOffset.x + relativeOffset.x * width;
 		v.y += pixelOffset.y + relativeOffset.y * height;
 

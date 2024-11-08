@@ -1,12 +1,13 @@
 ﻿/****************************************************************************
  *
- * Copyright (c) 2015 CRI Middleware Co., Ltd.
+ * Copyright (c) 2015-2018 CRI Middleware Co., Ltd.
  *
  ****************************************************************************/
 
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using UnityEngine;
 
 
 namespace CriMana.Detail
@@ -14,18 +15,24 @@ namespace CriMana.Detail
 	public abstract class RendererResource : System.IDisposable
 	{
 		private bool disposed = false;
-		
+		protected Shader shader;
+		protected Material currentMaterial;
+		protected bool hasAlpha;
+		protected bool additive;
+		protected bool applyTargetAlpha;
+		protected bool ui;
+
 		~RendererResource()
 		{
 			Dispose(false);
 		}
-		
+
 		public void Dispose()
 		{
 			this.Dispose(true);
 			System.GC.SuppressFinalize(this);
 		}
-		
+
 		private void Dispose(bool disposing)
 		{
 			if (disposed) {
@@ -37,25 +44,90 @@ namespace CriMana.Detail
 			OnDisposeUnmanaged();
 			disposed = true;
 		}
-	
+
+		public int GetNumberOfFrameBeforeDestroy(int playerId)
+		{
+			return CRIWAREA9D27250(playerId);
+		}
+
+		protected void SetupStaticMaterialProperties()
+		{
+			if (currentMaterial == null) {
+				return;
+			}
+
+			int srcBlendMode, dstBlendMode;
+			GetBlendModes(out srcBlendMode, out dstBlendMode);
+
+			if (currentMaterial.shader != shader) {
+				currentMaterial.shader = shader;
+			}
+			currentMaterial.SetInt("_SrcBlendMode", srcBlendMode);
+			currentMaterial.SetInt("_DstBlendMode", dstBlendMode);
+			currentMaterial.SetInt("_CullMode", ui ? 0 : 2);
+			currentMaterial.SetInt("_ZWriteMode", ui ? 0 : 1);
+			if (hasAlpha) {
+				currentMaterial.EnableKeyword("CRI_ALPHA_MOVIE");
+			}
+			if (applyTargetAlpha) {
+				currentMaterial.EnableKeyword("CRI_APPLY_TARGET_ALPHA");
+			}
+			if (QualitySettings.activeColorSpace == ColorSpace.Linear) {
+				currentMaterial.EnableKeyword("CRI_LINEAR_COLORSPACE");
+			}
+		}
+
+		private void GetBlendModes(out int srcBlendMode, out int dstBlendMode)
+		{
+			if (hasAlpha || applyTargetAlpha) {
+				srcBlendMode = additive ? (int)UnityEngine.Rendering.BlendMode.One : (int)UnityEngine.Rendering.BlendMode.SrcAlpha;
+				dstBlendMode = (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha;
+			} else {
+				srcBlendMode = (int)UnityEngine.Rendering.BlendMode.One;
+				dstBlendMode = additive ? (int)UnityEngine.Rendering.BlendMode.One : (int)UnityEngine.Rendering.BlendMode.Zero;
+			}
+		}
+
+		public virtual void SetApplyTargetAlpha(bool flag)
+		{
+			applyTargetAlpha = flag;
+			SetupStaticMaterialProperties();
+		}
+
+		public virtual void SetUiRenderMode(bool flag)
+		{
+			ui = flag;
+			SetupStaticMaterialProperties();
+		}
+
 		protected abstract void OnDisposeManaged();
 
 		protected abstract void OnDisposeUnmanaged();
-		
+
 		public abstract bool IsPrepared();
-		
+
 		public abstract bool ContinuePreparing();
-		
+
 		public abstract void AttachToPlayer(int playerId);
-		
-		public abstract bool UpdateFrame(int playerId, FrameInfo frameInfo);
-		
+
+		public abstract bool UpdateFrame(int playerId, FrameInfo frameInfo, ref bool frameDrop);
+
 		public abstract bool UpdateMaterial(UnityEngine.Material material);
 
 		public abstract void UpdateTextures();
-		
+
 		public abstract bool IsSuitable(int playerId, MovieInfo movieInfo, bool additive, UnityEngine.Shader userShader);
-		
+
+		public virtual void OnPlayerPause(bool pauseStatus) {}
+
+		public virtual bool OnPlayerStopForSeek() { return false; }
+
+		public virtual void OnPlayerStart() { }
+
+		public virtual bool ShouldSkipDestroyOnStopForSeek() { return false; }
+
+		public virtual bool HasRenderedNewFrame() { return true; }
+
 		public static uint NextPowerOfTwo(uint x)
 		{
 			x = x - 1;
@@ -66,44 +138,128 @@ namespace CriMana.Detail
 			x = x | (x >>16);
 			return x + 1;
 		}
-		
+
 		public static int NextPowerOfTwo(int x)
 		{
 			return (int)NextPowerOfTwo((uint)x);
 		}
-		
+
+		public static int CeilingWith(int x, int ceilingValue)
+		{
+			return (x+ceilingValue-1) & -ceilingValue;
+		}
+
 		public static int Ceiling16(int x)
 		{
 			return (x+15)& -16;
 		}
-		
+
+		public static int Ceiling32(int x)
+		{
+			return (x+31)& -32;
+		}
+
 		public static int Ceiling64(int x)
 		{
 			return (x+63)& -64;
 		}
-		
+
 		public static int Ceiling256(int x)
 		{
 			return (x+255)& -256;
 		}
 
-		#region Native API Definitions
-		[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-		protected static extern bool criManaUnityPlayer_UpdateFrame(
+		protected static void DisposeTextures(Texture[] textures)
+		{
+			if (textures == null) {
+				return;
+			}
+
+			for (int i = 0; i < textures.Length; i++) {
+				if (textures[i] != null) {
+#if UNITY_EDITOR
+					if (UnityEditor.EditorApplication.isPlaying == false) {
+						Texture2D.DestroyImmediate(textures[i]);
+					} else {
+						Texture2D.Destroy(textures[i]);
+					}
+#else
+					Texture2D.Destroy(textures[i]);
+#endif
+					textures[i] = null;
+				}
+			}
+		}
+
+		#region DLL Import
+		#if !CRIWARE_ENABLE_HEADLESS_MODE
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		protected static extern bool CRIWAREF463354B(
 			int player_id,
 			int num_textures,
 			System.IntPtr[] tex_ptrs,
-			[In, Out] FrameInfo frame_info
+			[In, Out] FrameInfo frame_info,
+            ref bool frame_drop // in -> Can drop a frame?, out -> Is Frame dropped?
 		);
 
-		[DllImport(CriWare.pluginName, CallingConvention = CriWare.pluginCallingConvention)]
-		protected static extern bool criManaUnityPlayer_UpdateTextures(
+		[DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+		protected static extern bool CRIWARE9B186887(
 			int player_id,
 			int num_textures,
 			[In, Out] System.IntPtr[] tex_ptrs
 		);
+
+        [DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+        protected static extern bool CRIWARE702CADE1(
+            int player_id,
+            int num_textures,
+            [In, Out] System.IntPtr[] tex_ptrs
+        );
+
+        [DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+        protected static extern bool CRIWARE44F6DEE8(
+            int player_id,
+            int num_textures,
+            [In, Out] System.IntPtr[] tex_ptrs
+        );
+
+        [DllImport(CriWare.Common.pluginName, CallingConvention = CriWare.Common.pluginCallingConvention)]
+        protected static extern sbyte CRIWAREA9D27250(
+            int player_id
+        );
+		#else
+		protected static bool CRIWAREF463354B(
+			int player_id,
+			int num_textures,
+			System.IntPtr[] tex_ptrs,
+			[In, Out] FrameInfo frame_info,
+			ref bool frame_drop
+		) { return true; }
+
+		protected static bool CRIWARE9B186887(
+			int player_id,
+			int num_textures,
+			[In, Out] System.IntPtr[] tex_ptrs
+		) { return true; }
+
+		protected static bool CRIWARE702CADE1(
+			int player_id,
+			int num_textures,
+			[In, Out] System.IntPtr[] tex_ptrs
+		) { return true; }
+
+		protected static bool CRIWARE44F6DEE8(
+			int player_id,
+			int num_textures,
+			[In, Out] System.IntPtr[] tex_ptrs
+		) { return true; }
+
+        protected static sbyte CRIWAREA9D27250(
+            int player_id
+        ) { return 0; }
+		#endif
 		#endregion
-	}
+    }
 
 
 
@@ -128,7 +284,7 @@ namespace CriMana.Detail
 
 		static public RendererResource DispatchAndCreate(int playerId, MovieInfo movieInfo, bool additive, UnityEngine.Shader userShader)
 		{
-			RendererResource	rendererResource	= null;
+			RendererResource    rendererResource    = null;
 
 			foreach (var factoryWithPriority in factoryList) {
 				rendererResource = factoryWithPriority.Value.CreateRendererResource(playerId, movieInfo, additive, userShader);
@@ -145,7 +301,7 @@ namespace CriMana.Detail
 
 		#region Instance
 		private bool disposed = false;
-		
+
 		~RendererResourceFactory()
 		{
 			Dispose(false);
@@ -229,4 +385,37 @@ namespace CriMana.Detail
 			}
 		}
 	}
+
+#if CRIWARE_ENABLE_HEADLESS_MODE
+	public static partial class AutoResisterRendererResourceFactories
+	{
+		[RendererResourceFactoryPriority(4000)]
+		public class RendererResourceFactoryDummy : RendererResourceFactory
+		{
+			public override RendererResource CreateRendererResource(int playerId, MovieInfo movieInfo, bool additive, UnityEngine.Shader userShader)
+			{
+				return new RendererResourceDummy(playerId, movieInfo, additive, userShader);
+			}
+			protected override void OnDisposeManaged() { }
+			protected override void OnDisposeUnmanaged() { }
+		}
+	}
+
+	public class RendererResourceDummy : RendererResource
+	{
+		public RendererResourceDummy(int playerId, MovieInfo movieInfo, bool additive, UnityEngine.Shader userShader) { }
+		protected override void OnDisposeManaged() { }
+		protected override void OnDisposeUnmanaged() { }
+		public override bool IsPrepared() { return true; }
+		public override bool ContinuePreparing() { return true; }
+		public override bool IsSuitable(int playerId, MovieInfo movieInfo, bool additive, UnityEngine.Shader userShader) { return true; }
+		public override void SetApplyTargetAlpha(bool flag) { }
+		public override void AttachToPlayer(int playerId) { }
+		public override bool UpdateFrame(int playerId, FrameInfo frameInfo, ref bool frameDrop) { return true; }
+		public override bool UpdateMaterial(UnityEngine.Material material) { return true; }
+		private void UpdateMovieTextureST(System.UInt32 dispWidth, System.UInt32 dispHeight) { }
+		public override void UpdateTextures(){ }
+	}
+#endif
 }
+

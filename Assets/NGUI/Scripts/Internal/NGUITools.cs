@@ -54,7 +54,7 @@ static public class NGUITools
 	{
 		get
 		{
-			return Application.platform != RuntimePlatform.WebGLPlayer;
+			return true;
 		}
 	}
 
@@ -980,7 +980,7 @@ static public class NGUITools
 
 	static public bool Save (string fileName, byte[] bytes)
 	{
-#if UNITY_WEBPLAYER || UNITY_FLASH || UNITY_METRO || UNITY_WP8
+#if UNITY_FLASH || UNITY_METRO || UNITY_WP8
 		return false;
 #else
 		if (!NGUITools.fileAccess) return false;
@@ -1017,7 +1017,7 @@ static public class NGUITools
 
 	static public byte[] Load (string fileName)
 	{
-#if UNITY_WEBPLAYER || UNITY_FLASH || UNITY_METRO || UNITY_WP8
+#if UNITY_FLASH || UNITY_METRO || UNITY_WP8
 		return null;
 #else
 		if (!NGUITools.fileAccess) return null;
@@ -1063,7 +1063,7 @@ static public class NGUITools
 	/// http://answers.unity3d.com/questions/266244/how-can-i-add-copypaste-clipboard-support-to-my-ga.html
 	/// </summary>
 
-#if UNITY_WEBPLAYER || UNITY_FLASH || UNITY_METRO
+#if UNITY_FLASH || UNITY_METRO
 	/// <summary>
 	/// Access to the clipboard is not supported on this platform.
 	/// </summary>

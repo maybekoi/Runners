@@ -6,118 +6,209 @@
 
 using UnityEngine;
 using System;
-using System.Collections;
-
-/// \addtogroup CRIATOM_UNITY_COMPONENT
-/// @{
+using System.Collections.Generic;
 
 /**
- * <summary>3Dリスナーを表すコンポーネントです。</summary>
- * \par 説明:
- * 通常、カメラやメインキャラクタのGameObjectに付与して使用します。
- * 現在位置の更新は自動的に行われるため、特に操作や設定を行う必要はありません。
+ * \addtogroup CRIATOM_UNITY_COMPONENT
+ * @{
+ */
+
+
+/**
+ * <summary>A component that represents a 3D listener.</summary>
+ * <remarks>
+ * <para header='Description'>Usually, it is used by attaching it to the GameObject object of the camera or main character.
+ * The current position is updated automatically, so no special operation or setting is required.</para>
+ * </remarks>
  */
 [AddComponentMenu("CRIWARE/CRI Atom Listener")]
-public class CriAtomListener : MonoBehaviour
+public class CriAtomListener : CriMonoBehaviour
 {
 	#region CRIWARE internals
-	public static CriAtomListener activeListener {
-		get; private set;
-	}
-
-	public static CriAtomEx3dListener sharedNativeListener {
-		get; private set;
-	}
-	
-	public static void CreateSharedNativeListener()
+	public static void CreateDummyNativeListener()
 	{
-		if (sharedNativeListener == null) {
-			sharedNativeListener = new CriAtomEx3dListener();
+		if (dummyNativeListener == null) {
+			dummyNativeListener = new CriAtomEx3dListener();
 		}
 	}
 
-	public static void DestroySharedNativeListener()
+	public static void DestroyDummyNativeListener()
 	{
-		if (sharedNativeListener != null) {
-			sharedNativeListener.Dispose();
-			sharedNativeListener = null;
+		if (dummyNativeListener != null) {
+			dummyNativeListener.Dispose();
+			dummyNativeListener = null;
 		}
 	}
 	#endregion
 
-	#region Variables
+	#region Fields & Properties
 	/**
-	 * <summary>OnEnable 時に常にアクティブリスナーにするか</summary>
-	 * \par 説明:
-	 * true の場合、 OnEnable 時に他のリスナーがアクティブな場合でもアクティブリスナーになります。
-	 * false の場合、アクティブリスナーが存在しない場合のみアクティブリスナーになります。
+	 * <summary>This is the CriAtomEx3dListener used internally.</summary>
+	 * <remarks>
+	 * <para header='Description'>If you want to control CriAtom3dListener directly, get CriAtom3dListener from this property.</para>
+	 * </remarks>
+	 */
+	public CriAtomEx3dListener nativeListener { get; protected set; }
+
+	[SerializeField] CriAtomRegion regionOnStart = null;
+
+	/**
+	 * <summary>Whether to make it an exclusive active listener in OnEnable</summary>
+	 * <remarks>
+	 * <para header='Description'>If true, when OnEnable is called, this listener will be activated
+	 * and all the other listeners will be deactivated.
+	 * If false, it will become active without affecting other listeners.</para>
+	 * </remarks>
 	 */
 	public bool activateListenerOnEnable = false;
+
+	/**
+	 * <summary>Whether the CriAtomListener is active</summary>
+	 * <remarks>
+	 * <para header='Description'>An active CriAtomListener acts as a listener for CriAtomSource audio. <br/>
+	 * If there are multiple CriAtomListeners, The 3D sound will be calculated <br/>
+	 * using the active listener that is closest to the CriAtomSource.</para>
+	 * </remarks>
+	 */
+	public bool isActive {
+		get { return _isActive; }
+		set {
+			if (_isActive == value) return;
+			_isActive = value;
+			if (value)
+				UpdatePosition();
+			else {
+				/* Make the listener unactive by setting far position. */
+				nativeListener.SetPosition(float.MaxValue, float.MaxValue, float.MaxValue);
+				nativeListener.Update();
+			}
+		}
+	}
+
+	/**
+	 * <summary>Sets/gets 3D region of the sound source</summary>
+	 */
+	public CriAtomRegion region3d
+	{
+		get { return currentRegion; }
+		set {
+			CriAtomEx3dRegion regionHandle = (value == null) ? null : value.region3dHn;
+			if (nativeListener != null) {
+				nativeListener.Set3dRegion(regionHandle);
+				nativeListener.Update();
+				this.currentRegion = value;
+			} else {
+				Debug.LogError("[CRIWARE] Internal: CriAtomListener is not initialized correctly.");
+				this.currentRegion = null;
+			}
+		}
+	}
 	#endregion
-	
+
 	#region Internal Variables
+	static List<CriAtomListener> listenersList = new List<CriAtomListener>();
+
+	/* Dummy listenr used when CriAtomListenr is not exists. */
+	static CriAtomEx3dListener dummyNativeListener;
+
 	private Vector3 lastPosition;
+	private CriAtomRegion currentRegion = null;
+	private bool _isActive;
 	#endregion
 
 	#region Functions
-	void OnEnable()
+	private void Awake()
 	{
-		if ((activeListener == null) || activateListenerOnEnable) {
-			ActivateListener();
+		if (!listenersList.Contains(this))
+			listenersList.Add(this);
+		DestroyDummyNativeListener();
+		nativeListener = new CriAtomEx3dListener();
+	}
+
+	private void Start()
+	{
+		if (regionOnStart != null) {
+			region3d = this.regionOnStart;
 		}
 	}
 
-	void OnDisable()
+	protected override void OnEnable()
 	{
-		if (activeListener == this) {
-			if (sharedNativeListener != null) {
-				sharedNativeListener.ResetParameters();
-				sharedNativeListener.Update();
-			}
-			activeListener = null;
-		}
+		base.OnEnable();
+		ActivateListener(activateListenerOnEnable);
 	}
 
-	void LateUpdate()
+	protected override void OnDisable()
 	{
-		if (activeListener != this) {
-			return;
-		}
+		base.OnDisable();
+		isActive = false;
+	}
+
+	private void OnDestroy()
+	{
+		if (listenersList.Contains(this))
+			listenersList.Remove(this);
+		nativeListener.Dispose();
+		nativeListener = null;
+	}
+
+#if UNITY_EDITOR
+	private void OnDrawGizmos() {
+		if (this.enabled == false) { return; }
+		var criWareLightBlue = new Color(0.332f, 0.661f, 0.991f);
+		Gizmos.color = isActive || !Application.isPlaying ? criWareLightBlue : Color.gray;
+		Gizmos.DrawLine(this.transform.position, this.transform.position + this.transform.forward);
+		Gizmos.DrawLine(this.transform.position, this.transform.position + this.transform.up);
+		UnityEditor.Handles.color = isActive || !Application.isPlaying ? criWareLightBlue : Color.gray;
+		UnityEditor.Handles.ArrowHandleCap(1, this.transform.position + this.transform.forward, this.transform.rotation, 1f, EventType.Repaint);
+		UnityEditor.Handles.RectangleHandleCap(1, this.transform.position, this.transform.rotation * Quaternion.LookRotation(Vector3.up), 1f, EventType.Repaint);
+	}
+#endif
+
+	public override void CriInternalUpdate() { }
+
+	public override void CriInternalLateUpdate()
+	{
+		if (isActive)
+			UpdatePosition();
+	}
+
+	void UpdatePosition()
+	{
 		Vector3 position = this.transform.position;
 		Vector3 velocity = (position - this.lastPosition) / Time.deltaTime;
-		Vector3 front    = this.transform.forward;
-		Vector3 up       = this.transform.up;
+		Vector3 front = this.transform.forward;
+		Vector3 up = this.transform.up;
 		this.lastPosition = position;
-		if (sharedNativeListener != null) {
-			sharedNativeListener.SetPosition(position.x, position.y, position.z);
-			sharedNativeListener.SetVelocity(velocity.x, velocity.y, velocity.z);
-			sharedNativeListener.SetOrientation(front.x, front.y, front.z, up.x, up.y, up.z);
-			sharedNativeListener.Update();
+		if (nativeListener != null) {
+			nativeListener.SetPosition(position.x, position.y, position.z);
+			nativeListener.SetVelocity(velocity.x, velocity.y, velocity.z);
+			nativeListener.SetOrientation(front.x, front.y, front.z, up.x, up.y, up.z);
+			nativeListener.Update();
 		}
 	}
 	#endregion
-	
-	/**
-	 * <summary>アクティブリスナーにする</summary>
-	 * \par 説明:
-	 * アクティブリスナーになると、 ::CriAtomSource の3Dリスナーとして動作します。
-	 */
-	public void ActivateListener()
-	{
-		activeListener = this;
 
-		Vector3 position = this.transform.position;
-		Vector3 front    = this.transform.forward;
-		Vector3 up       = this.transform.up;
-		this.lastPosition = position;
-		if (sharedNativeListener != null) {
-			sharedNativeListener.SetPosition(position.x, position.y, position.z);
-			sharedNativeListener.SetVelocity(0.0f, 0.0f, 0.0f);
-			sharedNativeListener.SetOrientation(front.x, front.y, front.z, up.x, up.y, up.z);
-			sharedNativeListener.Update();
+	/**
+	 * <summary>Make it an active listener</summary>
+	 * <param name='exclusive'>Whether to make this AtomListener the only active listener</param>
+	 * <remarks>
+	 * <para header='Description'>When it becomes an active listener, it acts as a 3D listener for ::CriAtomSource .</para>
+	 * <para header='Note'>For compatibility with old plugins, when called with no arguments, <br/>
+	 * only the CriAtomListener calling this method will be active.</para>
+	 * </remarks>
+	 */
+	public void ActivateListener(bool exclusive = true)
+	{
+		if (exclusive) {
+			foreach (var listener in listenersList) {
+				if (listener == this) continue;
+				listener.isActive = false;
+			}
 		}
+		isActive = true;
 	}
 } // end of class
 
-/// @}
+/** @} */
 /* end of file */
