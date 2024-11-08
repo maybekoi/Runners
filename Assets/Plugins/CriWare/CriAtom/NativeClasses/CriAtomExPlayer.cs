@@ -2723,6 +2723,7 @@ public class CriAtomExPlayer : IDisposable
             criAtomExPlayer_LimitLoopCount(this.handle, -3);
         }else
         {
+			// Note to self: time to figure out WHY this fucks the title
         	//const int CRIATOMPARAMETER2_ID_LOOP_COUNT = 146;
            // IntPtr player_parameter = criAtomExPlayer_GetPlayerParameter(this.handle);
            // criAtomExPlayerParameter_RemoveParameter(player_parameter, CRIATOMPARAMETER2_ID_LOOP_COUNT);
