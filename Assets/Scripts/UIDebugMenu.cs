@@ -16,13 +16,13 @@ public class UIDebugMenu : UIDebugMenuTask
 		ACTIVE_DEBUG_SERVER,
 		MIGRATION,
 		USER_MOVE,
-		FACEBOOK,
+		DISCORD,
 		NOTIFICATION,
 		CAMPAIGN,
-		LOCAL1,
-		LOCAL2,
-		LOCAL3,
-		DEVELOP,
+		SERVER1,
+		SERVER2,
+		SERVER3,
+		SERVER4,
 		NUM
 	}
 
@@ -36,13 +36,20 @@ public class UIDebugMenu : UIDebugMenuTask
 		"for Dev./ActiveDebugServer",
 		"for Dev./migration",
 		"for Dev./user_move",
-		"Facebook",
+		"Discord",
 		"Notification",
 		"Campaign",
+#if DEBUG || UNITY_EDITOR
+		"LOCAL2",
+		"FP137TEST1",
+		"FP137TEST2",
+		"LEADERBOARDTEST"
+#else
 		"LOCAL1",
 		"LOCAL2",
 		"LOCAL3",
-		"DEVELOP"
+		"LOCAL4"
+#endif
 	};
 
 	private List<Rect> RectList = new List<Rect>
@@ -99,7 +106,7 @@ public class UIDebugMenu : UIDebugMenuTask
 			gameObject2.AddComponent<LoadURLComponent>();
 		}
 		m_debugServerUrlField = base.gameObject.AddComponent<UIDebugMenuTextField>();
-		m_debugServerUrlField.Setup(new Rect(200f, 470f, 375f, 30f), "forDev:デバッグサーバーURL入力(例：http://157.109.83.27/sdl/)");
+		m_debugServerUrlField.Setup(new Rect(200f, 470f, 375f, 30f), "forDev: Debug Server URL (i.e. http://157.109.83.27/sdl/)");
 		StartCoroutine(InitCoroutine());
 		TransitionFrom();
 	}
@@ -140,17 +147,20 @@ public class UIDebugMenu : UIDebugMenuTask
 	{
 		m_clickedButtonName = name;
 		bool flag = true;
-		if (m_clickedButtonName == MenuObjName[11] || m_clickedButtonName == MenuObjName[12] || m_clickedButtonName == MenuObjName[13] || m_clickedButtonName == MenuObjName[14] || m_clickedButtonName == MenuObjName[5] || m_clickedButtonName == MenuObjName[1] || m_clickedButtonName == MenuObjName[8] || m_clickedButtonName == MenuObjName[7])
+		if (m_clickedButtonName == MenuObjName[(int)MenuType.SERVER1] ||
+			m_clickedButtonName == MenuObjName[(int)MenuType.SERVER2] ||
+			m_clickedButtonName == MenuObjName[(int)MenuType.SERVER3] ||
+			m_clickedButtonName == MenuObjName[(int)MenuType.SERVER4] ||
+			m_clickedButtonName == MenuObjName[(int)MenuType.ACTIVE_DEBUG_SERVER] ||
+			m_clickedButtonName == MenuObjName[(int)MenuType.TITLE] ||
+			m_clickedButtonName == MenuObjName[(int)MenuType.DISCORD] ||
+			m_clickedButtonName == MenuObjName[(int)MenuType.USER_MOVE])
 		{
 			flag = false;
 		}
 		if (flag)
 		{
-			ServerSessionWatcher serverSessionWatcher = GameObjectUtil.FindGameObjectComponent<ServerSessionWatcher>("NetMonitor");
-			if (serverSessionWatcher != null)
-			{
-				serverSessionWatcher.ValidateSession(ServerSessionWatcher.ValidateType.LOGIN_OR_RELOGIN, ValidateSessionCallback);
-			}
+			ValidateSessionCallback(true);
 		}
 		else
 		{
@@ -160,33 +170,52 @@ public class UIDebugMenu : UIDebugMenuTask
 
 	private void ValidateSessionCallback(bool isSuccess)
 	{
-		if (m_clickedButtonName == MenuObjName[11])
-		{
-			Env.actionServerType = Env.ActionServerType.LOCAL1;
-		}
-		else if (m_clickedButtonName == MenuObjName[12])
+#if DEBUG || UNITY_EDITOR
+		if (m_clickedButtonName == MenuObjName[(int)MenuType.SERVER1])
 		{
 			Env.actionServerType = Env.ActionServerType.LOCAL2;
 		}
-		else if (m_clickedButtonName == MenuObjName[13])
+		else if (m_clickedButtonName == MenuObjName[(int)MenuType.SERVER2])
+		{
+			Env.actionServerType = Env.ActionServerType.FP137TEST1;
+		}
+		else if (m_clickedButtonName == MenuObjName[(int)MenuType.SERVER3])
+		{
+			Env.actionServerType = Env.ActionServerType.FP137TEST2;
+		}
+		else if (m_clickedButtonName == MenuObjName[(int)MenuType.SERVER4])
+		{
+			Env.actionServerType = Env.ActionServerType.LEADERBOARDTEST;
+		}
+#else
+		if (m_clickedButtonName == MenuObjName[(int)MenuType.SERVER1])
+		{
+			Env.actionServerType = Env.ActionServerType.LOCAL1;
+		}
+		else if (m_clickedButtonName == MenuObjName[(int)MenuType.SERVER2])
+		{
+			Env.actionServerType = Env.ActionServerType.LOCAL2;
+		}
+		else if (m_clickedButtonName == MenuObjName[(int)MenuType.SERVER3])
 		{
 			Env.actionServerType = Env.ActionServerType.LOCAL3;
 		}
-		else if (m_clickedButtonName == MenuObjName[14])
+		else if (m_clickedButtonName == MenuObjName[(int)MenuType.SERVER4])
 		{
-			Env.actionServerType = Env.ActionServerType.DEVELOP;
+			Env.actionServerType = Env.ActionServerType.LOCAL4;
 		}
-		if (m_clickedButtonName == MenuObjName[11] || m_clickedButtonName == MenuObjName[12] || m_clickedButtonName == MenuObjName[13] || m_clickedButtonName == MenuObjName[14])
+#endif
+		if (m_clickedButtonName == MenuObjName[(int)MenuType.SERVER1] || m_clickedButtonName == MenuObjName[(int)MenuType.SERVER2] || m_clickedButtonName == MenuObjName[(int)MenuType.SERVER3] || m_clickedButtonName == MenuObjName[(int)MenuType.SERVER4])
 		{
 			NetBaseUtil.DebugServerUrl = null;
 			string actionServerURL = NetBaseUtil.ActionServerURL;
 		}
-		else if (m_clickedButtonName == MenuObjName[5])
+		else if (m_clickedButtonName == MenuObjName[(int)MenuType.ACTIVE_DEBUG_SERVER])
 		{
 			string actionServerURL = NetBaseUtil.DebugServerUrl = m_debugServerUrlField.text;
 			DebugSaveServerUrl.SaveURL(actionServerURL);
 		}
-		else if (m_clickedButtonName == MenuObjName[1])
+		else if (m_clickedButtonName == MenuObjName[(int)MenuType.TITLE])
 		{
 			Application.LoadLevel(TitleDefine.TitleSceneName);
 		}
@@ -198,7 +227,22 @@ public class UIDebugMenu : UIDebugMenuTask
 
 	protected override void OnGuiFromTask()
 	{
-		GUI.Label(new Rect(400f, 510f, 300f, 60f), "現在のURL\n" + NetBaseUtil.ActionServerURL);
+		GUI.Label(new Rect(400f, 510f, 300f, 60f), "Current URL\n" + NetBaseUtil.ActionServerURL);
+
+		string netState = "Unknown";
+		switch(Application.internetReachability) {
+			case NetworkReachability.NotReachable:
+				netState = "Disconnected";
+				break;
+			case NetworkReachability.ReachableViaLocalAreaNetwork:
+				netState = "Connected to Wi-Fi";
+				break;
+			case NetworkReachability.ReachableViaCarrierDataNetwork:
+				netState = "Connected to mobile";
+				break;
+		}
+
+		GUI.Label(new Rect(400f, 390f, 300f, 60f), "Network state\n"+netState);
 	}
 
 	private IEnumerator InitCoroutine()

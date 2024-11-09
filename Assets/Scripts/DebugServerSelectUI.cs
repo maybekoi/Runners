@@ -174,18 +174,24 @@ public class DebugServerSelectUI : MonoBehaviour
 		case ButtonType.LOCAL4:
 			Env.actionServerType = Env.ActionServerType.LOCAL4;
 			break;
+		#if DEBUG || UNITY_EDITOR
+		case ButtonType.LOCAL5:
+			Env.actionServerType = Env.ActionServerType.MTBTEST;
+			break;
+		case ButtonType.DEVELOP1:
+			Env.actionServerType = Env.ActionServerType.FP137TEST1;
+			break;
+		case ButtonType.DEVELOP2:
+			Env.actionServerType = Env.ActionServerType.FP137TEST2;
+			break;
+		case ButtonType.DEVELOP3:
+			Env.actionServerType = Env.ActionServerType.STAGING;
+			break;	
+		#else
 		case ButtonType.LOCAL5:
 			Env.actionServerType = Env.ActionServerType.LOCAL5;
 			break;
-		case ButtonType.DEVELOP1:
-			Env.actionServerType = Env.ActionServerType.DEVELOP;
-			break;
-		case ButtonType.DEVELOP2:
-			Env.actionServerType = Env.ActionServerType.DEVELOP2;
-			break;
-		case ButtonType.DEVELOP3:
-			Env.actionServerType = Env.ActionServerType.DEVELOP3;
-			break;
+		#endif
 		case ButtonType.RELEASE:
 			Env.actionServerType = Env.ActionServerType.RELEASE;
 			break;
