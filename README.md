@@ -2,6 +2,8 @@
 
 * A port of the Sonic Runners Decomp to Unity 2019.1.14
 
+* The Asset Bundles repo is [here](https://github.com/itsmattkc/RunnersAssetBundleDecomp)
+
 # Current Issues
 
 * Some of the UI stuff is broken rn.
