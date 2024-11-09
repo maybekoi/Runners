@@ -4,9 +4,7 @@
 
 # Current Issues
 
-* No Audio
-
-* Alot of UI stuff isn't fixed.
+* Some of the UI stuff is broken rn.
 
 # Credits
 
