@@ -6,6 +6,8 @@
 
 * Some of the UI stuff is broken rn.
 
+* Results screen softlocks you.
+
 # Credits
 
 * YoPhlox - Port to Unity 2019
@@ -32,7 +34,3 @@ By: YoPhlox
 5. Run outrun
 
 6. Enjoy! (the server is set to localhost by default)
-
-# Note
-
-* This is still a work in progress and this is being done by one person only, so expect development to be slow.
