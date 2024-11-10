@@ -6,9 +6,11 @@
 
 # Current Issues
 
-* Some of the UI stuff is broken rn. (I think I fixed everything but i dunno for sure)
-
 * Results screen text exists but it doesn't. (NGUI bug go brrr)
+
+# Progress
+
+I think about 85% maybe??
 
 # Credits
 
