@@ -4,6 +4,8 @@
 
 * The Asset Bundles repo is [here](https://github.com/yophlox/RunnersAssetBundleDecomp)
 
+* SRU18 is [here](https://github.com/yophlox/Runners/tree/SRU18-LEGACY)
+
 # Current Issues
 
 * Results screen text exists but it doesn't. (NGUI bug go brrr)
