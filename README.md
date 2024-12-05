@@ -4,7 +4,7 @@
 
 * The Asset Bundles repo is [here](https://github.com/yophlox/RunnersAssetBundleDecomp)
 
-* SRU18 is [here](https://github.com/yophlox/Runners/tree/SRU18-LEGACY)
+* The original SRU18 project is [here](https://github.com/yophlox/Runners/tree/SRU18-LEGACY)
 
 # Current Issues
 
