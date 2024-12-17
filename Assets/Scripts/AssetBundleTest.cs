@@ -1,32 +1,32 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class AssetBundleTest : MonoBehaviour
 {
 	private void Start()
 	{
-		WWW www = WWW.LoadFromCacheOrDownload("http://web2/HikiData/Sonic_Runners/Soft/Asset/AssetBundles_Win/PrephabKnuckles.unity3d", 5);
-		StartCoroutine(WaitLoard(www));
+		StartCoroutine(WaitLoad());
 	}
 
-	private void Update()
+	private IEnumerator WaitLoad()
 	{
-	}
+		UnityWebRequest www = UnityWebRequestAssetBundle.GetAssetBundle(
+			"http://web2/HikiData/Sonic_Runners/Soft/Asset/AssetBundles_Win/PrephabKnuckles.unity3d", 
+			5);
+			
+		yield return www.SendWebRequest();
 
-	private IEnumerator WaitLoard(WWW www)
-	{
-		while (!www.isDone)
-		{
-			yield return null;
-		}
-		if (www.error != null)
+		if (!string.IsNullOrEmpty(www.error))
 		{
 			Debug.LogError(www.error);
 			yield break;
 		}
-		AssetBundle myLoadedAssetBundle = www.assetBundle;
+
+		AssetBundle myLoadedAssetBundle = DownloadHandlerAssetBundle.GetContent(www);
 		Object asset = myLoadedAssetBundle.mainAsset;
 		Object.Instantiate(asset);
 		myLoadedAssetBundle.Unload(false);
+		www.Dispose();
 	}
 }

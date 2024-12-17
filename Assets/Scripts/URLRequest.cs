@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class URLRequest
 {
@@ -13,9 +14,9 @@ public class URLRequest
 
 	private Action mDelegateRequest;
 
-	private Action<WWW> mDelegateSuccess;
+	private Action<UnityWebRequest> mDelegateSuccess;
 
-	private Action<WWW, bool, bool> mDelegateFailure;
+	private Action<UnityWebRequest, bool, bool> mDelegateFailure;
 
 	private bool mCompleted;
 
@@ -23,7 +24,7 @@ public class URLRequest
 
 	private float mElapsedTime;
 
-	private WWW mWWW;
+	private UnityWebRequest mWebRequest;
 
 	private string mFormString;
 
@@ -83,7 +84,7 @@ public class URLRequest
 		}
 	}
 
-	public Action<WWW> success
+	public Action<UnityWebRequest> success
 	{
 		get
 		{
@@ -95,7 +96,7 @@ public class URLRequest
 		}
 	}
 
-	public Action<WWW, bool, bool> failure
+	public Action<UnityWebRequest, bool, bool> failure
 	{
 		get
 		{
@@ -140,7 +141,7 @@ public class URLRequest
 	{
 	}
 
-	public URLRequest(string url, Action begin, Action<WWW> success, Action<WWW, bool, bool> failure)
+	public URLRequest(string url, Action begin, Action<UnityWebRequest> success, Action<UnityWebRequest, bool, bool> failure)
 	{
 		mEmulation = URLRequestManager.Instance.Emulation;
 		mURL = url;
@@ -184,7 +185,7 @@ public class URLRequest
 		return wWWForm;
 	}
 
-	public void DidReceiveSuccess(WWW www)
+	public void DidReceiveSuccess(UnityWebRequest www)
 	{
 		if (mDelegateSuccess != null)
 		{
@@ -192,7 +193,7 @@ public class URLRequest
 		}
 	}
 
-	public void DidReceiveFailure(WWW www)
+	public void DidReceiveFailure(UnityWebRequest www)
 	{
 		if (mDelegateFailure != null)
 		{
@@ -212,19 +213,22 @@ public class URLRequest
 	{
 		PreBegin();
 		mElapsedTime = 0f;
-		WWWForm wWWForm = CreateWWWForm();
-		if (wWWForm == null)
+
+		if (mParamList.Count == 0)
 		{
-			mWWW = new WWW(mURL);
-			Debug.Log("URLRequestManager.ExecuteRequest:" + UriDecode(mURL), DebugTraceManager.TraceType.SERVER);
+			mWebRequest = UnityWebRequest.Get(mURL);
+			Debug.Log($"URLRequestManager.ExecuteRequest:{UriDecode(mURL)}", DebugTraceManager.TraceType.SERVER);
 			mFormString = null;
 		}
 		else
 		{
-			mWWW = new WWW(mURL, wWWForm);
-			mFormString = Encoding.ASCII.GetString(wWWForm.data);
-			Debug.Log("URLRequestManager.ExecuteRequest:" + UriDecode(mURL) + "  params:" + UriDecode(mFormString), DebugTraceManager.TraceType.SERVER);
+			WWWForm form = CreateWWWForm();
+			mWebRequest = UnityWebRequest.Post(mURL, form);
+			mFormString = Encoding.ASCII.GetString(form.data);
+			Debug.Log($"URLRequestManager.ExecuteRequest:{UriDecode(mURL)}  params:{UriDecode(mFormString)}", DebugTraceManager.TraceType.SERVER);
 		}
+
+		mWebRequest.SendWebRequest();
 	}
 
 	public float UpdateElapsedTime(float addElapsedTime)
@@ -235,7 +239,7 @@ public class URLRequest
 
 	public bool IsDone()
 	{
-		return mWWW.isDone;
+		return mWebRequest.isDone;
 	}
 
 	public bool IsTimeOut()
@@ -256,22 +260,25 @@ public class URLRequest
 	{
 		if (IsTimeOut())
 		{
-			Debug.Log("Request : TimeOut : " + mURL, DebugTraceManager.TraceType.SERVER);
+			Debug.Log($"Request : TimeOut : {mURL}", DebugTraceManager.TraceType.SERVER);
 			DidReceiveFailure(null);
-			mWWW = null;
+			mWebRequest.Dispose();
+			mWebRequest = null;
 			return;
 		}
-		if (!mWWW.isDone)
+
+		if (!mWebRequest.isDone)
 		{
-			Debug.Log("WWW doesn't begin yet.", DebugTraceManager.TraceType.SERVER);
+			Debug.Log("WebRequest doesn't begin yet.", DebugTraceManager.TraceType.SERVER);
 		}
-		if (null == mWWW.error)
+
+		if (string.IsNullOrEmpty(mWebRequest.error))
 		{
-			DidReceiveSuccess(mWWW);
+			DidReceiveSuccess(mWebRequest);
 		}
 		else
 		{
-			DidReceiveFailure(mWWW);
+			DidReceiveFailure(mWebRequest);
 		}
 	}
 

@@ -2,6 +2,7 @@ using LitJson;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public abstract class NetBase
 {
@@ -306,11 +307,11 @@ public abstract class NetBase
 		mRequest.AddParam("key", value2);
 	}
 
-	public void DidSuccess(WWW www)
+	public void DidSuccess(UnityWebRequest www)
 	{
 		if (www != null)
 		{
-			DidSuccess(www.text);
+			DidSuccess(www.downloadHandler.text);
 		}
 		else
 		{
@@ -415,33 +416,34 @@ public abstract class NetBase
 		}
 	}
 
-	public void DidFailure(WWW www, bool timeOut, bool notReachability)
+	public void DidFailure(UnityWebRequest www, bool timeOut, bool notReachability)
 	{
 		if (notReachability)
 		{
-			Debug.LogWarning(string.Concat("!!!!!!!!!!!!!!!!!!!!!!!!!!! ", this, ".DidFailure : NotReachability"), DebugTraceManager.TraceType.SERVER);
+			Debug.LogWarning($"!!!!!!!!!!!!!!!!!!!!!!!!!!! {this}.DidFailure : NotReachability", DebugTraceManager.TraceType.SERVER);
 			resultStCd = ServerInterface.StatusCode.NotReachability;
 		}
 		else if (timeOut)
 		{
-			Debug.LogWarning(string.Concat("!!!!!!!!!!!!!!!!!!!!!!!!!!! ", this, ".DidFailure : TimeOut"), DebugTraceManager.TraceType.SERVER);
+			Debug.LogWarning($"!!!!!!!!!!!!!!!!!!!!!!!!!!! {this}.DidFailure : TimeOut", DebugTraceManager.TraceType.SERVER);
 			resultStCd = ServerInterface.StatusCode.TimeOut;
 		}
-		else if (www.error != null)
+		else if (!string.IsNullOrEmpty(www.error))
 		{
-			Debug.LogWarning(string.Concat("!!!!!!!!!!!!!!!!!!!!!!!!!!! ", this, ".DidFailure : ", www.error), DebugTraceManager.TraceType.SERVER);
-			bool flag = www.error.Contains("400") || www.error.Contains("401") || www.error.Contains("402") || www.error.Contains("403") || www.error.Contains("404") || www.error.Contains("405") || www.error.Contains("406") || www.error.Contains("407") || www.error.Contains("408") || www.error.Contains("409") || www.error.Contains("410") || www.error.Contains("411") || www.error.Contains("412") || www.error.Contains("413") || www.error.Contains("414") || www.error.Contains("415");
-			bool flag2 = www.error.Contains("502") || www.error.Contains("503") || www.error.Contains("504");
-			bool flag3 = www.error.Contains("500") || www.error.Contains("501") || www.error.Contains("505");
-			if (flag)
+			Debug.LogWarning($"!!!!!!!!!!!!!!!!!!!!!!!!!!! {this}.DidFailure : {www.error}", DebugTraceManager.TraceType.SERVER);
+			bool isClientError = www.responseCode >= 400 && www.responseCode < 500;
+			bool isServerBusyError = www.responseCode == 502 || www.responseCode == 503 || www.responseCode == 504;
+			bool isServerError = www.responseCode >= 500 && www.responseCode < 600;
+
+			if (isClientError)
 			{
 				resultStCd = ServerInterface.StatusCode.CliendError;
 			}
-			else if (flag3)
+			else if (isServerError)
 			{
 				resultStCd = ServerInterface.StatusCode.InternalServerError;
 			}
-			else if (flag2)
+			else if (isServerBusyError)
 			{
 				resultStCd = ServerInterface.StatusCode.ServerBusy;
 			}
