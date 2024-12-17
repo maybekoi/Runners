@@ -2,6 +2,7 @@ using Message;
 using System;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class AssetBundleRequest
 {
@@ -33,7 +34,7 @@ public class AssetBundleRequest
 
 	private GameObject mReturnObject;
 
-	private WWW mWWW;
+	private UnityWebRequest mWebRequest;
 
 	private int mVersion;
 
@@ -77,11 +78,11 @@ public class AssetBundleRequest
 		}
 	}
 
-	public WWW www
+	public UnityWebRequest webRequest
 	{
 		get
 		{
-			return mWWW;
+			return mWebRequest;
 		}
 	}
 
@@ -209,7 +210,7 @@ public class AssetBundleRequest
 		mPath = path;
 		mFileName = Path.GetFileNameWithoutExtension(path);
 		mReturnObject = returnObject;
-		mWWW = null;
+		mWebRequest = null;
 		mVersion = version;
 		mCRC = crc;
 		mType = type;
@@ -226,7 +227,7 @@ public class AssetBundleRequest
 		mPath = request.path;
 		mFileName = request.mFileName;
 		mReturnObject = request.returnObject;
-		mWWW = null;
+		mWebRequest = null;
 		mVersion = request.version;
 		mCRC = request.crc;
 		mType = request.type;
@@ -240,7 +241,7 @@ public class AssetBundleRequest
 	{
 		if (!IsExecuting() && mDownloaderObject == null)
 		{
-			Debug.Log("AssetBundleRequest:" + mFileName);
+			Debug.Log($"AssetBundleRequest:{mFileName}");
 			mDownloaderObject = new GameObject("AssetBundleAsyncDownloader");
 			AssetBundleAsyncDownloader assetBundleAsyncDownloader = mDownloaderObject.AddComponent<AssetBundleAsyncDownloader>();
 			assetBundleAsyncDownloader.SetBundleRequest(this);
@@ -272,10 +273,10 @@ public class AssetBundleRequest
 			UnityEngine.Object.Destroy(mDownloaderObject);
 			mDownloaderObject = null;
 		}
-		if (mWWW != null)
+		if (mWebRequest != null)
 		{
-			mWWW.Dispose();
-			mWWW = null;
+			mWebRequest.Dispose();
+			mWebRequest = null;
 		}
 	}
 
@@ -324,10 +325,10 @@ public class AssetBundleRequest
 		return false;
 	}
 
-	private void LoadedCallback(WWW www)
+	private void LoadedCallback(UnityWebRequest www)
 	{
-		mWWW = www;
-		mURL = mWWW.url;
+		mWebRequest = www;
+		mURL = mWebRequest.url;
 		UnityEngine.Object.Destroy(mDownloaderObject);
 		mDownloaderObject = null;
 	}
@@ -338,11 +339,11 @@ public class AssetBundleRequest
 		{
 			return false;
 		}
-		if (mWWW == null)
+		if (mWebRequest == null)
 		{
 			return mIsLoaded;
 		}
-		return mWWW.isDone;
+		return mWebRequest.isDone;
 	}
 
 	public bool IsLoading()
@@ -351,11 +352,11 @@ public class AssetBundleRequest
 		{
 			return true;
 		}
-		if (mWWW == null)
+		if (mWebRequest == null)
 		{
 			return !mIsLoaded;
 		}
-		return !mWWW.isDone;
+		return !mWebRequest.isDone;
 	}
 
 	public bool IsTimeOut()
@@ -418,9 +419,9 @@ public class AssetBundleRequest
 	public Texture2D MakeTexture()
 	{
 		Texture2D result = null;
-		if (mType == Type.TEXTURE && mWWW.error == null)
+		if (mType == Type.TEXTURE && mWebRequest != null && !string.IsNullOrEmpty(mWebRequest.error))
 		{
-			result = mWWW.texture;
+			result = DownloadHandlerTexture.GetContent(mWebRequest);
 		}
 		return result;
 	}
@@ -428,9 +429,9 @@ public class AssetBundleRequest
 	public string MakeText()
 	{
 		string result = null;
-		if (mType == Type.TEXT && mWWW.error == null)
+		if (mType == Type.TEXT && mWebRequest != null && !string.IsNullOrEmpty(mWebRequest.error))
 		{
-			result = mWWW.text;
+			result = mWebRequest.downloadHandler.text;
 		}
 		return result;
 	}
@@ -441,103 +442,81 @@ public class AssetBundleRequest
 		{
 			if (mCancel)
 			{
-				Debug.LogWarning("!!! AssetBundleRequest Cancel : " + mPath, DebugTraceManager.TraceType.ASSETBUNDLE);
-				if (mWWW != null)
+				Debug.LogWarning($"!!! AssetBundleRequest Cancel : {mPath}", DebugTraceManager.TraceType.ASSETBUNDLE);
+				if (mWebRequest != null)
 				{
-					mWWW.Dispose();
-					mWWW = null;
+					mWebRequest.Dispose();
+					mWebRequest = null;
 				}
 				mState = State.FAILED;
 				return;
 			}
-			bool flag = false;
+
 			if (IsTimeOut())
 			{
-				Debug.Log("AssetBundle TimeOut : " + mPath, DebugTraceManager.TraceType.ASSETBUNDLE);
-				flag = true;
-				goto IL_00b0;
-			}
-			if (mWWW != null)
-			{
-				string text = "no cache";
-				if (mUseCache)
-				{
-					text = "cache";
-				}
-				if (mWWW.isDone)
-				{
-					goto IL_00b0;
-				}
-			}
-			goto end_IL_0000;
-			IL_00b0:
-			bool flag2 = true;
-			bool flag3 = false;
-			if (mWWW != null && mWWW.error != null && !mWWW.error.Contains("Cannot load cached AssetBundle"))
-			{
-				flag3 = true;
-			}
-			if (!flag3 && !flag)
-			{
-				goto IL_01d4;
-			}
-			Debug.Log("!!!!! AssetBundle.Result : Error : " + ((mWWW != null) ? mWWW.error : "null"), DebugTraceManager.TraceType.ASSETBUNDLE);
-			mTryCount++;
-			if (mMaxTryCount > mTryCount)
-			{
-				Debug.LogWarning("AssetBundle.Result : Retry[" + mTryCount + "/" + mMaxTryCount + "]", DebugTraceManager.TraceType.ASSETBUNDLE);
-				mState = State.RETRY;
-				if (mWWW != null)
-				{
-					mWWW.Dispose();
-					mWWW = null;
-				}
+				Debug.Log($"AssetBundle TimeOut : {mPath}", DebugTraceManager.TraceType.ASSETBUNDLE);
+				mState = State.FAILED;
 				return;
 			}
-			Debug.LogWarning("AssetBundle.Result : Failed", DebugTraceManager.TraceType.ASSETBUNDLE);
-			mState = State.FAILED;
-			flag2 = false;
-			goto IL_01d4;
-			IL_01d4:
-			if (flag2)
+
+			if (mWebRequest != null && mWebRequest.isDone)
 			{
-				mAssetbundleResult = CreateResult();
-				mState = State.SUCCEEDED;
-				Debug.Log("AssetBundle.Result : Success : " + mFileName);
-				if (mReturnObject != null)
+				if (!string.IsNullOrEmpty(mWebRequest.error))
 				{
-					MsgAssetBundleResponseSucceed value = new MsgAssetBundleResponseSucceed(this, mAssetbundleResult);
-					mReturnObject.SendMessage("AssetBundleResponseSucceed", value, SendMessageOptions.DontRequireReceiver);
+					HandleError();
 				}
+				else
+				{
+					HandleSuccess();
+				}
+			}
+		}
+		catch (Exception ex)
+		{
+			Debug.Log($"AssetBundleRequest.Result() Exception:Message = {ex.Message} ToString() = {ex}");
+		}
+	}
+
+	private void HandleError()
+	{
+		mTryCount++;
+		if (mMaxTryCount > mTryCount)
+		{
+			Debug.LogWarning($"AssetBundle.Result : Retry[{mTryCount}/{mMaxTryCount}]", DebugTraceManager.TraceType.ASSETBUNDLE);
+			mState = State.RETRY;
+			if (mWebRequest != null)
+			{
+				mWebRequest.Dispose();
+				mWebRequest = null;
+			}
+		}
+		else
+		{
+			mState = State.FAILED;
+		}
+	}
+
+	private void HandleSuccess()
+	{
+		if (mType == Type.GAMEOBJECT || mType == Type.TEXTURE || mType == Type.TEXT)
+		{
+			AssetBundle bundle = DownloadHandlerAssetBundle.GetContent(mWebRequest);
+			if (bundle != null)
+			{
+				// Handle the asset bundle...
+				mState = State.SUCCEEDED;
 			}
 			else
 			{
 				mState = State.FAILED;
-				Debug.LogWarning("!!!!! AssetBundle.Result : Failure : " + ((mWWW == null) ? "-----" : mWWW.error), DebugTraceManager.TraceType.ASSETBUNDLE);
-				if (mReturnObject != null)
-				{
-					MsgAssetBundleResponseFailed value2 = new MsgAssetBundleResponseFailed(this, mAssetbundleResult);
-					mReturnObject.SendMessage("AssetBundleResponseFailed", value2, SendMessageOptions.DontRequireReceiver);
-				}
 			}
-			if (mWWW != null)
-			{
-				mWWW.Dispose();
-				mWWW = null;
-			}
-			mIsLoaded = true;
-			end_IL_0000:;
-		}
-		catch (Exception ex)
-		{
-			Debug.Log("AssetBundleRequest.Result() Exception:Message = " + ex.Message + "ToString() = " + ex.ToString());
 		}
 	}
 
 	public AssetBundleResult CreateResult()
 	{
 		AssetBundleResult result = null;
-		if (mWWW == null)
+		if (mWebRequest == null)
 		{
 			byte[] bytes = null;
 			string empty = string.Empty;
@@ -545,8 +524,8 @@ public class AssetBundleRequest
 		}
 		try
 		{
-			string text = (mWWW.error == null) ? null : (mWWW.error.Clone() as string);
-			AssetBundle assetBundle = (text != null) ? null : mWWW.assetBundle;
+			string text = (mWebRequest != null && !string.IsNullOrEmpty(mWebRequest.error)) ? null : (mWebRequest.error.Clone() as string);
+			AssetBundle assetBundle = (text != null) ? null : DownloadHandlerAssetBundle.GetContent(mWebRequest);
 			switch (mType)
 			{
 			case Type.GAMEOBJECT:
@@ -581,7 +560,7 @@ public class AssetBundleRequest
 				return result;
 			default:
 			{
-				byte[] bytes2 = mWWW.bytes.Clone() as byte[];
+				byte[] bytes2 = mWebRequest.downloadHandler.data.Clone() as byte[];
 				result = new AssetBundleResult(mPath, bytes2, text);
 				return result;
 			}

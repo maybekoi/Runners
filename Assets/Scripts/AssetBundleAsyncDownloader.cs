@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class AssetBundleAsyncDownloader : MonoBehaviour
 {
@@ -52,12 +53,28 @@ public class AssetBundleAsyncDownloader : MonoBehaviour
 
 	private IEnumerator Load()
 	{
-		WWW www2 = null;
-		www2 = ((!mAbRquest.useCache) ? new WWW(mAbRquest.path) : ((mAbRquest.crc == 0) ? WWW.LoadFromCacheOrDownload(mAbRquest.path, mAbRquest.version) : WWW.LoadFromCacheOrDownload(mAbRquest.path, mAbRquest.version, mAbRquest.crc)));
-		yield return www2;
+		UnityWebRequest www = null;
+		if (!mAbRquest.useCache)
+		{
+			www = UnityWebRequest.Get(mAbRquest.path);
+		}
+		else
+		{
+			if (mAbRquest.crc == 0)
+			{
+				www = UnityWebRequestAssetBundle.GetAssetBundle(mAbRquest.path, (uint)mAbRquest.version);
+			}
+			else
+			{
+				www = UnityWebRequestAssetBundle.GetAssetBundle(mAbRquest.path, (uint)mAbRquest.version, mAbRquest.crc);
+			}
+		}
+
+		yield return www.SendWebRequest();
+
 		if (mAsyncDownloadCallback != null)
 		{
-			mAsyncDownloadCallback(www2);
+			mAsyncDownloadCallback(www);
 		}
 	}
 }
