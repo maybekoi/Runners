@@ -116,7 +116,7 @@ public class URLRequestManager : MonoBehaviour
 						continue;
 					}
 					string param = Encoding.ASCII.GetString(form.data);
-					Debug.Log("URLRequest Emulation : [" + request.url + "] [" + param + "]", DebugTraceManager.TraceType.SERVER);
+					Debug.Log($"URLRequest Emulation : [{request.url}] [{param}]", DebugTraceManager.TraceType.SERVER);
 					float startTime = Time.realtimeSinceStartup;
 					do
 					{
@@ -128,59 +128,31 @@ public class URLRequestManager : MonoBehaviour
 				else
 				{
 					mCurrentRequest = request;
-					try
+					request.Begin();
+					
+					while (!request.IsDone() && !cancel)
 					{
-   					request.Begin();
-					}
-						catch (System.Exception e)
-					{
-    					Debug.LogException(e);
-					}
-					float spendTime = 0f;
-					while (!request.IsDone())
-					{
-						float waitTime = request.UpdateElapsedTime(spendTime);
+						request.UpdateElapsedTime(0.1f);
 						if (request.IsTimeOut())
 						{
-							break;
+							cancel = true;
 						}
-						float startTime2 = Time.realtimeSinceStartup;
-						do
-						{
-							yield return null;
-							spendTime = Time.realtimeSinceStartup - startTime2;
-						}
-						while (spendTime < waitTime);
+						yield return new WaitForSeconds(0.1f);
 					}
+					
+					request.Result();
+					mCurrentRequest = null;
 				}
-				if (mCancelState == CancelState.CANCELING)
-				{
-					Debug.Log("-------------- AssetBundleRequest.ExecuteRequest Cancel --------------", DebugTraceManager.TraceType.SERVER);
-					mCancelState = CancelState.CANCELED;
-					mExecuting = false;
-					exec = false;
-					cancel = true;
-				}
-				else
-				{
-					if (!Emulation && !request.Emulation)
-					{
-						request.Result();
-					}
-					exec = false;
-					mRemainingList.Remove(request);
-				}
+				exec = false;
 			}
+			
 			if (cancel)
 			{
-				break;
+				mRemainingList.Remove(request);
 			}
 		}
-		mExecuteList.Clear();
-		mRemainingList.Clear();
-		mCurrentRequest = null;
+		
 		mExecuting = false;
-		ClearCancel();
 	}
 
 	public void Request(URLRequest request)
