@@ -202,8 +202,8 @@ public class StreamingDataLoader : MonoBehaviour
 		{
 			Debug.Log("LS:start install URL: " + url + " path:" + path);
 		}
-		WWWRequest request = new WWWRequest(url);
-		request.SetConnectTime(WWWRequest.DefaultConnectTime + WWWRequest.DefaultConnectTime * (float)m_installFailedCount);
+		WebRequest request = new WebRequest(url);
+		request.SetConnectTime(WebRequest.DefaultConnectTime + WebRequest.DefaultConnectTime * (float)m_installFailedCount);
 		while (!request.IsEnd())
 		{
 			request.Update();
@@ -304,7 +304,7 @@ public class StreamingDataLoader : MonoBehaviour
 	private IEnumerator LoadURLKeyData(string url, GameObject returnObject)
 	{
 		DebugDraw("LoadURLKeyData url=" + url);
-		WWWRequest request = new WWWRequest(url);
+		WebRequest request = new WebRequest(url);
 		while (!request.IsEnd())
 		{
 			request.Update();

@@ -1,3 +1,3 @@
-using UnityEngine;
+using UnityEngine.Networking;
 
-public delegate void AsyncDownloadCallback(WWW www);
+public delegate void AsyncDownloadCallback(UnityWebRequest www);

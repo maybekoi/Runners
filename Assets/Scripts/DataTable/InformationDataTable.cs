@@ -114,7 +114,7 @@ namespace DataTable
 			{
 				Debug.Log("LS:start install URL: " + url);
 			}
-			WWWRequest request = new WWWRequest(url);
+			WebRequest request = new WebRequest(url);
 			request.SetConnectTime(20f);
 			while (!request.IsEnd())
 			{

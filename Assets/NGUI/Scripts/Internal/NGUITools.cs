@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using UnityEngine.Networking;
 
 /// <summary>
 /// Helper class containing generic functions used throughout the UI library.
@@ -108,14 +109,18 @@ static public class NGUITools
 	/// New WWW call can fail if the crossdomain policy doesn't check out. Exceptions suck. It's much more elegant to check for null instead.
 	/// </summary>
 
-	static public WWW OpenURL (string url)
+	static public UnityWebRequest OpenURL (string url)
 	{
 #if UNITY_FLASH
-		Debug.LogError("WWW is not yet implemented in Flash");
+		Debug.LogError("UnityWebRequest is not yet implemented in Flash");
 		return null;
 #else
-		WWW www = null;
-		try { www = new WWW(url); }
+		UnityWebRequest www = null;
+		try 
+		{ 
+			www = UnityWebRequest.Get(url);
+			www.SendWebRequest();
+		}
 		catch (System.Exception ex) { Debug.LogError(ex.Message); }
 		return www;
 #endif
@@ -125,16 +130,20 @@ static public class NGUITools
 	/// New WWW call can fail if the crossdomain policy doesn't check out. Exceptions suck. It's much more elegant to check for null instead.
 	/// </summary>
 
-	static public WWW OpenURL (string url, WWWForm form)
+	static public UnityWebRequest OpenURL (string url, WWWForm form)
 	{
 		if (form == null) return OpenURL(url);
 #if UNITY_FLASH
-		Debug.LogError("WWW is not yet implemented in Flash");
+		Debug.LogError("UnityWebRequest is not yet implemented in Flash");
 		return null;
 #else
-		WWW www = null;
-		try { www = new WWW(url, form); }
-		catch (System.Exception ex) { Debug.LogError(ex != null ? ex.Message : "<null>"); }
+		UnityWebRequest www = null;
+		try 
+		{ 
+			www = UnityWebRequest.Post(url, form);
+			www.SendWebRequest();
+		}
+		catch (System.Exception ex) { Debug.LogError(ex.Message); }
 		return www;
 #endif
 	}
