@@ -1509,7 +1509,7 @@ public class GameModeTitle : MonoBehaviour
 					{
 						x.name = "HardlightAds";
 						UnityEngine.Object.DontDestroyOnLoad(x);
-						UnityEngineInternal.APIUpdaterRuntimeServices.AddComponent(x, "Assets/Scripts/GameModeTitle.cs (1512,7)", "HardlightAds");
+						//UnityEngineInternal.APIUpdaterRuntimeServices.AddComponent(x, "Assets/Scripts/GameModeTitle.cs (1512,7)", "HardlightAds");
 					}
 				}
 			}

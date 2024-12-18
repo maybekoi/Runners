@@ -3,7 +3,6 @@ using SaveData;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SocialPlatforms;
-using UnityEngine.SocialPlatforms.GameCenter;
 
 public class AchievementManager : MonoBehaviour
 {
@@ -234,7 +233,7 @@ public class AchievementManager : MonoBehaviour
 	{
 		SetDebugDraw("ResetAchievements");
 		m_state = State.Idle;
-		GameCenterPlatform.ResetAllAchievements(ProcessResetAllAchievements);
+		//GameCenterPlatform.ResetAllAchievements(ProcessResetAllAchievements);
 	}
 
 	private void ProcessAuthentication(bool success)
