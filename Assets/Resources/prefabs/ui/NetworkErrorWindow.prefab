@@ -50,7 +50,7 @@ MonoBehaviour:
   mWidth: 32
   mHeight: 32
   mDepth: 50
-  mFont: {fileID: 1790296881769572394, guid: 136922798de94ad096a570d5fbe152cf, type: 3}
+  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
   mText: OK
   mEncoding: 1
   mMaxLineCount: 0
@@ -193,7 +193,7 @@ MonoBehaviour:
   mWidth: 34
   mHeight: 32
   mDepth: 50
-  mFont: {fileID: 1790296881769572394, guid: 136922798de94ad096a570d5fbe152cf, type: 3}
+  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
   mText: NO
   mEncoding: 1
   mMaxLineCount: 0
@@ -280,7 +280,7 @@ MonoBehaviour:
   mWidth: 38
   mHeight: 32
   mDepth: 49
-  mFont: {fileID: 1790296881769572394, guid: 136922798de94ad096a570d5fbe152cf, type: 3}
+  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
   mText: "\u6255\u3044"
   mEncoding: 1
   mMaxLineCount: 0
@@ -603,7 +603,7 @@ MonoBehaviour:
   mWidth: 38
   mHeight: 32
   mDepth: 50
-  mFont: {fileID: 1790296881769572394, guid: 136922798de94ad096a570d5fbe152cf, type: 3}
+  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
   mText: "\u30DB\u30FC"
   mEncoding: 1
   mMaxLineCount: 0
@@ -815,7 +815,7 @@ MonoBehaviour:
   mWidth: 32
   mHeight: 32
   mDepth: 49
-  mFont: {fileID: 1790296881769572394, guid: 136922798de94ad096a570d5fbe152cf, type: 3}
+  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
   mText: OK
   mEncoding: 1
   mMaxLineCount: 0
@@ -901,7 +901,7 @@ MonoBehaviour:
   mWidth: 570
   mHeight: 32
   mDepth: 5
-  mFont: {fileID: 1790296881769572394, guid: 136922798de94ad096a570d5fbe152cf, type: 3}
+  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
   mText: read error
   mEncoding: 1
   mMaxLineCount: 0
@@ -1578,7 +1578,7 @@ MonoBehaviour:
   mWidth: 37
   mHeight: 32
   mDepth: 50
-  mFont: {fileID: 1790296881769572394, guid: 136922798de94ad096a570d5fbe152cf, type: 3}
+  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
   mText: YES
   mEncoding: 1
   mMaxLineCount: 0
@@ -1664,7 +1664,7 @@ MonoBehaviour:
   mWidth: 444
   mHeight: 32
   mDepth: 50
-  mFont: {fileID: 1790296881769572394, guid: 136922798de94ad096a570d5fbe152cf, type: 3}
+  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
   mText: "New Label \u30C6\u30B9"
   mEncoding: 1
   mMaxLineCount: 1
@@ -2235,7 +2235,7 @@ MonoBehaviour:
   mWidth: 34
   mHeight: 32
   mDepth: 49
-  mFont: {fileID: 1790296881769572394, guid: 136922798de94ad096a570d5fbe152cf, type: 3}
+  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
   mText: NO
   mEncoding: 1
   mMaxLineCount: 0
@@ -2447,7 +2447,7 @@ MonoBehaviour:
   mWidth: 37
   mHeight: 32
   mDepth: 49
-  mFont: {fileID: 1790296881769572394, guid: 136922798de94ad096a570d5fbe152cf, type: 3}
+  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
   mText: YES
   mEncoding: 1
   mMaxLineCount: 0
@@ -2753,7 +2753,7 @@ MonoBehaviour:
   mWidth: 38
   mHeight: 32
   mDepth: 49
-  mFont: {fileID: 1790296881769572394, guid: 136922798de94ad096a570d5fbe152cf, type: 3}
+  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
   mText: "\u30DB\u30FC"
   mEncoding: 1
   mMaxLineCount: 0
@@ -3090,7 +3090,7 @@ MonoBehaviour:
   mWidth: 38
   mHeight: 32
   mDepth: 50
-  mFont: {fileID: 1790296881769572394, guid: 136922798de94ad096a570d5fbe152cf, type: 3}
+  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
   mText: "\u6255\u3044"
   mEncoding: 1
   mMaxLineCount: 0
@@ -3446,7 +3446,7 @@ MonoBehaviour:
   mWidth: 34
   mHeight: 32
   mDepth: 49
-  mFont: {fileID: 1790296881769572394, guid: 136922798de94ad096a570d5fbe152cf, type: 3}
+  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
   mText: NO
   mEncoding: 1
   mMaxLineCount: 0
@@ -3534,7 +3534,7 @@ MonoBehaviour:
   mWidth: 34
   mHeight: 32
   mDepth: 50
-  mFont: {fileID: 1790296881769572394, guid: 136922798de94ad096a570d5fbe152cf, type: 3}
+  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
   mText: NO
   mEncoding: 1
   mMaxLineCount: 0
