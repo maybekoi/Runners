@@ -4,7 +4,7 @@ using UnityEditor;
 
 public static class RemoveDeletedScenes
 {
-    [MenuItem("Phlox Tools/RemoveDeletedScenes")]
+    [MenuItem("Phlox Util/RemoveDeletedScenes")]
     public static void CleanUpDeletedScenes()
     {
         var currentScenes = EditorBuildSettings.scenes;
