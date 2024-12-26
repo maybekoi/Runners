@@ -1,6 +1,6 @@
 # SRU19
 
-* A port of the Sonic Runners Decomp to Unity 2019.1.14
+* A port of the Sonic Runners Decomp to Unity 2019.4.17f1
 
 * The Asset Bundles repo is [here](https://github.com/yophlox/RunnersAssetBundleDecomp)
 
@@ -16,7 +16,7 @@ I think about 85% maybe??
 
 # Credits
 
-* YoPhlox - Port to Unity 2019
+* YoPhlox - Port to Unity 2019.4.17f1
 
 * MattKc, FairPlay137, and F121Live - Decomp
 
@@ -31,7 +31,7 @@ By: YoPhlox
 1. Download files from this repo using
 `git clone https://github.com/yophlox/Runners.git --recursive`
 
-2. Download Unity 2019.1.14 if you don't have it.
+2. Download Unity 2019.4.17f1 if you don't have it.
 
 3. Open the project in Unity
 
