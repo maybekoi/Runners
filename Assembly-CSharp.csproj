@@ -140,6 +140,7 @@
      <Compile Include="Assets\NGUI\Scripts\UI\UITexture.cs" />
      <Compile Include="Assets\NGUI\Scripts\UI\UITooltip.cs" />
      <Compile Include="Assets\NGUI\Scripts\UI\UIViewport.cs" />
+     <Compile Include="Assets\PhloxUtil\GameOBJReset.cs" />
      <Compile Include="Assets\Scripts\AbilityButtonParams.cs" />
      <Compile Include="Assets\Scripts\AbilityType.cs" />
      <Compile Include="Assets\Scripts\AbilityUpParam.cs" />
