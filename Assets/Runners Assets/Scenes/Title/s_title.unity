@@ -94,8 +94,9 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaDirect: 0.5
     m_PVRFilteringAtrousPositionSigmaIndirect: 2
     m_PVRFilteringAtrousPositionSigmaAO: 1
-    m_ShowResolutionOverlay: 1
     m_ExportTrainingData: 0
+    m_TrainingDataDestination: TrainingData
+    m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
   m_UseShadowmask: 1
 --- !u!196 &4
@@ -3664,7 +3665,7 @@ Transform:
   m_GameObject: {fileID: 32}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.0013888889, y: 0.0013888889, z: 0.0013888889}
+  m_LocalScale: {x: 0.003968254, y: 0.003968254, z: 0.003968254}
   m_Children:
   - {fileID: 392}
   m_Father: {fileID: 0}
@@ -4324,7 +4325,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 77}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -720, z: 0}
+  m_LocalPosition: {x: 0, y: -251.99997, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 278}
@@ -5995,7 +5996,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 189}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -740, y: 360, z: 0}
+  m_LocalPosition: {x: -575.7143, y: 360, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 279}
@@ -6606,6 +6607,7 @@ TrailRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -6617,6 +6619,7 @@ TrailRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -20163,6 +20166,7 @@ ParticleSystemRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -20175,6 +20179,7 @@ ParticleSystemRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -20225,6 +20230,7 @@ ParticleSystemRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -20237,6 +20243,7 @@ ParticleSystemRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -20287,6 +20294,7 @@ ParticleSystemRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -20299,6 +20307,7 @@ ParticleSystemRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -20743,7 +20752,7 @@ MonoBehaviour:
   mWidth: 180
   mHeight: 32
   mDepth: 191
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 1790296881769572392, guid: aaa4c2c945ea426fa000ea7bce9ed06c, type: 3}
   mText: "\u901A\u4FE1"
   mEncoding: 1
   mMaxLineCount: 0
@@ -20931,7 +20940,7 @@ MonoBehaviour:
   mWidth: 180
   mHeight: 32
   mDepth: 192
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 1790296881769572392, guid: aaa4c2c945ea426fa000ea7bce9ed06c, type: 3}
   mText: "\u901A\u4FE1"
   mEncoding: 1
   mMaxLineCount: 0
@@ -21000,7 +21009,7 @@ MonoBehaviour:
   mWidth: 566
   mHeight: 32
   mDepth: 91
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 1790296881769572392, guid: aaa4c2c945ea426fa000ea7bce9ed06c, type: 3}
   mText: read error
   mEncoding: 1
   mMaxLineCount: 1
@@ -21113,7 +21122,7 @@ MonoBehaviour:
   mWidth: 48
   mHeight: 32
   mDepth: 50
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 114955215718916075, guid: ffafa7387a3bb2243960c3aae18e3611, type: 3}
   mText: ver b
   mEncoding: 1
   mMaxLineCount: 0
@@ -21628,7 +21637,7 @@ MonoBehaviour:
   mWidth: 156
   mHeight: 32
   mDepth: 7
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 114955215718916075, guid: ffafa7387a3bb2243960c3aae18e3611, type: 3}
   mText: "\u30AD\u30E3\u30C3\u30B7\u30E5"
   mEncoding: 1
   mMaxLineCount: 0
@@ -21997,7 +22006,7 @@ MonoBehaviour:
   mWidth: 566
   mHeight: 32
   mDepth: 91
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 1790296881769572392, guid: aaa4c2c945ea426fa000ea7bce9ed06c, type: 3}
   mText: read error
   mEncoding: 1
   mMaxLineCount: 1
@@ -22151,7 +22160,7 @@ MonoBehaviour:
   mWidth: 568
   mHeight: 96
   mDepth: 91
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 1790296881769572392, guid: aaa4c2c945ea426fa000ea7bce9ed06c, type: 3}
   mText: read error
   mEncoding: 1
   mMaxLineCount: 3
@@ -22210,7 +22219,7 @@ MonoBehaviour:
   mWidth: 708
   mHeight: 32
   mDepth: 91
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 1790296881769572392, guid: aaa4c2c945ea426fa000ea7bce9ed06c, type: 3}
   mText: "\u30C0\u30A6\u30F3\u30ED\u30FC\u30C9\u4E2D"
   mEncoding: 1
   mMaxLineCount: 0
@@ -22380,7 +22389,7 @@ MonoBehaviour:
   mWidth: 56
   mHeight: 32
   mDepth: 95
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 1790296881769572392, guid: aaa4c2c945ea426fa000ea7bce9ed06c, type: 3}
   mText: 100%
   mEncoding: 1
   mMaxLineCount: 0
@@ -22707,7 +22716,7 @@ MonoBehaviour:
   mWidth: 488
   mHeight: 32
   mDepth: 50
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 1790296881769572392, guid: aaa4c2c945ea426fa000ea7bce9ed06c, type: 3}
   mText: "\u5229\u7528\u898F\u7D04\u3092\u898B\u308B "
   mEncoding: 1
   mMaxLineCount: 0
@@ -22803,7 +22812,7 @@ MonoBehaviour:
   mWidth: 91
   mHeight: 32
   mDepth: 50
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 1790296881769572392, guid: aaa4c2c945ea426fa000ea7bce9ed06c, type: 3}
   mText: 0000000
   mEncoding: 1
   mMaxLineCount: 0
@@ -22958,7 +22967,7 @@ MonoBehaviour:
   mWidth: 76
   mHeight: 32
   mDepth: 10
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 1790296881769572392, guid: aaa4c2c945ea426fa000ea7bce9ed06c, type: 3}
   mText: "\u753B\u9762\u3092\u30BF"
   mEncoding: 1
   mMaxLineCount: 0
@@ -23107,7 +23116,7 @@ MonoBehaviour:
   mWidth: 76
   mHeight: 32
   mDepth: 9
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 1790296881769572392, guid: aaa4c2c945ea426fa000ea7bce9ed06c, type: 3}
   mText: "\u753B\u9762\u3092\u30BF"
   mEncoding: 1
   mMaxLineCount: 0
@@ -23926,7 +23935,7 @@ MonoBehaviour:
   mWidth: 488
   mHeight: 32
   mDepth: 50
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 114955215718916075, guid: ffafa7387a3bb2243960c3aae18e3611, type: 3}
   mText: "\u5229\u7528\u898F\u7D04\u306B\u540C\u610F\u3057\u3066\u958B\u59CB "
   mEncoding: 1
   mMaxLineCount: 0
@@ -24063,7 +24072,7 @@ MonoBehaviour:
   mWidth: 156
   mHeight: 32
   mDepth: 7
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 114955215718916075, guid: ffafa7387a3bb2243960c3aae18e3611, type: 3}
   mText: "\u30C7\u30FC\u30BF\u5F15\u304D\u7D99\u304E"
   mEncoding: 1
   mMaxLineCount: 0
@@ -24346,7 +24355,7 @@ MonoBehaviour:
   mWidth: 488
   mHeight: 32
   mDepth: 49
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 1790296881769572392, guid: aaa4c2c945ea426fa000ea7bce9ed06c, type: 3}
   mText: "\u5229\u7528\u898F\u7D04\u3092\u898B\u308B "
   mEncoding: 1
   mMaxLineCount: 0
@@ -24454,7 +24463,7 @@ MonoBehaviour:
   mWidth: 56
   mHeight: 32
   mDepth: 91
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 1790296881769572392, guid: aaa4c2c945ea426fa000ea7bce9ed06c, type: 3}
   mText: 100%
   mEncoding: 1
   mMaxLineCount: 0
@@ -24669,7 +24678,7 @@ MonoBehaviour:
   mWidth: 488
   mHeight: 32
   mDepth: 49
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 114955215718916075, guid: ffafa7387a3bb2243960c3aae18e3611, type: 3}
   mText: "\u5229\u7528\u898F\u7D04\u306B\u540C\u610F\u3057\u3066\u958B\u59CB "
   mEncoding: 1
   mMaxLineCount: 0
@@ -24750,7 +24759,7 @@ MonoBehaviour:
   mWidth: 588
   mHeight: 32
   mDepth: 91
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 1790296881769572392, guid: aaa4c2c945ea426fa000ea7bce9ed06c, type: 3}
   mText: "\u30C7\u30FC\u30BF"
   mEncoding: 1
   mMaxLineCount: 1
@@ -24815,7 +24824,7 @@ MonoBehaviour:
   mWidth: 60
   mHeight: 32
   mDepth: 50
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 1790296881769572392, guid: aaa4c2c945ea426fa000ea7bce9ed06c, type: 3}
   mText: "\xA9SEGA"
   mEncoding: 1
   mMaxLineCount: 0
@@ -24886,17 +24895,17 @@ MonoBehaviour:
   widgetsAreStatic: 0
   cullWhileDragging: 0
   worldToLocal:
-    e00: 720
+    e00: 251.99997
     e01: 0
     e02: 0
     e03: 0
     e10: 0
-    e11: 720
+    e11: 251.99997
     e12: 0
-    e13: 720
+    e13: 251.99997
     e20: 0
     e21: 0
-    e22: 720
+    e22: 251.99997
     e23: 0
     e30: 0
     e31: 0

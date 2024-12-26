@@ -222,7 +222,7 @@ MonoBehaviour:
   mWidth: 576
   mHeight: 32
   mDepth: 50
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 114955215718916075, guid: ffafa7387a3bb2243960c3aae18e3611, type: 3}
   mText: read error
   mEncoding: 1
   mMaxLineCount: 0
@@ -4916,6 +4916,7 @@ ParticleSystemRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -4928,6 +4929,7 @@ ParticleSystemRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -5047,7 +5049,7 @@ MonoBehaviour:
   mWidth: 550
   mHeight: 32
   mDepth: 50
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 114955215718916075, guid: ffafa7387a3bb2243960c3aae18e3611, type: 3}
   mText: read error
   mEncoding: 1
   mMaxLineCount: 1
@@ -5224,7 +5226,7 @@ MonoBehaviour:
   mWidth: 700
   mHeight: 256
   mDepth: 5
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 114955215718916075, guid: ffafa7387a3bb2243960c3aae18e3611, type: 3}
   mText: read error
   mEncoding: 1
   mMaxLineCount: 0
@@ -5694,7 +5696,7 @@ MonoBehaviour:
   mWidth: 56
   mHeight: 32
   mDepth: 20
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 114955215718916075, guid: ffafa7387a3bb2243960c3aae18e3611, type: 3}
   mText: 100%
   mEncoding: 1
   mMaxLineCount: 0
@@ -10413,6 +10415,7 @@ ParticleSystemRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -10425,6 +10428,7 @@ ParticleSystemRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -15195,6 +15199,7 @@ ParticleSystemRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -15207,6 +15212,7 @@ ParticleSystemRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -15417,7 +15423,7 @@ MonoBehaviour:
   mWidth: 37
   mHeight: 32
   mDepth: 50
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 114955215718916075, guid: ffafa7387a3bb2243960c3aae18e3611, type: 3}
   mText: YES
   mEncoding: 1
   mMaxLineCount: 0
@@ -15504,7 +15510,7 @@ MonoBehaviour:
   mWidth: 32
   mHeight: 32
   mDepth: 49
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 114955215718916075, guid: ffafa7387a3bb2243960c3aae18e3611, type: 3}
   mText: OK
   mEncoding: 1
   mMaxLineCount: 0
@@ -20268,6 +20274,7 @@ ParticleSystemRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -20280,6 +20287,7 @@ ParticleSystemRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -20364,7 +20372,7 @@ MonoBehaviour:
   mWidth: 76
   mHeight: 32
   mDepth: 49
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 114955215718916075, guid: ffafa7387a3bb2243960c3aae18e3611, type: 3}
   mText: "\u6295\u7A3F\u3059\u308B"
   mEncoding: 1
   mMaxLineCount: 0
@@ -25224,6 +25232,7 @@ ParticleSystemRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -25236,6 +25245,7 @@ ParticleSystemRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -30478,6 +30488,7 @@ ParticleSystemRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -30490,6 +30501,7 @@ ParticleSystemRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -35371,6 +35383,7 @@ ParticleSystemRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -35383,6 +35396,7 @@ ParticleSystemRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -40613,6 +40627,7 @@ ParticleSystemRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -40625,6 +40640,7 @@ ParticleSystemRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -41217,7 +41233,7 @@ MonoBehaviour:
   mWidth: 32
   mHeight: 32
   mDepth: 12
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 114955215718916075, guid: ffafa7387a3bb2243960c3aae18e3611, type: 3}
   mText: OK
   mEncoding: 1
   mMaxLineCount: 0
@@ -41571,7 +41587,7 @@ Transform:
   m_GameObject: {fileID: 1325235868556842}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 240, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4054315789831788}
   m_RootOrder: 4
@@ -41593,7 +41609,7 @@ MonoBehaviour:
   mWidth: 460
   mHeight: 32
   mDepth: 5
-  mFont: {fileID: 0}
+  mFont: {fileID: 114955215718916075, guid: ffafa7387a3bb2243960c3aae18e3611, type: 3}
   mText: "\u30EA\u30F3\u30B0"
   mEncoding: 1
   mMaxLineCount: 1
@@ -46333,6 +46349,7 @@ ParticleSystemRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -46345,6 +46362,7 @@ ParticleSystemRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -46716,7 +46734,7 @@ MonoBehaviour:
   mWidth: 56
   mHeight: 32
   mDepth: 49
-  mFont: {fileID: 0}
+  mFont: {fileID: 114955215718916075, guid: ffafa7387a3bb2243960c3aae18e3611, type: 3}
   mText: NEXT
   mEncoding: 1
   mMaxLineCount: 0
@@ -46803,7 +46821,7 @@ MonoBehaviour:
   mWidth: 76
   mHeight: 32
   mDepth: 49
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 114955215718916075, guid: ffafa7387a3bb2243960c3aae18e3611, type: 3}
   mText: "\u30B7\u30E7\u30C3\u30D7"
   mEncoding: 1
   mMaxLineCount: 0
@@ -46944,7 +46962,7 @@ MonoBehaviour:
   mWidth: 200
   mHeight: 32
   mDepth: 14
-  mFont: {fileID: 0}
+  mFont: {fileID: 114955215718916075, guid: ffafa7387a3bb2243960c3aae18e3611, type: 3}
   mText: read error
   mEncoding: 1
   mMaxLineCount: 0
@@ -47010,7 +47028,7 @@ MonoBehaviour:
   mWidth: 84
   mHeight: 32
   mDepth: 50
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 114955215718916075, guid: ffafa7387a3bb2243960c3aae18e3611, type: 3}
   mText: CANCEL
   mEncoding: 1
   mMaxLineCount: 0
@@ -47096,7 +47114,7 @@ MonoBehaviour:
   mWidth: 570
   mHeight: 1824
   mDepth: 5
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 114955215718916075, guid: ffafa7387a3bb2243960c3aae18e3611, type: 3}
   mText: read error
   mEncoding: 1
   mMaxLineCount: 0
@@ -51976,6 +51994,7 @@ ParticleSystemRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -51988,6 +52007,7 @@ ParticleSystemRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -52254,7 +52274,7 @@ MonoBehaviour:
   mWidth: 32
   mHeight: 32
   mDepth: 50
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 114955215718916075, guid: ffafa7387a3bb2243960c3aae18e3611, type: 3}
   mText: OK
   mEncoding: 1
   mMaxLineCount: 0
@@ -52397,7 +52417,7 @@ MonoBehaviour:
   mWidth: 76
   mHeight: 32
   mDepth: 50
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 114955215718916075, guid: ffafa7387a3bb2243960c3aae18e3611, type: 3}
   mText: "\u6295\u7A3F\u3059\u308B"
   mEncoding: 1
   mMaxLineCount: 0
@@ -52594,7 +52614,7 @@ MonoBehaviour:
   mWidth: 76
   mHeight: 32
   mDepth: 50
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 114955215718916075, guid: ffafa7387a3bb2243960c3aae18e3611, type: 3}
   mText: "\u30B7\u30E7\u30C3\u30D7"
   mEncoding: 1
   mMaxLineCount: 0
@@ -52681,7 +52701,7 @@ MonoBehaviour:
   mWidth: 76
   mHeight: 32
   mDepth: 49
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 114955215718916075, guid: ffafa7387a3bb2243960c3aae18e3611, type: 3}
   mText: "\u6295\u7A3F\u3059\u308B"
   mEncoding: 1
   mMaxLineCount: 0
@@ -57334,6 +57354,7 @@ ParticleSystemRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -57346,6 +57367,7 @@ ParticleSystemRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -57515,7 +57537,7 @@ MonoBehaviour:
   mWidth: 32
   mHeight: 32
   mDepth: 49
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 114955215718916075, guid: ffafa7387a3bb2243960c3aae18e3611, type: 3}
   mText: OK
   mEncoding: 1
   mMaxLineCount: 0
@@ -58315,7 +58337,7 @@ MonoBehaviour:
   mWidth: 56
   mHeight: 32
   mDepth: 50
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 114955215718916075, guid: ffafa7387a3bb2243960c3aae18e3611, type: 3}
   mText: NEXT
   mEncoding: 1
   mMaxLineCount: 0
@@ -58456,7 +58478,7 @@ MonoBehaviour:
   mWidth: 612
   mHeight: 2080
   mDepth: 5
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 114955215718916075, guid: ffafa7387a3bb2243960c3aae18e3611, type: 3}
   mText: read error
   mEncoding: 1
   mMaxLineCount: 0
@@ -58499,7 +58521,7 @@ Transform:
   m_GameObject: {fileID: 1544406889761080}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4120866538973266}
   m_Father: {fileID: 4267229003661992}
@@ -58522,7 +58544,7 @@ MonoBehaviour:
   mWidth: 56
   mHeight: 32
   mDepth: 50
-  mFont: {fileID: 0}
+  mFont: {fileID: 114955215718916075, guid: ffafa7387a3bb2243960c3aae18e3611, type: 3}
   mText: NEXT
   mEncoding: 1
   mMaxLineCount: 0
@@ -63354,6 +63376,7 @@ ParticleSystemRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -63366,6 +63389,7 @@ ParticleSystemRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -63505,7 +63529,7 @@ MonoBehaviour:
   mWidth: 37
   mHeight: 32
   mDepth: 49
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 114955215718916075, guid: ffafa7387a3bb2243960c3aae18e3611, type: 3}
   mText: YES
   mEncoding: 1
   mMaxLineCount: 0
@@ -63754,7 +63778,7 @@ MonoBehaviour:
   mWidth: 32
   mHeight: 32
   mDepth: 11
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 114955215718916075, guid: ffafa7387a3bb2243960c3aae18e3611, type: 3}
   mText: OK
   mEncoding: 1
   mMaxLineCount: 0
@@ -64308,7 +64332,7 @@ MonoBehaviour:
   mWidth: 86
   mHeight: 32
   mDepth: 49
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 114955215718916075, guid: ffafa7387a3bb2243960c3aae18e3611, type: 3}
   mText: SKIP ALL
   mEncoding: 1
   mMaxLineCount: 0
@@ -65071,7 +65095,7 @@ MonoBehaviour:
   mWidth: 34
   mHeight: 32
   mDepth: 49
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 114955215718916075, guid: ffafa7387a3bb2243960c3aae18e3611, type: 3}
   mText: NO
   mEncoding: 1
   mMaxLineCount: 0
@@ -65525,7 +65549,7 @@ Transform:
   m_GameObject: {fileID: 1686293451886408}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4586468678176086}
   m_Father: {fileID: 4167041889207606}
@@ -65545,10 +65569,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mColor: {r: 0.9411765, g: 0.9411765, b: 0.9411765, a: 1}
   mPivot: 4
-  mWidth: 30
+  mWidth: 32
   mHeight: 32
   mDepth: 12
-  mFont: {fileID: 0}
+  mFont: {fileID: 114955215718916075, guid: ffafa7387a3bb2243960c3aae18e3611, type: 3}
   mText: OK
   mEncoding: 1
   mMaxLineCount: 0
@@ -65698,7 +65722,7 @@ MonoBehaviour:
   mWidth: 200
   mHeight: 32
   mDepth: 50
-  mFont: {fileID: 0}
+  mFont: {fileID: 114955215718916075, guid: ffafa7387a3bb2243960c3aae18e3611, type: 3}
   mText: read error
   mEncoding: 1
   mMaxLineCount: 0
@@ -65819,7 +65843,7 @@ MonoBehaviour:
   mWidth: 76
   mHeight: 32
   mDepth: 50
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 114955215718916075, guid: ffafa7387a3bb2243960c3aae18e3611, type: 3}
   mText: "\u6295\u7A3F\u3059\u308B"
   mEncoding: 1
   mMaxLineCount: 0
@@ -70786,6 +70810,7 @@ ParticleSystemRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -70798,6 +70823,7 @@ ParticleSystemRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -70882,7 +70908,7 @@ MonoBehaviour:
   mWidth: 84
   mHeight: 32
   mDepth: 49
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 114955215718916075, guid: ffafa7387a3bb2243960c3aae18e3611, type: 3}
   mText: CANCEL
   mEncoding: 1
   mMaxLineCount: 0
@@ -71948,10 +71974,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mColor: {r: 0, g: 0, b: 0, a: 0.3764706}
   mPivot: 4
-  mWidth: 30
+  mWidth: 32
   mHeight: 32
   mDepth: 11
-  mFont: {fileID: 0}
+  mFont: {fileID: 114955215718916075, guid: ffafa7387a3bb2243960c3aae18e3611, type: 3}
   mText: OK
   mEncoding: 1
   mMaxLineCount: 0
@@ -76658,6 +76684,7 @@ ParticleSystemRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -76670,6 +76697,7 @@ ParticleSystemRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -76755,7 +76783,7 @@ MonoBehaviour:
   mWidth: 32
   mHeight: 32
   mDepth: 50
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 114955215718916075, guid: ffafa7387a3bb2243960c3aae18e3611, type: 3}
   mText: OK
   mEncoding: 1
   mMaxLineCount: 0
@@ -81462,6 +81490,7 @@ ParticleSystemRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -81474,6 +81503,7 @@ ParticleSystemRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -82479,7 +82509,7 @@ MonoBehaviour:
   mWidth: 95
   mHeight: 32
   mDepth: 50
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 114955215718916075, guid: ffafa7387a3bb2243960c3aae18e3611, type: 3}
   mText: "\u6295\u7A3F\u3057\u306A\u3044"
   mEncoding: 1
   mMaxLineCount: 0
@@ -87186,6 +87216,7 @@ ParticleSystemRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -87198,6 +87229,7 @@ ParticleSystemRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -92037,6 +92069,7 @@ ParticleSystemRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -92049,6 +92082,7 @@ ParticleSystemRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -96874,6 +96908,7 @@ ParticleSystemRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -96886,6 +96921,7 @@ ParticleSystemRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -96947,7 +96983,7 @@ Transform:
   m_GameObject: {fileID: 1928850789482590}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 350, y: -182, z: 0}
-  m_LocalScale: {x: 1.2, y: 1.2, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4306791636065982}
   m_RootOrder: 2
@@ -96969,7 +97005,7 @@ MonoBehaviour:
   mWidth: 35
   mHeight: 32
   mDepth: 91
-  mFont: {fileID: 0}
+  mFont: {fileID: 114955215718916075, guid: ffafa7387a3bb2243960c3aae18e3611, type: 3}
   mText: 2/1
   mEncoding: 1
   mMaxLineCount: 0
@@ -97115,7 +97151,7 @@ MonoBehaviour:
   mWidth: 86
   mHeight: 32
   mDepth: 50
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 114955215718916075, guid: ffafa7387a3bb2243960c3aae18e3611, type: 3}
   mText: SKIP ALL
   mEncoding: 1
   mMaxLineCount: 0
@@ -97238,7 +97274,7 @@ MonoBehaviour:
   mWidth: 56
   mHeight: 32
   mDepth: 49
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 114955215718916075, guid: ffafa7387a3bb2243960c3aae18e3611, type: 3}
   mText: NEXT
   mEncoding: 1
   mMaxLineCount: 0
@@ -102256,6 +102292,7 @@ ParticleSystemRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -102268,6 +102305,7 @@ ParticleSystemRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -102353,7 +102391,7 @@ MonoBehaviour:
   mWidth: 34
   mHeight: 32
   mDepth: 50
-  mFont: {fileID: 114955215718916075, guid: 79095fe0798394949a1612ab435b0fe9, type: 3}
+  mFont: {fileID: 114955215718916075, guid: ffafa7387a3bb2243960c3aae18e3611, type: 3}
   mText: NO
   mEncoding: 1
   mMaxLineCount: 0
@@ -107060,6 +107098,7 @@ ParticleSystemRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -107072,6 +107111,7 @@ ParticleSystemRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -107278,7 +107318,7 @@ MonoBehaviour:
   mWidth: 200
   mHeight: 32
   mDepth: 14
-  mFont: {fileID: 0}
+  mFont: {fileID: 114955215718916075, guid: ffafa7387a3bb2243960c3aae18e3611, type: 3}
   mText: read error
   mEncoding: 1
   mMaxLineCount: 0
