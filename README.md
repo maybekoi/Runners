@@ -29,7 +29,7 @@ I think about 85% maybe??
 By: YoPhlox
 
 1. Download files from this repo using
-`git clone https://github.com/yophlox/Runners.git --recursive`
+`git clone https://github.com/maybekoi/Runners.git --recursive`
 
 2. Download Unity 2019.4.17f1 if you don't have it.
 
