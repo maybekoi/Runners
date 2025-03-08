@@ -54,32 +54,32 @@ internal class NetBaseUtil
 	
 	private static string[] mAssetURLTable = new string[11]
 	{
-		"http://pbassets.fluofoxxo.pw:9002/assets/",
-		"http://pbassets.fluofoxxo.pw:9002/assets/",
-		"http://pbassets.fluofoxxo.pw:9002/assets/",
-		"http://pbassets.fluofoxxo.pw:9002/assets/",
-		"http://pbassets.fluofoxxo.pw:9002/assets/",
-		"http://pbassets.fluofoxxo.pw:9002/assets/",
-		"http://pbassets.fluofoxxo.pw:9002/assets/",
-		"http://pbassets.fluofoxxo.pw:9002/assets/",
-		"http://pbassets.fluofoxxo.pw:9002/assets/",
-		"http://pbassets.fluofoxxo.pw:9002/assets/",
-		"http://pbassets.fluofoxxo.pw:9002/assets/"
+		"https://maybekoi.github.io/RunnersAssetServer/assets/",
+		"https://maybekoi.github.io/RunnersAssetServer/assets/",
+		"https://maybekoi.github.io/RunnersAssetServer/assets/",
+		"https://maybekoi.github.io/RunnersAssetServer/assets/",
+		"https://maybekoi.github.io/RunnersAssetServer/assets/",
+		"https://maybekoi.github.io/RunnersAssetServer/assets/",
+		"https://maybekoi.github.io/RunnersAssetServer/assets/",
+		"https://maybekoi.github.io/RunnersAssetServer/assets/",
+		"https://maybekoi.github.io/RunnersAssetServer/assets/",
+		"https://maybekoi.github.io/RunnersAssetServer/assets/",
+		"https://maybekoi.github.io/RunnersAssetServer/assets/"
 	};
 	
 	private static string[] mInformationURLTable = new string[11]
 	{
-		"http://pbassets.fluofoxxo.pw:9002/information/",
-		"http://pbassets.fluofoxxo.pw:9002/information/",
-		"http://pbassets.fluofoxxo.pw:9002/information/",
-		"http://pbassets.fluofoxxo.pw:9002/information/",
-		"http://pbassets.fluofoxxo.pw:9002/information/",
-		"http://pbassets.fluofoxxo.pw:9002/information/",
-		"http://pbassets.fluofoxxo.pw:9002/information/",
-		"http://pbassets.fluofoxxo.pw:9002/information/",
-		"http://pbassets.fluofoxxo.pw:9002/information/",
-		"http://pbassets.fluofoxxo.pw:9002/information/",
-		"http://pbassets.fluofoxxo.pw:9002/information/"
+		"https://maybekoi.github.io/RunnersAssetServer/information/",
+		"https://maybekoi.github.io/RunnersAssetServer/information/",
+		"https://maybekoi.github.io/RunnersAssetServer/information/",
+		"https://maybekoi.github.io/RunnersAssetServer/information/",
+		"https://maybekoi.github.io/RunnersAssetServer/information/",
+		"https://maybekoi.github.io/RunnersAssetServer/information/",
+		"https://maybekoi.github.io/RunnersAssetServer/information/",
+		"https://maybekoi.github.io/RunnersAssetServer/information/",
+		"https://maybekoi.github.io/RunnersAssetServer/information/",
+		"https://maybekoi.github.io/RunnersAssetServer/information/",
+		"https://maybekoi.github.io/RunnersAssetServer/information/"
 	};
 	
 	private static string mRedirectInstallPageUrl = "https://play.google.com/store/apps/details?id=com.sega.sonicrunners";
